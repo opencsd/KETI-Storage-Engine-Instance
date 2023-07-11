@@ -1,0 +1,64 @@
+{
+    "type": 3,
+    "snippet": {
+      "queryID": 14,
+      "workID": 4,
+      "tableName": [
+        "snippet14-2",
+        "revenue0"
+      ],
+      "tableCol": [],
+      "tableFilter": [
+        {
+          "LV": {
+            "type": [
+              10
+            ],
+            "value": [
+              "total_revenue"
+            ]
+          },
+          "Operator": 5,
+          "RV": {
+            "type": [
+              10
+            ],
+            "value": [
+              "Max_revenue"
+            ]
+          },
+          "EXTRA": []
+        }
+      ],
+      "tableOffset": [],
+      "tableOfflen": [],
+      "tableDatatype": [],
+      "tableAlias": "snippet14-4",
+      "columnAlias": [
+        "total_revenue",
+        "supplier_no"
+      ],
+      "columnProjection": [
+        {
+          "selectType": 0,
+          "value": [
+            "total_revenue"
+          ],
+          "valueType": [
+            10
+          ]
+        },
+        {
+          "selectType": 0,
+          "value": [
+            "supplier_no"
+          ],
+          "valueType": [
+            10
+          ]
+        }
+      ],
+      "columnFiltering": [],
+      "groupBy": []
+    }
+  }

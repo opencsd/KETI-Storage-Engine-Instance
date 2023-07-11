@@ -1,0 +1,65 @@
+{
+  "type" : 2,
+  "snippet":
+  {
+    "queryID":8,
+    "workID":10,
+    "tableName": ["snippet8-8","snippet8-4"],
+    "tableCol":[],
+    "tableFilter":[
+      {
+        "LV": {
+            "type": [10],
+            "value": ["l_orderkey"]
+        },
+        "Operator" : 5, 
+        "RV" : {
+            "type": [10],
+            "value": ["o_orderkey"]
+        },
+        "EXTRA": []
+      } 
+    ],
+    "tableOffset":[],
+    "tableOfflen":[],
+    "tableDatatype":[],
+    "tableAlias": "profit",
+    "columnAlias": [
+      "nation",
+      "o_year",
+      "amount"
+    ],
+    "columnProjection": [
+      {
+        "selectType": 0,
+        "value": [
+          "nation"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 0,
+        "value": [
+          "o_year"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 0,
+        "value": [
+          "amount"
+        ],
+        "valueType": [
+          10
+        ]
+      }
+    ],
+    "columnFiltering": [],
+    "groupBy": []
+  }
+
+}

@@ -1,0 +1,34 @@
+{
+    "type" : 1,
+    "snippet":
+    {
+      "queryID":13,
+      "workID":3,
+      "tableName": ["snippet13-2"],
+      "tableCol":[],
+      "tableFilter":[],
+      "tableOffset":[],
+      "tableOfflen":[],
+      "tableDatatype":[],
+      "tableAlias": "snippet13-3",
+      "columnAlias": [
+          "denominator",
+          "numerator"
+      ],
+      "columnProjection": [
+        {
+          "selectType": 1,
+          "value": ["denominator"],
+          "valueType": [10]
+        },
+        {
+          "selectType": 1,
+          "value": ["numerator"],
+          "valueType": [10]
+        }
+      ],
+      "columnFiltering": [],
+      "groupBy": []
+    }
+
+}

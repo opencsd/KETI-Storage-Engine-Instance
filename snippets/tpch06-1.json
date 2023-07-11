@@ -1,0 +1,31 @@
+{
+  "type": 1,
+  "snippet": {
+    "queryID":5,
+    "workID": 1,
+    "tableName": ["snippet5-0"],
+    "tableCol":[],
+    "tableFilter": [],
+    "tableOffset":[],
+    "tableOfflen":[],
+    "tableDatatype":[],
+    "tableAlias": "snippet5-1",
+    "columnAlias": [
+      "revenue"
+    ],
+    "columnProjection": [
+      {
+        "selectType": 1,
+        "value": [
+          "revenue"
+        ],
+        "valueType": [
+          10
+        ]
+      }
+    ],
+    "columnFiltering": [],
+    "groupBy": []
+  }
+}
+    
