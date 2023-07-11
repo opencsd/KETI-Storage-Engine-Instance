@@ -1,0 +1,43 @@
+{
+  "type" : 2,
+  "snippet":
+  {
+    "queryID":7,
+    "workID":9,
+    "tableName": ["snippet7-8","snippet7-4"],
+    "tableCol":[],
+    "tableFilter":[
+      {
+        "LV": {
+            "type": [10],
+            "value": ["n1.n_nationkey"]
+        },
+        "Operator" : 5, 
+        "RV" : {
+            "type": [10],
+            "value": ["c_nationkey"]
+        }
+      } 
+    ],
+    "tableOffset":[],
+    "tableOfflen":[],
+    "tableDatatype":[],
+    "tableAlias": "snippet7-9",
+    "columnAlias": [
+      "c_custkey"
+    ],
+    "columnProjection": [
+      {
+        "selectType": 0,
+        "value": [
+          "c_custkey"
+        ],
+        "valueType": [
+          10
+        ]
+      }
+    ],
+    "columnFiltering": [],
+    "groupBy": []
+  }
+}

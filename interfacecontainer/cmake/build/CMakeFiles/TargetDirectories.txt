@@ -1,0 +1,4 @@
+/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/ss_grpc_proto.dir
+/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/interface_container.dir
+/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/edit_cache.dir
+/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,100 @@
+{
+  "type" : 8,
+  "snippet":
+  {
+    "queryID":6,
+    "workID":11,
+    "tableName": ["snippet6-10"],
+    "tableCol":[],
+    "tableFilter":[
+      {
+        "LV": {
+          "type": [10],
+          "value": ["n1.n_name"]
+      },
+      "Operator" : 5, 
+      "RV" : {
+          "type": [9],
+          "value": ["JAPAN"]
+        }
+      },
+      {
+      "Operator" : 13
+      },
+      {
+        "LV": {
+          "type": [10],
+          "value": ["n2.n_name"]
+      },
+      "Operator" : 5, 
+      "RV" : {
+          "type": [9],
+          "value": ["INDIA"]
+        }
+      },
+      {
+      "Operator" : 14
+      },
+      {
+        "LV": {
+          "type": [10],
+          "value": ["n1.n_name"]
+      },
+      "Operator" : 5, 
+      "RV" : {
+          "type": [9],
+          "value": ["INDIA"]
+        }
+      },
+      {
+      "Operator" : 13
+      },
+      {
+        "LV": {
+          "type": [10],
+          "value": ["n2.n_name"]
+      },
+      "Operator" : 5, 
+      "RV" : {
+          "type": [9],
+          "value": ["JAPAN"]
+        }
+      }
+    ],
+    "tableOffset":[],
+    "tableOfflen":[],
+    "tableDatatype":[],
+    "tableAlias": "snippet6-11",
+    "columnAlias": [
+      "supp_nation",
+      "cust_nation", 
+      "l_year",
+      "volume"
+    ],
+    "columnProjection": [
+      {
+        "selectType": 0,
+        "value": ["n1.n_name"],
+        "valueType": [10]
+      },
+      {
+        "selectType": 0,
+        "value": ["n2.n_name"],
+        "valueType": [10]
+      },
+      {
+        "selectType": 0,
+        "value": ["l_shipdate"],
+        "valueType": [10]
+      },
+      {
+        "selectType": 0,
+        "value": ["volume"],
+        "valueType": [10]
+      }
+    ],
+    "columnFiltering": [],
+    "groupBy": []
+  }
+
+}

@@ -1,0 +1,51 @@
+{
+  "type" : 1,
+  "snippet":
+  {
+    "queryID":7,
+    "workID":16,
+    "tableName": ["snippet7-15"],
+    "tableCol":[],
+    "tableFilter":[],
+    "tableOffset":[],
+    "tableOfflen":[],
+    "tableDatatype":[],
+    "tableAlias": "snippet7-16",
+    "columnAlias": [
+      "o_year",
+      "tmp_sum1",
+      "tmp_sum2"
+    ],
+    "columnProjection": [
+      {
+        "selectType": 0,
+        "value": [
+          "o_year"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 1,
+        "value": [
+          "tmp_sum1"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 1,
+        "value": [
+          "tmp_sum2"
+        ],
+        "valueType": [
+          10
+        ]
+      }
+    ],
+    "columnFiltering": [],
+    "groupBy": ["o_year"]
+  }
+}

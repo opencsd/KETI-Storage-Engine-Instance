@@ -1,0 +1,43 @@
+{
+  "type":1,
+  "snippet":
+  {
+    "queryID":7,
+    "workID":15,
+    "tableName": ["all_nations"],
+    "tableCol":[],
+    "tableFilter":[],
+    "tableOffset":[],
+    "tableOfflen":[],
+    "tableDatatype":[],
+    "tableAlias": "snippet7-15",
+    "columnAlias": [
+      "o_year",
+      "tmp_sum1",
+      "tmp_sum2"
+    ],
+    "columnProjection": [
+      {
+        "selectType": 13,
+        "value": [
+          "o_year"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 8,
+        "value": ["CASE", "WHEN", "nation", "india", "LIKE", "THEN", "volume", "ELSE", "0", "END"],
+        "valueType": [11, 11, 10, 9, 11, 11, 10, 11, 2, 11]
+      },
+      {
+        "selectType": 0,
+        "value": ["volume"],
+        "valueType": [10]
+      }
+    ],
+    "columnFiltering": [],
+    "groupBy": []
+  }
+}

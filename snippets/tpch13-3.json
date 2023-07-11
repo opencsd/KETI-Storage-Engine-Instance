@@ -1,0 +1,36 @@
+{
+  "type": 1,
+  "snippet": {
+    "queryID": 12,
+    "workID": 3,
+    "tableName": [
+      "snippet12-2"
+    ],
+    "tableCol": [ ],
+    "tableFilter": [ ],
+    "tableOffset": [ ],
+    "tableOfflen": [ ],
+    "tableDatatype": [ ],
+    "tableAlias": "c_orders",
+    "columnAlias": [
+      "c_custkey",
+      "c_count"
+    ],
+    "columnProjection": [
+        {
+          "selectType": 0,
+          "value": ["c_custkey"],
+          "valueType": [10]
+        },
+        {
+          "selectType": 3,
+          "value": ["o_orderkey"],
+          "valueType": [10]
+        }
+    ],
+    "columnFiltering": [ ],
+    "groupBy": [
+        "c_custkey"
+    ]
+  }
+}
