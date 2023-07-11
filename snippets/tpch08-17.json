@@ -1,0 +1,51 @@
+{
+  "type" : 1,
+  "snippet":
+  {
+    "queryID":7,
+    "workID":17,
+    "tableName": ["snippet7-16"],
+    "tableCol":[],
+    "tableFilter":[],
+    "tableOffset":[],
+    "tableOfflen":[],
+    "tableDatatype":[],
+    "tableAlias": "snippet7-17",
+    "columnAlias": [
+      "o_year",
+      "mkt_share"
+    ],
+    "columnProjection": [
+      {
+        "selectType": 0,
+        "value": [
+          "o_year"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 0,
+        "value": [
+          "tmp_sum1",
+          "tmp_sum2",
+          "/"
+        ],
+        "valueType": [
+          10,
+          10,
+          11
+        ]
+      }
+    ],
+    "columnFiltering": [],
+    "groupBy": [],
+    "orderBy": 
+    {
+       "ascending" : [0],
+       "columnName" : ["o_year"]
+    }
+  }
+
+}

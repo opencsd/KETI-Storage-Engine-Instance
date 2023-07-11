@@ -1,0 +1,47 @@
+{
+    "type" : 2,
+    "snippet":
+    {
+      "queryID":13,
+      "workID":2,
+      "tableName": ["snippet13-1", "snippet13-0"],
+      "tableCol":[],
+      "tableFilter":[
+        {
+          "LV": {
+              "type": [10],
+              "value": ["p_partkey"]
+          },
+          "Operator" : 5, 
+          "RV" : {
+              "type": [10],
+              "value": ["l_partkey"]
+          },
+          "EXTRA": []
+        }   
+      ],
+      "tableOffset":[],
+      "tableOfflen":[],
+      "tableDatatype":[],
+      "tableAlias": "snippet13-2",
+      "columnAlias": [
+          "denominator",
+          "numerator"
+      ],
+      "columnProjection": [
+        {
+          "selectType": 8,
+          "value": ["CASE", "WHEN", "p_type", "PROMO%", "LIKE", "THEN", "promo_revenue", "ELSE", "0", "END"],
+          "valueType": [11, 11, 10, 9, 11, 11, 10, 11, 5, 11]
+        },
+        {
+          "selectType": 0,
+          "value": ["promo_revenue"],
+          "valueType": [10]
+        }
+      ],
+      "columnFiltering": [],
+      "groupBy": []
+    }
+
+}

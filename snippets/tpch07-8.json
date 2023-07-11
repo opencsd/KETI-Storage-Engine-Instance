@@ -1,0 +1,58 @@
+{
+  "type" : 2,
+  "snippet":
+  {
+    "queryID":6,
+    "workID":8,
+    "tableName": ["snippet6-6","snippet6-1"],
+    "tableCol":[],
+    "tableFilter":[
+      {
+        "LV": {
+          "type": [10],
+          "value": ["s_suppkey"]
+        },
+        "Operator" : 5,
+        "RV" : {
+          "type": [10],
+          "value": ["l_suppkey"]
+        }
+      }
+    ],
+    "tableOffset":[],
+    "tableOfflen":[],
+    "tableDatatype":[],
+    "tableAlias": "snippet6-8",
+    "columnAlias": [
+      "n1.n_name", 
+      "l_orderkey",
+      "l_shipdate",
+      "volume"
+    ],
+    "columnProjection": [
+      {
+        "selectType": 0,
+        "value": ["n1.n_name"],
+        "valueType": [10]
+      },
+      {
+        "selectType": 0,
+        "value": ["l_orderkey"],
+        "valueType": [10]
+      },
+      {
+        "selectType": 13,
+        "value": ["l_shipdate"],
+        "valueType": [10]
+      },
+      {
+        "selectType": 0,
+        "value": ["volume"],
+        "valueType": [10]
+      }
+    ],
+    "columnFiltering": [],
+    "groupBy": []
+  }
+
+}

@@ -1,0 +1,63 @@
+{
+    "type" : 2,
+    "snippet":
+    {
+        "queryID":4,
+        "workID":10,
+        "tableName": ["snippet4-9", "snippet4-8"],
+        "tableCol":[],
+        "tableFilter":[
+            {
+                "LV": {
+                    "type": [10],
+                    "value": ["l_orderkey"]
+                },
+                "Operator" : 5, 
+                "RV" : {
+                    "type": [10],
+                    "value": ["o_orderkey"]
+                }
+            },
+            {
+                "Operator" : 13
+            },
+            {
+                "LV": {
+                    "type": [10],
+                    "value": ["s_nationkey"]
+                },
+                "Operator" : 5, 
+                "RV" : {
+                    "type": [10],
+                    "value": ["c_nationkey"]
+                }
+            }
+        ],
+        "tableOffset":[],
+        "tableOfflen":[],
+        "tableDatatype":[],
+        "tableAlias": "snippet4-10",
+        "columnAlias": [
+            "n_name",
+            "revenue"
+        ],
+        "columnProjection": [
+            {
+                "selectType": 0,
+                "value": ["n_name"],
+                "valueType": [10]
+            },
+            {
+                "selectType": 0,
+                "value": ["revenue"],
+                "valueType": [10]
+            }
+        ],
+        "columnFiltering": [
+            "n_name",
+            "revenue"
+        ],
+        "groupBy": []
+    }
+
+}

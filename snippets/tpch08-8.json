@@ -1,0 +1,43 @@
+{
+  "type" : 2,
+  "snippet":
+  {
+    "queryID":7,
+    "workID":8,
+    "tableName": ["snippet7-7","n1"],
+    "tableCol":[],
+    "tableFilter":[
+      {
+        "LV": {
+            "type": [10],
+            "value": ["r_regionkey"]
+        },
+        "Operator" : 5, 
+        "RV" : {
+            "type": [10],
+            "value": ["n1.n_regionkey"]
+        }
+      } 
+    ],
+    "tableOffset":[],
+    "tableOfflen":[],
+    "tableDatatype":[],
+    "tableAlias": "snippet7-8",
+    "columnAlias": [
+      "n1.n_nationkey"
+    ],
+    "columnProjection": [
+      {
+        "selectType": 0,
+        "value": [
+          "n1.n_regionkey"
+        ],
+        "valueType": [
+          10
+        ]
+      }
+    ],
+    "columnFiltering": [],
+    "groupBy": []
+  }
+}

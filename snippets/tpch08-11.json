@@ -1,0 +1,73 @@
+{
+  "type" : 2,
+  "snippet":
+  {
+    "queryID":7,
+    "workID":11,
+    "tableName": ["snippet7-10","snippet7-2"],
+    "tableCol":[],
+    "tableFilter":[
+      {
+        "LV": {
+            "type": [10],
+            "value": ["o_orderkey"]
+        },
+        "Operator" : 5, 
+        "RV" : {
+            "type": [10],
+            "value": ["l_orderkey"]
+        }
+      } 
+    ],
+    "tableOffset":[],
+    "tableOfflen":[],
+    "tableDatatype":[],
+    "tableAlias": "snippet7-11",
+    "columnAlias": [
+      "o_year",
+      "volume",
+      "l_suppkey",
+      "l_partkey"
+    ],
+    "columnProjection": [
+      {
+        "selectType": 0,
+        "value": [
+          "o_year"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 0,
+        "value": [
+          "volume"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 0,
+        "value": [
+          "l_suppkey"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 0,
+        "value": [
+          "l_partkey"
+        ],
+        "valueType": [
+          10
+        ]
+      }
+    ],
+    "columnFiltering": [],
+    "groupBy": []
+  }
+}
