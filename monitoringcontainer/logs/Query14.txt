@@ -1,0 +1,10 @@
+[Monitoring Container::Table Manager] # Init TableManager
+[Monitoring Container] Monitoring Container Server listening on 127.0.0.1:40203
+[Monitoring Container] =: Set Meta Data :=
+[Monitoring Container::LBA2PBA Query Agent] # Request PBA Called
+[Monitoring Container] =: Get CSD Block Info :=
+[Monitoring Container] =: Get Meta Data :=
+[Monitoring Container] =: Set Meta Data :=
+[Monitoring Container::LBA2PBA Query Agent] # Request PBA Called
+[Monitoring Container] =: Get CSD Block Info :=
+[Monitoring Container] =: Get Meta Data :=

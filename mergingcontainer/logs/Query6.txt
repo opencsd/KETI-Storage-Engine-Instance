@@ -1,0 +1,33 @@
+[Merging Container::Buffer Manager] CSD Return Server Listening on 10.0.4.82:40203
+[Merging Container] Merging Container Server Listening on 127.0.0.1:40202
+[Merging Container] ==:Get Query Result:== {0|ResultTable5}
+0
+[Merging Container::Buffer Manager] QueryIDError | NonInitTable, wait phase : 1 {0|ResultTable5}
+[Merging Container] ==:Init Buffer:== {0|0}
+[Merging Container] ==:Init Buffer:== {0|1}
+[Merging Container] ==:Aggregation:== {0|1}
+<test> Not Finished 0:ProcessTable5-0
+[Merging Container::Buffer Manager] # Receive Data from CSD Return Interface {0|0}
+[Merging Container::Buffer Manager] Merging Data ... (Left Block : 1713)
+[Merging Container::Buffer Manager] # Receive Data from CSD Return Interface {0|0}
+[Merging Container::Buffer Manager] Merging Data ... (Left Block : 1468)
+[Merging Container::Buffer Manager] # Receive Data from CSD Return Interface {0|0}
+[Merging Container::Buffer Manager] Merging Data ... (Left Block : 1223)
+[Merging Container::Buffer Manager] # Receive Data from CSD Return Interface {0|0}
+[Merging Container::Buffer Manager] Merging Data ... (Left Block : 978)
+[Merging Container::Buffer Manager] # Receive Data from CSD Return Interface {0|0}
+[Merging Container::Buffer Manager] Merging Data ... (Left Block : 734)
+[Merging Container::Buffer Manager] # Receive Data from CSD Return Interface {0|0}
+[Merging Container::Buffer Manager] Merging Data ... (Left Block : 489)
+[Merging Container::Buffer Manager] # Receive Data from CSD Return Interface {0|0}
+[Merging Container::Buffer Manager] Merging Data ... (Left Block : 245)
+[Merging Container::Buffer Manager] # Receive Data from CSD Return Interface {0|0}
+[Merging Container::Buffer Manager] Merging Data ... (Left Block : 0)
+[Merging Container::Buffer Manager] Merging Data {0|0|ProcessTable5-0} Done
+<test> Finished 0:ProcessTable5-0
+revenue|1186
+revenue|1
+[Merging Container::Buffer Manager] Save Table {0|ResultTable5}
+<test> Done 0:ResultTable5
+revenue|1
+[Merging Container] ==:End Query:== {0}

@@ -1,0 +1,112 @@
+{
+  "type" : 2,
+  "snippet":
+  {
+    "queryID":9,
+    "workID":5,
+    "tableName": ["snippet9-4","snippet9-1"],
+    "tableCol":[],
+    "tableFilter":[
+      {
+        "LV": {
+            "type": [10],
+            "value": ["c_custkey"]
+        },
+        "Operator" : 5, 
+        "RV" : {
+            "type": [10],
+            "value": ["o_custkey"]
+        },
+        "EXTRA": []
+      } 
+  ],
+    "tableOffset":[],
+    "tableOfflen":[],
+    "tableDatatype":[],
+    "blockList":[],
+    "tableAlias": "snippet9-5",
+    "columnAlias": [
+      "c_custkey",
+      "c_name",
+      "c_acctbal",
+      "n_name",
+      "c_address",
+      "c_phone",
+      "c_comment",
+      "o_orderkey"
+    ],
+    "columnProjection": [
+      {
+        "selectType": 0,
+        "value": [
+          "c_custkey"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 0,
+        "value": [
+          "c_name"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 0,
+        "value": [
+          "c_acctbal"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 0,
+        "value": ["n_name"],
+        "valueType": [10]
+      },
+      {
+        "selectType": 0,
+        "value": [
+          "c_address"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 0,
+        "value": [
+          "c_phone"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 0,
+        "value": [
+          "c_comment"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 0,
+        "value": [
+          "o_orderkey"
+        ],
+        "valueType": [
+          10
+        ]
+      }
+    ],
+    "columnFiltering": [],
+    "groupBy": []
+  }
+
+}

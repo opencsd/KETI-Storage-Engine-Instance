@@ -1,0 +1,25 @@
+[Interface Container] Storage Engine Interface Server Listening on 127.0.0.1:40200
+[Interface Container] ==:Set Snippet:== {0}
+
+{"type":0,"snippet":{"queryID":0,"workID":0,"tableName":["lineitem"],"tableCol":["l_orderkey","l_partkey","l_suppkey","l_linenumber","l_quantity","l_extendedprice","l_discount","l_tax","l_returnflag","l_linestatus","l_shipdate","l_commitdate","l_receiptdate","l_shipinstruct","l_shipmode","l_comment"],"tableFilter":[{"LV":{"type":[10],"value":["l_shipdate"]},"Operator":1,"RV":{"type":[7],"value":["1022337"]},"EXTRA":[]},{"Operator":13,"EXTRA":[]},{"LV":{"type":[10],"value":["l_shipdate"]},"Operator":4,"RV":{"type":[7],"value":["1022497"]},"EXTRA":[]}],"tableOffset":[0,4,8,12,16,23,30,37,44,45,46,49,52,55,80,90],"tableOfflen":[4,4,4,4,7,7,7,7,1,1,3,3,3,25,10,44],"tableDatatype":[3,3,3,3,246,246,246,246,254,254,14,14,14,254,254,15],"tableAlias":"ProcessTable13-0","columnAlias":["l_partkey","ProcessTable13-0-c1"],"columnProjection":[{"selectType":0,"value":["l_partkey"],"valueType":[10]},{"selectType":0,"value":["l_extendedprice","1","l_discount","-","*"],"valueType":[10,2,10,11,11]}],"columnFiltering":[],"groupBy":[],"pkNum":0}}
+
+[Interface Container::Snippet Manager] # Request Monitoring Container Setting Metadata
+
+{"type":0,"snippet":{"queryID":0,"workID":1,"tableName":["part"],"tableCol":["p_partkey","p_name","p_mfgr","p_brand","p_type","p_size","p_container","p_retailprice","p_comment"],"tableFilter":[],"tableOffset":[0,4,59,84,94,119,123,133,140],"tableOfflen":[4,55,25,10,25,4,10,7,23],"tableDatatype":[3,15,254,254,15,3,254,246,15],"tableAlias":"ProcessTable13-1","columnAlias":["p_type","p_partkey"],"columnProjection":[{"selectType":0,"value":["p_type"],"valueType":[10]},{"selectType":0,"value":["p_partkey"],"valueType":[10]}],"columnFiltering":[],"groupBy":[],"pkNum":0}}
+
+
+{"type":2,"snippet":{"queryID":0,"workID":2,"tableName":["ProcessTable13-0","ProcessTable13-1"],"tableCol":[],"tableFilter":[{"LV":{"type":[10],"value":["l_partkey"]},"Operator":5,"RV":{"type":[10],"value":["p_partkey"]},"EXTRA":[]}],"tableOffset":[],"tableOfflen":[],"tableDatatype":[],"tableAlias":"ProcessTable13-2","columnAlias":["ProcessTable13-2-c1","ProcessTable13-2-c2"],"columnProjection":[{"selectType":1,"value":["CASE","WHEN","p_type","PROMO%","LIKE","THEN","ProcessTable13-0-c1","ELSE","0","END"],"valueType":[11,11,10,9,11,11,10,11,5,11]},{"selectType":1,"value":["ProcessTable13-0-c1"],"valueType":[10]}],"columnFiltering":[],"groupBy":[],"pkNum":0}}
+
+
+{"type":1,"snippet":{"queryID":0,"workID":3,"tableName":["ProcessTable13-2"],"tableCol":[],"tableFilter":[],"tableOffset":[],"tableOfflen":[],"tableDatatype":[],"tableAlias":"ResultTable13","columnAlias":["promo_revenue"],"columnProjection":[{"selectType":0,"value":["100.00","ProcessTable13-2-c1","*","ProcessTable13-2-c2","/"],"valueType":[5,10,11,10,11]}],"columnFiltering":[],"groupBy":[],"pkNum":0}}
+
+[Interface Container] ==:RUN:== {0}
+[Interface Container::Snippet Manager] # Init Buffer Manager
+[Interface Container::Snippet Manager] # Send Snippet to Offloading Container
+[Interface Container::Snippet Manager] # Request Monitoring Container Setting Metadata
+[Interface Container::Snippet Manager] # Init Buffer Manager
+[Interface Container::Snippet Manager] # Send Snippet to Offloading Container
+[Interface Container::Snippet Manager] # Init Buffer Manager
+[Interface Container::Snippet Manager] # Send Snippet to Merging Container
+[Interface Container::Snippet Manager] # Init Buffer Manager
+[Interface Container::Snippet Manager] # Send Snippet to Merging Container

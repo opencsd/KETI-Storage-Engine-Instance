@@ -1,0 +1,58 @@
+{
+  "type": 1,
+  "snippet": {
+    "queryID": 11,
+    "workID": 3,
+    "tableName": [
+      "snippet11-2"
+    ],
+    "tableCol": [ ],
+    "tableFilter": [ ],
+    "tableOffset": [ ],
+    "tableOfflen": [ ],
+    "tableDatatype": [ ],
+    "tableAlias": "snippet11-3",
+    "columnAlias": [
+      "l_shipmode",
+      "high_line_count",
+      "low_line_count"
+    ],
+    "columnProjection": [
+      {
+        "selectType": 0,
+        "value": [
+          "l_shipmode"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 1,
+        "value": [
+          "high_line_count"
+        ],
+        "valueType": [
+          10
+        ]
+      },
+      {
+        "selectType": 1,
+        "value": [
+          "low_line_count"
+        ],
+        "valueType": [
+          10
+        ]
+      }
+    ],
+    "columnFiltering": [ ],
+    "groupBy": [
+	    "l_shipmode"
+    ],
+    "orderBy": {
+      "ascending" : [0],
+      "columnName" : ["l_shipmode"]
+    }
+  }
+}

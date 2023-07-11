@@ -1,0 +1,4 @@
+/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/cmake/build/CMakeFiles/ss_grpc_proto.dir
+/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/cmake/build/CMakeFiles/monitoring_container.dir
+/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/cmake/build/CMakeFiles/edit_cache.dir
+/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/cmake/build/CMakeFiles/rebuild_cache.dir
