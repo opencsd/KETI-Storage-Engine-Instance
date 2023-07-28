@@ -41,22 +41,20 @@ service WALManager {
 
 message SnippetRequest {
   enum SnippetType {
-    SCAN_SNIPPET = 0;
+    CSD_SCAN_SNIPPET = 0;
     AGGREGATION_SNIPPET = 1;
-    INNER_JOIN_SNIPPET = 2;
-    LEFT_OUTER_JOIN_SNIPPET = 3;
-    RIGHT_OUTER_JOIN_SNIPPET = 4;
-    FULL_OUTER_JOIN_SNIPPET = 5;
-    DEPENDENCY_SEMI_JOIN_SNIPPET = 6;
-    DEPENDENCY_ANIT_JOIN_SNIPPET = 7;
-    NON_DEPENDENCY_SEMI_JOIN_SNIPPET = 8;
-    NON_DEPENDENCY_ANIT_JOIN_SNIPPET = 9;
-    DEPENDENCY_SUBQUERY_SNIPPET = 10;
-    NON_DEPENDENCY_SUBQUERY_SNIPPET = 11;
-    FILTER_SNIPPET = 12 ;
-    UNION_SNIPPET = 13;
-    UNION_ALL_SNIPPET = 14;
-    INDEX_SCAN_SNIPPET = 16;
+    STORAGE_FILTER_SNIPPET = 2;
+    INNER_JOIN_SNIPPET = 3;
+    LEFT_OUTER_JOIN_SNIPPET = 4;
+    RIGHT_OUTER_JOIN_SNIPPET = 5;
+    FULL_OUTER_JOIN_SNIPPET = 6;
+    CROSS_JOIN_SNIPPET = 7;
+    UNION_SNIPPET = 8;
+    EXIST_SNIPPET = 9;
+    IN_SNIPPET = 10;
+    DEPENDENCY_INNER_JOIN_SNIPPET = 11;
+    DEPENDENCY_EXIST_SNIPPET = 12;
+    DEPENDENCY_IN_SNIPPET = 13;
   }
   SnippetType type = 1;
   Snippet snippet = 2;
@@ -111,9 +109,10 @@ message Snippet {
       AVG = 2;
       COUNT = 3;
       COUNTSTAR = 4;
-      TOP = 5;
-      MIN = 6;
-      MAX = 7;
+      COUNTDISTINCT = 5;
+      TOP = 6;
+      MIN = 7;
+      MAX = 8;
     }
     SelectType select_type = 1;
     repeated string value = 2;

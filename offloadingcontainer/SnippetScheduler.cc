@@ -259,6 +259,8 @@ void Scheduler::sendSnippetToCSD(string snippet_json){
     size_t len = strlen(snippet_json.c_str());
     send(sock, &len, sizeof(len), 0);
     send(sock, (char *)snippet_json.c_str(), strlen(snippet_json.c_str()), 0);
+
+    close(sock);
 }
 
 string Scheduler::bestCSD(Object &scheduling_target, string sst_name, MetaDataResponse_PBAInfo &pba_info){

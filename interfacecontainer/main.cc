@@ -28,6 +28,7 @@ using namespace std;
 class InterfaceContainerServiceImpl final : public InterfaceContainer::Service {
   Status SetSnippet(ServerContext* context,
                    ServerReaderWriter<Result, SnippetRequest>* stream) override {
+    // CalculateStart();
     SnippetRequest snippet_request;
     bool flag = true;
 
@@ -58,7 +59,6 @@ class InterfaceContainerServiceImpl final : public InterfaceContainer::Service {
   }
 
   Status Run(ServerContext* context, const Request* request, Result* result) override {
-    // CalculateStart();
     int query_id = request->query_id();
     string table_name = SnippetManager::GetTableName(query_id);
 
@@ -70,7 +70,7 @@ class InterfaceContainerServiceImpl final : public InterfaceContainer::Service {
     
     result->set_value(query_result);
 
-    SnippetManager::EraseQueryID(query_id);
+    SnippetManager::EraseQueryID(query_id); //이후 캐시 사용시 고려 필요
     mc.EndQuery(query_id);
     // CalculateEnd();
     return Status::OK;

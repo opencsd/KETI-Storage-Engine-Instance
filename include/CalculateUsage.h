@@ -205,7 +205,7 @@ void CalculateStart(){
     pid_t pid = getpid();
     previousCpuUsage = GetProcessCpuUsage(pid);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));//출력대신 , 안하면 segmentationfault
+    // std::this_thread::sleep_for(std::chrono::milliseconds(50));//출력대신 , 안하면 segmentationfault
     
     // std::cout<<"Query Analyze : Scan 2, Aggregation 1, Join 1\n";
     // std::cout<<"Analyzing Scan Snippets\n";

@@ -36,6 +36,12 @@ typedef enum DEBUGG_LEVEL {
 
 class KETILOG {
     public:
+        template<typename T>
+        KETILOG& operator<<(const T& value) {
+            std::cout << "Custom Output: " << value;
+            return *this;
+        }
+
         static void SetDefaultLogLevel(){
             GetInstance().LOG_LEVEL = INFO;
         }

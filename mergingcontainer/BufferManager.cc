@@ -231,6 +231,7 @@ void BufferManager::mergeBlock(BlockResult result){
                         for(int k=0; k<5; k++){
                             integer[k] = tempbuf[5-k];
                         }
+
                         int64_t ivalue = *((int64_t *)integer); 
                         double rvalue;
                         if(col_len == 7){
@@ -358,7 +359,7 @@ int BufferManager::initWork(int type, StorageEngineInstance::Snippet masked_snip
     DataBuff[masked_snippet.query_id()]->work_buffer_list[masked_snippet.work_id()] = workBuffer;
     DataBuff[masked_snippet.query_id()]->tablename_workid_map[table_alias] = masked_snippet.work_id();
 
-    if(type == StorageEngineInstance::SnippetRequest_SnippetType_SCAN_SNIPPET){
+    if(type == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET){
       Monitoring_Container_Interface mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
       int block_cnt = mc.GetCSDBlockInfo(masked_snippet.query_id(),masked_snippet.work_id());
       DataBuff[masked_snippet.query_id()]->work_buffer_list[masked_snippet.work_id()]->left_block_count = block_cnt;
@@ -374,7 +375,7 @@ void BufferManager::initQuery(int qid){
 
 int BufferManager::checkTableStatus(int qid, string tname){
     if(DataBuff.find(qid) == DataBuff.end()){
-        return QueryIDError;
+        return NonInitQuery;
     }else if(DataBuff[qid]->tablename_workid_map.find(tname) == DataBuff[qid]->tablename_workid_map.end()){
         return NonInitTable;
     }else{
@@ -392,7 +393,7 @@ int BufferManager::endQuery(StorageEngineInstance::Request qid){
     return 1;
 }
 
-TableData BufferManager::getTableData(int qid, string tname){ //flag : 스니펫 첫번째 테이블 여부 (중간 테이블일수도 있음)
+TableData BufferManager::getTableData(int qid, string tname){ 
     TableData tableData;
     int phase = 0;
 
@@ -431,11 +432,16 @@ TableData BufferManager::getTableData(int qid, string tname){ //flag : 스니펫
             }
             KETILOG::DEBUGLOG(LOGTAG,"# Done " + to_string(qid) + ":" + tname);
             break;
-        }else{// QueryIDError | NonInitTable
+        }else if(status == NonInitTable){
             phase++;
-            string msg = "# QueryIDError | NonInitTable, wait phase : "+to_string(phase)+" {"+to_string(qid)+"|"+tname+"}";
+            string msg = "# NonInitTable, wait phase : "+to_string(phase)+" {"+to_string(qid)+"|"+tname+"}";
             KETILOG::DEBUGLOG(LOGTAG,msg);
-            sleep(1);
+            usleep(1000); 
+        }else{ // NONINITQUERY
+            phase++;
+            string msg = "# QueryIDError , wait phase : "+to_string(phase)+" {"+to_string(qid)+"|"+tname+"}";
+            KETILOG::DEBUGLOG(LOGTAG,msg);
+            usleep(1000);
         }
     }
 

@@ -86,8 +86,7 @@ private:
             }
 
             /* Request Set MetaData */
-            if(snippetrequest.type() == StorageEngineInstance::SnippetRequest_SnippetType_SCAN_SNIPPET || 
-               snippetrequest.type() == StorageEngineInstance::SnippetRequest_SnippetType_INDEX_SCAN_SNIPPET) {
+            if(snippetrequest.type() == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET) {
                 //async call
                 KETILOG::DEBUGLOG(LOGTAG,"# Request Monitoring Container Setting Metadata");
                 Monitoring_Container_Interface moc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
@@ -123,7 +122,7 @@ private:
             }
 
             /* Send Snippet to Container */
-            if(snippetrequest.type() == StorageEngineInstance::SnippetRequest_SnippetType_SCAN_SNIPPET) {
+            if(snippetrequest.type() == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET) {
                 KETILOG::DEBUGLOG(LOGTAG,"# Send Snippet to Offloading Container");
                 Offloading_Container_Interface oc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_OFFLOADING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
                 oc.Schedule(snippetrequest.snippet());

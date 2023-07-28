@@ -70,8 +70,8 @@ public:
 		int tablesize;
 		vector<struct ColumnSchema> Schema;
 		vector<struct SSTFile> SSTList;
-		vector<vector<string>> IndexList;
-		vector<string> PK;
+		vector<string> IndexList;
+		vector<string> PK; 
 	};
 
 	static int GetTableSchema(string tablename,vector<struct ColumnSchema> &dst){
@@ -82,7 +82,7 @@ public:
 		return GetInstance().getOrderedTableBySize(tablenames);
 	}
 
-	static int GetIndexList(string tablename, vector<vector<string>> &dst){
+	static int GetIndexList(string tablename, vector<string> &dst){
 		return GetInstance().getIndexList(tablename,dst);
 	}
 
@@ -141,7 +141,7 @@ private:
 	int initTableManager();
 	int getTableSchema(string tablename,vector<struct ColumnSchema> &dst);
 	vector<string> getOrderedTableBySize(vector<string> tablenames);
-	int getIndexList(string tablename, vector<vector<string>> &dst);
+	int getIndexList(string tablename, vector<string> &dst);
 	vector<string> getSSTList(string tablename);
 	void printTableManager();
 

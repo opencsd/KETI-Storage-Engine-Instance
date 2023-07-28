@@ -19,16 +19,16 @@ class Monitoring_Container_Interface {
 		std::string SetMetaData(SnippetRequest snippet_request) {
 			FieldMask mask;
 
-			if(snippet_request.type() == StorageEngineInstance::SnippetRequest_SnippetType_SCAN_SNIPPET) {
+			if(snippet_request.type() == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET) {
 				mask.add_paths("query_ID");
 				mask.add_paths("work_ID");
 				mask.add_paths("table_name");
-            } else if(snippet_request.type() == StorageEngineInstance::SnippetRequest_SnippetType_INDEX_SCAN_SNIPPET) {
+            } /*else if(snippet_request.type() == StorageEngineInstance::SnippetRequest_SnippetType_INDEX_SCAN_SNIPPET) {
 				mask.add_paths("query_ID");
 				mask.add_paths("work_ID");
 				mask.add_paths("table_name");
 				mask.add_paths("table_filter");
-            }
+            }*/
             
             Snippet masked_snippet = snippet_request.snippet();
             google::protobuf::util::FieldMaskUtil::TrimMessage(mask, &masked_snippet);

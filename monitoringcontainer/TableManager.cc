@@ -8,7 +8,7 @@ int TableManager::initTableManager(){
 
 	//read TableManager.json
 	string json = "";
-	std::ifstream openFile("/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/TableManager_tpch_1m_no_index.json");
+	std::ifstream openFile("/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/TableManager_tpch_small.json");
 	if(openFile.is_open() ){
 		std::string line;
 		while(getline(openFile, line)){
@@ -87,6 +87,9 @@ int TableManager::initTableManager(){
 		}
 		m_TableManager.insert({tbl->tablename,*tbl});
 	}
+
+
+	//인덱스테이블저장
 	
 	return 0;
 }
@@ -126,7 +129,7 @@ vector<string> TableManager::getOrderedTableBySize(vector<string> tablenames){
 	return ret;
 }
 
-int TableManager::getIndexList(string tablename, vector<vector<string>> &dst){
+int TableManager::getIndexList(string tablename, vector<string> &dst){
 	if (m_TableManager.find(tablename) == m_TableManager.end()){
 		KETILOG::FATALLOG(LOGTAG,"Table [" + tablename + "] Not Present");
         return -1;

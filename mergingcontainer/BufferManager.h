@@ -41,7 +41,7 @@ using namespace rapidjson;
 #define NUM_OF_BLOCKS 15
 #define BUFF_SIZE (NUM_OF_BLOCKS * 5000)
 #define NCONNECTION 8
-#define ID_INIT_WAIT_MAX_TIME 20
+#define ID_INIT_WAIT_MAX_TIME 1000
 
 template <typename T>
 class WorkQueue;
@@ -224,5 +224,4 @@ class BufferManager{
     kQueue<BlockResult> BlockResultQueue;//buffer manager csd result input queue
     thread BufferManager_Input_Thread;//get csd result thread
     thread BufferManager_Save_Thread;//save csd result thread
-
 };
