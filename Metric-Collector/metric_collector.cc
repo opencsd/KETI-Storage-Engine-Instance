@@ -6,7 +6,7 @@
 
 
 // CPU usage 구하는 함수
-double get_cpu_usage() {
+unsigned long long get_cpu_usage() {
     std::ifstream proc_stat("/proc/stat");
     std::string line;
     std::getline(proc_stat, line); // 첫 번째 라인은 'cpu' 정보
@@ -24,6 +24,9 @@ double get_cpu_usage() {
 
     return total_time;
 }
+
+
+
 int main(){
     //쿼리 시작
 
