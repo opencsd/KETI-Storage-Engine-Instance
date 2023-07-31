@@ -18,11 +18,11 @@ double get_cpu_usage() {
     long user, nice, sys, idle, iowait, irq, softirq, steal, guest, guest_nice;
     iss >> user >> nice >> sys >> idle >> iowait >> irq >> softirq >> steal >> guest >> guest_nice;
 
-    long idle_time = idle + iowait;
-    long active_time = user + nice + sys + irq + softirq + steal;
-    long total_time = active_time + idle_time;
+    unsigned long long total_time = 0;
+    total_time = user + nice + sys + idle + iowait + irq + softirq + steal + guest + guest_nice;
+    
 
-    return static_cast<double>(active_time) / total_time * 100.0;
+    return total_time;
 }
 int main(){
     //쿼리 시작
