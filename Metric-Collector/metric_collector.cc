@@ -11,6 +11,16 @@ struct CPU_Power {
     double end_CPUPower1;
 };
 
+struct QueryDuration {
+    std::chrono::high_resolution_clock::time_point start_time;
+    std::chrono::high_resolution_clock::time_point end_time;
+};
+
+struct CPU_Usage {
+    unsigned long long start_cpu;
+    unsigned long long end_cpu;
+};
+
 // CPU usage 구하는 함수
 unsigned long long get_cpu_usage() {
     std::ifstream proc_stat("/proc/stat");
@@ -33,6 +43,16 @@ unsigned long long get_cpu_usage() {
     return total_time;
 }
 
+float get_CPU_Usage_Percentage(const CPU_Usage& cpu_usage, const QueryDuration& querydur) {
+    unsigned long long total_cpu = cpu_usage.end_cpu - cpu_usage.start_cpu;
+    if(total_cpu == 0) {
+        printf("get CPU Usage error!");
+        return -1;
+    }
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(querydur.end_time - querydur.start_time);
+    float cpu_usage_percentage = (static_cast<double>(total_cpu) / 60.0); ///////////////////////여기부터 생각...
+}
+
 void get_CPU_Power(double power0, double power1) {
     // 0번째 CPU_Power
     std::ifstream file("/sys/class/powercap/intel-rapl:0:0/energy_uj");
@@ -50,18 +70,44 @@ void get_CPU_Power(double power0, double power1) {
 
 }
 
+void QueryStart(){
+    QueryDuration querydu;
+    CPU_Usage cpu_usg;
+    
+    // 쿼리 시작 시점 저장
+    querydu.start_time = std::chrono::high_resolution_clock::now();
+    cpu_usg.start_cpu = get_cpu_usage();
+
+}
+
+void QueryEnd(){
+
+}
+
 int main(){
-    //쿼리 시작 
+    /* 쿼리 시작 */
     //interface container에서 통신으로 쿼리 시작 받음
-    auto start = std::chrono::high_resolution_clock::now();
+
+    // 쿼리 시작 시점 저장
+    // 쿼리 시작 시점 cpu 사용량 저장
+
+    //쿼리 시작 시점 cpu power 저장
+
+    //쿼리 시작 시점 net 값 저장
 
 
-    //Metric 값 측정
-    //CPU, Power, Network
-
-
-    //쿼리 끝
+    /* 쿼리 끝 */
     //interface container에서 통신으로 쿼리 시작 받음
-    auto end = std::chrono::high_resolution_clock::now();
+
+    //쿼리 끝 시점 저장
+    //쿼리 끝 시점 cpu 사용량 저장
+    //쿼리 수행 시간 동안의 cpu 사용량 계산
+
+    //쿼리 끝 시점 cpu power 저장
+    //쿼리 수행 시간 동안의 cpu power 계산
+
+    //쿼리 끝 시점 net 값 저장
+    //쿼리 수행 시간 동안의 net 계산
+    
 
 }
