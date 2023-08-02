@@ -208,11 +208,11 @@ CMakeFiles/merging-container.dir/MergeQueryManager.cc.o: \
  /usr/include/c++/7/bits/stl_list.h /usr/include/c++/7/bits/list.tcc \
  /usr/include/c++/7/unordered_set /usr/include/c++/7/bits/unordered_set.h \
  /usr/include/c++/7/bitset /usr/include/c++/7/stack \
- /usr/include/c++/7/bits/stl_stack.h /usr/include/rapidjson/document.h \
- /usr/include/rapidjson/reader.h /usr/include/rapidjson/allocators.h \
- /usr/include/rapidjson/rapidjson.h /usr/include/c++/7/cstring \
- /usr/include/string.h /usr/include/strings.h /usr/include/inttypes.h \
- /usr/include/c++/7/cassert /usr/include/assert.h \
+ /usr/include/c++/7/bits/stl_stack.h /usr/include/c++/7/iostream \
+ /usr/include/rapidjson/document.h /usr/include/rapidjson/reader.h \
+ /usr/include/rapidjson/allocators.h /usr/include/rapidjson/rapidjson.h \
+ /usr/include/c++/7/cstring /usr/include/string.h /usr/include/strings.h \
+ /usr/include/inttypes.h /usr/include/c++/7/cassert /usr/include/assert.h \
  /usr/include/rapidjson/stream.h /usr/include/rapidjson/encodings.h \
  /usr/include/rapidjson/encodedstream.h \
  /usr/include/rapidjson/memorystream.h \
@@ -250,11 +250,10 @@ CMakeFiles/merging-container.dir/MergeQueryManager.cc.o: \
  /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
  /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
  /usr/include/x86_64-linux-gnu/bits/uio_lim.h /usr/include/c++/7/cstddef \
- /include/google/protobuf/stubs/common.h /usr/include/c++/7/iostream \
- /usr/include/c++/7/map /usr/include/c++/7/bits/stl_tree.h \
- /usr/include/c++/7/bits/stl_map.h /usr/include/c++/7/bits/stl_multimap.h \
- /usr/include/c++/7/set /usr/include/c++/7/bits/stl_set.h \
- /usr/include/c++/7/bits/stl_multiset.h \
+ /include/google/protobuf/stubs/common.h /usr/include/c++/7/map \
+ /usr/include/c++/7/bits/stl_tree.h /usr/include/c++/7/bits/stl_map.h \
+ /usr/include/c++/7/bits/stl_multimap.h /usr/include/c++/7/set \
+ /usr/include/c++/7/bits/stl_set.h /usr/include/c++/7/bits/stl_multiset.h \
  /include/google/protobuf/stubs/macros.h \
  /include/google/protobuf/stubs/platform_macros.h \
  /include/google/protobuf/stubs/port.h /usr/include/c++/7/stdlib.h \

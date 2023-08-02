@@ -71,8 +71,22 @@ public:
 		vector<struct ColumnSchema> Schema;
 		vector<struct SSTFile> SSTList;
 		vector<string> IndexList;
-		vector<string> PK; 
+		vector<string> PK;
+
 	};
+	
+	struct tableMetaData { //임시 선언 -> 추후에 Table Manager에서 JSON 데이터 값을 뽑아서 관리하는 정보들임
+        string tableIndexNum = "0000018B"; //table index 번호
+        bool pkExist = true; //pk 존재 여부
+        int indexCnt = 2; //index 갯수 카운트
+        int pkCnt = 2; //pk 갯수 카운트
+
+        //index, pk의 컬럼 이름 및 바이트 사이즈
+        vector<string> indexColumnNames = {"id", "age"};
+        vector<string> pkColumnNames = {"age", "id"};
+        vector<int> indexColumnBytes = {4,4}; 
+        vector<int> pkColumnBytes = {4,4};
+    };
 
 	static int GetTableSchema(string tablename,vector<struct ColumnSchema> &dst){
 		return GetInstance().getTableSchema(tablename,dst);

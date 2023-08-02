@@ -76,11 +76,11 @@ private:
     bool isGroupby;//그룹바이 여부
     bool isOrderby;//오더바이 여부
     bool isLimit;//리미트 여부
-    bool smallFlag;//true = right is smaller, false = left is smaller
+    bool right_is_smaller;//true = right is smaller, false = left is smaller
     bool equal_join_exist;
     TableData left_table;//table1(좌항)
     TableData right_table;//table2(우항)
-    unordered_map<string,vector<int>> equal_join_hash_table;//key:index 해시 조인 시(left, right 로우가 적은 쪽)
+    unordered_map<string,vector<int>> hash_table;//key:index 해시 조인 시(left, right 로우가 적은 쪽)
     TableData target_table;//프로젝션 대상 테이블(left_table X right_table)
     map<string,int> group_by_key;//<그룹바이기준컬럼,그룹바이 테이블 인덱스>
     vector<TableData> group_by_table;//그룹바이된 테이블 컬럼(group by)
@@ -102,12 +102,13 @@ private:
     void FullOuterJoin();//full outer join
     void CrossJoin();//cartesian product
     void Union();//single table filtering (having)
-    void Exist();
     void In();
     void DependencyInnerJoin();//dependency exist/in
     void DependencyExist();//dependency exist/in
     void DependencyIn();//dependency not exist/not in
     void Filtering();//single table filtering (having)
     void createHashTable(vector<int> equal_join_index);//create hash table for hash join
-    bool compareByOperator(int oper, string left_column, string right_column, int left_index, int right_index);
+    // bool compareByOperator(int oper, string left_column, string right_column, int left_index, int right_index);
+    template <typename T>
+    bool compareByOperator(int oper, const T& arg1, const T& arg2);
 };

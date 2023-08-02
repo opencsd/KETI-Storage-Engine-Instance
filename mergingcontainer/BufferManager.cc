@@ -436,12 +436,12 @@ TableData BufferManager::getTableData(int qid, string tname){
             phase++;
             string msg = "# NonInitTable, wait phase : "+to_string(phase)+" {"+to_string(qid)+"|"+tname+"}";
             KETILOG::DEBUGLOG(LOGTAG,msg);
-            usleep(1000); 
+            this_thread::sleep_for(std::chrono::milliseconds(100));
         }else{ // NONINITQUERY
             phase++;
             string msg = "# QueryIDError , wait phase : "+to_string(phase)+" {"+to_string(qid)+"|"+tname+"}";
             KETILOG::DEBUGLOG(LOGTAG,msg);
-            usleep(1000);
+            this_thread::sleep_for(std::chrono::milliseconds(100));
         }
     }
 
