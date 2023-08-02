@@ -5,20 +5,21 @@
 #include <thread>
 #include <sstream>
 
+struct Net_Usage {
+    unsigned long long rx;
+    unsigned long long tx;
+};
 
-int main() {
+struct Net_Usage get_Network_Usage() {
+    unsigned long long rxByte, txByte;
+    Net_Usage net_usg;
     std::ifstream file("/proc/net/dev");
     if (!file) {
         std::cerr << "Failed to open /proc/net/dev" << std::endl;
     }
 
-    const std::string interface = "eno1";
-
     std::string line;
-    
     std::string name;
-    unsigned long long rxByte, txByte;
-
 
     while (getline(file, line)){
         if(line.find("eno1") != std::string::npos){
@@ -27,16 +28,26 @@ int main() {
             for (int i = 3; i < 11; i++){
                 iss >> txByte;
             }
-            std::cout << line << std::endl;
             break;
         }
-
-       
     }
-
-    std::cout << name << std::endl;
     std::cout << rxByte << std::endl;
     std::cout << txByte << std::endl;
+
+    net_usg.rx = rxByte;
+    net_usg.tx = txByte;
+
+    return net_usg;
+}
+
+
+int main() {
+    Net_Usage net_usg;
     
+    net_usg = get_Network_Usage();
+
+    std::cout << net_usg.rx << std::endl;
+    std::cout << net_usg.tx << std::endl;
+
     return 0;
 }

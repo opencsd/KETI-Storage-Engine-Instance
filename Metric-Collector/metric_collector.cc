@@ -18,17 +18,22 @@ struct CPU_Usage {
 };
 
 struct CPU_Power {
-    double start_CPUPower0;
-    double start_CPUPower1;
-    double end_CPUPower0;
-    double end_CPUPower1;
+    float start_CPUPower0;
+    float start_CPUPower1;
+    float end_CPUPower0;
+    float end_CPUPower1;
 };
 
 struct Net_Usage {
-    unsigned long long start_rxByte;
-    unsigned long long start_txByte;
-    unsigned long long end_rxByte;
-    unsigned long long end_txByte;
+    unsigned long long rx;
+    unsigned long long tx;
+};
+
+struct result_Net_Usage {
+    unsigned long long start_rx;
+    unsigned long long start_tx;
+    unsigned long long end_rx;
+    unsigned long long end_tx;
 };
 
 struct Metric_Result {
@@ -73,25 +78,20 @@ float get_CPU_Usage_Percentage(const CPU_Usage& cpu_usage, const QueryDuration& 
 }
 
 // Power 사용량 구하는 함수
-void get_CPU_Power(double power0, double power1) {
-    // 0번째 CPU_Power
-    std::ifstream file("/sys/class/powercap/intel-rapl:0:0/energy_uj");
+float get_CPU_Power(const std::string& filePath) {
+    std::ifstream file(filePath);
     std::string line;
     std::getline(file, line);
     file.close();
-    power0 = std::stoull(line) / 1000000.0;
 
-    // 1번째 CPU_Power
-    std::ifstream file("/sys/class/powercap/intel-rapl:1:0/energy_uj");
-    std::string line;
-    std::getline(file, line);
-    file.close();
-    power1 = std::stoull(line) / 1000000.0;
-
+    return std::stoull(line) / 1000000.0;
 }
 
 // Network 사용량 
-void get_Network_Usage(unsigned long long rxByte, unsigned long long txByte) {
+struct Net_Usage get_Network_Usage() {
+    Net_Usage net_usg;
+    unsigned long long rxByte;
+    unsigned long long txByte;
     std::ifstream file("/proc/net/dev");
     if (!file) {
         std::cerr << "Failed to open /proc/net/dev" << std::endl;
@@ -110,10 +110,14 @@ void get_Network_Usage(unsigned long long rxByte, unsigned long long txByte) {
             break;
         }
     }
+
+    net_usg.rx = rxByte;
+    net_usg.tx = txByte;
+
+    return net_usg;
 }
 
-void QueryStart(QueryDuration& querydu, CPU_Usage& cpu_usg, CPU_Power& cpu_power, Net_Usage& net_usg){
-    
+void QueryStart(QueryDuration& querydu, CPU_Usage& cpu_usg, CPU_Power& cpu_power, result_Net_Usage& net_usg){
     // 쿼리 시작 시점 저장
     querydu.start_time = std::chrono::high_resolution_clock::now();
     
@@ -121,18 +125,32 @@ void QueryStart(QueryDuration& querydu, CPU_Usage& cpu_usg, CPU_Power& cpu_power
     cpu_usg.start_cpu = get_cpu_usage();
 
     //쿼리 시작 시점 cpu power 저장
-    get_CPU_Power(cpu_power.start_CPUPower0, cpu_power.start_CPUPower1);
+    cpu_power.start_CPUPower0 = get_CPU_Power("/sys/class/powercap/intel-rapl:0:0/energy_uj");
 
     //쿼리 시작 시점 net 값 저장
-    get_Network_Usage(net_usg.start_rxByte, net_usg.start_txByte);
+    Net_Usage temp_net;
+    temp_net = get_Network_Usage();
+    net_usg.start_rx = temp_net.rx;
+    net_usg.start_tx = temp_net.tx;
 }
 
-void QueryEnd(){
+void QueryEnd(QueryDuration& querydu, CPU_Usage& cpu_usg, CPU_Power& cpu_power, result_Net_Usage& net_usg, Metric_Result& result){
     //쿼리 끝 시점 저장
+    querydu.end_time = std::chrono::high_resolution_clock::now();
+    
     //쿼리 끝 시점 cpu 사용량 저장
+    cpu_usg.end_cpu = get_cpu_usage();
+
     //쿼리 수행 시간 동안의 cpu 사용량 계산
+    float cpu_usage_percentage;
+    cpu_usage_percentage = get_CPU_Usage_Percentage(cpu_usg, querydu);
+    if(cpu_usage_percentage < 0){
+        printf("CPU_Percentage error!\n");
+    }
+    result.cpu_usage = cpu_usage_percentage;
 
     //쿼리 끝 시점 cpu power 저장
+    
     //쿼리 수행 시간 동안의 cpu power 계산
 
     //쿼리 끝 시점 net 값 저장
@@ -146,7 +164,8 @@ int main(){
     CPU_Power cpu_power;
     QueryDuration querydu;
     CPU_Usage cpu_usg;
-    Net_Usage net_usg;
+    result_Net_Usage net_usg;
+    Metric_Result result;
 
     QueryStart(querydu, cpu_usg, cpu_power, net_usg);
     
@@ -154,6 +173,8 @@ int main(){
 
     /* 쿼리 끝 */
     //interface container에서 통신으로 쿼리 시작 받음
+
+    QueryEnd(querydu, cpu_usg, cpu_power, net_usg, result);
 
     
     
