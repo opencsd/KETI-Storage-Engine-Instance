@@ -61,19 +61,23 @@ unsigned long long get_cpu_usage() {
     unsigned long long total_time = 0;
     total_time = user + nice + sys + idle + iowait + irq + softirq + steal + guest + guest_nice;
 
+    // std::cout << "get_cpu_usage : " << total_time << std::endl;
+
     return total_time;
 }
 
 // 쿼리 시간 동안 CPU 평균 사용량 구하는 함수
 float get_CPU_Usage_Percentage(const CPU_Usage& cpu_usage, const QueryDuration& querydur) {
     unsigned long long total_cpu = cpu_usage.end_cpu - cpu_usage.start_cpu;
-    if(total_cpu == 0) {
+    if(total_cpu <= 0) {
         printf("get CPU Usage error!");
         return -1;
     }
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(querydur.end_time - querydur.start_time);
     float cpu_usage_percentage = (static_cast<double>(total_cpu) / sysconf(_SC_CLK_TCK)) / duration.count() * 100.0;
 
+    std::cout << "get_CPU_Usage_Percentage : " << cpu_usage_percentage << std::endl;
+    
     return cpu_usage_percentage;
 }
 
@@ -84,12 +88,14 @@ float get_CPU_Power(const std::string& filePath) {
     std::getline(file, line);
     file.close();
 
+    // std::cout << "get_CPU_Power : " << std::stoull(line) / 1000000.0 << std::endl;
+
     return std::stoull(line) / 1000000.0;
 }
 
 // Network 사용량 
-struct Net_Usage get_Network_Usage() {
-    Net_Usage net_usg;
+void get_Network_Usage(Net_Usage& net_usg) {
+    // Net_Usage net_usg;
     unsigned long long rxByte;
     unsigned long long txByte;
     std::ifstream file("/proc/net/dev");
@@ -114,7 +120,9 @@ struct Net_Usage get_Network_Usage() {
     net_usg.rx = rxByte;
     net_usg.tx = txByte;
 
-    return net_usg;
+    // std::cout << "get_Network_Usage : " << rxByte << "   " << txByte << std::endl;
+
+    // return net_usg;
 }
 
 void QueryStart(QueryDuration& querydu, CPU_Usage& cpu_usg, CPU_Power& cpu_power, result_Net_Usage& net_usg){
@@ -126,12 +134,19 @@ void QueryStart(QueryDuration& querydu, CPU_Usage& cpu_usg, CPU_Power& cpu_power
 
     //쿼리 시작 시점 cpu power 저장
     cpu_power.start_CPUPower0 = get_CPU_Power("/sys/class/powercap/intel-rapl:0:0/energy_uj");
+    cpu_power.start_CPUPower1 = get_CPU_Power("/sys/class/powercap/intel-rapl:1:0/energy_uj");
 
     //쿼리 시작 시점 net 값 저장
     Net_Usage temp_net;
-    temp_net = get_Network_Usage();
+    get_Network_Usage(temp_net);
     net_usg.start_rx = temp_net.rx;
     net_usg.start_tx = temp_net.tx;
+
+    std::cout << "cpu 사용량 : " << cpu_usg.start_cpu << std::endl;
+    std::cout << "cpu power1 : " << cpu_power.start_CPUPower0 << std::endl;
+    std::cout << "cpu power2 : " << cpu_power.start_CPUPower1 << std::endl;
+    std::cout << "Net 사용량 rx : " << net_usg.start_rx << std::endl;
+    std::cout << "Net 사용량 tx : " << net_usg.start_tx << std::endl;
 }
 
 void QueryEnd(QueryDuration& querydu, CPU_Usage& cpu_usg, CPU_Power& cpu_power, result_Net_Usage& net_usg, Metric_Result& result){
@@ -142,19 +157,41 @@ void QueryEnd(QueryDuration& querydu, CPU_Usage& cpu_usg, CPU_Power& cpu_power, 
     cpu_usg.end_cpu = get_cpu_usage();
 
     //쿼리 수행 시간 동안의 cpu 사용량 계산
-    float cpu_usage_percentage;
-    cpu_usage_percentage = get_CPU_Usage_Percentage(cpu_usg, querydu);
-    if(cpu_usage_percentage < 0){
+    result.cpu_usage = get_CPU_Usage_Percentage(cpu_usg, querydu);
+    if(result.cpu_usage < 0){
         printf("CPU_Percentage error!\n");
     }
-    result.cpu_usage = cpu_usage_percentage;
 
     //쿼리 끝 시점 cpu power 저장
+    cpu_power.end_CPUPower0 = get_CPU_Power("/sys/class/powercap/intel-rapl:0:0/energy_uj");
+    cpu_power.end_CPUPower1 = get_CPU_Power("/sys/class/powercap/intel-rapl:1:0/energy_uj");
     
     //쿼리 수행 시간 동안의 cpu power 계산
+    float cpu_power_result = (cpu_power.end_CPUPower0 - cpu_power.start_CPUPower0) + (cpu_power.end_CPUPower1 - cpu_power.start_CPUPower1);
+    result.power_usage = cpu_power_result;
 
     //쿼리 끝 시점 net 값 저장
+    Net_Usage temp_net;
+    get_Network_Usage(temp_net);
+    net_usg.end_rx = temp_net.rx;
+    net_usg.end_tx = temp_net.tx;
+
     //쿼리 수행 시간 동안의 net 계산
+    unsigned long long rxByte_usage, txByte_usage, totalByte;
+    rxByte_usage = net_usg.end_rx - net_usg.start_rx;
+    txByte_usage = net_usg.end_tx - net_usg.start_tx;
+    totalByte = rxByte_usage + txByte_usage;
+    // totalByte = totalByte/1000000.0;
+    result.network_usage = totalByte;
+
+    std::cout << "cpu 사용량 : " << cpu_usg.end_cpu << std::endl;
+    std::cout << "cpu power1 : " << cpu_power.end_CPUPower0 << std::endl;
+    std::cout << "cpu power2 : " << cpu_power.end_CPUPower1 << std::endl;
+    std::cout << "Net 사용량 rx : " << net_usg.end_rx << std::endl;
+    std::cout << "Net 사용량 tx : " << net_usg.end_tx << std::endl;
+    std::cout << "쿼리 수행동안 CPU 사용량 : " << result.cpu_usage << std::endl;
+    std::cout << "쿼리 수행동안 Power 사용량 : " << result.power_usage << std::endl;
+    std::cout << "쿼리 수행동안 Net 사용량 : " << result.network_usage << std::endl;
 }
 
 int main(){
@@ -167,16 +204,36 @@ int main(){
     result_Net_Usage net_usg;
     Metric_Result result;
 
+    std::cout << "---------Query Start-----------" << std::endl;
     QueryStart(querydu, cpu_usg, cpu_power, net_usg);
+
+    std::cout << "-------main query start-------" << std::endl;
+    std::cout << "cpu 사용량 : " << cpu_usg.start_cpu << std::endl;
+    std::cout << "cpu power1 : " << cpu_power.start_CPUPower0 << std::endl;
+    std::cout << "cpu power2 : " << cpu_power.start_CPUPower1 << std::endl;
+    std::cout << "Net 사용량 rx : " << net_usg.start_rx << std::endl;
+    std::cout << "Net 사용량 tx : " << net_usg.start_tx << std::endl;
+
+
+    sleep(5);
+    
     
 
 
     /* 쿼리 끝 */
     //interface container에서 통신으로 쿼리 시작 받음
 
+    std::cout << "---------Query End-----------" << std::endl;
     QueryEnd(querydu, cpu_usg, cpu_power, net_usg, result);
+    std::cout << "-------main query end-------" << std::endl;
+    std::cout << "cpu 사용량 : " << cpu_usg.end_cpu << std::endl;
+    std::cout << "cpu power1 : " << cpu_power.end_CPUPower0 << std::endl;
+    std::cout << "cpu power2 : " << cpu_power.end_CPUPower1 << std::endl;
+    std::cout << "Net 사용량 rx : " << net_usg.end_rx << std::endl;
+    std::cout << "Net 사용량 tx : " << net_usg.end_tx << std::endl;
+    std::cout << "쿼리 수행동안 CPU 사용량 : " << result.cpu_usage << std::endl;
+    std::cout << "쿼리 수행동안 Power 사용량 : " << result.power_usage << std::endl;
+    std::cout << "쿼리 수행동안 Net 사용량 : " << result.network_usage << std::endl;
 
-    
-    
-
+    return 0;
 }

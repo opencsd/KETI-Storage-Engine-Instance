@@ -10,9 +10,9 @@ struct Net_Usage {
     unsigned long long tx;
 };
 
-struct Net_Usage get_Network_Usage() {
+void get_Network_Usage(Net_Usage& net_usg) {
     unsigned long long rxByte, txByte;
-    Net_Usage net_usg;
+    // Net_Usage net_usg;
     std::ifstream file("/proc/net/dev");
     if (!file) {
         std::cerr << "Failed to open /proc/net/dev" << std::endl;
@@ -31,20 +31,23 @@ struct Net_Usage get_Network_Usage() {
             break;
         }
     }
-    std::cout << rxByte << std::endl;
-    std::cout << txByte << std::endl;
+    // std::cout << rxByte << std::endl;
+    // std::cout << txByte << std::endl;
 
     net_usg.rx = rxByte;
     net_usg.tx = txByte;
 
-    return net_usg;
+    std::cout << net_usg.rx << std::endl;
+    std::cout << net_usg.tx << std::endl;
+
+    // return net_usg;
 }
 
 
 int main() {
     Net_Usage net_usg;
     
-    net_usg = get_Network_Usage();
+    get_Network_Usage(net_usg);
 
     std::cout << net_usg.rx << std::endl;
     std::cout << net_usg.tx << std::endl;
