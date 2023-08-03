@@ -3,28 +3,7 @@
 // COPYING file in the root directory) and Apache 2.0 License
 // (found in the LICENSE.Apache file in the root directory)
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <iostream>
-#include <map> //추가
-#include <vector>
-#include <array> 
-#include <fstream>
-#include "rapidjson/document.h"
-#include "rapidjson/istreamwrapper.h"
-#include "rapidjson/prettywriter.h"
-#include "rapidjson/stringbuffer.h"
-
-#include "rocksdb/sst_file_reader.h"
-#include "rocksdb/sst_file_manager.h"
-#include "rocksdb/slice.h"
-#include "rocksdb/iterator.h"
-#include "rocksdb/table_properties.h"
+#include "IndexTblGenManager.h"
 
 using ROCKSDB_NAMESPACE::SstFileReader;
 using ROCKSDB_NAMESPACE::Slice;
@@ -46,6 +25,8 @@ std::string kDBPath = "C:\\Windows\\TEMP\\rocksdb_simple_example";
 const char *file_path = "/root/workspace/HUN/csd_file_scan/keti/sst/004096.sst";
 #endif
 
+//sst 파일 뿐만 아니라 metadata에 대한 정보도 받아야 함
+
 int main(int argc, char **argv) {
     map<string, vector<string>> indexScanMap; //Index Data map
     //vector<string> indexVecStr, pkVecStr;
@@ -56,17 +37,19 @@ int main(int argc, char **argv) {
     ReadOptions readOptions;
     SstFileReader sstFileReader(options);
     TableProperties tableProperties;
-    Status s = sstFileReader.Open(file_path); 
+    Status s = sstFileReader.Open(file_path); //sst list를 받아와서 
     // Status s = sstFileReader.KetiOpen(file_path);
     Iterator* it = sstFileReader.NewIterator(readOptions);
     if(!s.ok()){
       std::cout << "open error" << std::endl;
     }
 
-    struct tableMetaData { // 1.tablemanager.cc에서 파싱 작업 -> 2.구조체에 메타데이터 저장 -> 3.IndexTblGenManager에서 구조체 관리
+    // 1.tablemanager.cc에서 파싱 작업 -> 2.구조체에 메타데이터 저장 -> 3.IndexTblGenManager에서 구조체 관리
+
+    struct tableMetaData { 
         string tableIndexNum = "0000018B";
         bool pkExist = true;
-        int indexCnt = 2; 
+        int indexCnt = 2;
         int pkCnt = 2;
         //각 index와 pk 컬럼들에 대한 길이 정보
         vector<string> indexColumnNames = {"id", "age"};

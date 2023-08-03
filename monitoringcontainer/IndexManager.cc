@@ -5,7 +5,7 @@ using StorageEngineInstance::MetaDataResponse_PBAInfo;
 
 //테이블 스키마 정보 임의로 저장 >> 이후 DB File Monitoring을 통해 데이터 저장 -> 업데이트시 DB Connector Instance로 반영
 void IndexManager::initIndexManager(){
-	// 00 00 01 3E 80 00 2A 20 80 00 00 01
+	// 00 00 01 3E 80 00 2A 20 80 00 00 01 
     char data0[12];
     data0[0] = 0x00;
     data0[1] = 0x00;
@@ -93,14 +93,14 @@ void IndexManager::initIndexManager(){
     // [2] index table 정보 저장
     // key : index, value : pk list
 
-	TableManager::Table table = TableManager::GetMutableTable("lineitem");
-	for(int i=0; i<table.SSTList.size(); i++){
-		TableManager::SSTFile sst = table.SSTList[i];
+	TableManager::Table table = TableManager::GetMutableTable("lineitem"); //lineitem에 대한 table 구조체 획득
+	for(int i=0; i<table.SSTList.size(); i++){//해당 table에 대한 여러개의 sst list들을 전부 체크
+		TableManager::SSTFile sst = table.SSTList[i]; 
 		
 		char* ikey0 = &data0[0];
 		string index0(ikey0 + 4, ikey0 + 8);
 		string pk0(ikey0 + 4, ikey0 + 12);
-		sst.IndexTable[index0].push_back(pk0);
+		sst.IndexTable[index0].push_back(pk0); //sst 구조체의 index와 pk를 push back
 
 		char* ikey1 = &data1[0];
 		string index1(ikey1 + 4, ikey1 + 8);

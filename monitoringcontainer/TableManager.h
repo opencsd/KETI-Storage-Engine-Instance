@@ -17,6 +17,11 @@
 #include "rapidjson/writer.h"
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/prettywriter.h" 
+#include "rocksdb/sst_file_reader.h"
+#include "./rocksdb/include/rocksdb/sst_file_manager.h"
+#include "./rocksdb/include/rocksdb/slice.h"
+#include "./rocksdb/include/rocksdb/iterator.h"
+#include "./rocksdb/include/rocksdb/table_properties.h"
 
 #include "storage_engine_instance.grpc.pb.h"
 
@@ -51,18 +56,21 @@ public:
 		int type;
 		int length;
 		int offset;
+		bool isPk; //추가 : 해당 컬럼이 pk인지의 여부 -> 어느 구조체에서 관리가 되어야 할까? 
+		bool isIndex; //추가 : 해당 컬럼이 index인지의 여부 -> 어느 구조체에서 관리가 되어야 할까? 
 	};
 	
+	struct SSTFile{ 
+		string filename;
+		vector<struct DataBlockHandle> BlockList; //sst마다 block들이 list로 관리됨
+		map<string,vector<string>> IndexTable; //sst마다 인덱스가 list로 관리됨
+		string vector;
+	};
+
 	struct DataBlockHandle {
-		string IndexBlockHandle;
+		string IndexBlockHandle; //table index 번호, 스캔할 블록의 시작점 -> 처음 데이터 테이블 세팅 과정에서 이 데이터를 가지고 해당 블록인지 비교해야 함
 		off64_t Offset;
 		off64_t Length;
-	};
-	
-	struct SSTFile{
-		string filename;
-		vector<struct DataBlockHandle> BlockList;
-		map<string,vector<string>> IndexTable;
 	};
 	
 	struct Table {
@@ -72,21 +80,14 @@ public:
 		vector<struct SSTFile> SSTList;
 		vector<string> IndexList;
 		vector<string> PK;
-
+		bool pkExist; //추가 : pk 존재 여부
+		vector<string> IndexColumnNames; //추가 : index로 지정된 컬럼들의 이름, 갯수 및 바이트 사이즈
+		vector<int> IndexColumnBytes;
+		int IndexCnt; 
+		vector<string> PkColumnNames; //추가 : pk로 지정된 컬럼들의 이름, 갯수 및 바이트 사이즈
+		vector<int> PkColumnBytes;
+		int PkCnt;
 	};
-	
-	struct tableMetaData { //임시 선언 -> 추후에 Table Manager에서 JSON 데이터 값을 뽑아서 관리하는 정보들임
-        string tableIndexNum = "0000018B"; //table index 번호
-        bool pkExist = true; //pk 존재 여부
-        int indexCnt = 2; //index 갯수 카운트
-        int pkCnt = 2; //pk 갯수 카운트
-
-        //index, pk의 컬럼 이름 및 바이트 사이즈
-        vector<string> indexColumnNames = {"id", "age"};
-        vector<string> pkColumnNames = {"age", "id"};
-        vector<int> indexColumnBytes = {4,4}; 
-        vector<int> pkColumnBytes = {4,4};
-    };
 
 	static int GetTableSchema(string tablename,vector<struct ColumnSchema> &dst){
 		return GetInstance().getTableSchema(tablename,dst);
@@ -110,6 +111,10 @@ public:
 
 	static Table GetTable(string tablename){
 		return GetInstance().m_TableManager[tablename];
+	}
+
+	static GetIndexTable(){
+
 	}
 
 	static Table GetMutableTable(string tablename){
@@ -141,23 +146,25 @@ public:
 	}
 
 private:
-	TableManager() {};
-    TableManager(const TableManager&);
-    TableManager& operator=(const TableManager&){
+	TableManager() {}; //기본 생성자 정의. {} 부분이 비어있으므로 아무 동작 x  
+    TableManager(const TableManager&); //복사 생성자를 선언하는 코드
+    TableManager& operator=(const TableManager&){ //할당 연산자 선언. 이미 생성된 객체에 다른 객체의 값을 할당할 때 호출되는 함수
         return *this;
     };
 
-    static TableManager& GetInstance() {
+	//싱글톤 패턴을 사용하여 클래스의 인스턴스를 하나로 유지
+
+    static TableManager& GetInstance() { //정적으로 선언되어 클래스의 유일한 인스턴스를 반환. 이 함수를 통해 인스턴스를 가져오므로 항상 동일한 인스턴스를 사용하게 됨
         static TableManager _instance;
         return _instance;
     }
 
-	int initTableManager();
-	int getTableSchema(string tablename,vector<struct ColumnSchema> &dst);
-	vector<string> getOrderedTableBySize(vector<string> tablenames);
-	int getIndexList(string tablename, vector<string> &dst);
-	vector<string> getSSTList(string tablename);
-	void printTableManager();
+	int initTableManager(); //TableManager의 초기화 함수
+	int getTableSchema(string tablename,vector<struct ColumnSchema> &dst); //특정 테이블의 스키마 정보를 가져옴
+	vector<string> getOrderedTableBySize(vector<string> tablenames); //크기 순으로 정렬된 테이블의 이름을 가져옴
+	int getIndexList(string tablename, vector<string> &dst); //특정 테이블의 인덱스 목록을 가져옴
+	vector<string> getSSTList(string tablename); //특정 테이블의 sst 파일 목록을 가져옴
+	void printTableManager(); //테이블 매니저의 정보를 출력하는 함수
 
 /* Variables */
 public:
@@ -165,6 +172,6 @@ public:
 
 private:
     mutex Table_Mutex;
-	unordered_map<string,struct Table> m_TableManager;
+	unordered_map<string,struct Table> m_TableManager; //key : 테이블 이름, value : 테이블 정보 구조체
 	unordered_map<string,Response*> return_data;
 };

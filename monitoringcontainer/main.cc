@@ -130,7 +130,7 @@ class MonitoringContainerServiceImpl final : public MonitoringContainer::Service
 void RunServer() {
   std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT));
   MonitoringContainerServiceImpl service;
-
+  monitoringContainerSerViceLmpl service2;
   ServerBuilder builder;
   builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
   builder.RegisterService(&service);
@@ -150,7 +150,7 @@ int main(int argc, char** argv) {
 
   MetricAnalysisModule& instance = MetricAnalysisModule::GetInstance();
   TableManager::InitTableManager();
-  IndexTblGenManager::InitIndexTblGenManager();
+  IndexTblGenManager::InitIndexTblGenManager(); //추가 : 인덱스 테이블 생성 과정
   WALQueryAgent::InitWALQueryAgent();
   LBA2PBAQueryAgent::InitLBA2PBAQueryAgent();
   IndexManager::InitIndexManager();

@@ -25,10 +25,11 @@ int TableManager::initTableManager(){
 	
 	for(int i=0;i<TableList.Size();i++){
 		Value &TableObject = TableList[i];
-		auto tbl = new Table();
+		auto tbl = new Table(); //테이블 구조체 생성
 
-		Value &tablenameObject = TableObject["tablename"];
-		tbl->tablename = tablenameObject.GetString();
+		Value &tablenameObject = TableObject["tablename"]; //json으로 수신한 테이블 이름 저장
+
+		tbl->tablename = tablenameObject.GetString(); //Table 구조체에 테이블 이름 저장
 
 		// tbl.tablesize = TableObject["Size"].GetInt();
 
@@ -52,12 +53,17 @@ int TableManager::initTableManager(){
 			Value &ColumnObject = SchemaObject[j];
 			auto Column = new ColumnSchema;
 
+			//column 구조체에 컬럼 관련 정보들 저장 
 			Column->column_name = ColumnObject["column_name"].GetString();
 			Column->type = ColumnObject["type"].GetInt();
 			Column->length = ColumnObject["length"].GetInt();
 			Column->offset = ColumnObject["offset"].GetInt();
+			Column->isPk = ColumnObject["isPk"].GetBool(); //추가 : 해당 컬럼이 pk인지의 여부
+			Column->isIndex = ColumnObject["isIndex"].GetBool(); //추가 : 해당 컬럼이 index인지의 여부
 
+			//column 구조체를 테이블 구조체의 컬럼스키마를 모아두는 스키마 벡터에 푸시백
 			tbl->Schema.push_back(*Column);
+			tbl->Schema.push_back(*Column2);
 		}
 
 		Value &SSTList = TableObject["SST List"];
@@ -67,16 +73,17 @@ int TableManager::initTableManager(){
 
 			SstFile->filename = SSTObject["filename"].GetString();
 
-			Value &BlockList = SSTObject["Block List"];
+			Value &BlockList = SSTObject["Block List"]; //index block handle, offset, length 존재
 			
 			for(int k=0;k<BlockList.Size();k++){
 				Value &BlockHandleObject = BlockList[k];
-				struct DataBlockHandle DataBlockHandle;
+				struct DataBlockHandle DataBlockHandle; 
 
-				// if(BlockHandleObject.HasMember("IndexBlockHandle")){
+				//index block handle 
+				// if(BlockHandleObject.HasMember("IndexBlockHandle")){ 
 				// 	DataBlockHandle.IndexBlockHandle = BlockHandleObject["IndexBlockHandle"].GetString();
 				// }
-
+				DataBlockHandle.IndexBlockHandle = BlockHandleObject["IndexBlockHandle"]; //추가 : sst 파일 내부의 인덱스 블록들의 block handle
 				DataBlockHandle.Offset = BlockHandleObject["Offset"].GetInt();
 				DataBlockHandle.Length = BlockHandleObject["Length"].GetInt();
 
@@ -87,11 +94,6 @@ int TableManager::initTableManager(){
 		}
 		m_TableManager.insert({tbl->tablename,*tbl});
 	}
-
-
-	//인덱스테이블저장
-	
-	return 0;
 }
 
 vector<string> TableManager::getSSTList(string tablename){
@@ -103,9 +105,9 @@ vector<string> TableManager::getSSTList(string tablename){
 }
 
 int TableManager::getTableSchema(std::string tablename,vector<struct ColumnSchema> &dst){	
-    if (m_TableManager.find(tablename) == m_TableManager.end()){
-		KETILOG::FATALLOG(LOGTAG,"Table [" + tablename + "] Not Present");
-        return -1;
+    if (m_TableManager.find(tablename) == m_TableManager.end()){ //맵에 일치하는 테이블 이름이 없을 때
+		KETILOG::FATALLOG(LOGTAG,"Table [" + tablename + "] Not Present"); //해당 테이블이 존재하지 않음
+		    return -1;
 	}
 
 	struct Table tbl = m_TableManager[tablename];
