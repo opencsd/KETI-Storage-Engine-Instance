@@ -80,7 +80,9 @@ public:
 		vector<struct SSTFile> SSTList;
 		vector<string> IndexList;
 		vector<string> PK;
-		bool pkExist; //추가 : pk 존재 여부
+
+		//추가: pk 존재 여부, index 및 pk로 지정된 컬럼들의 이름, 갯수 및 바이트 사이즈
+		bool PkExist; //추가 : pk 존재 여부
 		vector<string> IndexColumnNames; //추가 : index로 지정된 컬럼들의 이름, 갯수 및 바이트 사이즈
 		vector<int> IndexColumnBytes;
 		int IndexCnt; 

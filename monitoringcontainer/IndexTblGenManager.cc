@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
       std::cout << "open error" << std::endl;
     }
 
-    // 1.tablemanager.cc에서 파싱 작업 -> 2.구조체에 메타데이터 저장 -> 3.IndexTblGenManager에서 구조체 관리
+    // 1. json에 저장되어있는 해당 데이터 tablemanager.cc에서 파싱 작업 -> 2.구조체에 메타데이터 저장 -> 3.IndexTblGenManager에서 구조체 관리
 
     struct tableMetaData { 
         string tableIndexNum = "0000018B";

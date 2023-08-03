@@ -1,7 +1,7 @@
 #include "TableManager.h"
 
 using namespace rapidjson;
-
+//table manager 초기화
 //테이블 스키마 정보 임의로 저장 >> 이후 DB File Monitoring을 통해 데이터 저장 -> 업데이트시 DB Connector Instance로 반영
 int TableManager::initTableManager(){
 	KETILOG::DEBUGLOG(LOGTAG, "# Init TableManager");
@@ -30,7 +30,7 @@ int TableManager::initTableManager(){
 		Value &tablenameObject = TableObject["tablename"]; //json으로 수신한 테이블 이름 저장
 
 		tbl->tablename = tablenameObject.GetString(); //Table 구조체에 테이블 이름 저장
-
+		tbl->PkExist = tablenameObject.GetBool(); //추가 : Table 구조체에 pk 존재 여부 저장
 		// tbl.tablesize = TableObject["Size"].GetInt();
 
 		// if(TableObject.HasMember("PK")){
@@ -58,27 +58,34 @@ int TableManager::initTableManager(){
 			Column->type = ColumnObject["type"].GetInt();
 			Column->length = ColumnObject["length"].GetInt();
 			Column->offset = ColumnObject["offset"].GetInt();
-			Column->isPk = ColumnObject["isPk"].GetBool(); //추가 : 해당 컬럼이 pk인지의 여부
-			Column->isIndex = ColumnObject["isIndex"].GetBool(); //추가 : 해당 컬럼이 index인지의 여부
-
+			
+			//추가 항목들
+			Column->isPk = ColumnObject["isPk"].GetBool(); //해당 컬럼이 pk인지의 여부
+			Column->isIndex = ColumnObject["isIndex"].GetBool(); //해당 컬럼이 index인지의 여부
+			if (Column->isPk == true){ //pk가 존재한다면, 해당 pk에 대한 컬럼 이름 및 바이트 사이즈 저장
+				tbl->PkColumnNames.push_back(Column->column_name);
+				tbl->PkColumnBytes.push_back(Column->type*Column->length); //바이트 사이즈를 어떤 식으로 정해야 하나..
+				tbl->PkCnt++;
+			}
+			if (Column->isIndex == true){ //index가 존재한다면, 해당 index에 대한 컬럼 이름 및 바이트 사이즈 저장
+				tbl->IndexColumnNames.push_back(Column->column_name);
+				tbl->IndexColumnBytes.push_back(Column->type*Column->length); //바이트 사이즈를 어떤 식으로 정해야 하나..
+				tbl->IndexCnt++;
+			}			
 			//column 구조체를 테이블 구조체의 컬럼스키마를 모아두는 스키마 벡터에 푸시백
 			tbl->Schema.push_back(*Column);
-			tbl->Schema.push_back(*Column2);
 		}
 
 		Value &SSTList = TableObject["SST List"];
 		for(int j=0;j<SSTList.Size();j++){
 			Value &SSTObject = SSTList[j];
 			auto SstFile = new SSTFile;
-
 			SstFile->filename = SSTObject["filename"].GetString();
-
 			Value &BlockList = SSTObject["Block List"]; //index block handle, offset, length 존재
 			
 			for(int k=0;k<BlockList.Size();k++){
 				Value &BlockHandleObject = BlockList[k];
 				struct DataBlockHandle DataBlockHandle; 
-
 				//index block handle 
 				// if(BlockHandleObject.HasMember("IndexBlockHandle")){ 
 				// 	DataBlockHandle.IndexBlockHandle = BlockHandleObject["IndexBlockHandle"].GetString();
@@ -89,13 +96,15 @@ int TableManager::initTableManager(){
 
 				SstFile->BlockList.push_back(DataBlockHandle);
 			}
-
 			tbl->SSTList.push_back(*SstFile);
 		}
 		m_TableManager.insert({tbl->tablename,*tbl});
 	}
 }
 
+
+
+//이미 JSON 파일을 파싱하는 과정으로 데이터를 저장해뒀고, 이후에 원하는 데이터들을 뽑아내기 위해서 아래 함수들을 정의해둠
 vector<string> TableManager::getSSTList(string tablename){
 	vector<string> sstlist;
 	for(int i = 0; i < m_TableManager[tablename].SSTList.size(); i++){

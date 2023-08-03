@@ -1,13 +1,25 @@
 {
+	"SST List" : [
+		{"filename" : "010904.sst",
+			"Block List" : [
+			{"IndexBlockHandle" : "000001DF8000000780000022",
+			"Offset": 0,
+			"Length": 4026}
+			]	
+		}
+	],
 	"Table List": [
 		{
 			"tablename": "lineitem",
+			"tablesize" : 4,
 			"Schema": [
 				{
 					"column_name": "l_orderkey",
 					"type": 3,
 					"length": 4,
-					"offset": 0
+					"offset": 0,
+					"isPk" : true, 
+					"isIndex" : true
 				},
 				{
 					"column_name": "l_partkey",
