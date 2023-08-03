@@ -3,11 +3,12 @@
 #include "storage_engine_instance.grpc.pb.h"
 
 #include "TableManager.h"
+#include "IndexTblGenManager.h"
 #include "LBA2PBAQueryAgent.h"
 #include "WALQueryAgent.h"
 #include "MetricAnalysisModule.h"
 #include "IndexManager.h"
-
+#include "IndexTblGenManager.h"
 #include "CalculateUsage.h"
 
 using google::protobuf::FieldMask;
@@ -149,6 +150,7 @@ int main(int argc, char** argv) {
 
   MetricAnalysisModule& instance = MetricAnalysisModule::GetInstance();
   TableManager::InitTableManager();
+  IndexTblGenManager::InitIndexTblGenManager();
   WALQueryAgent::InitWALQueryAgent();
   LBA2PBAQueryAgent::InitLBA2PBAQueryAgent();
   IndexManager::InitIndexManager();
