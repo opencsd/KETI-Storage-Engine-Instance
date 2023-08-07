@@ -1,13 +1,4 @@
 {
-	"SST List" : [
-		{"filename" : "010904.sst",
-			"Block List" : [
-			{"IndexBlockHandle" : "000001DF8000000780000022",
-			"Offset": 0,
-			"Length": 4026}
-			]	
-		}
-	],
 	"Table List": [
 		{
 			"tablename": "lineitem",
@@ -113,8 +104,13 @@
 				}
 			],
 			"SST List": [
-                
-    
+				{"filename" : "010904.sst",
+					"Block List" : [
+					{"IndexBlockHandle" : "000001DF8000000780000022",
+					"Offset": 0,
+					"Length": 4026}
+					]	
+				}
 			]
 		},
         {
@@ -411,7 +407,7 @@
 				}
 			],
 			"SST List": [
-                
+
                     
 			]
 		},

@@ -25,8 +25,6 @@ std::string kDBPath = "C:\\Windows\\TEMP\\rocksdb_simple_example";
 const char *file_path = "/root/workspace/HUN/csd_file_scan/keti/sst/004096.sst";
 #endif
 
-//sst 파일 뿐만 아니라 metadata에 대한 정보도 받아야 함
-
 int main(int argc, char **argv) {
     map<string, vector<string>> indexScanMap; //Index Data map
     //vector<string> indexVecStr, pkVecStr;
@@ -44,30 +42,40 @@ int main(int argc, char **argv) {
       std::cout << "open error" << std::endl;
     }
 
-    // 1. json에 저장되어있는 해당 데이터 tablemanager.cc에서 파싱 작업 -> 2.구조체에 메타데이터 저장 -> 3.IndexTblGenManager에서 구조체 관리
+    // 1. json에 저장되어있는 해당 데이터 tablemanager.cc에서 파싱 작업 -> 2.구조체에 데이터 저장 -> 3.IndexTblGenManager에서 구조체 관리
+    //필요한 정보들이 담겨있는 구조체 예시
+    // struct tableMetaData { 
+    //     string tableIndexNum = "0000018B";
+    //     bool pkExist = true;
+    //     int indexCnt = 2;
+    //     int pkCnt = 2;
+    //     //각 index와 pk 컬럼들에 대한 길이 정보
+    //     vector<string> indexColumnNames = {"id", "age"};
+    //     vector<string> pkColumnNames = {"age", "id"};
+    //     vector<int> indexColumnBytes = {4,4}; 
+    //     vector<int> pkColumnBytes = {4,4};
+    // };
 
-    struct tableMetaData { 
-        string tableIndexNum = "0000018B";
-        bool pkExist = true;
-        int indexCnt = 2;
-        int pkCnt = 2;
-        //각 index와 pk 컬럼들에 대한 길이 정보
-        vector<string> indexColumnNames = {"id", "age"};
-        vector<string> pkColumnNames = {"age", "id"};
-        vector<int> indexColumnBytes = {4,4}; 
-        vector<int> pkColumnBytes = {4,4};
-    };
+    //TableManager 객체 수신
+    TableManager& tableManager = TableManager::GetInstance();
+    bool pkExist = tableManager.Table.PkExist;
+    int indexCnt = tableManager.Table.IndexCnt;
+    int pkCnt = tableManager.Table.PkCnt;
+    vector<string> indexColumnNames = tableManager.Table.IndexColumnNames;
+    vector<int> indexColumnBytes = tableManager.Table.IndexColumnBytes;
+    vector<string> pkColumnNames = tableManager.Table.PkColumnNames;
+    vector<int> pkColumnBytes = tableManager.Table.PkColumnBytes;
 
     //sst 파일 읽어서 seek 진행
     for (it->SeekToFirst(); it->Valid(); it->Next()) { //sst file에서 key, value 가져오기
         //std::cout << "Key: " << it->key().ToString(true) << ", Value: " << it->value().ToString(true) << std::endl;
         const Slice& key = it->key();
         const Slice& value = it->value();     
-        tableMetaData MetaData;
         string indexList = " ";
         vector<std::string> pkList;
         vector<std::string> noPkIndexList;     
         int BlockOffset = 8; //블록 첫 부분의 table index num은 4바이트 고정이므로 시작 오프셋은 4x2=8
+        
         string keyData = key.ToString(true); // 키 추출
         string tableIndexNum = keyData.substr(0,8); //table index num 추출
         //테이블 인덱스 번호가 같으므로 내가 찾으려는 인덱스 테이블 블록임
@@ -79,6 +87,7 @@ int main(int argc, char **argv) {
                 noPkIndexList.push_back(keyData.substr(BlockOffset, indexSize)); //pk가 없는 경우 해당 벡터를 value로 push back
                 BlockOffset += indexSize; //블록 오프셋 이동
             }
+            pk.push_back();
 
             //pk 존재 유무
             if (MetaData.pkExist){ 

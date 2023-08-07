@@ -18,19 +18,27 @@
 #include "rapidjson/stringbuffer.h"
 #include "rapidjson/prettywriter.h" 
 #include "rocksdb/sst_file_reader.h"
-#include "./rocksdb/include/rocksdb/sst_file_manager.h"
-#include "./rocksdb/include/rocksdb/slice.h"
-#include "./rocksdb/include/rocksdb/iterator.h"
-#include "./rocksdb/include/rocksdb/table_properties.h"
+#include "rocksdb/include/rocksdb/sst_file_manager.h"
+#include "rocksdb/include/rocksdb/slice.h"
+#include "rocksdb/include/rocksdb/iterator.h"
+#include "rocksdb/include/rocksdb/table_properties.h"
 
 #include "storage_engine_instance.grpc.pb.h"
-
 #include "keti_log.h"
 #include "ip_config.h"
 
 using namespace std;
 using StorageEngineInstance::Snippet;
 using StorageEngineInstance::MetaDataResponse;
+using ROCKSDB_NAMESPACE::SstFileReader;
+using ROCKSDB_NAMESPACE::Slice;
+using ROCKSDB_NAMESPACE::Status;
+using ROCKSDB_NAMESPACE::Iterator;
+using ROCKSDB_NAMESPACE::ReadOptions;
+using ROCKSDB_NAMESPACE::Options;
+using ROCKSDB_NAMESPACE::TableProperties;
+using namespace rapidjson;
+using namespace std;
 
 struct Response {
 	MetaDataResponse* metadataResponse;
@@ -85,9 +93,9 @@ public:
 		bool PkExist; //추가 : pk 존재 여부
 		vector<string> IndexColumnNames; //추가 : index로 지정된 컬럼들의 이름, 갯수 및 바이트 사이즈
 		vector<int> IndexColumnBytes;
-		int IndexCnt; 
 		vector<string> PkColumnNames; //추가 : pk로 지정된 컬럼들의 이름, 갯수 및 바이트 사이즈
 		vector<int> PkColumnBytes;
+		int IndexCnt; 
 		int PkCnt;
 	};
 
@@ -115,10 +123,7 @@ public:
 		return GetInstance().m_TableManager[tablename];
 	}
 
-	static GetIndexTable(){
-
-	}
-
+	//key: table name, values: table 구조체의 구조인 m_Tablemanager map에서 table name에 해당하는 table 구조체를 가져옴
 	static Table GetMutableTable(string tablename){
 		Table& table_ref = GetInstance().m_TableManager[tablename];
 		return table_ref;
@@ -166,6 +171,7 @@ private:
 	vector<string> getOrderedTableBySize(vector<string> tablenames); //크기 순으로 정렬된 테이블의 이름을 가져옴
 	int getIndexList(string tablename, vector<string> &dst); //특정 테이블의 인덱스 목록을 가져옴
 	vector<string> getSSTList(string tablename); //특정 테이블의 sst 파일 목록을 가져옴
+	//void getIndexScanMap(struct &table); //테이블 내에 존재하는 sst file들의 index scan table 맵 출력
 	void printTableManager(); //테이블 매니저의 정보를 출력하는 함수
 
 /* Variables */

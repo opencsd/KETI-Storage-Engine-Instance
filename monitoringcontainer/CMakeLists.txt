@@ -28,7 +28,7 @@ get_filename_component(ss_proto "../proto/storage_engine_instance.proto" ABSOLUT
 get_filename_component(ss_proto_path "${ss_proto}" PATH)
 
 # Generated sources
-set(ss_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/storage_engine_instance.pb.cc")
+set(ss_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/storage_engine_instance.pb.cc") 
 set(ss_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/storage_engine_instance.pb.h")
 set(ss_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/storage_engine_instance.grpc.pb.cc")
 set(ss_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/storage_engine_instance.grpc.pb.h")

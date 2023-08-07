@@ -22,6 +22,7 @@
 #include "./rocksdb/include/rocksdb/table_properties.h"
 
 #include "TableManager.h" //추가 : table manager로부터 정보 받아오기
+
 class IndexTblGenManager {
     public:
         static void InitIndexTblGenManager(){

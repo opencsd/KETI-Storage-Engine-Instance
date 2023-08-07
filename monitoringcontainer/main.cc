@@ -150,7 +150,7 @@ int main(int argc, char** argv) {
 
   MetricAnalysisModule& instance = MetricAnalysisModule::GetInstance();
   TableManager::InitTableManager();
-  IndexTblGenManager::InitIndexTblGenManager(); //추가 : 인덱스 테이블 생성 과정
+  //IndexTblGenManager::InitIndexTblGenManager(); //추가 : 인덱스 테이블 생성 과정 -> 그냥 InitTablemanager에 넣기?
   WALQueryAgent::InitWALQueryAgent();
   LBA2PBAQueryAgent::InitLBA2PBAQueryAgent();
   IndexManager::InitIndexManager();
