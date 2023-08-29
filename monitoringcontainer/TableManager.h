@@ -27,6 +27,12 @@ using namespace std;
 using StorageEngineInstance::Snippet;
 using StorageEngineInstance::MetaDataResponse;
 
+struct InternalRequest {
+	int query_id;
+	int work_id;
+	string table_name;
+};
+
 struct Response {
 	MetaDataResponse* metadataResponse;
 	// Snippet snippet;
