@@ -21,6 +21,9 @@
 #include <unordered_set>
 #include <bitset>
 #include <stack>
+#include <thread>
+#include <chrono>
+#include <iostream>
 
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
@@ -171,7 +174,7 @@ class BufferManager{
       return GetInstance().getTableData(qid,tname);
     }
 
-    static int SaveTableData(int qid, string tname, TableData table_data_, int offset, int length){
+    static int SaveTableData(int qid, string tname, TableData &table_data_, int offset, int length){
       return GetInstance().saveTableData(qid,tname,table_data_, offset, length);
     }
 
@@ -214,7 +217,7 @@ class BufferManager{
     void initQuery(int qid);
     int checkTableStatus(int qid, string tname);//return true only when the snippet work done
     TableData getTableData(int qid, string tname);//return table data on queryID/tableName
-    int saveTableData(int qid, string tname, TableData table_data_, int offset, int length);
+    int saveTableData(int qid, string tname, TableData &table_data_, int offset, int length);
     int endQuery(StorageEngineInstance::Request qid);
 
     inline const static std::string LOGTAG = "Merging Container::Buffer Manager";
