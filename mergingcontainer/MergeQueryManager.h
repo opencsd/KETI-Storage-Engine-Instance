@@ -14,7 +14,6 @@ inline std::string& rtrim(std::string& s, const char* t = " \t\n\r\f\v\0"){
 	return ltrim(rtrim(s, t), t);
 }
 
-
 struct T{
     string varString;
     int64_t varInt;
@@ -75,16 +74,18 @@ private:
     int tableCnt;//작업 대상 테이블 개수
     bool isGroupby;//그룹바이 여부
     bool isOrderby;//오더바이 여부
+    bool isHaving;//해빙절 여부
     bool isLimit;//리미트 여부
-    bool smallFlag;//true = right is smaller, false = left is smaller
+    bool right_is_smaller;//true = right is smaller, false = left is smaller
     bool equal_join_exist;
     TableData left_table;//table1(좌항)
     TableData right_table;//table2(우항)
-    unordered_map<string,vector<int>> equal_join_hash_table;//key:index 해시 조인 시(left, right 로우가 적은 쪽)
+    unordered_map<string,vector<int>> hash_table;//key:index 해시 조인 시(left, right 로우가 적은 쪽)
     TableData target_table;//프로젝션 대상 테이블(left_table X right_table)
     map<string,int> group_by_key;//<그룹바이기준컬럼,그룹바이 테이블 인덱스>
     vector<TableData> group_by_table;//그룹바이된 테이블 컬럼(group by)
     TableData result_table;//결과 테이블(projected)->버퍼저장
+    TableData having_table;//결과 테이블에 해빙절 수행 테이블
     vector<int> ordered_index;//result_table의 정렬 후 인덱스 순서
     TableData order_by_table;//결과 테이블(ordered)->버퍼저장
 
@@ -99,15 +100,16 @@ private:
     void LeftOuterJoin_nestedloop();//left outer join (nested loop join)
     void LeftOuterJoin_hash();//left outer join (hash join)
     void RightOuterJoin_hash();//right outer join (hash join)
-    void FullOuterJoin();//full outer join
     void CrossJoin();//cartesian product
-    void Union();//single table filtering (having)
-    void Exist();
-    void In();
-    void DependencyInnerJoin();//dependency exist/in
-    void DependencyExist();//dependency exist/in
-    void DependencyIn();//dependency not exist/not in
-    void Filtering();//single table filtering (having)
+    void Union();//left and right table union
+    void In();//non dependency in
+    void DependencyInnerJoin();//dependency join
+    void DependencyExist();//dependency exist/not exist
+    void DependencyIn();//dependency in/not in
+    void Filtering();//single table filtering
+    void Having();//having clause
     void createHashTable(vector<int> equal_join_index);//create hash table for hash join
-    bool compareByOperator(int oper, string left_column, string right_column, int left_index, int right_index);
+    template <typename T>
+    bool compareByOperator(int oper, const T& arg1, const T& arg2);
+    // bool compareByOperator(int oper, string left_column, string right_column, int left_index, int right_index);
 };
