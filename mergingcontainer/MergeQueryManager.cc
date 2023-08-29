@@ -9,6 +9,7 @@ void MergeQueryManager::RunSnippetWork(){
     tableCnt = snippet.table_name_size();
     isGroupby = (snippet.group_by_size() == 0) ? false : true;
     isOrderby = (snippet.order_by().column_name_size() == 0) ? false : true;
+    // isHaving = (snippet.having_size() == 0) ? false : true;
     isLimit = (snippet.limit().length() != 0) ? true : false;
     
     //Save "base_table"
@@ -39,7 +40,7 @@ void MergeQueryManager::RunSnippetWork(){
         (i==0) ? left_table = tableData : right_table = tableData;
     }  
     
-    //Do snippet work -> (Make "equal_join_hash_table") -> Make "target_table"
+    //Do snippet work -> (Make "hash_table") -> Make "target_table"
     switch(snippetType){
         case StorageEngineInstance::SnippetRequest::AGGREGATION_SNIPPET:{
             //single table aggregation&projection
@@ -59,17 +60,11 @@ void MergeQueryManager::RunSnippetWork(){
         }case StorageEngineInstance::SnippetRequest::RIGHT_OUTER_JOIN_SNIPPET:{
             RightOuterJoin_hash();
             break;
-        }case StorageEngineInstance::SnippetRequest::FULL_OUTER_JOIN_SNIPPET:{
-            FullOuterJoin();
-            break;
         }case StorageEngineInstance::SnippetRequest::CROSS_JOIN_SNIPPET:{
             CrossJoin();
             break;
         }case StorageEngineInstance::SnippetRequest::UNION_SNIPPET:{
             Union();          
-            break;
-        }case StorageEngineInstance::SnippetRequest::EXIST_SNIPPET:{
-            Exist();
             break;
         }case StorageEngineInstance::SnippetRequest::IN_SNIPPET:{
             In();
@@ -88,7 +83,7 @@ void MergeQueryManager::RunSnippetWork(){
 
     left_table.table_data.clear();
     right_table.table_data.clear();
-    equal_join_hash_table.clear();
+    hash_table.clear();
 
     // 테이블 데이터 로우 수 확인 - Debug Code   
     if(KETILOG::IsLogLevelUnder(TRACE)){
@@ -119,8 +114,8 @@ void MergeQueryManager::RunSnippetWork(){
     } 
     target_table.table_data.clear();
 
+    // 테이블 데이터 로우 수 확인 - Debug Code 
     if(KETILOG::IsLogLevelUnder(TRACE)){
-        // 테이블 데이터 로우 수 확인 - Debug Code 
         cout << "<group by table row>" << endl;
         for(int j = 0; j < group_by_table.size(); j++){
             for(auto i : group_by_table[j].table_data){
@@ -143,16 +138,12 @@ void MergeQueryManager::RunSnippetWork(){
         }
     }
 
-    cout << "check 1" << endl;
-
     //Column Projection -> Make "result_table"
     Aggregation();
     group_by_table.clear();
 
-    cout << "check 2" << endl;
-    
+    // 테이블 데이터 로우 수 확인 - Debug Code     
     if(KETILOG::IsLogLevelUnder(TRACE)){
-        // 테이블 데이터 로우 수 확인 - Debug Code 
         cout << "<result table row>" << endl;
         for(auto i : result_table.table_data){
             if(i.second.type == TYPE_STRING){
@@ -172,6 +163,12 @@ void MergeQueryManager::RunSnippetWork(){
         }
     }
 
+    if(isHaving){
+        Having();
+    }else{
+        having_table = result_table;
+    }
+
     if(isOrderby){
         //Order By -> Make "ordered_index" & "order_by_table"
         OrderBy();
@@ -184,9 +181,9 @@ void MergeQueryManager::RunSnippetWork(){
     }else{
         //Save "result_table"
         if(isLimit){
-            BufferManager::SaveTableData(snippet.query_id(),snippet.table_alias(),result_table,snippet.limit().offset(),snippet.limit().length());
+            BufferManager::SaveTableData(snippet.query_id(),snippet.table_alias(),having_table,snippet.limit().offset(),snippet.limit().length());
         }else{
-            BufferManager::SaveTableData(snippet.query_id(),snippet.table_alias(),result_table,0,result_table.row_count);
+            BufferManager::SaveTableData(snippet.query_id(),snippet.table_alias(),having_table,0,having_table.row_count);
         } 
     }
 
@@ -226,7 +223,7 @@ void MergeQueryManager::Aggregation(){
                                 colData.row_count++;
                                 break;
                             }default:{
-                                KETILOG::ERRORLOG("","Snippet_Projection_SelectType_COLUMNNAME1 => check plz..");
+                                KETILOG::ERRORLOG(LOGTAG,"Snippet_Projection_SelectType_COLUMNNAME1 => check plz..");
                             }
                         }
                         colData.type = t.type;
@@ -250,7 +247,7 @@ void MergeQueryManager::Aggregation(){
                                     colData.row_count++;
                                     break;
                                 }default:{
-                                    KETILOG::ERRORLOG("","Snippet_Projection_SelectType_COLUMNNAME2 => check plz..");
+                                    KETILOG::ERRORLOG(LOGTAG,"Snippet_Projection_SelectType_COLUMNNAME2 => check plz..");
                                 }
                             }
                             colData.type = t.type;
@@ -269,7 +266,7 @@ void MergeQueryManager::Aggregation(){
                                 t.varFloat += t_.varFloat;
                                 break;
                             }default:{
-                                KETILOG::ERRORLOG("","MergeQueryManager::Snippet_Projection_SelectType_SUM1 => check plz..");
+                                KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::Snippet_Projection_SelectType_SUM1 => check plz..");
                             }
                         }
                     }
@@ -288,7 +285,7 @@ void MergeQueryManager::Aggregation(){
                             colData.type = t.type;
                             break;
                         }default:{
-                            KETILOG::ERRORLOG("","MergeQueryManager::Snippet_Projection_SelectType_SUM2 => check plz..");
+                            KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::Snippet_Projection_SelectType_SUM2 => check plz..");
                         }
                     }
                     break;
@@ -304,7 +301,7 @@ void MergeQueryManager::Aggregation(){
                                 t.varFloat += t_.varFloat;
                                 break;
                             }default:{
-                                KETILOG::ERRORLOG("","MergeQueryManager::Snippet_Projection_SelectType_AVG1 => check plz..");
+                                KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::Snippet_Projection_SelectType_AVG1 => check plz..");
                             }
                         }
                     }
@@ -318,7 +315,7 @@ void MergeQueryManager::Aggregation(){
                             avg = t.varFloat / group_row_num;
                             break;
                         }default:{
-                            KETILOG::ERRORLOG("","MergeQueryManager::Snippet_Projection_SelectType_AVG2 => check plz..");
+                            KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::Snippet_Projection_SelectType_AVG2 => check plz..");
                         }
                     }
                     colData.floatvec.push_back(avg);
@@ -327,7 +324,6 @@ void MergeQueryManager::Aggregation(){
                     colData.type = TYPE_FLOAT;
                     break;
                 }case StorageEngineInstance::Snippet_Projection_SelectType_COUNT:{//해당 컬럼의 null 데이터 제외 로우 개수 카운트
-                    //distinct count는?
                     vector<bool> is_column_null = group_by_table[g].table_data[snippet.column_projection(p).value(0)].isnull;
                     int count = std::count(is_column_null.begin(), is_column_null.end(), false);
                     colData.intvec.push_back(count);
@@ -341,8 +337,32 @@ void MergeQueryManager::Aggregation(){
                     colData.row_count++;
                     colData.type = TYPE_INT;
                     break;
+                }case StorageEngineInstance::Snippet_Projection_SelectType_COUNTDISTINCT:{
+                    int distinct_row_count = 0;
+                    switch(group_by_table[g].table_data[snippet.column_projection(p).value(0)].type){
+                        case TYPE_INT:{    
+                            std::set<int> uniqueElements( group_by_table[g].table_data[snippet.column_projection(p).value(0)].intvec.begin(), group_by_table[g].table_data[snippet.column_projection(p).value(0)].intvec.end());
+                            distinct_row_count = uniqueElements.size();
+                            break;
+                        }case TYPE_FLOAT:{
+                            std::set<float> uniqueElements( group_by_table[g].table_data[snippet.column_projection(p).value(0)].floatvec.begin(), group_by_table[g].table_data[snippet.column_projection(p).value(0)].floatvec.end());
+                            distinct_row_count = uniqueElements.size();
+                            break;
+                        }case TYPE_STRING:{
+                            std::set<string> uniqueElements( group_by_table[g].table_data[snippet.column_projection(p).value(0)].strvec.begin(), group_by_table[g].table_data[snippet.column_projection(p).value(0)].strvec.end());
+                            distinct_row_count = uniqueElements.size();
+                            break;
+                        }default:{
+                            KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::Snippet_Projection_SelectType_COUNTDISTINCT => check plz..");
+                        }
+                    }
+                    colData.intvec.push_back(distinct_row_count);
+                    colData.isnull.push_back(false);
+                    colData.row_count++;
+                    colData.type = TYPE_INT;
+                    break;
                 }case StorageEngineInstance::Snippet_Projection_SelectType_TOP:{
-                    KETILOG::ERRORLOG("","MergeQueryManager::Snippet_Projection_SelectType_TOP => check plz.. ");
+                    KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::Snippet_Projection_SelectType_TOP => check plz.. ");
                     break;
                 }case StorageEngineInstance::Snippet_Projection_SelectType_MIN:{
                     T t, t_;
@@ -365,7 +385,7 @@ void MergeQueryManager::Aggregation(){
                                 t.varString = (t.varString < t_.varString) ? t.varString : t_.varString;
                                 break;
                             }default:{
-                                KETILOG::ERRORLOG("","MergeQueryManager::Snippet_Projection_SelectType_MIN1 => check plz..");
+                                KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::Snippet_Projection_SelectType_MIN1 => check plz..");
                             }
                         }
                     }
@@ -386,7 +406,7 @@ void MergeQueryManager::Aggregation(){
                             colData.row_count++;
                             break;
                         }default:{
-                            KETILOG::ERRORLOG("","MergeQueryManager::Snippet_Projection_SelectType_MIN2 => check plz..");
+                            KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::Snippet_Projection_SelectType_MIN2 => check plz..");
                         }
                     }
                     colData.type = t_.type;
@@ -401,7 +421,7 @@ void MergeQueryManager::Aggregation(){
                         t.varFloat = t_.varFloat;
                         t.type = TYPE_FLOAT;
                     }else{
-                        KETILOG::ERRORLOG("","MergeQueryManager::Snippet_Projection_SelectType_MAX0 => check plz..");
+                        KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::Snippet_Projection_SelectType_MAX0 => check plz..");
                     }
                     for (int r = 1; r < group_row_num; r++){
                         t_ = Projection(g,p,r);
@@ -416,7 +436,7 @@ void MergeQueryManager::Aggregation(){
                                 t.varString = (t.varString > t_.varString) ? t.varString : t_.varString;
                                 break;
                             }default:{
-                                KETILOG::ERRORLOG("","MergeQueryManager::Snippet_Projection_SelectType_MAX1 => check plz..");
+                                KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::Snippet_Projection_SelectType_MAX1 => check plz..");
                             }
                         }
                     }
@@ -437,7 +457,7 @@ void MergeQueryManager::Aggregation(){
                             colData.row_count++;
                             break;
                         }default:{
-                            KETILOG::ERRORLOG("","MergeQueryManager::Snippet_Projection_SelectType_MAX2 => check plz..");
+                            KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::Snippet_Projection_SelectType_MAX2 => check plz..");
                         }
                     }
                     colData.type = t_.type;
@@ -540,7 +560,7 @@ T MergeQueryManager::Projection(int groupIndex, int projectionIndex, int rowInde
                     postfixResult.varFloat = t.varFloat;
                     break;
                 default:
-                    KETILOG::ERRORLOG("","else type check plz.. "+to_string(t.type));
+                    KETILOG::ERRORLOG(LOGTAG,"else type check plz.. "+to_string(t.type));
                     break;
                 }
                 postfixResult.isnull = false;
@@ -564,7 +584,7 @@ T MergeQueryManager::Projection(int groupIndex, int projectionIndex, int rowInde
                 postfixResult.varFloat = t.varFloat;
                 break;
             default:
-                KETILOG::ERRORLOG("","else type check plz.. "+to_string(t.type));
+                KETILOG::ERRORLOG(LOGTAG,"else type check plz.. "+to_string(t.type));
                 break;
             }
             postfixResult.isnull = false;
@@ -582,7 +602,7 @@ T MergeQueryManager::Projection(int groupIndex, int projectionIndex, int rowInde
         }else if(type == StorageEngineInstance::Snippet_ValueType_STRING){
             value = src;
         }else{
-            KETILOG::ERRORLOG("","Merge Query Manager :: SUBSTRING => check plz..");
+            KETILOG::ERRORLOG(LOGTAG,"SUBSTRING => check plz..");
         }
 
         postfixResult.varString = value.substr(start,length);;
@@ -597,7 +617,7 @@ T MergeQueryManager::Projection(int groupIndex, int projectionIndex, int rowInde
         if(type == StorageEngineInstance::Snippet_ValueType_COLUMN){
             value = group_by_table[groupIndex].table_data[col].intvec[rowIndex];
         }else{
-            KETILOG::ERRORLOG("","Merge Query Manager :: Extract1 => check plz..");
+            KETILOG::ERRORLOG(LOGTAG,"Extract1 => check plz..");
         }
 
         if(unit == "YEAR"){
@@ -610,7 +630,7 @@ T MergeQueryManager::Projection(int groupIndex, int projectionIndex, int rowInde
             value %= 32;
             result = value;
         }else{
-            KETILOG::ERRORLOG("","Merge Query Manager :: Extract2 => check plz..");
+            KETILOG::ERRORLOG(LOGTAG,"Extract2 => check plz..");
         }
 
         postfixResult.varInt = result;
@@ -646,7 +666,7 @@ T MergeQueryManager::Postfix(int groupIndex, int projectionIndex, int rowIndex, 
                     oper_stack.push(t);
                 }else{
                     cout << groupIndex << " " << projection.value(i) << " " << group_by_table[groupIndex].table_data[projection.value(i)].row_count << endl;
-                    KETILOG::ERRORLOG("","Postfix type check plz... (a) " + to_string(group_by_table[groupIndex].table_data[projection.value(i)].type));
+                    KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (a) " + to_string(group_by_table[groupIndex].table_data[projection.value(i)].type));
                 }
                 break;
             }case StorageEngineInstance::Snippet_ValueType_OPERATOR:{
@@ -664,7 +684,7 @@ T MergeQueryManager::Postfix(int groupIndex, int projectionIndex, int rowIndex, 
                         t.type = TYPE_FLOAT;
                         oper_stack.push(t);
                     }else{
-                        KETILOG::ERRORLOG("","Postfix type check plz... (b)");
+                        KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (b)");
                     }
                 }else if(projection.value(i) == "-"){
                     T oper2 = oper_stack.top();
@@ -681,7 +701,7 @@ T MergeQueryManager::Postfix(int groupIndex, int projectionIndex, int rowIndex, 
                             t.type = TYPE_FLOAT;
                             oper_stack.push(t);
                         }else{
-                            KETILOG::ERRORLOG("","Postfix type check plz... (c)");
+                            KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (c)");
                         }
                     }else if(oper1.type == TYPE_FLOAT){
                         if (oper2.type == TYPE_INT){
@@ -693,7 +713,7 @@ T MergeQueryManager::Postfix(int groupIndex, int projectionIndex, int rowIndex, 
                             t.type = TYPE_FLOAT;
                             oper_stack.push(t);
                         }else{
-                            KETILOG::ERRORLOG("","Postfix type check plz... (d)");
+                            KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (d)");
                         }
                     }
                 }else if(projection.value(i) == "*"){
@@ -711,7 +731,7 @@ T MergeQueryManager::Postfix(int groupIndex, int projectionIndex, int rowIndex, 
                             t.type = TYPE_FLOAT;
                             oper_stack.push(t);
                         }else{
-                            KETILOG::ERRORLOG("","Postfix type check plz... (e)");
+                            KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (e)");
                         }
                     }else if(oper1.type == TYPE_FLOAT){
                         if (oper2.type == TYPE_INT){
@@ -723,7 +743,7 @@ T MergeQueryManager::Postfix(int groupIndex, int projectionIndex, int rowIndex, 
                             t.type = TYPE_FLOAT;
                             oper_stack.push(t);
                         }else{
-                            KETILOG::ERRORLOG("","Postfix type check plz... (f)");
+                            KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (f)");
                         }
                     }
                 }else if(projection.value(i) == "/"){
@@ -741,7 +761,7 @@ T MergeQueryManager::Postfix(int groupIndex, int projectionIndex, int rowIndex, 
                             t.type = TYPE_FLOAT;
                             oper_stack.push(t);
                         }else{
-                            KETILOG::ERRORLOG("","Postfix type check plz... (g)");
+                            KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (g)");
                         }
                     }else if(oper1.type == TYPE_FLOAT){
                         if (oper2.type == TYPE_INT){
@@ -753,10 +773,10 @@ T MergeQueryManager::Postfix(int groupIndex, int projectionIndex, int rowIndex, 
                             t.type = TYPE_FLOAT;
                             oper_stack.push(t);
                         }else{
-                            KETILOG::ERRORLOG("","Postfix type check plz... (h)");
+                            KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (h)");
                         }
                     }else{
-                        KETILOG::ERRORLOG("","Merge Query Manager :: Snippet_ValueType_OPERATOR '<>' => check plz..");
+                        KETILOG::ERRORLOG(LOGTAG,"Snippet_ValueType_OPERATOR '<>' => check plz..");
                     }
                 }else if(projection.value(i) == "="){
                     T oper2 = oper_stack.top();
@@ -766,7 +786,7 @@ T MergeQueryManager::Postfix(int groupIndex, int projectionIndex, int rowIndex, 
                     if(oper1.type == TYPE_STRING && oper2.type == TYPE_STRING){
                         t.boolean = (oper1.type == oper2.type);
                     }else{
-                        KETILOG::ERRORLOG("","Merge Query Manager :: Snippet_ValueType_OPERATOR '=' => check plz..");
+                        KETILOG::ERRORLOG(LOGTAG,"Snippet_ValueType_OPERATOR '=' => check plz..");
                     }
                     oper_stack.push(t);
                 }else if(projection.value(i) == "<>"){
@@ -777,7 +797,7 @@ T MergeQueryManager::Postfix(int groupIndex, int projectionIndex, int rowIndex, 
                     if(oper1.type == TYPE_STRING && oper2.type == TYPE_STRING){
                         t.boolean = (oper1.type != oper2.type);
                     }else{
-                        KETILOG::ERRORLOG("","Merge Query Manager :: Snippet_ValueType_OPERATOR '<>' => check plz..");
+                        KETILOG::ERRORLOG(LOGTAG,"Snippet_ValueType_OPERATOR '<>' => check plz..");
                     }
                     oper_stack.push(t);
                 }else if(projection.value(i) == "LIKE"){//%A%B%... 케이스 모두 체크 필요
@@ -804,10 +824,10 @@ T MergeQueryManager::Postfix(int groupIndex, int projectionIndex, int rowIndex, 
                         }
                         oper_stack.push(t);
                     }else{
-                        KETILOG::ERRORLOG("","Merge Query Manager :: Snippet_ValueType_OPERATOR 'LIKE' => check plz..");
+                        KETILOG::ERRORLOG(LOGTAG,"Snippet_ValueType_OPERATOR 'LIKE' => check plz..");
                     }
                 }else{
-                    KETILOG::ERRORLOG("","Merge Query Manager :: Projection => check plz..");
+                    KETILOG::ERRORLOG(LOGTAG,"Projection => check plz..");
                 }
                 break;
             }case StorageEngineInstance::Snippet_ValueType_FLOAT32:
@@ -830,7 +850,7 @@ T MergeQueryManager::Postfix(int groupIndex, int projectionIndex, int rowIndex, 
                 oper_stack.push(t);
                 break;
             }default:{
-                KETILOG::ERRORLOG("","projection defualt -> check plz..");
+                KETILOG::ERRORLOG(LOGTAG,"projection defualt -> check plz..");
             }
         }
     }
@@ -874,7 +894,7 @@ void MergeQueryManager::GroupBy(){
                         group_by_table[group_by_index].table_data[col_name].floatvec.push_back(target_table.table_data[col_name].floatvec[r]);
                         break;
                     default:
-                    KETILOG::ERRORLOG("","group by type check plz.. "+col_name);
+                    KETILOG::ERRORLOG(LOGTAG,"group by type check plz.. "+col_name);
                         break;
                 }
                 group_by_table[group_by_index].table_data[col_name].isnull.push_back(target_table.table_data[col_name].isnull[r]);
@@ -922,7 +942,7 @@ void MergeQueryManager::OrderBy(){
                         }
                         break;
                     default:
-                        KETILOG::ERRORLOG("","order by sort asc default");
+                        KETILOG::ERRORLOG(LOGTAG,"order by sort asc default");
                         return true;
                 }
             }else{//Snippet_Order_OrderDirection_DESC
@@ -943,7 +963,7 @@ void MergeQueryManager::OrderBy(){
                         }
                         break;
                     default:
-                        KETILOG::ERRORLOG("","order by sort desc default");
+                        KETILOG::ERRORLOG(LOGTAG,"order by sort desc default");
                         return true;
                 }
             }
@@ -984,11 +1004,72 @@ void MergeQueryManager::OrderBy(){
                 order_by_table.table_data[table.first].type = TYPE_STRING;
                 break;
             default:
-                KETILOG::ERRORLOG("","order by type error check plz..");
+                KETILOG::ERRORLOG(LOGTAG,"order by type error check plz..");
         }
         order_by_table.table_data[table.first].row_count = table.second.row_count;
     }
     order_by_table.row_count = result_table.row_count;
+}
+
+void MergeQueryManager::Filtering(){
+    for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
+        target_table.table_data[(*it).first].type = (*it).second.type;
+    }
+
+    for(int r=0; r<left_table.row_count; r++){
+        bool passed = true;
+
+        for(int f=0; f<snippet.table_filter_size(); f++){
+            if(f%2 == 1){
+                if(snippet.table_filter(f).operator_() == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_AND){
+                    if(passed == false) break;
+                }else{
+                    KETILOG::ERRORLOG(LOGTAG,"Filtering: " + snippet.table_filter(f).operator_());
+                }
+            }else{
+                string left_col = snippet.table_filter(f).lv().value(0);
+
+                switch(left_table.table_data[left_col].type){
+                case TYPE_STRING:{
+                    string lv = trim(left_table.table_data[left_col].strvec[r]);
+                    string rv = snippet.table_filter(f).rv().value(0);
+                    passed = compareByOperator(snippet.table_filter(f).operator_(), lv, rv);
+                    break;
+                }case TYPE_FLOAT:{
+                    float lv = left_table.table_data[left_col].floatvec[r];
+                    float rv = stof(snippet.table_filter(f).rv().value(0));
+                    passed = compareByOperator(snippet.table_filter(f).operator_(), lv, rv);
+                    break;
+                }case TYPE_INT:{
+                    int lv = left_table.table_data[left_col].intvec[r];
+                    int rv = stoi(snippet.table_filter(f).rv().value(0));
+                    passed = compareByOperator(snippet.table_filter(f).operator_(), lv, rv);
+                    break;
+                }default:
+                    KETILOG::ERRORLOG(LOGTAG,"Filtering (d)");
+                }
+            }
+        }
+
+        if(passed){ 
+            for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
+                switch((*it).second.type){
+                case TYPE_INT:
+                    target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[r]);
+                    break;
+                case TYPE_STRING:
+                    target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[r]);
+                    break;
+                case TYPE_FLOAT:
+                    target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r]);
+                    break;
+                }
+                target_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[r]);
+                target_table.table_data[(*it).first].row_count++;
+            }
+            target_table.row_count++;
+        }
+    }
 }
 
 void MergeQueryManager::InnerJoin_hash(){
@@ -1006,13 +1087,13 @@ void MergeQueryManager::InnerJoin_hash(){
         }
     }
 
-    smallFlag = (left_table.row_count >= right_table.row_count)? true : false;
+    right_is_smaller = (left_table.row_count >= right_table.row_count)? true : false;
     equal_join_exist = (equal_join_index.size() != 0)? true : false;
 
     if(equal_join_exist){ //hash join::equal filter + (nested loop join::non equal filter)
         createHashTable(equal_join_index);
         
-        if(smallFlag){//right table로 hash table 만듦
+        if(right_is_smaller){//right table로 hash table 만듦
 
             for(int r=0; r<left_table.row_count; r++){
                 string hash_key = "";
@@ -1034,7 +1115,7 @@ void MergeQueryManager::InnerJoin_hash(){
                     }   
                 }
 
-                for(int i = 0; i < equal_join_hash_table[hash_key].size(); i++){
+                for(int i = 0; i < hash_table[hash_key].size(); i++){
                     bool passed = true;
                     for(int f = 0; f < snippet.table_filter_size(); f++){
                         if( snippet.table_filter(f).operator_() == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_GE ||
@@ -1047,7 +1128,21 @@ void MergeQueryManager::InnerJoin_hash(){
                             string right_column = snippet.table_filter(f).rv().value(0);
                             int oper = snippet.table_filter(f).operator_();
 
-                            passed = compareByOperator(oper, left_column, right_column, r, equal_join_hash_table[hash_key][i]);
+                            // passed = compareByOperator(oper, left_column, right_column, r, hash_table[hash_key][i]);
+                            switch(left_table.table_data[left_column].type){
+                            case TYPE_STRING:
+                                passed = compareByOperator(oper, left_table.table_data[left_column].strvec[r],
+                                                            right_table.table_data[right_column].strvec[hash_table[hash_key][i]]);
+                                break;
+                            case TYPE_INT:
+                                passed = compareByOperator(oper, left_table.table_data[left_column].intvec[r],
+                                                            right_table.table_data[right_column].intvec[hash_table[hash_key][i]]);
+                                break;
+                            case TYPE_FLOAT:
+                                passed = compareByOperator(oper, left_table.table_data[left_column].floatvec[r],
+                                                            right_table.table_data[right_column].floatvec[hash_table[hash_key][i]]);
+                                break;
+                            }
 
                             if(passed == false) break;
                         }else{
@@ -1074,13 +1169,13 @@ void MergeQueryManager::InnerJoin_hash(){
                         for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
                             switch((*it).second.type){
                             case TYPE_INT:
-                                target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[equal_join_hash_table[hash_key][i]]);
+                                target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[hash_table[hash_key][i]]);
                                 break;
                             case TYPE_STRING:
-                                target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[equal_join_hash_table[hash_key][i]]);
+                                target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[hash_table[hash_key][i]]);
                                 break;
                             case TYPE_FLOAT:
-                                target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[equal_join_hash_table[hash_key][i]]);
+                                target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[hash_table[hash_key][i]]);
                                 break;
                             }
                             target_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[i]);
@@ -1112,7 +1207,7 @@ void MergeQueryManager::InnerJoin_hash(){
                     }   
                 }
 
-                for(int i = 0; i < equal_join_hash_table[hash_key].size(); i++){
+                for(int i = 0; i < hash_table[hash_key].size(); i++){
                     bool passed = true;
                     for(int f = 0; f < snippet.table_filter_size(); f++){
                         if(snippet.table_filter(f).operator_() == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_GE ||
@@ -1125,7 +1220,21 @@ void MergeQueryManager::InnerJoin_hash(){
                             string right_column = snippet.table_filter(f).rv().value(0);
                             int oper = snippet.table_filter(f).operator_();
 
-                            passed = compareByOperator(oper, left_column, right_column, equal_join_hash_table[hash_key][i], r);
+                            // passed = compareByOperator(oper, left_column, right_column, hash_table[hash_key][i], r);
+                            switch(left_table.table_data[left_column].type){
+                            case TYPE_STRING:
+                                passed = compareByOperator(oper, left_table.table_data[left_column].strvec[hash_table[hash_key][i]],
+                                                            right_table.table_data[right_column].strvec[r]);
+                                break;
+                            case TYPE_INT:
+                                passed = compareByOperator(oper, left_table.table_data[left_column].intvec[hash_table[hash_key][i]],
+                                                            right_table.table_data[right_column].intvec[r]);
+                                break;
+                            case TYPE_FLOAT:
+                                passed = compareByOperator(oper, left_table.table_data[left_column].floatvec[hash_table[hash_key][i]],
+                                                            right_table.table_data[right_column].floatvec[r]);
+                                break;
+                            }
 
                             if(passed == false) break;
                         }else{
@@ -1152,16 +1261,16 @@ void MergeQueryManager::InnerJoin_hash(){
                         for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
                             switch((*it).second.type){
                             case TYPE_INT:
-                                target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[equal_join_hash_table[hash_key][i]]);
+                                target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[hash_table[hash_key][i]]);
                                 break;
                             case TYPE_STRING:
-                                target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[equal_join_hash_table[hash_key][i]]);
+                                target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[hash_table[hash_key][i]]);
                                 break;
                             case TYPE_FLOAT:
-                                target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[equal_join_hash_table[hash_key][i]]);
+                                target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[hash_table[hash_key][i]]);
                                 break;
                             }
-                            target_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[equal_join_hash_table[hash_key][i]]);
+                            target_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[hash_table[hash_key][i]]);
                             target_table.table_data[(*it).first].row_count++;
                         }
                         target_table.row_count++;
@@ -1183,8 +1292,23 @@ void MergeQueryManager::InnerJoin_hash(){
 
                         string left_column = snippet.table_filter(f).lv().value(0);
                         string right_column = snippet.table_filter(f).rv().value(0);
+                        int oper = snippet.table_filter(f).operator_();
 
-                        passed = compareByOperator(snippet.table_filter(f).operator_(), left_column, right_column, r1,r2);
+                        // passed = compareByOperator(snippet.table_filter(f).operator_(), left_column, right_column, r1,r2);
+                        switch(left_table.table_data[left_column].type){
+                        case TYPE_STRING:
+                            passed = compareByOperator(oper, left_table.table_data[left_column].strvec[r1],
+                                                        right_table.table_data[right_column].strvec[r2]);
+                            break;
+                        case TYPE_INT:
+                            passed = compareByOperator(oper, left_table.table_data[left_column].intvec[r1],
+                                                        right_table.table_data[right_column].intvec[r2]);
+                            break;
+                        case TYPE_FLOAT:
+                            passed = compareByOperator(oper, left_table.table_data[left_column].floatvec[r1],
+                                                        right_table.table_data[right_column].floatvec[r2]);
+                            break;
+                        }
 
                         if(passed == false) break;
                     }else{
@@ -1274,7 +1398,7 @@ void MergeQueryManager::InnerJoin_nestedloop(){
                         }
                         break;
                     default:
-                        KETILOG::ERRORLOG("","inner join type check plz... " + to_string(left_table.table_data[driving_c1].type));
+                        KETILOG::ERRORLOG(LOGTAG,"inner join type check plz... " + to_string(left_table.table_data[driving_c1].type));
                     }
 
                     if(filter_passed){
@@ -1339,7 +1463,7 @@ void MergeQueryManager::LeftOuterJoin_hash(){
         }
     }
 
-    smallFlag = true;//left outer join은 무조건 right table로 해시테이블 생성, left테이블의 모든 로우 포함
+    right_is_smaller = true;//left outer join은 무조건 right table로 해시테이블 생성, left테이블의 모든 로우 포함
     equal_join_exist = true;//left outer join은 = 조건만 존재
  
     createHashTable(equal_join_index);
@@ -1364,10 +1488,10 @@ void MergeQueryManager::LeftOuterJoin_hash(){
             }   
         }
 
-        passed = (equal_join_hash_table.find(hash_key) != equal_join_hash_table.end())? true : false;
+        passed = (hash_table.find(hash_key) != hash_table.end())? true : false;
 
         if(passed){ 
-            for(int i = 0; i < equal_join_hash_table[hash_key].size(); i++){
+            for(int i = 0; i < hash_table[hash_key].size(); i++){
                 for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
@@ -1386,13 +1510,13 @@ void MergeQueryManager::LeftOuterJoin_hash(){
                 for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
-                        target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[equal_join_hash_table[hash_key][i]]);
+                        target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[hash_table[hash_key][i]]);
                         break;
                     case TYPE_STRING:
-                        target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[equal_join_hash_table[hash_key][i]]);
+                        target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[hash_table[hash_key][i]]);
                         break;
                     case TYPE_FLOAT:
-                        target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[equal_join_hash_table[hash_key][i]]);
+                        target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[hash_table[hash_key][i]]);
                         break;
                     }
                     target_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[i]);
@@ -1482,7 +1606,7 @@ void MergeQueryManager::LeftOuterJoin_nestedloop(){
                         }
                         break;
                     default:
-                        KETILOG::ERRORLOG("","inner join type check plz... " + to_string(left_table.table_data[driving_c1].type));
+                        KETILOG::ERRORLOG(LOGTAG,"inner join type check plz... " + to_string(left_table.table_data[driving_c1].type));
                     }
 
                     if(filter_passed){
@@ -1582,7 +1706,7 @@ void MergeQueryManager::RightOuterJoin_hash(){
         }
     }
 
-    smallFlag = true;//left outer join은 무조건 right table로 해시테이블 생성, left테이블의 모든 로우 포함
+    right_is_smaller = true;//left outer join은 무조건 right table로 해시테이블 생성, left테이블의 모든 로우 포함
     equal_join_exist = true;//left outer join은 = 조건만 존재
  
     createHashTable(equal_join_index);
@@ -1607,10 +1731,10 @@ void MergeQueryManager::RightOuterJoin_hash(){
             }   
         }
 
-        passed = (equal_join_hash_table.find(hash_key) != equal_join_hash_table.end())? true : false;
+        passed = (hash_table.find(hash_key) != hash_table.end())? true : false;
 
         if(passed){ 
-            for(int i = 0; i < equal_join_hash_table[hash_key].size(); i++){
+            for(int i = 0; i < hash_table[hash_key].size(); i++){
                 for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
@@ -1629,13 +1753,13 @@ void MergeQueryManager::RightOuterJoin_hash(){
                 for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
-                        target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[equal_join_hash_table[hash_key][i]]);
+                        target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[hash_table[hash_key][i]]);
                         break;
                     case TYPE_STRING:
-                        target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[equal_join_hash_table[hash_key][i]]);
+                        target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[hash_table[hash_key][i]]);
                         break;
                     case TYPE_FLOAT:
-                        target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[equal_join_hash_table[hash_key][i]]);
+                        target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[hash_table[hash_key][i]]);
                         break;
                     }
                     target_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[i]);
@@ -1680,57 +1804,105 @@ void MergeQueryManager::RightOuterJoin_hash(){
       
 }
 
-void MergeQueryManager::Filtering(){
-    for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
-        target_table.table_data[(*it).first].type = (*it).second.type;
-    }
+void MergeQueryManager::CrossJoin(){}
 
-    for(int r=0; r<left_table.row_count; r++){
-        bool passed = false;
-        bool filter_passed = false;
+void MergeQueryManager::Union(){
+    if(snippet.table_filter_size() == 0){// Union
+        // 중복 로우 포함 X
+    }else{ // Union All
+        target_table.table_data = left_table.table_data;
 
-        for(int f=0; f<snippet.table_filter_size(); f++){
-            if(f%2 == 1){
-                if(snippet.table_filter(f).operator_() == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_AND){
-                    if(passed == false) break;
-                }else{
-                    KETILOG::ERRORLOG("","MergeQueryManager::Filtering: " + snippet.table_filter(f).operator_());
-                }
+        for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
+            switch((*it).second.type){
+            case TYPE_INT:
+                target_table.table_data[(*it).first].intvec.insert(target_table.table_data[(*it).first].intvec.end(),right_table.table_data[(*it).first].intvec.begin(),right_table.table_data[(*it).first].intvec.end());
+                break;
+            case TYPE_STRING:
+                target_table.table_data[(*it).first].strvec.insert(target_table.table_data[(*it).first].strvec.end(),right_table.table_data[(*it).first].strvec.begin(),right_table.table_data[(*it).first].strvec.end());
+                break;
+            case TYPE_FLOAT:
+                target_table.table_data[(*it).first].floatvec.insert(target_table.table_data[(*it).first].floatvec.end(),right_table.table_data[(*it).first].floatvec.begin(),right_table.table_data[(*it).first].floatvec.end());
+                break;
+            }
+            target_table.table_data[(*it).first].row_count += right_table.table_data[(*it).first].row_count;
+            target_table.table_data[(*it).first].isnull.insert(target_table.table_data[(*it).first].isnull.end(),right_table.table_data[(*it).first].isnull.begin(),right_table.table_data[(*it).first].isnull.end());
+        }
+
+        for(auto it =target_table.table_data.begin(); it != target_table.table_data.end(); it++){
+            if((*it).second.floatvec.size() != 0){
+                (*it).second.type = TYPE_FLOAT;
+            }else if((*it).second.intvec.size() != 0){
+                (*it).second.type = TYPE_INT;
+            }else if((*it).second.strvec.size() != 0){
+                (*it).second.type = TYPE_STRING;
             }else{
-                string driving_c1 = snippet.table_filter(f).lv().value(0);
-
-                switch(left_table.table_data[driving_c1].type){
-                case TYPE_STRING:
-                    if(snippet.table_filter(f).rv().type(0) == Snippet_ValueType_STRING){
-                        string lv = trim(left_table.table_data[driving_c1].strvec[r]);
-                        string rv = snippet.table_filter(f).rv().value(0);
-                        if(snippet.table_filter(f).operator_() == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_ET){
-                            filter_passed = (lv == rv) ? true : false;
-                        }
-                    }else{
-                        KETILOG::ERRORLOG("","MergeQueryManager::Filtering (a)");
-                    }
-                    break;
-                case TYPE_FLOAT:
-                    KETILOG::ERRORLOG("","MergeQueryManager::Filtering (b)");
-                    break;
-                case TYPE_INT:
-                    KETILOG::ERRORLOG("","MergeQueryManager::Filtering (c)");
-                    break;
-                default:
-                    KETILOG::ERRORLOG("","MergeQueryManager::Filtering (d)");
-                }
-
-                if(filter_passed){
-                    passed = true;
-                    filter_passed = false;
-                }else{
-                    passed = false;
-                }
+                (*it).second.type = TYPE_EMPTY;
             }
         }
 
-        if(passed){ 
+        target_table.row_count = left_table.row_count + right_table.row_count;
+    }
+}
+
+void MergeQueryManager::In(){
+    for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
+        target_table.table_data[(*it).first].type = (*it).second.type;
+    }
+    for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
+        target_table.table_data[(*it).first].type = (*it).second.type;
+    }
+
+    right_is_smaller = true;//in은 무조건 right table로 해시테이블 생성
+
+    vector<int> equal_join_index;
+    bool is_not_in = false;
+    if(snippet.table_filter(0).operator_() == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_NOT){
+        is_not_in = true;
+        createHashTable({1});
+    }else{
+        createHashTable({0});
+    }
+
+    for(int r=0; r<left_table.row_count; r++){
+        string hash_key = "";
+        bool passed = true;
+
+        if(is_not_in){
+            string hash_key_column = snippet.table_filter(1).lv().value(0);
+
+            switch(left_table.table_data[hash_key_column].type){
+            case TYPE_STRING:
+                hash_key += "|" + left_table.table_data[hash_key_column].strvec[r];
+                break;
+            case TYPE_INT:
+                hash_key += "|" + to_string(left_table.table_data[hash_key_column].intvec[r]);
+                break;
+            case TYPE_FLOAT:
+                hash_key += "|" + to_string(left_table.table_data[hash_key_column].floatvec[r]);
+                break;
+            } 
+
+            passed = (hash_table.find(hash_key) != hash_table.end())? false : true;
+            
+        }else{
+            string hash_key_column = snippet.table_filter(0).lv().value(0);
+
+            switch(left_table.table_data[hash_key_column].type){
+            case TYPE_STRING:
+                hash_key += "|" + left_table.table_data[hash_key_column].strvec[r];
+                break;
+            case TYPE_INT:
+                hash_key += "|" + to_string(left_table.table_data[hash_key_column].intvec[r]);
+                break;
+            case TYPE_FLOAT:
+                hash_key += "|" + to_string(left_table.table_data[hash_key_column].floatvec[r]);
+                break;
+            } 
+
+            passed = (hash_table.find(hash_key) != hash_table.end())? true : false;
+        }
+
+        if(passed){
             for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
                 switch((*it).second.type){
                 case TYPE_INT:
@@ -1747,39 +1919,177 @@ void MergeQueryManager::Filtering(){
                 target_table.table_data[(*it).first].row_count++;
             }
             target_table.row_count++;
-        }
+        } 
     }
 }
 
-void MergeQueryManager::Union(){
-    if(snippet.table_filter_size() == 0){// Union
-        // 중복 로우 포함 X
-    }else{ // Union All
-        target_table.table_data = left_table.table_data;
+void MergeQueryManager::DependencyInnerJoin(){
+    for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
+        target_table.table_data[(*it).first].type = (*it).second.type;
+    }
 
-        for (auto it = target_table.table_data.begin(); it != left_table.table_data.end(); it++){
-            switch((*it).second.type){
-            case TYPE_INT:
-                target_table.table_data[(*it).first].intvec.insert(target_table.table_data[(*it).first].intvec.end(),right_table.table_data[(*it).first].intvec.begin(),right_table.table_data[(*it).first].intvec.end());
-                break;
-            case TYPE_STRING:
-                target_table.table_data[(*it).first].strvec.insert(target_table.table_data[(*it).first].strvec.end(),right_table.table_data[(*it).first].strvec.begin(),right_table.table_data[(*it).first].strvec.end());
-                break;
-            case TYPE_FLOAT:
-                target_table.table_data[(*it).first].floatvec.insert(target_table.table_data[(*it).first].floatvec.end(),right_table.table_data[(*it).first].floatvec.begin(),right_table.table_data[(*it).first].floatvec.end());
-                break;
+    TableData dependency_subquery_result_table;
+    for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
+        dependency_subquery_result_table.table_data[(*it).first].type = (*it).second.type;
+    }
+
+    vector<int> equal_join_index;//join조건 중 equal 조인의 인덱스
+    for(int f = 0; f < snippet.dependency().dependency_filter_size(); f++){
+        if(snippet.dependency().dependency_filter(f).operator_() == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_ET){
+            equal_join_index.push_back(f);
+        }
+    }
+
+    right_is_smaller = true;//dependency subquery table로 해시테이블 생성
+    equal_join_exist = (equal_join_index.size() != 0)? true : false;
+
+    createHashTable(equal_join_index);
+
+    string lv_column = snippet.table_filter(0).lv().value(0);
+    int lv_type = left_table.table_data[lv_column].type;
+
+    if(lv_type == TYPE_STRING){
+        for(int r1=0; r1<left_table.row_count; r1++){
+            string lv_value = left_table.table_data[lv_column].strvec[r1];
+
+            for(int r2=0; r2<right_table.row_count; r2++){
+                bool passed = true;
+
+                for(int f=0; f<snippet.dependency().dependency_filter_size(); f++){
+                    string dependency_lv_column = snippet.dependency().dependency_filter(f).lv().value(0);
+                    string dependency_rv_column = snippet.dependency().dependency_filter(f).rv().value(0);
+                    int oper = snippet.dependency().dependency_filter(f).operator_();
+                    int dependency_lv_type = left_table.table_data[dependency_lv_column].type;
+
+                    if(dependency_lv_type == TYPE_STRING){
+                        string dependency_lv_value = left_table.table_data[dependency_lv_column].strvec[r1];
+                        string dependency_rv_value = right_table.table_data[dependency_rv_column].strvec[r2];
+                        passed = compareByOperator(oper,dependency_lv_value,dependency_rv_value);
+                    }else if(dependency_lv_type == TYPE_INT){
+                        int dependency_lv_value = left_table.table_data[dependency_lv_column].intvec[r1];
+                        int dependency_rv_value = right_table.table_data[dependency_rv_column].intvec[r2];
+                        passed = compareByOperator(oper,dependency_lv_value,dependency_rv_value);
+                    }else if(dependency_lv_type == TYPE_FLOAT){
+                        float dependency_lv_value = left_table.table_data[dependency_lv_column].floatvec[r1];
+                        float dependency_rv_value = right_table.table_data[dependency_rv_column].floatvec[r2];
+                        passed = compareByOperator(oper,dependency_lv_value,dependency_rv_value);
+                    }
+
+                    if(!passed) break;
+                }
+
+                if(passed){ 
+                    for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
+                        switch((*it).second.type){
+                        case TYPE_INT:
+                            dependency_subquery_result_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[r2]);
+                            break;
+                        case TYPE_STRING:
+                            dependency_subquery_result_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[r2]);
+                            break;
+                        case TYPE_FLOAT:
+                            dependency_subquery_result_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r2]);
+                            break;
+                        }
+                        dependency_subquery_result_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[r2]);
+                        dependency_subquery_result_table.table_data[(*it).first].row_count++;
+                    }
+                    dependency_subquery_result_table.row_count++;
+                }
+                
             }
-            target_table.table_data[(*it).first].row_count += right_table.table_data[(*it).first].row_count;
-            target_table.table_data[(*it).first].isnull.insert(target_table.table_data[(*it).first].isnull.end(),right_table.table_data[(*it).first].isnull.begin(),right_table.table_data[(*it).first].isnull.end());
+        }
+        
+    }else if(lv_type == TYPE_INT){
+        for(int r1=0; r1<left_table.row_count; r1++){
+            int lv_value = left_table.table_data[lv_column].intvec[r1];
+
+            for(int r2=0; r2<right_table.row_count; r2++){
+                
+            }
         }
 
-        target_table.row_count = left_table.row_count + right_table.row_count;
+    }else if(lv_type == TYPE_FLOAT){
+        for(int r1=0; r1<left_table.row_count; r1++){
+            float lv_value = left_table.table_data[lv_column].floatvec[r1];
+            
+            for(int r2=0; r2<right_table.row_count; r2++){
+                
+            }
+        }
+
     }
+
+    
+}
+
+void MergeQueryManager::DependencyExist(){
+    
+}    
+
+void MergeQueryManager::DependencyIn(){
+
+}
+
+void MergeQueryManager::Having(){
+    // for(int r=0; r<result_table.row_count; r++){
+    //     bool passed = true;
+
+    //     for(int h=0; h<snippet.having_size(); h++){
+    //         if(h%2 == 1){
+    //             if(snippet.having(h).operator_() == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_AND){
+    //                 if(passed == false) break;
+    //             }else{
+    //                 KETILOG::ERRORLOG(LOGTAG,"Filtering: " + snippet.having(h).operator_());
+    //             }
+    //         }else{
+    //             string left_col = snippet.having(h).lv().value(0);
+
+    //             switch(result_table.table_data[left_col].type){
+    //             case TYPE_STRING:{
+    //                 string lv = trim(result_table.table_data[left_col].strvec[r]);
+    //                 string rv = snippet.having(h).rv().value(0);
+    //                 passed = compareByOperator(snippet.having(h).operator_(), lv, rv);
+    //                 break;
+    //             }case TYPE_FLOAT:{
+    //                 float lv = result_table.table_data[left_col].floatvec[r];
+    //                 float rv = stof(snippet.having(h).rv().value(0));
+    //                 passed = compareByOperator(snippet.having(h).operator_(), lv, rv);
+    //                 break;
+    //             }case TYPE_INT:{
+    //                 int lv = result_table.table_data[left_col].intvec[r];
+    //                 int rv = stoi(snippet.having(h).rv().value(0));
+    //                 passed = compareByOperator(snippet.having(h).operator_(), lv, rv);
+    //                 break;
+    //             }default:
+    //                 KETILOG::ERRORLOG(LOGTAG,"Filtering (d)");
+    //             }
+    //         }
+    //     }
+
+    //     if(passed){ 
+    //         for (auto it = result_table.table_data.begin(); it != result_table.table_data.end(); it++){
+    //             switch((*it).second.type){
+    //             case TYPE_INT:
+    //                 having_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[r]);
+    //                 break;
+    //             case TYPE_STRING:
+    //                 having_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[r]);
+    //                 break;
+    //             case TYPE_FLOAT:
+    //                 having_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r]);
+    //                 break;
+    //             }
+    //             having_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[r]);
+    //             having_table.table_data[(*it).first].row_count++;
+    //         }
+    //         having_table.row_count++;
+    //     }
+    // }
 }
 
 void MergeQueryManager::createHashTable(vector<int> equal_join_index){
-    
-    if(smallFlag){//right table로 hash table 만듦
+    if(right_is_smaller){//right table로 hash table 만듦
         for (int i = 0; i < right_table.row_count; i++){
             string hash_key = "";
 
@@ -1800,7 +2110,7 @@ void MergeQueryManager::createHashTable(vector<int> equal_join_index){
                     break;
                 }
             }
-            equal_join_hash_table[hash_key].push_back(i);
+            hash_table[hash_key].push_back(i);
         }
         
     }else{//left table로 hash table 만듦
@@ -1825,128 +2135,139 @@ void MergeQueryManager::createHashTable(vector<int> equal_join_index){
                 }
 
             }
-            equal_join_hash_table[hash_key].push_back(i);
+            hash_table[hash_key].push_back(i);
         }
     }
 
 }
 
-bool MergeQueryManager::compareByOperator(int oper, string left_column, string right_column, int left_index, int right_index){
-    cout << "<Test> Called compareByOperator" << endl;
-    bool passed = true;
-    if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_GE){
-        switch(left_table.table_data[left_column].type){
-        case TYPE_STRING:
-            if(!(left_table.table_data[left_column].strvec[left_index] >= 
-                right_table.table_data[right_column].strvec[right_index])){
-                    passed = false;
-                }
-            break;
-        case TYPE_INT:
-            if(!(left_table.table_data[left_column].intvec[left_index] >= 
-                right_table.table_data[right_column].intvec[right_index])){
-                    passed = false;
-                }
-            break;
-        case TYPE_FLOAT:
-            if(!(left_table.table_data[left_column].floatvec[left_index] >= 
-                right_table.table_data[right_column].floatvec[right_index])){
-                    passed = false;
-                }
-            break;
-        }
+template <typename T>
+bool MergeQueryManager::compareByOperator(int oper, const T& arg1, const T& arg2) {
+    bool passed;
+    if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_ET){
+        passed = (arg1 == arg2) ? true : false;
+    }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_GE){
+        passed = (arg1 >= arg2) ? true : false;
     }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_LE){
-        switch(left_table.table_data[left_column].type){
-        case TYPE_STRING:
-            if(!(left_table.table_data[left_column].strvec[left_index] <= 
-                right_table.table_data[right_column].strvec[right_index])){
-                    passed = false;
-                }
-            break;
-        case TYPE_INT:
-            if(!(left_table.table_data[left_column].intvec[left_index] <= 
-                right_table.table_data[right_column].intvec[right_index])){
-                    passed = false;
-                }
-            break;
-        case TYPE_FLOAT:
-            if(!(left_table.table_data[left_column].floatvec[left_index] <= 
-                right_table.table_data[right_column].floatvec[right_index])){
-                    passed = false;
-                }
-            break;
-        }
+        passed = (arg1 <= arg2) ? true : false;
     }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_GT){
-        switch(left_table.table_data[left_column].type){
-        case TYPE_STRING:
-            if(!(left_table.table_data[left_column].strvec[left_index] > 
-                right_table.table_data[right_column].strvec[right_index])){
-                    passed = false;
-                }
-            break;
-        case TYPE_INT:
-            if(!(left_table.table_data[left_column].intvec[left_index] > 
-                right_table.table_data[right_column].intvec[right_index])){
-                    passed = false;
-                }
-            break;
-        case TYPE_FLOAT:
-            if(!(left_table.table_data[left_column].floatvec[left_index] > 
-                right_table.table_data[right_column].floatvec[right_index])){
-                    passed = false;
-                }
-            break;
-        }
+        passed = (arg1 > arg2) ? true : false;
     }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_LT){
-        switch(left_table.table_data[left_column].type){
-        case TYPE_STRING:
-            if(!(left_table.table_data[left_column].strvec[left_index] < 
-                right_table.table_data[right_column].strvec[right_index])){
-                    passed = false;
-                }
-            break;
-        case TYPE_INT:
-            if(!(left_table.table_data[left_column].intvec[left_index] < 
-                right_table.table_data[right_column].intvec[right_index])){
-                    passed = false;
-                }
-            break;
-        case TYPE_FLOAT:
-            if(!(left_table.table_data[left_column].floatvec[left_index] < 
-                right_table.table_data[right_column].floatvec[right_index])){
-                    passed = false;
-                }
-            break;
-        }
+        passed = (arg1 < arg2) ? true : false;
     }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_NE){
-        switch(left_table.table_data[left_column].type){
-        case TYPE_STRING:
-            if(!(left_table.table_data[left_column].strvec[left_index] != 
-                right_table.table_data[right_column].strvec[right_index])){
-                    passed = false;
-                }
-            break;
-        case TYPE_INT:
-            if(!(left_table.table_data[left_column].intvec[left_index] != 
-                right_table.table_data[right_column].intvec[right_index])){
-                    passed = false;
-                }
-            break;
-        case TYPE_FLOAT:
-            if(!(left_table.table_data[left_column].floatvec[left_index] != 
-                right_table.table_data[right_column].floatvec[right_index])){
-                    passed = false;
-                }
-            break;
-        }
+        passed = (arg1 != arg2) ? true : false;
     }
     return passed;
 }
 
-void MergeQueryManager::FullOuterJoin(){}
-void MergeQueryManager::CrossJoin(){}
-void MergeQueryManager::Exist(){}    
-void MergeQueryManager::In(){}
-void MergeQueryManager::DependencyInnerJoin(){}
-void MergeQueryManager::DependencyExist(){}    
-void MergeQueryManager::DependencyIn(){}
+// bool MergeQueryManager::compareByOperator(int oper, string left_column, string right_column, int left_index, int right_index){
+//     bool passed = true;
+//     if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_GE){
+//         switch(left_table.table_data[left_column].type){
+//         case TYPE_STRING:
+//             if(!(left_table.table_data[left_column].strvec[left_index] >= 
+//                 right_table.table_data[right_column].strvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         case TYPE_INT:
+//             if(!(left_table.table_data[left_column].intvec[left_index] >= 
+//                 right_table.table_data[right_column].intvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         case TYPE_FLOAT:
+//             if(!(left_table.table_data[left_column].floatvec[left_index] >= 
+//                 right_table.table_data[right_column].floatvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         }
+//     }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_LE){
+//         switch(left_table.table_data[left_column].type){
+//         case TYPE_STRING:
+//             if(!(left_table.table_data[left_column].strvec[left_index] <= 
+//                 right_table.table_data[right_column].strvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         case TYPE_INT:
+//             if(!(left_table.table_data[left_column].intvec[left_index] <= 
+//                 right_table.table_data[right_column].intvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         case TYPE_FLOAT:
+//             if(!(left_table.table_data[left_column].floatvec[left_index] <= 
+//                 right_table.table_data[right_column].floatvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         }
+//     }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_GT){
+//         switch(left_table.table_data[left_column].type){
+//         case TYPE_STRING:
+//             if(!(left_table.table_data[left_column].strvec[left_index] > 
+//                 right_table.table_data[right_column].strvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         case TYPE_INT:
+//             if(!(left_table.table_data[left_column].intvec[left_index] > 
+//                 right_table.table_data[right_column].intvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         case TYPE_FLOAT:
+//             if(!(left_table.table_data[left_column].floatvec[left_index] > 
+//                 right_table.table_data[right_column].floatvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         }
+//     }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_LT){
+//         switch(left_table.table_data[left_column].type){
+//         case TYPE_STRING:
+//             if(!(left_table.table_data[left_column].strvec[left_index] < 
+//                 right_table.table_data[right_column].strvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         case TYPE_INT:
+//             if(!(left_table.table_data[left_column].intvec[left_index] < 
+//                 right_table.table_data[right_column].intvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         case TYPE_FLOAT:
+//             if(!(left_table.table_data[left_column].floatvec[left_index] < 
+//                 right_table.table_data[right_column].floatvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         }
+//     }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_NE){
+//         switch(left_table.table_data[left_column].type){
+//         case TYPE_STRING:
+//             if(!(left_table.table_data[left_column].strvec[left_index] != 
+//                 right_table.table_data[right_column].strvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         case TYPE_INT:
+//             if(!(left_table.table_data[left_column].intvec[left_index] != 
+//                 right_table.table_data[right_column].intvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         case TYPE_FLOAT:
+//             if(!(left_table.table_data[left_column].floatvec[left_index] != 
+//                 right_table.table_data[right_column].floatvec[right_index])){
+//                     passed = false;
+//                 }
+//             break;
+//         }
+//     }
+//     return passed;
+// }
+
