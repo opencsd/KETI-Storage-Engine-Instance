@@ -1,25 +1,25 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
-Change Dir: /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeTmp
+Change Dir: /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-oMFWi2
 
-Run Build Command(s):/usr/bin/make -f Makefile cmTC_3b1f6/fast && /usr/bin/make  -f CMakeFiles/cmTC_3b1f6.dir/build.make CMakeFiles/cmTC_3b1f6.dir/build
-make[1]: Entering directory '/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_3b1f6.dir/src.c.o
-/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_3b1f6.dir/src.c.o -c /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeTmp/src.c
-Linking C executable cmTC_3b1f6
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3b1f6.dir/link.txt --verbose=1
-/usr/bin/cc CMakeFiles/cmTC_3b1f6.dir/src.c.o -o cmTC_3b1f6 
-CMakeFiles/cmTC_3b1f6.dir/src.c.o: In function `main':
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_924dc/fast && /usr/bin/make  -f CMakeFiles/cmTC_924dc.dir/build.make CMakeFiles/cmTC_924dc.dir/build
+make[1]: Entering directory '/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-oMFWi2'
+Building C object CMakeFiles/cmTC_924dc.dir/src.c.o
+/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_924dc.dir/src.c.o -c /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-oMFWi2/src.c
+Linking C executable cmTC_924dc
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_924dc.dir/link.txt --verbose=1
+/usr/bin/cc CMakeFiles/cmTC_924dc.dir/src.c.o -o cmTC_924dc 
+CMakeFiles/cmTC_924dc.dir/src.c.o: In function `main':
 src.c:(.text+0x3e): undefined reference to `pthread_create'
 src.c:(.text+0x4a): undefined reference to `pthread_detach'
 src.c:(.text+0x56): undefined reference to `pthread_cancel'
 src.c:(.text+0x67): undefined reference to `pthread_join'
 src.c:(.text+0x7b): undefined reference to `pthread_atfork'
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_3b1f6.dir/build.make:98: recipe for target 'cmTC_3b1f6' failed
-make[1]: *** [cmTC_3b1f6] Error 1
-make[1]: Leaving directory '/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeTmp'
-Makefile:127: recipe for target 'cmTC_3b1f6/fast' failed
-make: *** [cmTC_3b1f6/fast] Error 2
+CMakeFiles/cmTC_924dc.dir/build.make:98: recipe for target 'cmTC_924dc' failed
+make[1]: *** [cmTC_924dc] Error 1
+make[1]: Leaving directory '/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-oMFWi2'
+Makefile:127: recipe for target 'cmTC_924dc/fast' failed
+make: *** [cmTC_924dc/fast] Error 2
 
 
 Source file was:
@@ -43,23 +43,24 @@ int main(void)
   return 0;
 }
 
-Determining if the function pthread_create exists in the pthreads failed with the following output:
-Change Dir: /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make -f Makefile cmTC_bb572/fast && /usr/bin/make  -f CMakeFiles/cmTC_bb572.dir/build.make CMakeFiles/cmTC_bb572.dir/build
-make[1]: Entering directory '/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_bb572.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_bb572.dir/CheckFunctionExists.c.o -c /usr/share/cmake-3.24/Modules/CheckFunctionExists.c
-Linking C executable cmTC_bb572
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bb572.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_bb572.dir/CheckFunctionExists.c.o -o cmTC_bb572  -lpthreads 
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-szjGsb
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_ded1c/fast && /usr/bin/make  -f CMakeFiles/cmTC_ded1c.dir/build.make CMakeFiles/cmTC_ded1c.dir/build
+make[1]: Entering directory '/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-szjGsb'
+Building C object CMakeFiles/cmTC_ded1c.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_ded1c.dir/CheckFunctionExists.c.o -c /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-szjGsb/CheckFunctionExists.c
+Linking C executable cmTC_ded1c
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ded1c.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_ded1c.dir/CheckFunctionExists.c.o -o cmTC_ded1c  -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_bb572.dir/build.make:98: recipe for target 'cmTC_bb572' failed
-make[1]: *** [cmTC_bb572] Error 1
-make[1]: Leaving directory '/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeTmp'
-Makefile:127: recipe for target 'cmTC_bb572/fast' failed
-make: *** [cmTC_bb572/fast] Error 2
+CMakeFiles/cmTC_ded1c.dir/build.make:98: recipe for target 'cmTC_ded1c' failed
+make[1]: *** [cmTC_ded1c] Error 1
+make[1]: Leaving directory '/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-szjGsb'
+Makefile:127: recipe for target 'cmTC_ded1c/fast' failed
+make: *** [cmTC_ded1c/fast] Error 2
 
 
 

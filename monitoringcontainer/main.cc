@@ -34,7 +34,7 @@ class MonitoringContainerServiceImpl final : public MonitoringContainer::Service
     //PBA 정보 요청, WAL 정보 요청, 결과 구성
     // CalculateStart();
     KETILOG::INFOLOG("Monitoring Container", "=: Set Meta Data :=");
-    // sleep(1+rand()%5);
+    this_thread::sleep_for(std::chrono::milliseconds(100));
     
     string key = TableManager::makeKey(snippet->query_id(),snippet->work_id());
     TableManager::SetReturnData(key);

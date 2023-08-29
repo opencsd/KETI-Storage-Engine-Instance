@@ -194,14 +194,12 @@ enum SnippetRequest_SnippetType : int {
   SnippetRequest_SnippetType_INNER_JOIN_SNIPPET = 3,
   SnippetRequest_SnippetType_LEFT_OUTER_JOIN_SNIPPET = 4,
   SnippetRequest_SnippetType_RIGHT_OUTER_JOIN_SNIPPET = 5,
-  SnippetRequest_SnippetType_FULL_OUTER_JOIN_SNIPPET = 6,
-  SnippetRequest_SnippetType_CROSS_JOIN_SNIPPET = 7,
-  SnippetRequest_SnippetType_UNION_SNIPPET = 8,
-  SnippetRequest_SnippetType_EXIST_SNIPPET = 9,
-  SnippetRequest_SnippetType_IN_SNIPPET = 10,
-  SnippetRequest_SnippetType_DEPENDENCY_INNER_JOIN_SNIPPET = 11,
-  SnippetRequest_SnippetType_DEPENDENCY_EXIST_SNIPPET = 12,
-  SnippetRequest_SnippetType_DEPENDENCY_IN_SNIPPET = 13,
+  SnippetRequest_SnippetType_CROSS_JOIN_SNIPPET = 6,
+  SnippetRequest_SnippetType_UNION_SNIPPET = 7,
+  SnippetRequest_SnippetType_IN_SNIPPET = 8,
+  SnippetRequest_SnippetType_DEPENDENCY_INNER_JOIN_SNIPPET = 9,
+  SnippetRequest_SnippetType_DEPENDENCY_EXIST_SNIPPET = 10,
+  SnippetRequest_SnippetType_DEPENDENCY_IN_SNIPPET = 11,
   SnippetRequest_SnippetType_SnippetRequest_SnippetType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   SnippetRequest_SnippetType_SnippetRequest_SnippetType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
@@ -515,14 +513,10 @@ class SnippetRequest final :
     SnippetRequest_SnippetType_LEFT_OUTER_JOIN_SNIPPET;
   static constexpr SnippetType RIGHT_OUTER_JOIN_SNIPPET =
     SnippetRequest_SnippetType_RIGHT_OUTER_JOIN_SNIPPET;
-  static constexpr SnippetType FULL_OUTER_JOIN_SNIPPET =
-    SnippetRequest_SnippetType_FULL_OUTER_JOIN_SNIPPET;
   static constexpr SnippetType CROSS_JOIN_SNIPPET =
     SnippetRequest_SnippetType_CROSS_JOIN_SNIPPET;
   static constexpr SnippetType UNION_SNIPPET =
     SnippetRequest_SnippetType_UNION_SNIPPET;
-  static constexpr SnippetType EXIST_SNIPPET =
-    SnippetRequest_SnippetType_EXIST_SNIPPET;
   static constexpr SnippetType IN_SNIPPET =
     SnippetRequest_SnippetType_IN_SNIPPET;
   static constexpr SnippetType DEPENDENCY_INNER_JOIN_SNIPPET =

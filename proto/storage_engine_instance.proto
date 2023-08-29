@@ -10,6 +10,7 @@ package StorageEngineInstance;
 service InterfaceContainer {
   rpc SetSnippet (stream SnippetRequest) returns (stream Result) {}
   rpc Run (Request) returns (Result) {}
+  rpc SetSnippetAndRun (stream SnippetRequest) returns (Result) {}
 }
 
 service MergingContainer {
@@ -47,14 +48,12 @@ message SnippetRequest {
     INNER_JOIN_SNIPPET = 3;
     LEFT_OUTER_JOIN_SNIPPET = 4;
     RIGHT_OUTER_JOIN_SNIPPET = 5;
-    FULL_OUTER_JOIN_SNIPPET = 6;
-    CROSS_JOIN_SNIPPET = 7;
-    UNION_SNIPPET = 8;
-    EXIST_SNIPPET = 9;
-    IN_SNIPPET = 10;
-    DEPENDENCY_INNER_JOIN_SNIPPET = 11;
-    DEPENDENCY_EXIST_SNIPPET = 12;
-    DEPENDENCY_IN_SNIPPET = 13;
+    CROSS_JOIN_SNIPPET = 6;
+    UNION_SNIPPET = 7;
+    IN_SNIPPET = 8;
+    DEPENDENCY_INNER_JOIN_SNIPPET = 9;
+    DEPENDENCY_EXIST_SNIPPET = 10;
+    DEPENDENCY_IN_SNIPPET = 11;
   }
   SnippetType type = 1;
   Snippet snippet = 2;
