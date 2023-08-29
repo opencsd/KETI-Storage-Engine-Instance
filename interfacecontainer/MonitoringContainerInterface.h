@@ -37,7 +37,7 @@ class Monitoring_Container_Interface {
     		ClientContext context;
 			
 			Status status = stub_->SetMetaData(&context, masked_snippet, &result);
-			// cout << "result : " << result.value() << endl;
+			// std::cout << "result : " << result.value() << std::endl;
 
 	  		if (!status.ok()) {
 				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
