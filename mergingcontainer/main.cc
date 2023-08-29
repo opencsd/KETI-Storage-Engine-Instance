@@ -32,8 +32,9 @@ class MergingContainerServiceImpl final : public MergingContainer::Service {
     string msg = "==:Init Buffer:== {" + to_string(request->snippet().query_id()) + "|" + to_string(request->snippet().work_id()) + "}";
     KETILOG::INFOLOG("Merging Container",msg);
 
-    thread BufferInitWorkInstance = thread(&BufferManager::InitWork,request->type(), request->snippet());
-    BufferInitWorkInstance.detach();  
+    // thread BufferInitWorkInstance = thread(&BufferManager::InitWork,request->type(), request->snippet());
+    // BufferInitWorkInstance.detach();  
+    BufferManager::InitWork(request->type(), request->snippet());
  
     result->set_value("Init Success");
 
@@ -47,18 +48,16 @@ class MergingContainerServiceImpl final : public MergingContainer::Service {
     BufferManager::EndQuery(*request);
 
     result->set_value("End Query");
-    // CalculateEnd();
     return Status::OK;
   }
 
   Status GetQueryResult(ServerContext* context, const Request* request, QueryResult* result) override {
-    
-    // CalculateStart();
-
     string msg = "==:Get Query Result:== {" + to_string(request->query_id()) + "|" + request->table_name() + "}";
     KETILOG::INFOLOG("Merging Container", msg);
+
+    string key = to_string(request->query_id()) + "|" + request->table_name();
      
-    TableData queryResult = BufferManager::GetTableData(request->query_id(),request->table_name());
+    TableData queryResult = BufferManager::GetTableData(request->query_id(),request->table_name());//이걸 막기
 
     if(KETILOG::IsLogLevelUnder(TRACE)){
       // // 테이블 데이터 로우 수 확인 - Debug Code   
