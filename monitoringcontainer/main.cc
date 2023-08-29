@@ -32,9 +32,9 @@ using StorageEngineInstance::Snippet;
 class MonitoringContainerServiceImpl final : public MonitoringContainer::Service {
   Status SetMetaData(ServerContext* context, const Snippet* snippet, Result* result) override {
     //PBA 정보 요청, WAL 정보 요청, 결과 구성
-    // CalculateStart();
     KETILOG::INFOLOG("Monitoring Container", "=: Set Meta Data :=");
-    this_thread::sleep_for(std::chrono::milliseconds(100));
+    // this_thread::sleep_for(std::chrono::milliseconds(100));
+    
     
     string key = TableManager::makeKey(snippet->query_id(),snippet->work_id());
     TableManager::SetReturnData(key);
@@ -44,6 +44,11 @@ class MonitoringContainerServiceImpl final : public MonitoringContainer::Service
     request_.set_work_id(snippet->work_id());
     request_.set_table_name(snippet->table_name(0));
 
+    InternalRequest internal_request;
+    internal_request.query_id = snippet->query_id();
+    internal_request.work_id = snippet->work_id();
+    internal_request.table_name = snippet->table_name(0);
+
     bool temp_index_scan = false;
 
     // Snippet snippet_;
@@ -52,14 +57,14 @@ class MonitoringContainerServiceImpl final : public MonitoringContainer::Service
     // TableManager::GetReturnData(key)->snippet->CopyFrom(new_snippet);
     TableManager::GetReturnData(key)->wal_done = true;
     // WALManager::PushQueue(request_);
-    
+
     if(!temp_index_scan){ //full scan
       TableManager::GetReturnData(key)->index_scan_done = true;
       LBA2PBAQueryAgent::PushQueue(request_);
     }else{ //index scan
       IndexManager::PushQueue(request_);
     }
-
+    
     result->set_value("Set Meta Data Start");
 
     return Status::OK;
@@ -77,7 +82,6 @@ class MonitoringContainerServiceImpl final : public MonitoringContainer::Service
     }
     
     result->CopyFrom(*data->metadataResponse);
-    // CalculateEnd();
     return Status::OK;
   }
   Status GetCSDBlockInfo(ServerContext* context, const Request* request, TableBlockCount* result) override {

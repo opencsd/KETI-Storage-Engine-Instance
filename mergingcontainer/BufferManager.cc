@@ -304,13 +304,6 @@ void BufferManager::mergeBlock(BlockResult result){
                 myWorkBuffer->table_data[col_name].row_count++;
             }
         }
-    }else{
-        for(size_t j=0; j<myWorkBuffer->table_column.size(); j++){
-            col_name = myWorkBuffer->table_column[j];
-            ColData coldata;
-            myWorkBuffer->table_data[col_name] = coldata;
-        }
-        
     }
 
     // scheduler.csdworkdec(result.csd_name, result.result_block_count);
@@ -319,7 +312,7 @@ void BufferManager::mergeBlock(BlockResult result){
     
     KETILOG::DEBUGLOG(LOGTAG,"# Merging Data{" + to_string(qid) + "|" + to_string(wid) + "|" + myWorkBuffer->table_alias + "} ... (Left Block : " + std::to_string(myWorkBuffer->left_block_count) + ")");
 
-    if(myWorkBuffer->left_block_count == 0){
+    if(myWorkBuffer->left_block_count == 0){ //Work Done
         string msg = "# Merging Data {" + to_string(qid) + "|" + to_string(wid) + "|" + myWorkBuffer->table_alias + "} Done";
         KETILOG::DEBUGLOG(LOGTAG,msg);
 
@@ -395,60 +388,54 @@ int BufferManager::endQuery(StorageEngineInstance::Request qid){
 
 TableData BufferManager::getTableData(int qid, string tname){ 
     TableData tableData;
-    int phase = 0;
 
-    while(ID_INIT_WAIT_MAX_TIME > phase){
+    while(1){
         int status = CheckTableStatus(qid,tname);
 
-        if(status == NotFinished){
-            KETILOG::DEBUGLOG(LOGTAG,"# Not Finished " + to_string(qid) + ":" + tname);
+        if(status == NonInitQuery || status == NonInitTable){
+            KETILOG::DEBUGLOG(LOGTAG,"# Buffer Not Init " + to_string(qid) + ":" + tname);
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }else{
             int wid = DataBuff[qid]->tablename_workid_map[tname];
             WorkBuffer* workBuffer = DataBuff[qid]->work_buffer_list[wid];
-            unique_lock<mutex> lock(workBuffer->mu);
-            workBuffer->cond.wait(lock);
-            tableData.table_data = workBuffer->table_data;
-            tableData.valid = true;
-            tableData.row_count = workBuffer->row_count;
-            // Debug Code 
-            if(KETILOG::IsLogLevelUnder(TRACE)){
-                for(auto i : workBuffer->table_data){
-                    cout << i.first << "|" << i.second.row_count << "|" << i.second.type << endl;
+            unique_lock<mutex> buffer_lock(workBuffer->mu);
+
+            int status = CheckTableStatus(qid,tname);
+
+            if(status == NotFinished){
+                KETILOG::DEBUGLOG(LOGTAG,"# Not Finished " + to_string(qid) + ":" + tname);
+
+                workBuffer->cond.wait(buffer_lock);
+                tableData.table_data = workBuffer->table_data;
+                tableData.valid = true;
+                tableData.row_count = workBuffer->row_count;
+
+                if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
+                    for(auto i : workBuffer->table_data){
+                        cout << i.first << "|" << i.second.row_count << "|" << i.second.type << endl;
+                    }
                 }
-            }
-            KETILOG::DEBUGLOG(LOGTAG,"# Finished " + to_string(qid) + ":" + tname);
-            break;
-        }else if(status == WorkDone){
-            int wid = DataBuff[qid]->tablename_workid_map[tname];
-            WorkBuffer* workBuffer = DataBuff[qid]->work_buffer_list[wid];
-            unique_lock<mutex> lock(workBuffer->mu);
-            tableData.table_data = workBuffer->table_data;
-            tableData.valid = true;
-            tableData.row_count = workBuffer->row_count;
-            // Debug Code 
-            if(KETILOG::IsLogLevelUnder(TRACE)){
-                for(auto i : workBuffer->table_data){
-                    cout << i.first << "|" << i.second.row_count << "|" << i.second.type << endl;
+                KETILOG::DEBUGLOG(LOGTAG,"# Finished " + to_string(qid) + ":" + tname);
+                break;
+            }else if(status == WorkDone){
+                tableData.table_data = workBuffer->table_data;
+                tableData.valid = true;
+                tableData.row_count = workBuffer->row_count;
+
+                if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
+                    for(auto i : workBuffer->table_data){
+                        cout << i.first << "|" << i.second.row_count << "|" << i.second.type << endl;
+                    }
                 }
+                KETILOG::DEBUGLOG(LOGTAG,"# Done " + to_string(qid) + ":" + tname);
+                break;
             }
-            KETILOG::DEBUGLOG(LOGTAG,"# Done " + to_string(qid) + ":" + tname);
-            break;
-        }else if(status == NonInitTable){
-            phase++;
-            string msg = "# NonInitTable, wait phase : "+to_string(phase)+" {"+to_string(qid)+"|"+tname+"}";
-            KETILOG::DEBUGLOG(LOGTAG,msg);
-            usleep(1000); 
-        }else{ // NONINITQUERY
-            phase++;
-            string msg = "# QueryIDError , wait phase : "+to_string(phase)+" {"+to_string(qid)+"|"+tname+"}";
-            KETILOG::DEBUGLOG(LOGTAG,msg);
-            usleep(1000);
         }
     }
-
     return tableData;
 }
 
-int BufferManager::saveTableData(int qid, string tname, TableData table_data_, int offset, int length){
+int BufferManager::saveTableData(int qid, string tname, TableData &table_data_, int offset, int length){
     string msg = "# Save Table {" + to_string(qid) + "|" + tname + "}";
     KETILOG::DEBUGLOG(LOGTAG,msg);
 
