@@ -29,9 +29,9 @@ typedef enum DEBUGG_LEVEL {
     DEBUG = 1,
     INFO = 2,
     WARN = 3,
-    ERROR = 4,
-    FATAL = 5,
-    METRIC = 6
+    METRIC = 4,
+    ERROR = 5,
+    FATAL = 6
 }KETI_DEBUGG_LEVEL;
 
 class KETILOG {
@@ -110,6 +110,11 @@ class KETILOG {
 
         static bool IsLogLevelUnder(int level){
             bool flag = (GetInstance().LOG_LEVEL <= level);
+            return flag;
+        }
+
+        static bool IsLogLevel(int level){
+            bool flag = (GetInstance().LOG_LEVEL == level);
             return flag;
         }
 
