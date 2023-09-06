@@ -18,13 +18,8 @@ typedef enum opertype
     KETI_NOT,     // ISNOT과 관련 없음 OPERATOR 앞에 붙는 형식 --> 혼자 들어오는 oper
     KETI_AND,     // AND --> 혼자 들어오는 oper
     KETI_OR,      // OR --> 혼자 들어오는 oper
-    KETI_JOIN,    // 타입 나눠야함 left, right, inner, outer
-    KETI_SUBSTRING,
-    KETI_SET_UNION = 100,
-    KETI_SET_UNIONALL = 101,
-    KETI_SET_INTERSECT = 102, //MySQL 미지원
-    KETI_SET_MINUS = 103, //MySQL 미지원
-    KETI_SET_PLUS = 104  //MySQL 미지원
+    KETI_ALL,    
+    KETI_SUBSTRING
 }KETI_OPER_TYPE;
 
 typedef enum QueryEngineType{
