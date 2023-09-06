@@ -91,6 +91,8 @@ message Snippet {
       KETI_NOT = 12;
       KETI_AND = 13;
       KETI_OR = 14;
+      KETI_ALL = 15;
+      KETI_SUBSTRING = 16;
     }
     message FilterValue{
       repeated ValueType type = 1;
@@ -99,7 +101,6 @@ message Snippet {
     FilterValue LV = 1;
     OperType Operator = 2;
     FilterValue RV = 3;
-    repeated FilterValue EXTRA = 4;
   }
   message Projection {
     enum SelectType{
@@ -150,6 +151,7 @@ message Snippet {
   Order order_by = 15;
   Limit limit = 16;
   int32 pk_num = 17;
+  repeated Filter having = 18;
 }
 
 message Column {
