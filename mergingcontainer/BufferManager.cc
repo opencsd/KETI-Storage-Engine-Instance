@@ -316,16 +316,33 @@ void BufferManager::mergeBlock(BlockResult result){
         string msg = "# Merging Data {" + to_string(qid) + "|" + to_string(wid) + "|" + myWorkBuffer->table_alias + "} Done";
         KETILOG::DEBUGLOG(LOGTAG,msg);
 
+        // if(myWorkBuffer->row_count == 0){
+        //     for(int c = 0; c < myWorkBuffer->table_column.size(); c++){
+        //         myWorkBuffer->table_data[myWorkBuffer->table_column[c]].row_count = 0;
+        //         myWorkBuffer->table_data[myWorkBuffer->table_column[c]].type = TYPE_EMPTY;
+        //     }
+        // }else{
+        //     for(auto it = myWorkBuffer->table_data.begin(); it != myWorkBuffer->table_data.end(); it++){
+        //         if((*it).second.floatvec.size() != 0){
+        //             (*it).second.type = TYPE_FLOAT;
+        //         }else if((*it).second.intvec.size() != 0){
+        //             (*it).second.type = TYPE_INT;
+        //         }else if((*it).second.strvec.size() != 0){
+        //             (*it).second.type = TYPE_STRING;
+        //         }
+        //     }
+        // }
+
         for(auto it = myWorkBuffer->table_data.begin(); it != myWorkBuffer->table_data.end(); it++){
-            if((*it).second.floatvec.size() != 0){
-                (*it).second.type = TYPE_FLOAT;
-            }else if((*it).second.intvec.size() != 0){
-                (*it).second.type = TYPE_INT;
-            }else if((*it).second.strvec.size() != 0){
-                (*it).second.type = TYPE_STRING;
+                if((*it).second.floatvec.size() != 0){
+                    (*it).second.type = TYPE_FLOAT;
+                }else if((*it).second.intvec.size() != 0){
+                    (*it).second.type = TYPE_INT;
+                }else if((*it).second.strvec.size() != 0){
+                    (*it).second.type = TYPE_STRING;
+                }
             }
-        }
-        
+
         myWorkBuffer->status = WorkDone;
         myWorkBuffer->cond.notify_all();
     }
@@ -347,6 +364,7 @@ int BufferManager::initWork(int type, StorageEngineInstance::Snippet masked_snip
     workBuffer->table_alias = table_alias;
     for(int i = 0; i < masked_snippet.column_alias_size(); i++){
         workBuffer->table_column.push_back(masked_snippet.column_alias(i));
+        workBuffer->table_data.insert({masked_snippet.column_alias(i),ColData{}});
     }
 
     DataBuff[masked_snippet.query_id()]->work_buffer_list[masked_snippet.work_id()] = workBuffer;
@@ -410,24 +428,29 @@ TableData BufferManager::getTableData(int qid, string tname){
                 tableData.valid = true;
                 tableData.row_count = workBuffer->row_count;
 
+                KETILOG::DEBUGLOG(LOGTAG,"# Finished " + to_string(qid) + ":" + tname);
                 if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
+                    cout << "<get table data>" << endl;
                     for(auto i : workBuffer->table_data){
                         cout << i.first << "|" << i.second.row_count << "|" << i.second.type << endl;
                     }
                 }
-                KETILOG::DEBUGLOG(LOGTAG,"# Finished " + to_string(qid) + ":" + tname);
                 break;
             }else if(status == WorkDone){
+                KETILOG::DEBUGLOG(LOGTAG,"# Done " + to_string(qid) + ":" + tname);
                 tableData.table_data = workBuffer->table_data;
                 tableData.valid = true;
                 tableData.row_count = workBuffer->row_count;
 
                 if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
+                    cout << "<get table data>" << endl;
                     for(auto i : workBuffer->table_data){
                         cout << i.first << "|" << i.second.row_count << "|" << i.second.type << endl;
                     }
                 }
-                KETILOG::DEBUGLOG(LOGTAG,"# Done " + to_string(qid) + ":" + tname);
+                if(workBuffer->table_data.size() == 0){
+                    cout << "what ???" << endl;
+                }
                 break;
             }
         }
@@ -463,7 +486,8 @@ int BufferManager::saveTableData(int qid, string tname, TableData &table_data_, 
                 KETILOG::FATALLOG(LOGTAG,"save table row type check plz... ");
             }
             column.type = coldata.second.type;
-            workBuffer->table_data.insert({coldata.first, column});
+            // workBuffer->table_data.insert({coldata.first, column});
+            workBuffer->table_data[coldata.first] = column;
         }
         workBuffer->row_count = length - offset;
     }else{
