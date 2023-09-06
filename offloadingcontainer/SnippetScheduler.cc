@@ -76,22 +76,23 @@ void Scheduler::serialize(StringBuffer &buff, Snippet &snippet, string bestcsd, 
 
     writer.Key("tableFilter");
     writer.StartArray();
-    if(snippet.table_filter().size() > 0){
+    if(snippet.table_filter_size() > 0){
         for (int i = 0; i < snippet.table_filter().size(); i++)
         {
             writer.StartObject();
-            if (snippet.table_filter()[i].lv().type().size() > 0)
+            if (snippet.table_filter(i).lv().type().size() > 0)
             {
                 writer.Key("LV");
                 
-                if(snippet.table_filter()[i].lv().type(0) == 10){
+                if(snippet.table_filter(i).lv().type(0) == 10){
                     writer.String(snippet.table_filter()[i].lv().value(0).c_str());
                 }
             }
             writer.Key("OPERATOR");
-            writer.Int(snippet.table_filter()[i].operator_());
+            writer.Int(snippet.table_filter(i).operator_());
 
-            if(snippet.table_filter()[i].operator_() == 8 || snippet.table_filter()[i].operator_() == 9){
+            if(snippet.table_filter(i).operator_() == 8 || snippet.table_filter(i).operator_() == 9 || snippet.table_filter(i).operator_() == 16){
+                //EXTRA가 DB Connector에서 올땐 RV로 오는데 여기서 EXTRA로 바뀌어서 CSD로 넘어감 -> 통일하는게 좋을듯
                 writer.Key("EXTRA");
                 writer.StartArray();
 
@@ -119,30 +120,29 @@ void Scheduler::serialize(StringBuffer &buff, Snippet &snippet, string bestcsd, 
                     }
                 }
                 writer.EndArray();
-            } else if (snippet.table_filter()[i].rv().type().size() > 0)
-            {
+            } else if (snippet.table_filter(i).rv().type().size() > 0){
                 writer.Key("RV");
 
-                if(snippet.table_filter()[i].rv().type(0) != 10){
-                    if(snippet.table_filter()[i].rv().type(0) == 7 || snippet.table_filter()[i].rv().type(0) == 3){
-                        string tmpstr = snippet.table_filter()[i].rv().value(0);
+                if(snippet.table_filter(i).rv().type(0) != 10){
+                    if(snippet.table_filter(i).rv().type(0) == 7 || snippet.table_filter(i).rv().type(0) == 3){
+                        string tmpstr = snippet.table_filter(i).rv().value(0);
                         int tmpint = atoi(tmpstr.c_str());
                         writer.Int(tmpint);
-                    }else if(snippet.table_filter()[i].rv().type(0) == 9){
-                        string tmpstr = snippet.table_filter()[i].rv().value(0);
+                    }else if(snippet.table_filter(i).rv().type(0) == 9){
+                        string tmpstr = snippet.table_filter(i).rv().value(0);
                         tmpstr = "+" + tmpstr;
                         writer.String(tmpstr.c_str());
-                    }else if(snippet.table_filter()[i].rv().type(0) == 4 || snippet.table_filter()[i].rv().type(0) == 5){
-                        string tmpstr = snippet.table_filter()[i].rv().value(0);
+                    }else if(snippet.table_filter(i).rv().type(0) == 4 || snippet.table_filter(i).rv().type(0) == 5){
+                        string tmpstr = snippet.table_filter(i).rv().value(0);
                         double tmpfloat = stod(tmpstr);
                         writer.Double(tmpfloat);
                     }else{
-                        string tmpstr = snippet.table_filter()[i].rv().value(0);
+                        string tmpstr = snippet.table_filter(i).rv().value(0);
                         tmpstr = "+" + tmpstr;
                         writer.String(tmpstr.c_str());
                     }
                 }else{
-                    writer.String(snippet.table_filter()[i].rv().value(0).c_str());
+                    writer.String(snippet.table_filter(i).rv().value(0).c_str());
                 }
             }
 

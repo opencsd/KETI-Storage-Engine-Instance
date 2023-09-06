@@ -56,7 +56,7 @@ struct ColData{
   vector<int64_t> intvec;
   vector<double> floatvec;
   vector<bool> isnull;//해당 인덱스 null 여부 (조인시)
-  int type;//0 string, 1 int, 2 float (KETI_VECTOR_TYPE)
+  int type;//0 empty, 1 string, 2 int, 3 float, 4 boolean (KETI_VECTOR_TYPE)
   int row_count;
   ColData(){
     strvec.clear();

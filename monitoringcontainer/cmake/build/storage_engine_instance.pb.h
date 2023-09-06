@@ -238,12 +238,14 @@ enum Snippet_Filter_OperType : int {
   Snippet_Filter_OperType_KETI_NOT = 12,
   Snippet_Filter_OperType_KETI_AND = 13,
   Snippet_Filter_OperType_KETI_OR = 14,
+  Snippet_Filter_OperType_KETI_ALL = 15,
+  Snippet_Filter_OperType_KETI_SUBSTRING = 16,
   Snippet_Filter_OperType_Snippet_Filter_OperType_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   Snippet_Filter_OperType_Snippet_Filter_OperType_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool Snippet_Filter_OperType_IsValid(int value);
 constexpr Snippet_Filter_OperType Snippet_Filter_OperType_OperType_MIN = Snippet_Filter_OperType_KETI_DEFAULT;
-constexpr Snippet_Filter_OperType Snippet_Filter_OperType_OperType_MAX = Snippet_Filter_OperType_KETI_OR;
+constexpr Snippet_Filter_OperType Snippet_Filter_OperType_OperType_MAX = Snippet_Filter_OperType_KETI_SUBSTRING;
 constexpr int Snippet_Filter_OperType_OperType_ARRAYSIZE = Snippet_Filter_OperType_OperType_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* Snippet_Filter_OperType_descriptor();
@@ -930,6 +932,10 @@ class Snippet_Filter final :
     Snippet_Filter_OperType_KETI_AND;
   static constexpr OperType KETI_OR =
     Snippet_Filter_OperType_KETI_OR;
+  static constexpr OperType KETI_ALL =
+    Snippet_Filter_OperType_KETI_ALL;
+  static constexpr OperType KETI_SUBSTRING =
+    Snippet_Filter_OperType_KETI_SUBSTRING;
   static inline bool OperType_IsValid(int value) {
     return Snippet_Filter_OperType_IsValid(value);
   }
@@ -958,29 +964,10 @@ class Snippet_Filter final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kEXTRAFieldNumber = 4,
     kLVFieldNumber = 1,
     kRVFieldNumber = 3,
     kOperatorFieldNumber = 2,
   };
-  // repeated .StorageEngineInstance.Snippet.Filter.FilterValue EXTRA = 4;
-  int extra_size() const;
-  private:
-  int _internal_extra_size() const;
-  public:
-  void clear_extra();
-  ::StorageEngineInstance::Snippet_Filter_FilterValue* mutable_extra(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Filter_FilterValue >*
-      mutable_extra();
-  private:
-  const ::StorageEngineInstance::Snippet_Filter_FilterValue& _internal_extra(int index) const;
-  ::StorageEngineInstance::Snippet_Filter_FilterValue* _internal_add_extra();
-  public:
-  const ::StorageEngineInstance::Snippet_Filter_FilterValue& extra(int index) const;
-  ::StorageEngineInstance::Snippet_Filter_FilterValue* add_extra();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Filter_FilterValue >&
-      extra() const;
-
   // .StorageEngineInstance.Snippet.Filter.FilterValue LV = 1;
   bool has_lv() const;
   private:
@@ -1033,7 +1020,6 @@ class Snippet_Filter final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Filter_FilterValue > extra_;
   ::StorageEngineInstance::Snippet_Filter_FilterValue* lv_;
   ::StorageEngineInstance::Snippet_Filter_FilterValue* rv_;
   int operator__;
@@ -2009,6 +1995,7 @@ class Snippet final :
     kColumnProjectionFieldNumber = 12,
     kColumnFilteringFieldNumber = 13,
     kGroupByFieldNumber = 14,
+    kHavingFieldNumber = 18,
     kTableAliasFieldNumber = 10,
     kDependencyFieldNumber = 6,
     kOrderByFieldNumber = 15,
@@ -2239,6 +2226,24 @@ class Snippet final :
   std::string* _internal_add_group_by();
   public:
 
+  // repeated .StorageEngineInstance.Snippet.Filter having = 18;
+  int having_size() const;
+  private:
+  int _internal_having_size() const;
+  public:
+  void clear_having();
+  ::StorageEngineInstance::Snippet_Filter* mutable_having(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Filter >*
+      mutable_having();
+  private:
+  const ::StorageEngineInstance::Snippet_Filter& _internal_having(int index) const;
+  ::StorageEngineInstance::Snippet_Filter* _internal_add_having();
+  public:
+  const ::StorageEngineInstance::Snippet_Filter& having(int index) const;
+  ::StorageEngineInstance::Snippet_Filter* add_having();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Filter >&
+      having() const;
+
   // string table_alias = 10;
   void clear_table_alias();
   const std::string& table_alias() const;
@@ -2354,6 +2359,7 @@ class Snippet final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Projection > column_projection_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> column_filtering_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> group_by_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Filter > having_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr table_alias_;
   ::StorageEngineInstance::Snippet_Dependency* dependency_;
   ::StorageEngineInstance::Snippet_Order* order_by_;
@@ -6257,46 +6263,6 @@ inline void Snippet_Filter::set_allocated_rv(::StorageEngineInstance::Snippet_Fi
   // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.Snippet.Filter.RV)
 }
 
-// repeated .StorageEngineInstance.Snippet.Filter.FilterValue EXTRA = 4;
-inline int Snippet_Filter::_internal_extra_size() const {
-  return extra_.size();
-}
-inline int Snippet_Filter::extra_size() const {
-  return _internal_extra_size();
-}
-inline void Snippet_Filter::clear_extra() {
-  extra_.Clear();
-}
-inline ::StorageEngineInstance::Snippet_Filter_FilterValue* Snippet_Filter::mutable_extra(int index) {
-  // @@protoc_insertion_point(field_mutable:StorageEngineInstance.Snippet.Filter.EXTRA)
-  return extra_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Filter_FilterValue >*
-Snippet_Filter::mutable_extra() {
-  // @@protoc_insertion_point(field_mutable_list:StorageEngineInstance.Snippet.Filter.EXTRA)
-  return &extra_;
-}
-inline const ::StorageEngineInstance::Snippet_Filter_FilterValue& Snippet_Filter::_internal_extra(int index) const {
-  return extra_.Get(index);
-}
-inline const ::StorageEngineInstance::Snippet_Filter_FilterValue& Snippet_Filter::extra(int index) const {
-  // @@protoc_insertion_point(field_get:StorageEngineInstance.Snippet.Filter.EXTRA)
-  return _internal_extra(index);
-}
-inline ::StorageEngineInstance::Snippet_Filter_FilterValue* Snippet_Filter::_internal_add_extra() {
-  return extra_.Add();
-}
-inline ::StorageEngineInstance::Snippet_Filter_FilterValue* Snippet_Filter::add_extra() {
-  ::StorageEngineInstance::Snippet_Filter_FilterValue* _add = _internal_add_extra();
-  // @@protoc_insertion_point(field_add:StorageEngineInstance.Snippet.Filter.EXTRA)
-  return _add;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Filter_FilterValue >&
-Snippet_Filter::extra() const {
-  // @@protoc_insertion_point(field_list:StorageEngineInstance.Snippet.Filter.EXTRA)
-  return extra_;
-}
-
 // -------------------------------------------------------------------
 
 // Snippet_Projection
@@ -7668,6 +7634,46 @@ inline void Snippet::_internal_set_pk_num(int32_t value) {
 inline void Snippet::set_pk_num(int32_t value) {
   _internal_set_pk_num(value);
   // @@protoc_insertion_point(field_set:StorageEngineInstance.Snippet.pk_num)
+}
+
+// repeated .StorageEngineInstance.Snippet.Filter having = 18;
+inline int Snippet::_internal_having_size() const {
+  return having_.size();
+}
+inline int Snippet::having_size() const {
+  return _internal_having_size();
+}
+inline void Snippet::clear_having() {
+  having_.Clear();
+}
+inline ::StorageEngineInstance::Snippet_Filter* Snippet::mutable_having(int index) {
+  // @@protoc_insertion_point(field_mutable:StorageEngineInstance.Snippet.having)
+  return having_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Filter >*
+Snippet::mutable_having() {
+  // @@protoc_insertion_point(field_mutable_list:StorageEngineInstance.Snippet.having)
+  return &having_;
+}
+inline const ::StorageEngineInstance::Snippet_Filter& Snippet::_internal_having(int index) const {
+  return having_.Get(index);
+}
+inline const ::StorageEngineInstance::Snippet_Filter& Snippet::having(int index) const {
+  // @@protoc_insertion_point(field_get:StorageEngineInstance.Snippet.having)
+  return _internal_having(index);
+}
+inline ::StorageEngineInstance::Snippet_Filter* Snippet::_internal_add_having() {
+  return having_.Add();
+}
+inline ::StorageEngineInstance::Snippet_Filter* Snippet::add_having() {
+  ::StorageEngineInstance::Snippet_Filter* _add = _internal_add_having();
+  // @@protoc_insertion_point(field_add:StorageEngineInstance.Snippet.having)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Filter >&
+Snippet::having() const {
+  // @@protoc_insertion_point(field_list:StorageEngineInstance.Snippet.having)
+  return having_;
 }
 
 // -------------------------------------------------------------------

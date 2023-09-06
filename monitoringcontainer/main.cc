@@ -33,8 +33,6 @@ class MonitoringContainerServiceImpl final : public MonitoringContainer::Service
   Status SetMetaData(ServerContext* context, const Snippet* snippet, Result* result) override {
     //PBA 정보 요청, WAL 정보 요청, 결과 구성
     KETILOG::INFOLOG("Monitoring Container", "=: Set Meta Data :=");
-    // this_thread::sleep_for(std::chrono::milliseconds(100));
-    
     
     string key = TableManager::makeKey(snippet->query_id(),snippet->work_id());
     TableManager::SetReturnData(key);
