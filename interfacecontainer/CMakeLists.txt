@@ -66,8 +66,8 @@ if (UNIX)
 endif (UNIX)
 
 # interface_container
-add_executable(interface_container "main.cc")
-target_link_libraries(interface_container
+add_executable(interface-container "main.cc")
+target_link_libraries(interface-container
   ss_grpc_proto
   ${LINKING_LIBRARIES}
   ${_REFLECTION}

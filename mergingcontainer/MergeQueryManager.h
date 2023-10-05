@@ -93,6 +93,6 @@ private:
     bool compareByOperator(int oper, const T& arg1, const U& arg2);
     string makeGroupbyKey(TableData &groupby_table, const RepeatedPtrField<string>& groups, int row_index);
 
-    void InnerJoin_nestedloop();//inner join (nested loop join)
+    void InnerJoin_nestedloop(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, TableData &dest);//inner join (nested loop join)
     void LeftOuterJoin_nestedloop();//left outer join (nested loop join)
 };

@@ -130,24 +130,24 @@ ss_grpc_proto/fast:
 .PHONY : ss_grpc_proto/fast
 
 #=============================================================================
-# Target rules for targets named interface_container
+# Target rules for targets named interface-container
 
 # Build rule for target.
-interface_container: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 interface_container
-.PHONY : interface_container
+interface-container: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 interface-container
+.PHONY : interface-container
 
 # fast build rule for target.
-interface_container/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/interface_container.dir/build.make CMakeFiles/interface_container.dir/build
-.PHONY : interface_container/fast
+interface-container/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/interface-container.dir/build.make CMakeFiles/interface-container.dir/build
+.PHONY : interface-container/fast
 
 main.o: main.cc.o
 .PHONY : main.o
 
 # target to build an object file
 main.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/interface_container.dir/build.make CMakeFiles/interface_container.dir/main.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/interface-container.dir/build.make CMakeFiles/interface-container.dir/main.cc.o
 .PHONY : main.cc.o
 
 main.i: main.cc.i
@@ -155,7 +155,7 @@ main.i: main.cc.i
 
 # target to preprocess a source file
 main.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/interface_container.dir/build.make CMakeFiles/interface_container.dir/main.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/interface-container.dir/build.make CMakeFiles/interface-container.dir/main.cc.i
 .PHONY : main.cc.i
 
 main.s: main.cc.s
@@ -163,7 +163,7 @@ main.s: main.cc.s
 
 # target to generate assembly for a file
 main.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/interface_container.dir/build.make CMakeFiles/interface_container.dir/main.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/interface-container.dir/build.make CMakeFiles/interface-container.dir/main.cc.s
 .PHONY : main.cc.s
 
 storage_engine_instance.grpc.pb.o: storage_engine_instance.grpc.pb.cc.o
@@ -222,7 +222,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... interface_container"
+	@echo "... interface-container"
 	@echo "... ss_grpc_proto"
 	@echo "... main.o"
 	@echo "... main.i"
