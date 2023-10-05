@@ -76,7 +76,7 @@ void MergeQueryManager::RunSnippetWork(){
             Filtering(left_table_, snippet.table_filter(), target_table);
             break;
         }case StorageEngineInstance::SnippetRequest::INNER_JOIN_SNIPPET:{
-            // InnerJoin_nestedloop();
+            
             InnerJoin_hash(left_table_, right_table_, snippet.table_filter(), target_table);
             break;
         }case StorageEngineInstance::SnippetRequest::LEFT_OUTER_JOIN_SNIPPET:{
@@ -156,6 +156,7 @@ void MergeQueryManager::RunSnippetWork(){
                     }
                 }
                 cout << "--" << endl;
+                if(j == 20000) break;
             }
         }
         //Column Projection -> Make "result_table"
@@ -1470,99 +1471,79 @@ void MergeQueryManager::InnerJoin_hash(TableData &left_table, TableData &right_t
     }   
 }
 
-// void MergeQueryManager::InnerJoin_nestedloop(){
-//     for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
-//         target_table.table_data[(*it).first].type = (*it).second.type;
-//     }
-//     for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
-//         target_table.table_data[(*it).first].type = (*it).second.type;
-//     }
+void MergeQueryManager::InnerJoin_nestedloop(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, TableData &dest){
+    for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
+        dest.table_data[(*it).first].type = (*it).second.type;
+    }
+    for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
+        dest.table_data[(*it).first].type = (*it).second.type;
+    }
 
-//     for(int r1=0; r1<left_table.row_count; r1++){
+    for(int r1=0; r1<left_table.row_count; r1++){
 
-//         for(int r2=0; r2<right_table.row_count; r2++){
-//             bool passed = false;
+        for(int r2=0; r2<right_table.row_count; r2++){
+            bool passed = false;
 
-//             for(int f=0; f<snippet.table_filter_size(); f++){//동등조인,비동등조인 여부 판단 필요
-//                 if(f%2 == 1){
-//                     switch(snippet.table_filter(f).operator_())
-//                     case KETI_AND:{//and가 아닌경우??
-//                         continue;
-//                     }
-//                 }else{
-//                     bool filter_passed = false;
-//                     string driving_c1 = snippet.table_filter(f).lv().value(0);
-//                     string driven_c2 = snippet.table_filter(f).rv().value(0);
+            for(int f=0; f<filters.size(); f+=2){//동등조인,비동등조인 여부 판단 필요
+                string left_column = filters[f].lv().value(0);
+                string right_column = filters[f].rv().value(0);
+                int oper = filters[f].operator_();
 
-//                     switch(left_table.table_data[driving_c1].type){
-//                     case TYPE_INT:
-//                         if(left_table.table_data[driving_c1].intvec[r1] == right_table.table_data[driven_c2].intvec[r2]){
-//                             filter_passed = true;
-//                             break;
-//                         }
-//                         break;
-//                     case TYPE_FLOAT:
-//                         if(left_table.table_data[driving_c1].floatvec[r1] == right_table.table_data[driven_c2].floatvec[r2]){
-//                             filter_passed = true;
-//                             break;
-//                         }
-//                         break;
-//                     case TYPE_STRING:
-//                         if(left_table.table_data[driving_c1].strvec[r1] == right_table.table_data[driven_c2].strvec[r2]){
-//                             filter_passed = true;
-//                             break;
-//                         }
-//                         break;
-//                     default:
-//                         KETILOG::ERRORLOG(LOGTAG,"inner join type check plz... " + to_string(left_table.table_data[driving_c1].type));
-//                     }
+                switch(left_table.table_data[left_column].type){
+                case TYPE_STRING:
+                    passed = compareByOperator(oper, left_table.table_data[left_column].strvec[r1],
+                                                right_table.table_data[right_column].strvec[r2]);
+                    break;
+                case TYPE_INT:
+                    passed = compareByOperator(oper, left_table.table_data[left_column].intvec[r1],
+                                                right_table.table_data[right_column].intvec[r2]);
+                    break;
+                case TYPE_FLOAT:
+                    passed = compareByOperator(oper, left_table.table_data[left_column].floatvec[r1],
+                                                right_table.table_data[right_column].floatvec[r2]);
+                    break;
+                }
 
-//                     if(filter_passed){
-//                         passed = true;
-//                         filter_passed = false;
-//                     }else{
-//                         passed = false;
-//                         break;
-//                     }
-//                 }
-//             }
+                if(passed == false) break;
+                
+            }
 
-//             if(passed){ 
-//                 for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
-//                     switch((*it).second.type){
-//                     case TYPE_INT:
-//                         target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[r1]);
-//                         break;
-//                     case TYPE_STRING:
-//                         target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[r1]);
-//                         break;
-//                     case TYPE_FLOAT:
-//                         target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r1]);
-//                         break;
-//                     }
-//                     target_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[r1]);
-//                     target_table.table_data[(*it).first].row_count++;
-//                 }
-//                 for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
-//                     switch((*it).second.type){
-//                     case TYPE_INT:
-//                         target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[r2]);
-//                         break;
-//                     case TYPE_STRING:
-//                         target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[r2]);
-//                         break;
-//                     case TYPE_FLOAT:
-//                         target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r2]);
-//                         break;
-//                     }
-//                     target_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[r2]);
-//                     target_table.table_data[(*it).first].row_count++;
-//                 }
-//                 target_table.row_count++;
-//             }
-//         }
-//     }
-// }
+            if(passed){ 
+                for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
+                    switch((*it).second.type){
+                    case TYPE_INT:
+                        dest.table_data[(*it).first].intvec.push_back((*it).second.intvec[r1]);
+                        break;
+                    case TYPE_STRING:
+                        dest.table_data[(*it).first].strvec.push_back((*it).second.strvec[r1]);
+                        break;
+                    case TYPE_FLOAT:
+                        dest.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r1]);
+                        break;
+                    }
+                    dest.table_data[(*it).first].isnull.push_back((*it).second.isnull[r1]);
+                    dest.table_data[(*it).first].row_count++;
+                }
+                for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
+                    switch((*it).second.type){
+                    case TYPE_INT:
+                        dest.table_data[(*it).first].intvec.push_back((*it).second.intvec[r2]);
+                        break;
+                    case TYPE_STRING:
+                        dest.table_data[(*it).first].strvec.push_back((*it).second.strvec[r2]);
+                        break;
+                    case TYPE_FLOAT:
+                        dest.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r2]);
+                        break;
+                    }
+                    dest.table_data[(*it).first].isnull.push_back((*it).second.isnull[r2]);
+                    dest.table_data[(*it).first].row_count++;
+                }
+                dest.row_count++;
+            }
+        }
+    }
+}
 
 void MergeQueryManager::LeftOuterJoin_hash(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, TableData &dest){
     for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
