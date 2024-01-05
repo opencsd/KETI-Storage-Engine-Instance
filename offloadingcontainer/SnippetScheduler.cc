@@ -12,7 +12,20 @@ void Scheduler::runScheduler(){
 
         MetaDataResponse schedulerinfo;
 
-        Monitoring_Container_Interface mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
+        int temp_port;
+        // if(scheduling_target.snippet.table_alias() == "ProcessTable10-0"){
+        //     temp_port = 40210;
+        // }else if(scheduling_target.snippet.table_alias() == "ProcessTable10-1"){
+        //     temp_port = 40210;
+        // }else if(scheduling_target.snippet.table_alias() == "ProcessTable10-2"){
+        //     temp_port = 40210;
+        // }else{
+        //     temp_port = SE_MONITORING_CONTAINER_PORT;
+        // }
+        temp_port = SE_MONITORING_CONTAINER_PORT;
+        
+        Monitoring_Container_Interface mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(temp_port), grpc::InsecureChannelCredentials()));
+        // Monitoring_Container_Interface mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
         schedulerinfo = mc.GetMetaData(scheduling_target.snippet.query_id(), scheduling_target.snippet.work_id(), scheduling_target.snippet.table_name(0));
         
         scheduling_target.metadata = schedulerinfo;
@@ -230,6 +243,17 @@ void Scheduler::serialize(StringBuffer &buff, Snippet &snippet, string bestcsd, 
     writer.Key("csdName");
     writer.String(bestcsd.c_str());
 
+    string port = "";
+
+    if (getenv("SE_MERGING_CONTAINER_POD_PORT") != NULL){
+        port = to_string(SE_MERGING_CONTAINER_BM_TCP_CLOUD_PORT);
+    }else{
+        port = to_string(SE_MERGING_CONTAINER_BM_TCP_PORT);
+    }
+
+    writer.Key("storageEnginePort");
+    writer.String(port.c_str());
+
     writer.EndObject();
     
     string csdIP = "10.1."+bestcsd+".2";
@@ -247,8 +271,8 @@ void Scheduler::sendSnippetToCSD(string snippet_json){
     serv_addr.sin_family = AF_INET;
 
     /*Send Snippet To CSD Proxy*/
-    serv_addr.sin_addr.s_addr = inet_addr(CSD_PROXY_IP);
-    serv_addr.sin_port = htons(CSD_PROXY_PORT);
+    serv_addr.sin_addr.s_addr = inet_addr(CSD_IDENTIFIER_IP);
+    serv_addr.sin_port = htons(CSD_IDENTIFIER_CLOUD_PORT);
     connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 
     {

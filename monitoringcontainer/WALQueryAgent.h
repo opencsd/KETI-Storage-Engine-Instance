@@ -81,7 +81,7 @@ private:
         return _instance;
     }
 
-    static Request pushQueue(Request request){
+    static void pushQueue(Request request){
         GetInstance().walQueue.push_work(request);
     }
 
@@ -111,7 +111,7 @@ void WALQueryAgent::requestWAL(){
         string tname = request.table_name();
 
         string key = TableManager::makeKey(qid,wid);
-        Response* data = TableManager::GetReturnData(key);
+        MetaDataResponse_* data = TableManager::GetReturnData(key);
         unique_lock<mutex> lock(data->mu);
 
         KETILOG::DEBUGLOG(LOGTAG, "# Request WAL Called");

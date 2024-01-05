@@ -8,28 +8,28 @@ option objc_class_prefix = "SSP";
 package StorageEngineInstance;
 
 service InterfaceContainer {
-  rpc SetSnippet (stream SnippetRequest) returns (stream Result) {}
+  rpc SetSnippet (stream SnippetRequest) returns (stream Response) {}
   rpc Run (Request) returns (Result) {}
   rpc SetSnippetAndRun (stream SnippetRequest) returns (Result) {}
 }
 
 service MergingContainer {
-  rpc Aggregation (SnippetRequest) returns (Result) {}
-  rpc InitBuffer (SnippetRequest) returns (Result) {}
-  rpc EndQuery (Request) returns (Result) {}
+  rpc Aggregation (SnippetRequest) returns (Response) {}
+  rpc InitBuffer (SnippetRequest) returns (Response) {}
+  rpc EndQuery (Request) returns (Response) {}
   rpc GetQueryResult (Request) returns (QueryResult) {}
 }
 
 service MonitoringContainer {
-  rpc SetMetaData (Snippet) returns (Result) {}
+  rpc SetMetaData (Snippet) returns (Response) {}
   rpc GetMetaData (Request) returns (MetaDataResponse) {}
   rpc GetCSDBlockInfo (Request) returns (TableBlockCount) {}
-  rpc SetCSDMetricsInfo (CSDMetricList) returns (Result) {}
+  rpc SetCSDMetricsInfo (CSDMetricList) returns (Response) {}
 }
 
 service OffloadingContainer {
-  rpc Schedule (Snippet) returns (Result) {}
-  rpc PushCSDMetric (CSDStatusList) returns (Result) {}
+  rpc Schedule (Snippet) returns (Response) {}
+  rpc PushCSDMetric (CSDStatusList) returns (Response) {}
 }
 
 service LBA2PBAManager {
@@ -170,6 +170,8 @@ message Column {
 message QueryResult {
   map<string, Column> query_result = 1;
   int32 row_count = 2;
+  int32 scanned_row_count = 3;
+  int32 filtered_row_count = 4; 
 }
 
 message TableBlockCount {
@@ -213,8 +215,14 @@ message CSDMetricList{
   repeated CSDMetric csd_metric_list = 1;
 }
 
-message Result {
+message Response {
   string value = 1;
+}
+
+message Result {
+  string query_result = 1;
+  int32 scanned_row_count = 2;
+  int32 filtered_row_count = 3; 
 }
 
 message Chunk{

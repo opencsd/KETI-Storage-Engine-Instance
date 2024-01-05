@@ -136,7 +136,7 @@ void MergeQueryManager::RunSnippetWork(){
         GroupBy(target_table, snippet.group_by(), group_by_table_);//GroupBy -> Make "group_by_key" & "group_by_table"
         
         // 테이블 데이터 로우 수 확인 - Debug Code 
-        if(KETILOG::IsLogLevelUnder(TRACE)){
+        if(KETILOG::IsLogLevelUnder(TRACE)  /*|| snippet.table_alias() == "ProcessTable10-6"*/){
             cout << "<group by table>" << endl;
             for(int j = 0; j < group_by_table_.size(); j++){
                 for(auto i : group_by_table_[j].table_data){
@@ -156,7 +156,6 @@ void MergeQueryManager::RunSnippetWork(){
                     }
                 }
                 cout << "--" << endl;
-                if(j == 20000) break;
             }
         }
         //Column Projection -> Make "result_table"
@@ -190,6 +189,11 @@ void MergeQueryManager::RunSnippetWork(){
             }
         }
     }
+
+    // if(snippet.table_alias() == "ResultTable13"){
+    //     sleep(3);
+    // }
+    
 
     if(isHaving){
         Filtering(result_table_, snippet.having(), having_table_);

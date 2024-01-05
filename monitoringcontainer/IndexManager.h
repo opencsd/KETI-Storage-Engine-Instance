@@ -58,7 +58,7 @@ private:
         return _instance;
     }
 
-    static Request pushQueue(Request request){
+    static void pushQueue(Request request){
         GetInstance().indexManagerQueue.push_work(request);
     }
 

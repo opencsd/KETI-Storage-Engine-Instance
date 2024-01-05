@@ -35,14 +35,14 @@ class InterfaceContainer final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    std::unique_ptr< ::grpc::ClientReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>> SetSnippet(::grpc::ClientContext* context) {
-      return std::unique_ptr< ::grpc::ClientReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>>(SetSnippetRaw(context));
+    std::unique_ptr< ::grpc::ClientReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>> SetSnippet(::grpc::ClientContext* context) {
+      return std::unique_ptr< ::grpc::ClientReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>>(SetSnippetRaw(context));
     }
-    std::unique_ptr< ::grpc::ClientAsyncReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>> AsyncSetSnippet(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) {
-      return std::unique_ptr< ::grpc::ClientAsyncReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>>(AsyncSetSnippetRaw(context, cq, tag));
+    std::unique_ptr< ::grpc::ClientAsyncReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>> AsyncSetSnippet(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>>(AsyncSetSnippetRaw(context, cq, tag));
     }
-    std::unique_ptr< ::grpc::ClientAsyncReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>> PrepareAsyncSetSnippet(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>>(PrepareAsyncSetSnippetRaw(context, cq));
+    std::unique_ptr< ::grpc::ClientAsyncReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>> PrepareAsyncSetSnippet(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>>(PrepareAsyncSetSnippetRaw(context, cq));
     }
     virtual ::grpc::Status Run(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Result* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> AsyncRun(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
@@ -63,7 +63,7 @@ class InterfaceContainer final {
     class async_interface {
      public:
       virtual ~async_interface() {}
-      virtual void SetSnippet(::grpc::ClientContext* context, ::grpc::ClientBidiReactor< ::StorageEngineInstance::SnippetRequest,::StorageEngineInstance::Result>* reactor) = 0;
+      virtual void SetSnippet(::grpc::ClientContext* context, ::grpc::ClientBidiReactor< ::StorageEngineInstance::SnippetRequest,::StorageEngineInstance::Response>* reactor) = 0;
       virtual void Run(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) = 0;
       virtual void Run(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void SetSnippetAndRun(::grpc::ClientContext* context, ::StorageEngineInstance::Result* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) = 0;
@@ -72,9 +72,9 @@ class InterfaceContainer final {
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
-    virtual ::grpc::ClientReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* SetSnippetRaw(::grpc::ClientContext* context) = 0;
-    virtual ::grpc::ClientAsyncReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* AsyncSetSnippetRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) = 0;
-    virtual ::grpc::ClientAsyncReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* PrepareAsyncSetSnippetRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* SetSnippetRaw(::grpc::ClientContext* context) = 0;
+    virtual ::grpc::ClientAsyncReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* AsyncSetSnippetRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientAsyncReaderWriterInterface< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* PrepareAsyncSetSnippetRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* AsyncRunRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* PrepareAsyncRunRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientWriterInterface< ::StorageEngineInstance::SnippetRequest>* SetSnippetAndRunRaw(::grpc::ClientContext* context, ::StorageEngineInstance::Result* response) = 0;
@@ -84,14 +84,14 @@ class InterfaceContainer final {
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-    std::unique_ptr< ::grpc::ClientReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>> SetSnippet(::grpc::ClientContext* context) {
-      return std::unique_ptr< ::grpc::ClientReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>>(SetSnippetRaw(context));
+    std::unique_ptr< ::grpc::ClientReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>> SetSnippet(::grpc::ClientContext* context) {
+      return std::unique_ptr< ::grpc::ClientReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>>(SetSnippetRaw(context));
     }
-    std::unique_ptr<  ::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>> AsyncSetSnippet(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) {
-      return std::unique_ptr< ::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>>(AsyncSetSnippetRaw(context, cq, tag));
+    std::unique_ptr<  ::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>> AsyncSetSnippet(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>>(AsyncSetSnippetRaw(context, cq, tag));
     }
-    std::unique_ptr<  ::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>> PrepareAsyncSetSnippet(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>>(PrepareAsyncSetSnippetRaw(context, cq));
+    std::unique_ptr<  ::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>> PrepareAsyncSetSnippet(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>>(PrepareAsyncSetSnippetRaw(context, cq));
     }
     ::grpc::Status Run(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Result* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> AsyncRun(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
@@ -112,7 +112,7 @@ class InterfaceContainer final {
     class async final :
       public StubInterface::async_interface {
      public:
-      void SetSnippet(::grpc::ClientContext* context, ::grpc::ClientBidiReactor< ::StorageEngineInstance::SnippetRequest,::StorageEngineInstance::Result>* reactor) override;
+      void SetSnippet(::grpc::ClientContext* context, ::grpc::ClientBidiReactor< ::StorageEngineInstance::SnippetRequest,::StorageEngineInstance::Response>* reactor) override;
       void Run(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) override;
       void Run(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) override;
       void SetSnippetAndRun(::grpc::ClientContext* context, ::StorageEngineInstance::Result* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) override;
@@ -127,9 +127,9 @@ class InterfaceContainer final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
-    ::grpc::ClientReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* SetSnippetRaw(::grpc::ClientContext* context) override;
-    ::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* AsyncSetSnippetRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) override;
-    ::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* PrepareAsyncSetSnippetRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* SetSnippetRaw(::grpc::ClientContext* context) override;
+    ::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* AsyncSetSnippetRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) override;
+    ::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* PrepareAsyncSetSnippetRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* AsyncRunRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* PrepareAsyncRunRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientWriter< ::StorageEngineInstance::SnippetRequest>* SetSnippetAndRunRaw(::grpc::ClientContext* context, ::StorageEngineInstance::Result* response) override;
@@ -145,7 +145,7 @@ class InterfaceContainer final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status SetSnippet(::grpc::ServerContext* context, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Result, ::StorageEngineInstance::SnippetRequest>* stream);
+    virtual ::grpc::Status SetSnippet(::grpc::ServerContext* context, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Response, ::StorageEngineInstance::SnippetRequest>* stream);
     virtual ::grpc::Status Run(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response);
     virtual ::grpc::Status SetSnippetAndRun(::grpc::ServerContext* context, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* reader, ::StorageEngineInstance::Result* response);
   };
@@ -161,11 +161,11 @@ class InterfaceContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetSnippet(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Result, ::StorageEngineInstance::SnippetRequest>* /*stream*/)  override {
+    ::grpc::Status SetSnippet(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Response, ::StorageEngineInstance::SnippetRequest>* /*stream*/)  override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestSetSnippet(::grpc::ServerContext* context, ::grpc::ServerAsyncReaderWriter< ::StorageEngineInstance::Result, ::StorageEngineInstance::SnippetRequest>* stream, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestSetSnippet(::grpc::ServerContext* context, ::grpc::ServerAsyncReaderWriter< ::StorageEngineInstance::Response, ::StorageEngineInstance::SnippetRequest>* stream, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncBidiStreaming(0, context, stream, new_call_cq, notification_cq, tag);
     }
   };
@@ -217,7 +217,7 @@ class InterfaceContainer final {
    public:
     WithCallbackMethod_SetSnippet() {
       ::grpc::Service::MarkMethodCallback(0,
-          new ::grpc::internal::CallbackBidiHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>(
+          new ::grpc::internal::CallbackBidiHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>(
             [this](
                    ::grpc::CallbackServerContext* context) { return this->SetSnippet(context); }));
     }
@@ -225,11 +225,11 @@ class InterfaceContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetSnippet(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Result, ::StorageEngineInstance::SnippetRequest>* /*stream*/)  override {
+    ::grpc::Status SetSnippet(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Response, ::StorageEngineInstance::SnippetRequest>* /*stream*/)  override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    virtual ::grpc::ServerBidiReactor< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* SetSnippet(
+    virtual ::grpc::ServerBidiReactor< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* SetSnippet(
       ::grpc::CallbackServerContext* /*context*/)
       { return nullptr; }
   };
@@ -296,7 +296,7 @@ class InterfaceContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetSnippet(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Result, ::StorageEngineInstance::SnippetRequest>* /*stream*/)  override {
+    ::grpc::Status SetSnippet(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Response, ::StorageEngineInstance::SnippetRequest>* /*stream*/)  override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -347,7 +347,7 @@ class InterfaceContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetSnippet(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Result, ::StorageEngineInstance::SnippetRequest>* /*stream*/)  override {
+    ::grpc::Status SetSnippet(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Response, ::StorageEngineInstance::SnippetRequest>* /*stream*/)  override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -410,7 +410,7 @@ class InterfaceContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetSnippet(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Result, ::StorageEngineInstance::SnippetRequest>* /*stream*/)  override {
+    ::grpc::Status SetSnippet(::grpc::ServerContext* /*context*/, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Response, ::StorageEngineInstance::SnippetRequest>* /*stream*/)  override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -502,26 +502,26 @@ class MergingContainer final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    virtual ::grpc::Status Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Result* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> AsyncAggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(AsyncAggregationRaw(context, request, cq));
+    virtual ::grpc::Status Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Response* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncAggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncAggregationRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> PrepareAsyncAggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(PrepareAsyncAggregationRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncAggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncAggregationRaw(context, request, cq));
     }
-    virtual ::grpc::Status InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Result* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> AsyncInitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(AsyncInitBufferRaw(context, request, cq));
+    virtual ::grpc::Status InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Response* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncInitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncInitBufferRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> PrepareAsyncInitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(PrepareAsyncInitBufferRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncInitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncInitBufferRaw(context, request, cq));
     }
-    virtual ::grpc::Status EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Result* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> AsyncEndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(AsyncEndQueryRaw(context, request, cq));
+    virtual ::grpc::Status EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Response* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncEndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncEndQueryRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> PrepareAsyncEndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(PrepareAsyncEndQueryRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncEndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncEndQueryRaw(context, request, cq));
     }
     virtual ::grpc::Status GetQueryResult(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::QueryResult* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::QueryResult>> AsyncGetQueryResult(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
@@ -533,12 +533,12 @@ class MergingContainer final {
     class async_interface {
      public:
       virtual ~async_interface() {}
-      virtual void Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void GetQueryResult(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::QueryResult* response, std::function<void(::grpc::Status)>) = 0;
       virtual void GetQueryResult(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::QueryResult* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
@@ -546,38 +546,38 @@ class MergingContainer final {
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* AsyncAggregationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* PrepareAsyncAggregationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* AsyncInitBufferRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* PrepareAsyncInitBufferRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* AsyncEndQueryRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* PrepareAsyncEndQueryRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncAggregationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncAggregationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncInitBufferRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncInitBufferRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncEndQueryRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncEndQueryRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::QueryResult>* AsyncGetQueryResultRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::QueryResult>* PrepareAsyncGetQueryResultRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-    ::grpc::Status Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Result* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> AsyncAggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(AsyncAggregationRaw(context, request, cq));
+    ::grpc::Status Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Response* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncAggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncAggregationRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> PrepareAsyncAggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(PrepareAsyncAggregationRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncAggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncAggregationRaw(context, request, cq));
     }
-    ::grpc::Status InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Result* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> AsyncInitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(AsyncInitBufferRaw(context, request, cq));
+    ::grpc::Status InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Response* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncInitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncInitBufferRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> PrepareAsyncInitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(PrepareAsyncInitBufferRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncInitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncInitBufferRaw(context, request, cq));
     }
-    ::grpc::Status EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Result* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> AsyncEndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(AsyncEndQueryRaw(context, request, cq));
+    ::grpc::Status EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Response* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncEndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncEndQueryRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> PrepareAsyncEndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(PrepareAsyncEndQueryRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncEndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncEndQueryRaw(context, request, cq));
     }
     ::grpc::Status GetQueryResult(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::QueryResult* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::QueryResult>> AsyncGetQueryResult(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
@@ -589,12 +589,12 @@ class MergingContainer final {
     class async final :
       public StubInterface::async_interface {
      public:
-      void Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) override;
-      void Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) override;
-      void InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) override;
-      void EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
+      void Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
+      void InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
+      void EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
       void GetQueryResult(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::QueryResult* response, std::function<void(::grpc::Status)>) override;
       void GetQueryResult(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::QueryResult* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
@@ -608,12 +608,12 @@ class MergingContainer final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* AsyncAggregationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* PrepareAsyncAggregationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* AsyncInitBufferRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* PrepareAsyncInitBufferRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* AsyncEndQueryRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* PrepareAsyncEndQueryRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncAggregationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncAggregationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncInitBufferRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncInitBufferRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncEndQueryRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncEndQueryRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::QueryResult>* AsyncGetQueryResultRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::QueryResult>* PrepareAsyncGetQueryResultRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_Aggregation_;
@@ -627,9 +627,9 @@ class MergingContainer final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status Aggregation(::grpc::ServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response);
-    virtual ::grpc::Status InitBuffer(::grpc::ServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response);
-    virtual ::grpc::Status EndQuery(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response);
+    virtual ::grpc::Status Aggregation(::grpc::ServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response);
+    virtual ::grpc::Status InitBuffer(::grpc::ServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response);
+    virtual ::grpc::Status EndQuery(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response);
     virtual ::grpc::Status GetQueryResult(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::QueryResult* response);
   };
   template <class BaseClass>
@@ -644,11 +644,11 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Aggregation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status Aggregation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestAggregation(::grpc::ServerContext* context, ::StorageEngineInstance::SnippetRequest* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Result>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestAggregation(::grpc::ServerContext* context, ::StorageEngineInstance::SnippetRequest* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -664,11 +664,11 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status InitBuffer(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status InitBuffer(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestInitBuffer(::grpc::ServerContext* context, ::StorageEngineInstance::SnippetRequest* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Result>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestInitBuffer(::grpc::ServerContext* context, ::StorageEngineInstance::SnippetRequest* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -684,11 +684,11 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status EndQuery(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status EndQuery(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestEndQuery(::grpc::ServerContext* context, ::StorageEngineInstance::Request* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Result>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestEndQuery(::grpc::ServerContext* context, ::StorageEngineInstance::Request* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -720,25 +720,25 @@ class MergingContainer final {
    public:
     WithCallbackMethod_Aggregation() {
       ::grpc::Service::MarkMethodCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>(
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response) { return this->Aggregation(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response) { return this->Aggregation(context, request, response); }));}
     void SetMessageAllocatorFor_Aggregation(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* allocator) {
+        ::grpc::MessageAllocator< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_Aggregation() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Aggregation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status Aggregation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* Aggregation(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_InitBuffer : public BaseClass {
@@ -747,25 +747,25 @@ class MergingContainer final {
    public:
     WithCallbackMethod_InitBuffer() {
       ::grpc::Service::MarkMethodCallback(1,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>(
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response) { return this->InitBuffer(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response) { return this->InitBuffer(context, request, response); }));}
     void SetMessageAllocatorFor_InitBuffer(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* allocator) {
+        ::grpc::MessageAllocator< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_InitBuffer() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status InitBuffer(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status InitBuffer(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* InitBuffer(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_EndQuery : public BaseClass {
@@ -774,25 +774,25 @@ class MergingContainer final {
    public:
     WithCallbackMethod_EndQuery() {
       ::grpc::Service::MarkMethodCallback(2,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Request, ::StorageEngineInstance::Result>(
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response) { return this->EndQuery(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response) { return this->EndQuery(context, request, response); }));}
     void SetMessageAllocatorFor_EndQuery(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::Request, ::StorageEngineInstance::Result>* allocator) {
+        ::grpc::MessageAllocator< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Request, ::StorageEngineInstance::Result>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_EndQuery() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status EndQuery(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status EndQuery(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* EndQuery(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Result* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_GetQueryResult : public BaseClass {
@@ -835,7 +835,7 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Aggregation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status Aggregation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -852,7 +852,7 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status InitBuffer(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status InitBuffer(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -869,7 +869,7 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status EndQuery(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status EndQuery(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -903,7 +903,7 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Aggregation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status Aggregation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -923,7 +923,7 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status InitBuffer(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status InitBuffer(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -943,7 +943,7 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status EndQuery(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status EndQuery(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -986,7 +986,7 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Aggregation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status Aggregation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1008,7 +1008,7 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status InitBuffer(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status InitBuffer(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1030,7 +1030,7 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status EndQuery(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status EndQuery(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1067,10 +1067,10 @@ class MergingContainer final {
     WithStreamedUnaryMethod_Aggregation() {
       ::grpc::Service::MarkMethodStreamed(0,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>(
+          ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* streamer) {
+                     ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* streamer) {
                        return this->StreamedAggregation(context,
                          streamer);
                   }));
@@ -1079,12 +1079,12 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status Aggregation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status Aggregation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedAggregation(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::SnippetRequest,::StorageEngineInstance::Result>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedAggregation(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::SnippetRequest,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_InitBuffer : public BaseClass {
@@ -1094,10 +1094,10 @@ class MergingContainer final {
     WithStreamedUnaryMethod_InitBuffer() {
       ::grpc::Service::MarkMethodStreamed(1,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>(
+          ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* streamer) {
+                     ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* streamer) {
                        return this->StreamedInitBuffer(context,
                          streamer);
                   }));
@@ -1106,12 +1106,12 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status InitBuffer(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status InitBuffer(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedInitBuffer(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::SnippetRequest,::StorageEngineInstance::Result>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedInitBuffer(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::SnippetRequest,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_EndQuery : public BaseClass {
@@ -1121,10 +1121,10 @@ class MergingContainer final {
     WithStreamedUnaryMethod_EndQuery() {
       ::grpc::Service::MarkMethodStreamed(2,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::Request, ::StorageEngineInstance::Result>(
+          ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::Request, ::StorageEngineInstance::Result>* streamer) {
+                     ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>* streamer) {
                        return this->StreamedEndQuery(context,
                          streamer);
                   }));
@@ -1133,12 +1133,12 @@ class MergingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status EndQuery(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status EndQuery(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedEndQuery(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Request,::StorageEngineInstance::Result>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedEndQuery(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Request,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_GetQueryResult : public BaseClass {
@@ -1180,12 +1180,12 @@ class MonitoringContainer final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    virtual ::grpc::Status SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Result* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> AsyncSetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(AsyncSetMetaDataRaw(context, request, cq));
+    virtual ::grpc::Status SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Response* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncSetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncSetMetaDataRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> PrepareAsyncSetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(PrepareAsyncSetMetaDataRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncSetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncSetMetaDataRaw(context, request, cq));
     }
     virtual ::grpc::Status GetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::MetaDataResponse* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::MetaDataResponse>> AsyncGetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
@@ -1201,47 +1201,47 @@ class MonitoringContainer final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::TableBlockCount>> PrepareAsyncGetCSDBlockInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::TableBlockCount>>(PrepareAsyncGetCSDBlockInfoRaw(context, request, cq));
     }
-    virtual ::grpc::Status SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::StorageEngineInstance::Result* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> AsyncSetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(AsyncSetCSDMetricsInfoRaw(context, request, cq));
+    virtual ::grpc::Status SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::StorageEngineInstance::Response* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncSetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncSetCSDMetricsInfoRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> PrepareAsyncSetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(PrepareAsyncSetCSDMetricsInfoRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncSetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncSetCSDMetricsInfoRaw(context, request, cq));
     }
     class async_interface {
      public:
       virtual ~async_interface() {}
-      virtual void SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void GetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::MetaDataResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void GetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::MetaDataResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void GetCSDBlockInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::TableBlockCount* response, std::function<void(::grpc::Status)>) = 0;
       virtual void GetCSDBlockInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::TableBlockCount* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* AsyncSetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* PrepareAsyncSetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncSetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncSetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::MetaDataResponse>* AsyncGetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::MetaDataResponse>* PrepareAsyncGetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::TableBlockCount>* AsyncGetCSDBlockInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::TableBlockCount>* PrepareAsyncGetCSDBlockInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* AsyncSetCSDMetricsInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* PrepareAsyncSetCSDMetricsInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncSetCSDMetricsInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncSetCSDMetricsInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-    ::grpc::Status SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Result* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> AsyncSetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(AsyncSetMetaDataRaw(context, request, cq));
+    ::grpc::Status SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Response* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncSetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncSetMetaDataRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> PrepareAsyncSetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(PrepareAsyncSetMetaDataRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncSetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncSetMetaDataRaw(context, request, cq));
     }
     ::grpc::Status GetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::MetaDataResponse* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::MetaDataResponse>> AsyncGetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
@@ -1257,24 +1257,24 @@ class MonitoringContainer final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::TableBlockCount>> PrepareAsyncGetCSDBlockInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::TableBlockCount>>(PrepareAsyncGetCSDBlockInfoRaw(context, request, cq));
     }
-    ::grpc::Status SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::StorageEngineInstance::Result* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> AsyncSetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(AsyncSetCSDMetricsInfoRaw(context, request, cq));
+    ::grpc::Status SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::StorageEngineInstance::Response* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncSetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncSetCSDMetricsInfoRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> PrepareAsyncSetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(PrepareAsyncSetCSDMetricsInfoRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncSetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncSetCSDMetricsInfoRaw(context, request, cq));
     }
     class async final :
       public StubInterface::async_interface {
      public:
-      void SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) override;
-      void SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
+      void SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
       void GetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::MetaDataResponse* response, std::function<void(::grpc::Status)>) override;
       void GetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::MetaDataResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
       void GetCSDBlockInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::TableBlockCount* response, std::function<void(::grpc::Status)>) override;
       void GetCSDBlockInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::TableBlockCount* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) override;
-      void SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
+      void SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -1286,14 +1286,14 @@ class MonitoringContainer final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* AsyncSetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* PrepareAsyncSetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncSetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncSetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::MetaDataResponse>* AsyncGetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::MetaDataResponse>* PrepareAsyncGetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::TableBlockCount>* AsyncGetCSDBlockInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::TableBlockCount>* PrepareAsyncGetCSDBlockInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* AsyncSetCSDMetricsInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* PrepareAsyncSetCSDMetricsInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncSetCSDMetricsInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncSetCSDMetricsInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_SetMetaData_;
     const ::grpc::internal::RpcMethod rpcmethod_GetMetaData_;
     const ::grpc::internal::RpcMethod rpcmethod_GetCSDBlockInfo_;
@@ -1305,10 +1305,10 @@ class MonitoringContainer final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status SetMetaData(::grpc::ServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response);
+    virtual ::grpc::Status SetMetaData(::grpc::ServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response);
     virtual ::grpc::Status GetMetaData(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::MetaDataResponse* response);
     virtual ::grpc::Status GetCSDBlockInfo(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::TableBlockCount* response);
-    virtual ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Result* response);
+    virtual ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_SetMetaData : public BaseClass {
@@ -1322,11 +1322,11 @@ class MonitoringContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status SetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestSetMetaData(::grpc::ServerContext* context, ::StorageEngineInstance::Snippet* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Result>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestSetMetaData(::grpc::ServerContext* context, ::StorageEngineInstance::Snippet* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -1382,11 +1382,11 @@ class MonitoringContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestSetCSDMetricsInfo(::grpc::ServerContext* context, ::StorageEngineInstance::CSDMetricList* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Result>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestSetCSDMetricsInfo(::grpc::ServerContext* context, ::StorageEngineInstance::CSDMetricList* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -1398,25 +1398,25 @@ class MonitoringContainer final {
    public:
     WithCallbackMethod_SetMetaData() {
       ::grpc::Service::MarkMethodCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result>(
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response) { return this->SetMetaData(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response) { return this->SetMetaData(context, request, response); }));}
     void SetMessageAllocatorFor_SetMetaData(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result>* allocator) {
+        ::grpc::MessageAllocator< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_SetMetaData() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status SetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* SetMetaData(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_GetMetaData : public BaseClass {
@@ -1479,25 +1479,25 @@ class MonitoringContainer final {
    public:
     WithCallbackMethod_SetCSDMetricsInfo() {
       ::grpc::Service::MarkMethodCallback(3,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Result>(
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Response>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Result* response) { return this->SetCSDMetricsInfo(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response) { return this->SetCSDMetricsInfo(context, request, response); }));}
     void SetMessageAllocatorFor_SetCSDMetricsInfo(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Result>* allocator) {
+        ::grpc::MessageAllocator< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Response>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Result>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Response>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_SetCSDMetricsInfo() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* SetCSDMetricsInfo(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Result* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
   typedef WithCallbackMethod_SetMetaData<WithCallbackMethod_GetMetaData<WithCallbackMethod_GetCSDBlockInfo<WithCallbackMethod_SetCSDMetricsInfo<Service > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
@@ -1513,7 +1513,7 @@ class MonitoringContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status SetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1564,7 +1564,7 @@ class MonitoringContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1581,7 +1581,7 @@ class MonitoringContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status SetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1641,7 +1641,7 @@ class MonitoringContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1664,7 +1664,7 @@ class MonitoringContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status SetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1730,7 +1730,7 @@ class MonitoringContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1745,10 +1745,10 @@ class MonitoringContainer final {
     WithStreamedUnaryMethod_SetMetaData() {
       ::grpc::Service::MarkMethodStreamed(0,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result>(
+          ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result>* streamer) {
+                     ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>* streamer) {
                        return this->StreamedSetMetaData(context,
                          streamer);
                   }));
@@ -1757,12 +1757,12 @@ class MonitoringContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status SetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status SetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedSetMetaData(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Snippet,::StorageEngineInstance::Result>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedSetMetaData(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Snippet,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_GetMetaData : public BaseClass {
@@ -1826,10 +1826,10 @@ class MonitoringContainer final {
     WithStreamedUnaryMethod_SetCSDMetricsInfo() {
       ::grpc::Service::MarkMethodStreamed(3,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Result>(
+          ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Response>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Result>* streamer) {
+                     ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Response>* streamer) {
                        return this->StreamedSetCSDMetricsInfo(context,
                          streamer);
                   }));
@@ -1838,12 +1838,12 @@ class MonitoringContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status SetCSDMetricsInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedSetCSDMetricsInfo(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::CSDMetricList,::StorageEngineInstance::Result>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedSetCSDMetricsInfo(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::CSDMetricList,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
   typedef WithStreamedUnaryMethod_SetMetaData<WithStreamedUnaryMethod_GetMetaData<WithStreamedUnaryMethod_GetCSDBlockInfo<WithStreamedUnaryMethod_SetCSDMetricsInfo<Service > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
@@ -1858,61 +1858,61 @@ class OffloadingContainer final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    virtual ::grpc::Status Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Result* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> AsyncSchedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(AsyncScheduleRaw(context, request, cq));
+    virtual ::grpc::Status Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Response* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncSchedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncScheduleRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> PrepareAsyncSchedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(PrepareAsyncScheduleRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncSchedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncScheduleRaw(context, request, cq));
     }
-    virtual ::grpc::Status PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::StorageEngineInstance::Result* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> AsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(AsyncPushCSDMetricRaw(context, request, cq));
+    virtual ::grpc::Status PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::StorageEngineInstance::Response* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncPushCSDMetricRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>> PrepareAsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>>(PrepareAsyncPushCSDMetricRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncPushCSDMetricRaw(context, request, cq));
     }
     class async_interface {
      public:
       virtual ~async_interface() {}
-      virtual void Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* AsyncScheduleRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* PrepareAsyncScheduleRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Result>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncScheduleRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncScheduleRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-    ::grpc::Status Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Result* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> AsyncSchedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(AsyncScheduleRaw(context, request, cq));
+    ::grpc::Status Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Response* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncSchedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncScheduleRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> PrepareAsyncSchedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(PrepareAsyncScheduleRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncSchedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncScheduleRaw(context, request, cq));
     }
-    ::grpc::Status PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::StorageEngineInstance::Result* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> AsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(AsyncPushCSDMetricRaw(context, request, cq));
+    ::grpc::Status PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::StorageEngineInstance::Response* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncPushCSDMetricRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>> PrepareAsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>>(PrepareAsyncPushCSDMetricRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncPushCSDMetricRaw(context, request, cq));
     }
     class async final :
       public StubInterface::async_interface {
      public:
-      void Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) override;
-      void Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)>) override;
-      void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
+      void Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
+      void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -1924,10 +1924,10 @@ class OffloadingContainer final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* AsyncScheduleRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* PrepareAsyncScheduleRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncScheduleRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncScheduleRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_Schedule_;
     const ::grpc::internal::RpcMethod rpcmethod_PushCSDMetric_;
   };
@@ -1937,8 +1937,8 @@ class OffloadingContainer final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status Schedule(::grpc::ServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response);
-    virtual ::grpc::Status PushCSDMetric(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Result* response);
+    virtual ::grpc::Status Schedule(::grpc::ServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response);
+    virtual ::grpc::Status PushCSDMetric(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Response* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_Schedule : public BaseClass {
@@ -1952,11 +1952,11 @@ class OffloadingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Schedule(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status Schedule(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestSchedule(::grpc::ServerContext* context, ::StorageEngineInstance::Snippet* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Result>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestSchedule(::grpc::ServerContext* context, ::StorageEngineInstance::Snippet* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -1972,11 +1972,11 @@ class OffloadingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestPushCSDMetric(::grpc::ServerContext* context, ::StorageEngineInstance::CSDStatusList* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Result>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestPushCSDMetric(::grpc::ServerContext* context, ::StorageEngineInstance::CSDStatusList* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -1988,25 +1988,25 @@ class OffloadingContainer final {
    public:
     WithCallbackMethod_Schedule() {
       ::grpc::Service::MarkMethodCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result>(
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response) { return this->Schedule(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response) { return this->Schedule(context, request, response); }));}
     void SetMessageAllocatorFor_Schedule(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result>* allocator) {
+        ::grpc::MessageAllocator< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_Schedule() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Schedule(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status Schedule(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* Schedule(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_PushCSDMetric : public BaseClass {
@@ -2015,25 +2015,25 @@ class OffloadingContainer final {
    public:
     WithCallbackMethod_PushCSDMetric() {
       ::grpc::Service::MarkMethodCallback(1,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Result>(
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Response>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Result* response) { return this->PushCSDMetric(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Response* response) { return this->PushCSDMetric(context, request, response); }));}
     void SetMessageAllocatorFor_PushCSDMetric(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Result>* allocator) {
+        ::grpc::MessageAllocator< ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Response>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Result>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Response>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_PushCSDMetric() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* PushCSDMetric(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Result* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
   typedef WithCallbackMethod_Schedule<WithCallbackMethod_PushCSDMetric<Service > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
@@ -2049,7 +2049,7 @@ class OffloadingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Schedule(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status Schedule(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2066,7 +2066,7 @@ class OffloadingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2083,7 +2083,7 @@ class OffloadingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Schedule(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status Schedule(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2103,7 +2103,7 @@ class OffloadingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2126,7 +2126,7 @@ class OffloadingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Schedule(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status Schedule(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2148,7 +2148,7 @@ class OffloadingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2163,10 +2163,10 @@ class OffloadingContainer final {
     WithStreamedUnaryMethod_Schedule() {
       ::grpc::Service::MarkMethodStreamed(0,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result>(
+          ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result>* streamer) {
+                     ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>* streamer) {
                        return this->StreamedSchedule(context,
                          streamer);
                   }));
@@ -2175,12 +2175,12 @@ class OffloadingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status Schedule(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status Schedule(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedSchedule(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Snippet,::StorageEngineInstance::Result>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedSchedule(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Snippet,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_PushCSDMetric : public BaseClass {
@@ -2190,10 +2190,10 @@ class OffloadingContainer final {
     WithStreamedUnaryMethod_PushCSDMetric() {
       ::grpc::Service::MarkMethodStreamed(1,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Result>(
+          ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Response>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Result>* streamer) {
+                     ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Response>* streamer) {
                        return this->StreamedPushCSDMetric(context,
                          streamer);
                   }));
@@ -2202,12 +2202,12 @@ class OffloadingContainer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Result* /*response*/) override {
+    ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDStatusList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedPushCSDMetric(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::CSDStatusList,::StorageEngineInstance::Result>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedPushCSDMetric(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::CSDStatusList,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
   typedef WithStreamedUnaryMethod_Schedule<WithStreamedUnaryMethod_PushCSDMetric<Service > > StreamedUnaryService;
   typedef Service SplitStreamedService;

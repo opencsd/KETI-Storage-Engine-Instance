@@ -33,7 +33,7 @@ struct InternalRequest {
 	string table_name;
 };
 
-struct Response {
+struct MetaDataResponse_ {
 	MetaDataResponse* metadataResponse;
 	// Snippet snippet;
 	int block_count;
@@ -43,7 +43,7 @@ struct Response {
 	bool lba2pba_done = false;
 	bool index_scan_done = false;
 	bool wal_done = false;//아직 wal 수행 전
-	Response(){
+	MetaDataResponse_(){
 		this->metadataResponse = new StorageEngineInstance::MetaDataResponse;
 	}
 };
@@ -120,11 +120,11 @@ public:
     }
 
 	static void SetReturnData(string key){
-		Response* response = new Response;
+		MetaDataResponse_* response = new MetaDataResponse_;
 		GetInstance().return_data[key] = response;
 	}
 
-	static Response* GetReturnData(string key){
+	static MetaDataResponse_* GetReturnData(string key){
 		return GetInstance().return_data[key];
 	}
 
@@ -158,5 +158,5 @@ public:
 private:
     mutex Table_Mutex;
 	unordered_map<string,struct Table> m_TableManager;
-	unordered_map<string,Response*> return_data;
+	unordered_map<string,MetaDataResponse_*> return_data;
 };

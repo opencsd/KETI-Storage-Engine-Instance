@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <vector>
 
-// #include "MonitoringContainerInterface.h"
 #include "SnippetScheduler.h"
 #include "CSDStatusManager.h"
 #include "keti_log.h"
@@ -22,12 +21,13 @@ using StorageEngineInstance::OffloadingContainer;
 using StorageEngineInstance::Snippet;
 using StorageEngineInstance::MetaDataResponse;
 using StorageEngineInstance::Result;
+using StorageEngineInstance::Response;
 using StorageEngineInstance::CSDStatusList;
 using StorageEngineInstance::CSDStatusList_CSDStatus;
 
 // Logic and data behind the server's behavior.
 class OffloadingContainerServiceImpl final : public OffloadingContainer::Service {
-  Status Schedule(ServerContext* context, const Snippet* snippet, Result* result) override {
+  Status Schedule(ServerContext* context, const Snippet* snippet, Response* response) override {
     KETILOG::INFOLOG("Offloading Container", "==:Receive Snippet from Interface Container:==");
     // CalculateStart();
     
@@ -43,11 +43,11 @@ class OffloadingContainerServiceImpl final : public OffloadingContainer::Service
 
     Scheduler::PushQueue(schedulingTarget);
 
-    result->set_value("Snippet Scheduling OK");
+    response->set_value("Snippet Scheduling OK");
     // CalculateEnd();
     return Status::OK;
   }
-  Status PushCSDMetric(ServerContext* context, const CSDStatusList* csdStatusList, Result* result) override {
+  Status PushCSDMetric(ServerContext* context, const CSDStatusList* csdStatusList, Response* response) override {
     // KETILOG("Offloading Container", "==:Push CSD Metric:==");
 
     const auto status = csdStatusList->csd_status_map();
@@ -68,13 +68,13 @@ class OffloadingContainerServiceImpl final : public OffloadingContainer::Service
       CSDStatusManager::SetCSDInfo(id, csdInfo);
     }
     
-    result->set_value("CSD Status Manager OK");
+    response->set_value("CSD Status Manager OK");
 
     return Status::OK;
   }
 };
 
-void RunServer() {
+void RunGRPCServer() {
   std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_OFFLOADING_CONTAINER_PORT));
   OffloadingContainerServiceImpl service;
 
@@ -91,12 +91,37 @@ void RunServer() {
 
 int main(int argc, char** argv) {
   if (argc >= 2) {
-    KETILOG::SetLogLevel(stoi(argv[1]));
+      KETILOG::SetLogLevel(stoi(argv[1]));
+  }else if (getenv("LOG_LEVEL") != NULL){
+      string env = getenv("LOG_LEVEL");
+      int log_level;
+      if (env == "TRACE"){
+          log_level = DEBUGG_LEVEL::TRACE;
+      }else if (env == "DEBUG"){
+          log_level = DEBUGG_LEVEL::DEBUG;
+      }else if (env == "INFO"){
+          log_level = DEBUGG_LEVEL::INFO;
+      }else if (env == "WARN"){
+          log_level = DEBUGG_LEVEL::WARN;
+      }else if (env == "ERROR"){
+          log_level = DEBUGG_LEVEL::ERROR;
+      }else if (env == "FATAL"){
+          log_level = DEBUGG_LEVEL::FATAL;
+      }else{
+          log_level = DEBUGG_LEVEL::TRACE;
+      }
+      KETILOG::SetLogLevel(log_level);
   }else{
-    KETILOG::SetDefaultLogLevel();
+      KETILOG::SetDefaultLogLevel();
   }
+
+  std::thread grpc_thread(RunGRPCServer);//Run Merge Query Manager & Buffer Manager gRPC Server
+
+  httplib::Server server;
+  server.Get("/log-level", KETILOG::HandleSetLogLevel);
+  server.listen("0.0.0.0", 40206);
   
-  RunServer();
+  grpc_thread.join();
 
   return 0;
 }

@@ -66,8 +66,8 @@ if (UNIX)
 endif (UNIX)
 
 # merging_container
-add_executable(monitoring_container "main.cc" "TableManager.cc" "IndexManager.cc")
-target_link_libraries(monitoring_container
+add_executable(monitoring-container "main.cc" "TableManager.cc" "IndexManager.cc")
+target_link_libraries(monitoring-container
   ss_grpc_proto
   ${LINKING_LIBRARIES}
   ${_REFLECTION}

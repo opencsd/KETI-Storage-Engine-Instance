@@ -130,24 +130,24 @@ ss_grpc_proto/fast:
 .PHONY : ss_grpc_proto/fast
 
 #=============================================================================
-# Target rules for targets named monitoring_container
+# Target rules for targets named monitoring-container
 
 # Build rule for target.
-monitoring_container: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 monitoring_container
-.PHONY : monitoring_container
+monitoring-container: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 monitoring-container
+.PHONY : monitoring-container
 
 # fast build rule for target.
-monitoring_container/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring_container.dir/build.make CMakeFiles/monitoring_container.dir/build
-.PHONY : monitoring_container/fast
+monitoring-container/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/build
+.PHONY : monitoring-container/fast
 
 IndexManager.o: IndexManager.cc.o
 .PHONY : IndexManager.o
 
 # target to build an object file
 IndexManager.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring_container.dir/build.make CMakeFiles/monitoring_container.dir/IndexManager.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/IndexManager.cc.o
 .PHONY : IndexManager.cc.o
 
 IndexManager.i: IndexManager.cc.i
@@ -155,7 +155,7 @@ IndexManager.i: IndexManager.cc.i
 
 # target to preprocess a source file
 IndexManager.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring_container.dir/build.make CMakeFiles/monitoring_container.dir/IndexManager.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/IndexManager.cc.i
 .PHONY : IndexManager.cc.i
 
 IndexManager.s: IndexManager.cc.s
@@ -163,7 +163,7 @@ IndexManager.s: IndexManager.cc.s
 
 # target to generate assembly for a file
 IndexManager.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring_container.dir/build.make CMakeFiles/monitoring_container.dir/IndexManager.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/IndexManager.cc.s
 .PHONY : IndexManager.cc.s
 
 TableManager.o: TableManager.cc.o
@@ -171,7 +171,7 @@ TableManager.o: TableManager.cc.o
 
 # target to build an object file
 TableManager.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring_container.dir/build.make CMakeFiles/monitoring_container.dir/TableManager.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/TableManager.cc.o
 .PHONY : TableManager.cc.o
 
 TableManager.i: TableManager.cc.i
@@ -179,7 +179,7 @@ TableManager.i: TableManager.cc.i
 
 # target to preprocess a source file
 TableManager.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring_container.dir/build.make CMakeFiles/monitoring_container.dir/TableManager.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/TableManager.cc.i
 .PHONY : TableManager.cc.i
 
 TableManager.s: TableManager.cc.s
@@ -187,7 +187,7 @@ TableManager.s: TableManager.cc.s
 
 # target to generate assembly for a file
 TableManager.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring_container.dir/build.make CMakeFiles/monitoring_container.dir/TableManager.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/TableManager.cc.s
 .PHONY : TableManager.cc.s
 
 main.o: main.cc.o
@@ -195,7 +195,7 @@ main.o: main.cc.o
 
 # target to build an object file
 main.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring_container.dir/build.make CMakeFiles/monitoring_container.dir/main.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/main.cc.o
 .PHONY : main.cc.o
 
 main.i: main.cc.i
@@ -203,7 +203,7 @@ main.i: main.cc.i
 
 # target to preprocess a source file
 main.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring_container.dir/build.make CMakeFiles/monitoring_container.dir/main.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/main.cc.i
 .PHONY : main.cc.i
 
 main.s: main.cc.s
@@ -211,7 +211,7 @@ main.s: main.cc.s
 
 # target to generate assembly for a file
 main.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring_container.dir/build.make CMakeFiles/monitoring_container.dir/main.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/main.cc.s
 .PHONY : main.cc.s
 
 storage_engine_instance.grpc.pb.o: storage_engine_instance.grpc.pb.cc.o
@@ -270,7 +270,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... monitoring_container"
+	@echo "... monitoring-container"
 	@echo "... ss_grpc_proto"
 	@echo "... IndexManager.o"
 	@echo "... IndexManager.i"

@@ -87,9 +87,21 @@ private:
 
             /* Request Set MetaData */
             if(snippetrequest.type() == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET) {
-                //async call
+                int temp_port;
+                // if(snippetrequest.snippet().table_alias() == "ProcessTable10-0"){
+                //     temp_port = 40210;
+                // }else if(snippetrequest.snippet().table_alias() == "ProcessTable10-1"){
+                //     temp_port = 40210;
+                // }else if(snippetrequest.snippet().table_alias() == "ProcessTable10-2"){
+                //     temp_port = 40210;
+                // }else{
+                //     temp_port = SE_MONITORING_CONTAINER_PORT;
+                // }
+                temp_port = SE_MONITORING_CONTAINER_PORT;
+                
                 KETILOG::DEBUGLOG(LOGTAG,"# Request Monitoring Container Setting Metadata");
-                Monitoring_Container_Interface moc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
+                Monitoring_Container_Interface moc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(temp_port), grpc::InsecureChannelCredentials()));
+                // Monitoring_Container_Interface moc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
                 moc.SetMetaData(snippetrequest);
             } 
 

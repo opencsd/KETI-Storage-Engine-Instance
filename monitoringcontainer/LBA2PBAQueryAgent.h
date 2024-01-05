@@ -89,7 +89,7 @@ private:
         return _instance;
     }
 
-    static Request pushQueue(Request request){
+    static void pushQueue(Request request){
         GetInstance().lba2pbaQueue.push_work(request);
     }
 
@@ -163,7 +163,7 @@ void LBA2PBAQueryAgent::requestPBA(){
         string tname = request.table_name();
         
         string key = TableManager::makeKey(qid,wid);
-        Response* data = TableManager::GetReturnData(key);
+        MetaDataResponse_* data = TableManager::GetReturnData(key);
         unique_lock<mutex> lock(data->mu);
 
         KETILOG::DEBUGLOG(LOGTAG, "# Request PBA Called");

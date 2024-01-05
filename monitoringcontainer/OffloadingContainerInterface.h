@@ -12,7 +12,7 @@ using grpc::Status;
 using StorageEngineInstance::OffloadingContainer;
 using StorageEngineInstance::CSDStatusList;
 using StorageEngineInstance::CSDStatusList_CSDStatus;
-using StorageEngineInstance::Result;
+using StorageEngineInstance::Response;
 
 using namespace std;
 
@@ -28,7 +28,7 @@ class Offloading_Container_Interface {
 
 		std::string PushCSDMetric(unordered_map<string,CSDStatus> csd_status_list) {
 			CSDStatusList csdStatusList;
-			Result result;
+			Response response;
     		ClientContext context;
 
 			for (const auto pair : csd_status_list) {
@@ -40,13 +40,13 @@ class Offloading_Container_Interface {
 				csdStatusList.mutable_csd_status_map()->insert({id,csdStatus});
             }
 			
-			Status status = stub_->PushCSDMetric(&context, csdStatusList, &result);
+			Status status = stub_->PushCSDMetric(&context, csdStatusList, &response);
 
 	  		if (!status.ok()) {
 				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
 				KETILOG::FATALLOG(LOGTAG,"RPC failed");
 			}
-			return result.value();
+			return response.value();
 		}
 
 	private:

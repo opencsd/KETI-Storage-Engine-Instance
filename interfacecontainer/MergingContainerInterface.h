@@ -15,6 +15,7 @@ using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::Snippet;
 using StorageEngineInstance::Request;
 using StorageEngineInstance::Result;
+using StorageEngineInstance::Response;
 using StorageEngineInstance::QueryResult;
 using StorageEngineInstance::Column;
 
@@ -25,17 +26,17 @@ class Merging_Container_Interface {
 		Merging_Container_Interface(std::shared_ptr<Channel> channel) : stub_(MergingContainer::NewStub(channel)) {}
 
 		string Aggregation(SnippetRequest snippet_request) {
-			Result result;
+			Response response;
     		ClientContext context;
 			
-			Status status = stub_->Aggregation(&context, snippet_request, &result);
+			Status status = stub_->Aggregation(&context, snippet_request, &response);
 			// cout << "result : " << result.value() << endl;
 
 	  		if (!status.ok()) {
 				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
 				KETILOG::FATALLOG(LOGTAG,"RPC failed");
 			}
-			return result.value();
+			return response.value();
 		}
 
 		string InitBuffer(Snippet masked_snippet, SnippetRequest::SnippetType type) {
@@ -43,28 +44,28 @@ class Merging_Container_Interface {
 			request.mutable_snippet()->CopyFrom(masked_snippet);
 			request.set_type(type);
 
-			Result result;
+			Response response;
     		ClientContext context;
 			
-			Status status = stub_->InitBuffer(&context, request, &result);
+			Status status = stub_->InitBuffer(&context, request, &response);
 			// cout << "result : " << result.value() << endl;
 
 			if (!status.ok()) {
 				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
 				KETILOG::FATALLOG(LOGTAG,"RPC failed");
 			}
-			return result.value();
+			return response.value();
 		}
 
-		string GetQueryResult(int qid, string tname) {
+		Result GetQueryResult(int qid, string tname) {
 			Request request;
 			request.set_query_id(qid);
 			request.set_table_name(tname);
 			
-			QueryResult queryResult;
+			QueryResult query_result;
     		ClientContext context;
 			
-			Status status = stub_->GetQueryResult(&context, request, &queryResult);
+			Status status = stub_->GetQueryResult(&context, request, &query_result);
 
 	  		if (!status.ok()) {
 				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
@@ -73,10 +74,10 @@ class Merging_Container_Interface {
 
 			stringstream result_string;
 			int length = 18;
-			std::string line((length+1) * queryResult.query_result_size() - 1, '-');
+			std::string line((length+1) * query_result.query_result_size() - 1, '-');
 			//Proto Buffer 형식 결과를 임시로 string으로 저장 -> 나중엔 DB Connector Instance 에서 출력		
 			result_string << "+"+line+"+\n";
-			const auto& my_map = queryResult.query_result();
+			const auto& my_map = query_result.query_result();
 			
 			result_string << "|";
 			for (const auto& entry : my_map) {
@@ -86,7 +87,7 @@ class Merging_Container_Interface {
 
 			result_string <<  "+"+line+"+\n";
 
-			for(int i=0; i<queryResult.row_count(); i++){
+			for(int i=0; i<query_result.row_count(); i++){
 				result_string << "|";
 				for (const auto& entry : my_map) {
 					switch(entry.second.col_type()){
@@ -109,22 +110,27 @@ class Merging_Container_Interface {
 
 			result_string <<  "+"+line+"+\n";
 
-			return result_string.str();
+			Result result;
+			result.set_query_result(result_string.str());
+			result.set_scanned_row_count(query_result.scanned_row_count());
+			result.set_filtered_row_count(query_result.filtered_row_count());
+
+			return result;
 		}
 
 		string EndQuery(int qid) {
 			Request request;
 			request.set_query_id(qid);
-			Result result;
+			Response response;
     		ClientContext context;
 			
-			Status status = stub_->EndQuery(&context, request, &result);
+			Status status = stub_->EndQuery(&context, request, &response);
 
 	  		if (!status.ok()) {
 				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
 				KETILOG::FATALLOG(LOGTAG,"RPC failed");
 			}
-			return result.value();
+			return response.value();
 		}
 
 	private:

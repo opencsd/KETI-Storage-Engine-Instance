@@ -7,24 +7,24 @@ using grpc::ClientContext;
 using grpc::Status;
 using StorageEngineInstance::OffloadingContainer;
 using StorageEngineInstance::Snippet;
-using StorageEngineInstance::Result;
+using StorageEngineInstance::Response;
 
 class Offloading_Container_Interface {
 	public:
 		Offloading_Container_Interface(std::shared_ptr<Channel> channel) : stub_(OffloadingContainer::NewStub(channel)) {}
 
 		std::string Schedule(Snippet snippet) {
-			Result result;
+			Response response;
     		ClientContext context;
 			
-			Status status = stub_->Schedule(&context, snippet, &result);
+			Status status = stub_->Schedule(&context, snippet, &response);
 			// cout << "result : " << result.value() << endl;
 
 	  		if (!status.ok()) {
 				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
 				KETILOG::FATALLOG(LOGTAG,"RPC failed");
 			}
-			return result.value();
+			return response.value();
 		}
 
 	private:
