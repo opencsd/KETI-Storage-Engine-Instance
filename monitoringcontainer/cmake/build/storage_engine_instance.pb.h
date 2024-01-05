@@ -50,7 +50,7 @@ struct TableStruct_storage_5fengine_5finstance_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[31]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[32]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -115,6 +115,9 @@ extern QueryResult_QueryResultEntry_DoNotUseDefaultTypeInternal _QueryResult_Que
 class Request;
 struct RequestDefaultTypeInternal;
 extern RequestDefaultTypeInternal _Request_default_instance_;
+class Response;
+struct ResponseDefaultTypeInternal;
+extern ResponseDefaultTypeInternal _Response_default_instance_;
 class Result;
 struct ResultDefaultTypeInternal;
 extern ResultDefaultTypeInternal _Result_default_instance_;
@@ -172,6 +175,7 @@ template<> ::StorageEngineInstance::PBAResponse* Arena::CreateMaybeMessage<::Sto
 template<> ::StorageEngineInstance::QueryResult* Arena::CreateMaybeMessage<::StorageEngineInstance::QueryResult>(Arena*);
 template<> ::StorageEngineInstance::QueryResult_QueryResultEntry_DoNotUse* Arena::CreateMaybeMessage<::StorageEngineInstance::QueryResult_QueryResultEntry_DoNotUse>(Arena*);
 template<> ::StorageEngineInstance::Request* Arena::CreateMaybeMessage<::StorageEngineInstance::Request>(Arena*);
+template<> ::StorageEngineInstance::Response* Arena::CreateMaybeMessage<::StorageEngineInstance::Response>(Arena*);
 template<> ::StorageEngineInstance::Result* Arena::CreateMaybeMessage<::StorageEngineInstance::Result>(Arena*);
 template<> ::StorageEngineInstance::Snippet* Arena::CreateMaybeMessage<::StorageEngineInstance::Snippet>(Arena*);
 template<> ::StorageEngineInstance::SnippetRequest* Arena::CreateMaybeMessage<::StorageEngineInstance::SnippetRequest>(Arena*);
@@ -2777,6 +2781,8 @@ class QueryResult final :
   enum : int {
     kQueryResultFieldNumber = 1,
     kRowCountFieldNumber = 2,
+    kScannedRowCountFieldNumber = 3,
+    kFilteredRowCountFieldNumber = 4,
   };
   // map<string, .StorageEngineInstance.Column> query_result = 1;
   int query_result_size() const;
@@ -2804,6 +2810,24 @@ class QueryResult final :
   void _internal_set_row_count(int32_t value);
   public:
 
+  // int32 scanned_row_count = 3;
+  void clear_scanned_row_count();
+  int32_t scanned_row_count() const;
+  void set_scanned_row_count(int32_t value);
+  private:
+  int32_t _internal_scanned_row_count() const;
+  void _internal_set_scanned_row_count(int32_t value);
+  public:
+
+  // int32 filtered_row_count = 4;
+  void clear_filtered_row_count();
+  int32_t filtered_row_count() const;
+  void set_filtered_row_count(int32_t value);
+  private:
+  int32_t _internal_filtered_row_count() const;
+  void _internal_set_filtered_row_count(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:StorageEngineInstance.QueryResult)
  private:
   class _Internal;
@@ -2817,6 +2841,8 @@ class QueryResult final :
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_MESSAGE> query_result_;
   int32_t row_count_;
+  int32_t scanned_row_count_;
+  int32_t filtered_row_count_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_storage_5fengine_5finstance_2eproto;
 };
@@ -4291,6 +4317,157 @@ class CSDMetricList final :
 };
 // -------------------------------------------------------------------
 
+class Response final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:StorageEngineInstance.Response) */ {
+ public:
+  inline Response() : Response(nullptr) {}
+  ~Response() override;
+  explicit constexpr Response(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  Response(const Response& from);
+  Response(Response&& from) noexcept
+    : Response() {
+    *this = ::std::move(from);
+  }
+
+  inline Response& operator=(const Response& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Response& operator=(Response&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const Response& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const Response* internal_default_instance() {
+    return reinterpret_cast<const Response*>(
+               &_Response_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    22;
+
+  friend void swap(Response& a, Response& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Response* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Response* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  Response* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<Response>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const Response& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const Response& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Response* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "StorageEngineInstance.Response";
+  }
+  protected:
+  explicit Response(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kValueFieldNumber = 1,
+  };
+  // string value = 1;
+  void clear_value();
+  const std::string& value() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_value(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_value();
+  PROTOBUF_NODISCARD std::string* release_value();
+  void set_allocated_value(std::string* value);
+  private:
+  const std::string& _internal_value() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_value(const std::string& value);
+  std::string* _internal_mutable_value();
+  public:
+
+  // @@protoc_insertion_point(class_scope:StorageEngineInstance.Response)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr value_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_storage_5fengine_5finstance_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Result final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:StorageEngineInstance.Result) */ {
  public:
@@ -4339,7 +4516,7 @@ class Result final :
                &_Result_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    23;
 
   friend void swap(Result& a, Result& b) {
     a.Swap(&b);
@@ -4413,20 +4590,40 @@ class Result final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kValueFieldNumber = 1,
+    kQueryResultFieldNumber = 1,
+    kScannedRowCountFieldNumber = 2,
+    kFilteredRowCountFieldNumber = 3,
   };
-  // string value = 1;
-  void clear_value();
-  const std::string& value() const;
+  // string query_result = 1;
+  void clear_query_result();
+  const std::string& query_result() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_value(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_value();
-  PROTOBUF_NODISCARD std::string* release_value();
-  void set_allocated_value(std::string* value);
+  void set_query_result(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_query_result();
+  PROTOBUF_NODISCARD std::string* release_query_result();
+  void set_allocated_query_result(std::string* query_result);
   private:
-  const std::string& _internal_value() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_value(const std::string& value);
-  std::string* _internal_mutable_value();
+  const std::string& _internal_query_result() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_query_result(const std::string& value);
+  std::string* _internal_mutable_query_result();
+  public:
+
+  // int32 scanned_row_count = 2;
+  void clear_scanned_row_count();
+  int32_t scanned_row_count() const;
+  void set_scanned_row_count(int32_t value);
+  private:
+  int32_t _internal_scanned_row_count() const;
+  void _internal_set_scanned_row_count(int32_t value);
+  public:
+
+  // int32 filtered_row_count = 3;
+  void clear_filtered_row_count();
+  int32_t filtered_row_count() const;
+  void set_filtered_row_count(int32_t value);
+  private:
+  int32_t _internal_filtered_row_count() const;
+  void _internal_set_filtered_row_count(int32_t value);
   public:
 
   // @@protoc_insertion_point(class_scope:StorageEngineInstance.Result)
@@ -4436,7 +4633,9 @@ class Result final :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr value_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr query_result_;
+  int32_t scanned_row_count_;
+  int32_t filtered_row_count_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_storage_5fengine_5finstance_2eproto;
 };
@@ -4490,7 +4689,7 @@ class Chunk final :
                &_Chunk_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    24;
 
   friend void swap(Chunk& a, Chunk& b) {
     a.Swap(&b);
@@ -4647,7 +4846,7 @@ class LBA final :
                &_LBA_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    25;
 
   friend void swap(LBA& a, LBA& b) {
     a.Swap(&b);
@@ -4818,7 +5017,7 @@ class LBARequest final :
                &_LBARequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    26;
 
   friend void swap(LBARequest& a, LBARequest& b) {
     a.Swap(&b);
@@ -4973,7 +5172,7 @@ class PBA final :
                &_PBA_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    27;
 
   friend void swap(PBA& a, PBA& b) {
     a.Swap(&b);
@@ -5144,7 +5343,7 @@ class PBAList final :
                &_PBAList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    28;
 
   friend void swap(PBAList& a, PBAList& b) {
     a.Swap(&b);
@@ -5315,7 +5514,7 @@ class PBAResponse final :
                &_PBAResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    29;
 
   friend void swap(PBAResponse& a, PBAResponse& b) {
     a.Swap(&b);
@@ -5470,7 +5669,7 @@ class WALRequest final :
                &_WALRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    30;
 
   friend void swap(WALRequest& a, WALRequest& b) {
     a.Swap(&b);
@@ -5653,7 +5852,7 @@ class WALResponse final :
                &_WALResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    31;
 
   friend void swap(WALResponse& a, WALResponse& b) {
     a.Swap(&b);
@@ -7924,6 +8123,46 @@ inline void QueryResult::set_row_count(int32_t value) {
   // @@protoc_insertion_point(field_set:StorageEngineInstance.QueryResult.row_count)
 }
 
+// int32 scanned_row_count = 3;
+inline void QueryResult::clear_scanned_row_count() {
+  scanned_row_count_ = 0;
+}
+inline int32_t QueryResult::_internal_scanned_row_count() const {
+  return scanned_row_count_;
+}
+inline int32_t QueryResult::scanned_row_count() const {
+  // @@protoc_insertion_point(field_get:StorageEngineInstance.QueryResult.scanned_row_count)
+  return _internal_scanned_row_count();
+}
+inline void QueryResult::_internal_set_scanned_row_count(int32_t value) {
+  
+  scanned_row_count_ = value;
+}
+inline void QueryResult::set_scanned_row_count(int32_t value) {
+  _internal_set_scanned_row_count(value);
+  // @@protoc_insertion_point(field_set:StorageEngineInstance.QueryResult.scanned_row_count)
+}
+
+// int32 filtered_row_count = 4;
+inline void QueryResult::clear_filtered_row_count() {
+  filtered_row_count_ = 0;
+}
+inline int32_t QueryResult::_internal_filtered_row_count() const {
+  return filtered_row_count_;
+}
+inline int32_t QueryResult::filtered_row_count() const {
+  // @@protoc_insertion_point(field_get:StorageEngineInstance.QueryResult.filtered_row_count)
+  return _internal_filtered_row_count();
+}
+inline void QueryResult::_internal_set_filtered_row_count(int32_t value) {
+  
+  filtered_row_count_ = value;
+}
+inline void QueryResult::set_filtered_row_count(int32_t value) {
+  _internal_set_filtered_row_count(value);
+  // @@protoc_insertion_point(field_set:StorageEngineInstance.QueryResult.filtered_row_count)
+}
+
 // -------------------------------------------------------------------
 
 // TableBlockCount
@@ -8621,44 +8860,44 @@ CSDMetricList::csd_metric_list() const {
 
 // -------------------------------------------------------------------
 
-// Result
+// Response
 
 // string value = 1;
-inline void Result::clear_value() {
+inline void Response::clear_value() {
   value_.ClearToEmpty();
 }
-inline const std::string& Result::value() const {
-  // @@protoc_insertion_point(field_get:StorageEngineInstance.Result.value)
+inline const std::string& Response::value() const {
+  // @@protoc_insertion_point(field_get:StorageEngineInstance.Response.value)
   return _internal_value();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void Result::set_value(ArgT0&& arg0, ArgT... args) {
+void Response::set_value(ArgT0&& arg0, ArgT... args) {
  
  value_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:StorageEngineInstance.Result.value)
+  // @@protoc_insertion_point(field_set:StorageEngineInstance.Response.value)
 }
-inline std::string* Result::mutable_value() {
+inline std::string* Response::mutable_value() {
   std::string* _s = _internal_mutable_value();
-  // @@protoc_insertion_point(field_mutable:StorageEngineInstance.Result.value)
+  // @@protoc_insertion_point(field_mutable:StorageEngineInstance.Response.value)
   return _s;
 }
-inline const std::string& Result::_internal_value() const {
+inline const std::string& Response::_internal_value() const {
   return value_.Get();
 }
-inline void Result::_internal_set_value(const std::string& value) {
+inline void Response::_internal_set_value(const std::string& value) {
   
   value_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* Result::_internal_mutable_value() {
+inline std::string* Response::_internal_mutable_value() {
   
   return value_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline std::string* Result::release_value() {
-  // @@protoc_insertion_point(field_release:StorageEngineInstance.Result.value)
+inline std::string* Response::release_value() {
+  // @@protoc_insertion_point(field_release:StorageEngineInstance.Response.value)
   return value_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void Result::set_allocated_value(std::string* value) {
+inline void Response::set_allocated_value(std::string* value) {
   if (value != nullptr) {
     
   } else {
@@ -8671,7 +8910,102 @@ inline void Result::set_allocated_value(std::string* value) {
     value_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.Result.value)
+  // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.Response.value)
+}
+
+// -------------------------------------------------------------------
+
+// Result
+
+// string query_result = 1;
+inline void Result::clear_query_result() {
+  query_result_.ClearToEmpty();
+}
+inline const std::string& Result::query_result() const {
+  // @@protoc_insertion_point(field_get:StorageEngineInstance.Result.query_result)
+  return _internal_query_result();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void Result::set_query_result(ArgT0&& arg0, ArgT... args) {
+ 
+ query_result_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:StorageEngineInstance.Result.query_result)
+}
+inline std::string* Result::mutable_query_result() {
+  std::string* _s = _internal_mutable_query_result();
+  // @@protoc_insertion_point(field_mutable:StorageEngineInstance.Result.query_result)
+  return _s;
+}
+inline const std::string& Result::_internal_query_result() const {
+  return query_result_.Get();
+}
+inline void Result::_internal_set_query_result(const std::string& value) {
+  
+  query_result_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* Result::_internal_mutable_query_result() {
+  
+  return query_result_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* Result::release_query_result() {
+  // @@protoc_insertion_point(field_release:StorageEngineInstance.Result.query_result)
+  return query_result_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void Result::set_allocated_query_result(std::string* query_result) {
+  if (query_result != nullptr) {
+    
+  } else {
+    
+  }
+  query_result_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), query_result,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (query_result_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    query_result_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.Result.query_result)
+}
+
+// int32 scanned_row_count = 2;
+inline void Result::clear_scanned_row_count() {
+  scanned_row_count_ = 0;
+}
+inline int32_t Result::_internal_scanned_row_count() const {
+  return scanned_row_count_;
+}
+inline int32_t Result::scanned_row_count() const {
+  // @@protoc_insertion_point(field_get:StorageEngineInstance.Result.scanned_row_count)
+  return _internal_scanned_row_count();
+}
+inline void Result::_internal_set_scanned_row_count(int32_t value) {
+  
+  scanned_row_count_ = value;
+}
+inline void Result::set_scanned_row_count(int32_t value) {
+  _internal_set_scanned_row_count(value);
+  // @@protoc_insertion_point(field_set:StorageEngineInstance.Result.scanned_row_count)
+}
+
+// int32 filtered_row_count = 3;
+inline void Result::clear_filtered_row_count() {
+  filtered_row_count_ = 0;
+}
+inline int32_t Result::_internal_filtered_row_count() const {
+  return filtered_row_count_;
+}
+inline int32_t Result::filtered_row_count() const {
+  // @@protoc_insertion_point(field_get:StorageEngineInstance.Result.filtered_row_count)
+  return _internal_filtered_row_count();
+}
+inline void Result::_internal_set_filtered_row_count(int32_t value) {
+  
+  filtered_row_count_ = value;
+}
+inline void Result::set_filtered_row_count(int32_t value) {
+  _internal_set_filtered_row_count(value);
+  // @@protoc_insertion_point(field_set:StorageEngineInstance.Result.filtered_row_count)
 }
 
 // -------------------------------------------------------------------
@@ -9480,6 +9814,8 @@ WALResponse::mutable_inserted_value() {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

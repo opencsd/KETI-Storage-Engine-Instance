@@ -19,7 +19,7 @@ public:
         return _instance;
     }
 
-	static int SetCSDStatus(string id, CSDStatus csd_status){
+	static void SetCSDStatus(string id, CSDStatus csd_status){
 		return GetInstance().setCSDStatus(id, csd_status);
 	}
 
@@ -43,7 +43,7 @@ private:
         return *this;
     };
     
-    int setCSDStatus(string id, CSDStatus csd_status){
+    void setCSDStatus(string id, CSDStatus csd_status){
         GetInstance().m_MetricAnalysisModule[id] = csd_status;
     }
 

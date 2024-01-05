@@ -16,7 +16,7 @@ public:
         int block_count = 0;
     };
 
-	static int SetCSDInfo(string id, CSDInfo csd_info){
+	static void SetCSDInfo(string id, CSDInfo csd_info){
 		return GetInstance().setCSDInfo(id, csd_info);
 	}
 
@@ -35,7 +35,7 @@ private:
         return *this;
     };
     
-    int setCSDInfo(string id, CSDInfo csd_info){
+    void setCSDInfo(string id, CSDInfo csd_info){
         GetInstance().m_CSDInfo[id] = csd_info;
     }
 

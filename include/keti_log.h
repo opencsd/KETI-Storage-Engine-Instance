@@ -11,6 +11,7 @@
 #include <sys/msg.h>
 #include <stdlib.h>
 #include <string.h>
+#include "httplib.h"
 
 #define MSQID 12345
 #define MSGMAAX 4096
@@ -36,10 +37,16 @@ typedef enum DEBUGG_LEVEL {
 
 class KETILOG {
     public:
-        template<typename T>
-        KETILOG& operator<<(const T& value) {
-            std::cout << "Custom Output: " << value;
-            return *this;
+        static void HandleSetLogLevel(const httplib::Request& request, httplib::Response& response) {
+            try {
+                std::string log_level = request.get_param_value("log_level");
+                SetLogLevel(stoi(log_level));
+                KETILOG::INFOLOG("Handle Set Log Level", "log level changed to "+log_level);
+                response.status = 200;
+            }catch (std::exception &e) {
+                KETILOG::INFOLOG("Handle Set Log Level", e.what());
+                response.status = 501;
+            }
         }
 
         static void SetDefaultLogLevel(){

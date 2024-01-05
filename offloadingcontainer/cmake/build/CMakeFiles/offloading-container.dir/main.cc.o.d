@@ -420,18 +420,83 @@ CMakeFiles/offloading-container.dir/main.cc.o: \
  /usr/include/x86_64-linux-gnu/bits/ipc.h \
  /usr/include/x86_64-linux-gnu/sys/msg.h \
  /usr/include/x86_64-linux-gnu/bits/msq.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/../include/CalculateUsage.h \
+ /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/../include/httplib.h \
+ /usr/include/ifaddrs.h /usr/include/net/if.h /usr/include/netdb.h \
+ /usr/include/rpc/netdb.h \
+ /usr/include/x86_64-linux-gnu/bits/types/sigevent_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/__sigval_t.h \
+ /usr/include/x86_64-linux-gnu/bits/netdb.h /usr/include/resolv.h \
+ /usr/include/x86_64-linux-gnu/sys/param.h /usr/include/signal.h \
+ /usr/include/x86_64-linux-gnu/bits/signum.h \
+ /usr/include/x86_64-linux-gnu/bits/signum-generic.h \
+ /usr/include/x86_64-linux-gnu/bits/types/sig_atomic_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/siginfo_t.h \
+ /usr/include/x86_64-linux-gnu/bits/siginfo-arch.h \
+ /usr/include/x86_64-linux-gnu/bits/siginfo-consts.h \
+ /usr/include/x86_64-linux-gnu/bits/siginfo-consts-arch.h \
+ /usr/include/x86_64-linux-gnu/bits/types/sigval_t.h \
+ /usr/include/x86_64-linux-gnu/bits/sigevent-consts.h \
+ /usr/include/x86_64-linux-gnu/bits/sigaction.h \
+ /usr/include/x86_64-linux-gnu/bits/sigcontext.h \
+ /usr/include/x86_64-linux-gnu/bits/types/stack_t.h \
+ /usr/include/x86_64-linux-gnu/sys/ucontext.h \
+ /usr/include/x86_64-linux-gnu/bits/sigstack.h \
+ /usr/include/x86_64-linux-gnu/bits/ss_flags.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_sigstack.h \
+ /usr/include/x86_64-linux-gnu/bits/sigthread.h \
+ /usr/include/x86_64-linux-gnu/bits/param.h /usr/include/linux/param.h \
+ /usr/include/x86_64-linux-gnu/asm/param.h \
+ /usr/include/asm-generic/param.h /usr/include/arpa/nameser.h \
+ /usr/include/arpa/nameser_compat.h \
+ /usr/include/x86_64-linux-gnu/bits/types/res_state.h \
+ /usr/include/netinet/tcp.h /usr/include/c++/11/csignal \
+ /usr/include/x86_64-linux-gnu/sys/mman.h \
+ /usr/include/x86_64-linux-gnu/bits/mman.h \
+ /usr/include/x86_64-linux-gnu/bits/mman-linux.h \
+ /usr/include/x86_64-linux-gnu/bits/mman-shared.h \
+ /usr/include/x86_64-linux-gnu/sys/un.h /usr/include/fcntl.h \
+ /usr/include/x86_64-linux-gnu/bits/fcntl.h \
+ /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
+ /usr/include/linux/falloc.h /usr/include/x86_64-linux-gnu/bits/stat.h \
  /usr/include/c++/11/fstream /usr/include/c++/11/bits/codecvt.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
- /usr/include/c++/11/bits/fstream.tcc /include/grpcpp/grpcpp.h \
- /include/grpc/grpc.h /include/grpc/support/port_platform.h \
- /include/grpc/byte_buffer.h /include/grpc/slice_buffer.h \
- /include/grpc/slice.h /include/grpc/support/sync.h \
- /include/grpc/status.h /include/grpc/support/time.h \
- /include/grpcpp/channel.h /include/grpcpp/impl/call.h \
- /include/grpcpp/client_context.h /include/grpcpp/completion_queue.h \
- /include/grpcpp/create_channel.h /include/grpcpp/security/credentials.h \
+ /usr/include/c++/11/bits/fstream.tcc /usr/include/c++/11/iomanip \
+ /usr/include/c++/11/locale \
+ /usr/include/c++/11/bits/locale_facets_nonio.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h \
+ /usr/include/libintl.h /usr/include/c++/11/bits/locale_facets_nonio.tcc \
+ /usr/include/c++/11/bits/locale_conv.h \
+ /usr/include/c++/11/bits/quoted_string.h /usr/include/c++/11/random \
+ /usr/include/c++/11/bits/random.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
+ /usr/include/c++/11/bits/random.tcc /usr/include/c++/11/numeric \
+ /usr/include/c++/11/bits/stl_numeric.h \
+ /usr/include/c++/11/pstl/glue_numeric_defs.h /usr/include/c++/11/regex \
+ /usr/include/c++/11/bitset /usr/include/c++/11/stack \
+ /usr/include/c++/11/bits/stl_stack.h \
+ /usr/include/c++/11/bits/regex_constants.h \
+ /usr/include/c++/11/bits/regex_error.h \
+ /usr/include/c++/11/bits/regex_automaton.h \
+ /usr/include/c++/11/bits/regex_automaton.tcc \
+ /usr/include/c++/11/bits/regex_scanner.h \
+ /usr/include/c++/11/bits/regex_scanner.tcc \
+ /usr/include/c++/11/bits/regex_compiler.h \
+ /usr/include/c++/11/bits/regex_compiler.tcc \
+ /usr/include/c++/11/bits/regex.h /usr/include/c++/11/bits/regex.tcc \
+ /usr/include/c++/11/bits/regex_executor.h \
+ /usr/include/c++/11/bits/regex_executor.tcc \
+ /usr/include/x86_64-linux-gnu/sys/stat.h \
+ /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/../include/CalculateUsage.h \
+ /include/grpcpp/grpcpp.h /include/grpc/grpc.h \
+ /include/grpc/support/port_platform.h /include/grpc/byte_buffer.h \
+ /include/grpc/slice_buffer.h /include/grpc/slice.h \
+ /include/grpc/support/sync.h /include/grpc/status.h \
+ /include/grpc/support/time.h /include/grpcpp/channel.h \
+ /include/grpcpp/impl/call.h /include/grpcpp/client_context.h \
+ /include/grpcpp/completion_queue.h /include/grpcpp/create_channel.h \
+ /include/grpcpp/security/credentials.h \
  /include/grpc/grpc_security_constants.h \
  /include/grpcpp/security/auth_context.h \
  /include/grpcpp/security/tls_credentials_options.h \

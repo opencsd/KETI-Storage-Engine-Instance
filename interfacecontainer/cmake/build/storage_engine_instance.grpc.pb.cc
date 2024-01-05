@@ -39,20 +39,20 @@ InterfaceContainer::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>&
   , rpcmethod_SetSnippetAndRun_(InterfaceContainer_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::CLIENT_STREAMING, channel)
   {}
 
-::grpc::ClientReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* InterfaceContainer::Stub::SetSnippetRaw(::grpc::ClientContext* context) {
-  return ::grpc::internal::ClientReaderWriterFactory< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>::Create(channel_.get(), rpcmethod_SetSnippet_, context);
+::grpc::ClientReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* InterfaceContainer::Stub::SetSnippetRaw(::grpc::ClientContext* context) {
+  return ::grpc::internal::ClientReaderWriterFactory< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>::Create(channel_.get(), rpcmethod_SetSnippet_, context);
 }
 
-void InterfaceContainer::Stub::async::SetSnippet(::grpc::ClientContext* context, ::grpc::ClientBidiReactor< ::StorageEngineInstance::SnippetRequest,::StorageEngineInstance::Result>* reactor) {
-  ::grpc::internal::ClientCallbackReaderWriterFactory< ::StorageEngineInstance::SnippetRequest,::StorageEngineInstance::Result>::Create(stub_->channel_.get(), stub_->rpcmethod_SetSnippet_, context, reactor);
+void InterfaceContainer::Stub::async::SetSnippet(::grpc::ClientContext* context, ::grpc::ClientBidiReactor< ::StorageEngineInstance::SnippetRequest,::StorageEngineInstance::Response>* reactor) {
+  ::grpc::internal::ClientCallbackReaderWriterFactory< ::StorageEngineInstance::SnippetRequest,::StorageEngineInstance::Response>::Create(stub_->channel_.get(), stub_->rpcmethod_SetSnippet_, context, reactor);
 }
 
-::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* InterfaceContainer::Stub::AsyncSetSnippetRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) {
-  return ::grpc::internal::ClientAsyncReaderWriterFactory< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>::Create(channel_.get(), cq, rpcmethod_SetSnippet_, context, true, tag);
+::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* InterfaceContainer::Stub::AsyncSetSnippetRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) {
+  return ::grpc::internal::ClientAsyncReaderWriterFactory< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>::Create(channel_.get(), cq, rpcmethod_SetSnippet_, context, true, tag);
 }
 
-::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>* InterfaceContainer::Stub::PrepareAsyncSetSnippetRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncReaderWriterFactory< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>::Create(channel_.get(), cq, rpcmethod_SetSnippet_, context, false, nullptr);
+::grpc::ClientAsyncReaderWriter< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* InterfaceContainer::Stub::PrepareAsyncSetSnippetRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncReaderWriterFactory< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>::Create(channel_.get(), cq, rpcmethod_SetSnippet_, context, false, nullptr);
 }
 
 ::grpc::Status InterfaceContainer::Stub::Run(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Result* response) {
@@ -98,10 +98,10 @@ InterfaceContainer::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       InterfaceContainer_method_names[0],
       ::grpc::internal::RpcMethod::BIDI_STREAMING,
-      new ::grpc::internal::BidiStreamingHandler< InterfaceContainer::Service, ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result>(
+      new ::grpc::internal::BidiStreamingHandler< InterfaceContainer::Service, ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>(
           [](InterfaceContainer::Service* service,
              ::grpc::ServerContext* ctx,
-             ::grpc::ServerReaderWriter<::StorageEngineInstance::Result,
+             ::grpc::ServerReaderWriter<::StorageEngineInstance::Response,
              ::StorageEngineInstance::SnippetRequest>* stream) {
                return service->SetSnippet(ctx, stream);
              }, this)));
@@ -130,7 +130,7 @@ InterfaceContainer::Service::Service() {
 InterfaceContainer::Service::~Service() {
 }
 
-::grpc::Status InterfaceContainer::Service::SetSnippet(::grpc::ServerContext* context, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Result, ::StorageEngineInstance::SnippetRequest>* stream) {
+::grpc::Status InterfaceContainer::Service::SetSnippet(::grpc::ServerContext* context, ::grpc::ServerReaderWriter< ::StorageEngineInstance::Response, ::StorageEngineInstance::SnippetRequest>* stream) {
   (void) context;
   (void) stream;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
@@ -171,69 +171,69 @@ MergingContainer::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& c
   , rpcmethod_GetQueryResult_(MergingContainer_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
-::grpc::Status MergingContainer::Stub::Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Result* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Aggregation_, context, request, response);
+::grpc::Status MergingContainer::Stub::Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Response* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Aggregation_, context, request, response);
 }
 
-void MergingContainer::Stub::async::Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Aggregation_, context, request, response, std::move(f));
+void MergingContainer::Stub::async::Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Aggregation_, context, request, response, std::move(f));
 }
 
-void MergingContainer::Stub::async::Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) {
+void MergingContainer::Stub::async::Aggregation(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Aggregation_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* MergingContainer::Stub::PrepareAsyncAggregationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Result, ::StorageEngineInstance::SnippetRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Aggregation_, context, request);
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* MergingContainer::Stub::PrepareAsyncAggregationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Response, ::StorageEngineInstance::SnippetRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Aggregation_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* MergingContainer::Stub::AsyncAggregationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* MergingContainer::Stub::AsyncAggregationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncAggregationRaw(context, request, cq);
   result->StartCall();
   return result;
 }
 
-::grpc::Status MergingContainer::Stub::InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Result* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_InitBuffer_, context, request, response);
+::grpc::Status MergingContainer::Stub::InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Response* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_InitBuffer_, context, request, response);
 }
 
-void MergingContainer::Stub::async::InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_InitBuffer_, context, request, response, std::move(f));
+void MergingContainer::Stub::async::InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_InitBuffer_, context, request, response, std::move(f));
 }
 
-void MergingContainer::Stub::async::InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) {
+void MergingContainer::Stub::async::InitBuffer(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_InitBuffer_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* MergingContainer::Stub::PrepareAsyncInitBufferRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Result, ::StorageEngineInstance::SnippetRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_InitBuffer_, context, request);
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* MergingContainer::Stub::PrepareAsyncInitBufferRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Response, ::StorageEngineInstance::SnippetRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_InitBuffer_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* MergingContainer::Stub::AsyncInitBufferRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* MergingContainer::Stub::AsyncInitBufferRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncInitBufferRaw(context, request, cq);
   result->StartCall();
   return result;
 }
 
-::grpc::Status MergingContainer::Stub::EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Result* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::Request, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_EndQuery_, context, request, response);
+::grpc::Status MergingContainer::Stub::EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Response* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_EndQuery_, context, request, response);
 }
 
-void MergingContainer::Stub::async::EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::Request, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_EndQuery_, context, request, response, std::move(f));
+void MergingContainer::Stub::async::EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_EndQuery_, context, request, response, std::move(f));
 }
 
-void MergingContainer::Stub::async::EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) {
+void MergingContainer::Stub::async::EndQuery(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_EndQuery_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* MergingContainer::Stub::PrepareAsyncEndQueryRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Result, ::StorageEngineInstance::Request, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_EndQuery_, context, request);
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* MergingContainer::Stub::PrepareAsyncEndQueryRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Response, ::StorageEngineInstance::Request, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_EndQuery_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* MergingContainer::Stub::AsyncEndQueryRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* MergingContainer::Stub::AsyncEndQueryRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncEndQueryRaw(context, request, cq);
   result->StartCall();
@@ -267,31 +267,31 @@ MergingContainer::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MergingContainer_method_names[0],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MergingContainer::Service, ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< MergingContainer::Service, ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MergingContainer::Service* service,
              ::grpc::ServerContext* ctx,
              const ::StorageEngineInstance::SnippetRequest* req,
-             ::StorageEngineInstance::Result* resp) {
+             ::StorageEngineInstance::Response* resp) {
                return service->Aggregation(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MergingContainer_method_names[1],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MergingContainer::Service, ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< MergingContainer::Service, ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MergingContainer::Service* service,
              ::grpc::ServerContext* ctx,
              const ::StorageEngineInstance::SnippetRequest* req,
-             ::StorageEngineInstance::Result* resp) {
+             ::StorageEngineInstance::Response* resp) {
                return service->InitBuffer(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MergingContainer_method_names[2],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MergingContainer::Service, ::StorageEngineInstance::Request, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< MergingContainer::Service, ::StorageEngineInstance::Request, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MergingContainer::Service* service,
              ::grpc::ServerContext* ctx,
              const ::StorageEngineInstance::Request* req,
-             ::StorageEngineInstance::Result* resp) {
+             ::StorageEngineInstance::Response* resp) {
                return service->EndQuery(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
@@ -309,21 +309,21 @@ MergingContainer::Service::Service() {
 MergingContainer::Service::~Service() {
 }
 
-::grpc::Status MergingContainer::Service::Aggregation(::grpc::ServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response) {
+::grpc::Status MergingContainer::Service::Aggregation(::grpc::ServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response) {
   (void) context;
   (void) request;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status MergingContainer::Service::InitBuffer(::grpc::ServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Result* response) {
+::grpc::Status MergingContainer::Service::InitBuffer(::grpc::ServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response) {
   (void) context;
   (void) request;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status MergingContainer::Service::EndQuery(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Result* response) {
+::grpc::Status MergingContainer::Service::EndQuery(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response) {
   (void) context;
   (void) request;
   (void) response;
@@ -358,23 +358,23 @@ MonitoringContainer::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>
   , rpcmethod_SetCSDMetricsInfo_(MonitoringContainer_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
-::grpc::Status MonitoringContainer::Stub::SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Result* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_SetMetaData_, context, request, response);
+::grpc::Status MonitoringContainer::Stub::SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Response* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_SetMetaData_, context, request, response);
 }
 
-void MonitoringContainer::Stub::async::SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SetMetaData_, context, request, response, std::move(f));
+void MonitoringContainer::Stub::async::SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SetMetaData_, context, request, response, std::move(f));
 }
 
-void MonitoringContainer::Stub::async::SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) {
+void MonitoringContainer::Stub::async::SetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SetMetaData_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* MonitoringContainer::Stub::PrepareAsyncSetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Result, ::StorageEngineInstance::Snippet, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_SetMetaData_, context, request);
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* MonitoringContainer::Stub::PrepareAsyncSetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Response, ::StorageEngineInstance::Snippet, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_SetMetaData_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* MonitoringContainer::Stub::AsyncSetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* MonitoringContainer::Stub::AsyncSetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncSetMetaDataRaw(context, request, cq);
   result->StartCall();
@@ -427,23 +427,23 @@ void MonitoringContainer::Stub::async::GetCSDBlockInfo(::grpc::ClientContext* co
   return result;
 }
 
-::grpc::Status MonitoringContainer::Stub::SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::StorageEngineInstance::Result* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_SetCSDMetricsInfo_, context, request, response);
+::grpc::Status MonitoringContainer::Stub::SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::StorageEngineInstance::Response* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_SetCSDMetricsInfo_, context, request, response);
 }
 
-void MonitoringContainer::Stub::async::SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SetCSDMetricsInfo_, context, request, response, std::move(f));
+void MonitoringContainer::Stub::async::SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SetCSDMetricsInfo_, context, request, response, std::move(f));
 }
 
-void MonitoringContainer::Stub::async::SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) {
+void MonitoringContainer::Stub::async::SetCSDMetricsInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_SetCSDMetricsInfo_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* MonitoringContainer::Stub::PrepareAsyncSetCSDMetricsInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Result, ::StorageEngineInstance::CSDMetricList, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_SetCSDMetricsInfo_, context, request);
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* MonitoringContainer::Stub::PrepareAsyncSetCSDMetricsInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Response, ::StorageEngineInstance::CSDMetricList, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_SetCSDMetricsInfo_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* MonitoringContainer::Stub::AsyncSetCSDMetricsInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* MonitoringContainer::Stub::AsyncSetCSDMetricsInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncSetCSDMetricsInfoRaw(context, request, cq);
   result->StartCall();
@@ -454,11 +454,11 @@ MonitoringContainer::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MonitoringContainer_method_names[0],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MonitoringContainer::Service, ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< MonitoringContainer::Service, ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MonitoringContainer::Service* service,
              ::grpc::ServerContext* ctx,
              const ::StorageEngineInstance::Snippet* req,
-             ::StorageEngineInstance::Result* resp) {
+             ::StorageEngineInstance::Response* resp) {
                return service->SetMetaData(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
@@ -484,11 +484,11 @@ MonitoringContainer::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MonitoringContainer_method_names[3],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MonitoringContainer::Service, ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< MonitoringContainer::Service, ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MonitoringContainer::Service* service,
              ::grpc::ServerContext* ctx,
              const ::StorageEngineInstance::CSDMetricList* req,
-             ::StorageEngineInstance::Result* resp) {
+             ::StorageEngineInstance::Response* resp) {
                return service->SetCSDMetricsInfo(ctx, req, resp);
              }, this)));
 }
@@ -496,7 +496,7 @@ MonitoringContainer::Service::Service() {
 MonitoringContainer::Service::~Service() {
 }
 
-::grpc::Status MonitoringContainer::Service::SetMetaData(::grpc::ServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response) {
+::grpc::Status MonitoringContainer::Service::SetMetaData(::grpc::ServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response) {
   (void) context;
   (void) request;
   (void) response;
@@ -517,7 +517,7 @@ MonitoringContainer::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status MonitoringContainer::Service::SetCSDMetricsInfo(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Result* response) {
+::grpc::Status MonitoringContainer::Service::SetCSDMetricsInfo(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response) {
   (void) context;
   (void) request;
   (void) response;
@@ -541,46 +541,46 @@ OffloadingContainer::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>
   , rpcmethod_PushCSDMetric_(OffloadingContainer_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
-::grpc::Status OffloadingContainer::Stub::Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Result* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Schedule_, context, request, response);
+::grpc::Status OffloadingContainer::Stub::Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Response* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Schedule_, context, request, response);
 }
 
-void OffloadingContainer::Stub::async::Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Schedule_, context, request, response, std::move(f));
+void OffloadingContainer::Stub::async::Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Schedule_, context, request, response, std::move(f));
 }
 
-void OffloadingContainer::Stub::async::Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) {
+void OffloadingContainer::Stub::async::Schedule(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Schedule_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* OffloadingContainer::Stub::PrepareAsyncScheduleRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Result, ::StorageEngineInstance::Snippet, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Schedule_, context, request);
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* OffloadingContainer::Stub::PrepareAsyncScheduleRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Response, ::StorageEngineInstance::Snippet, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Schedule_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* OffloadingContainer::Stub::AsyncScheduleRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* OffloadingContainer::Stub::AsyncScheduleRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncScheduleRaw(context, request, cq);
   result->StartCall();
   return result;
 }
 
-::grpc::Status OffloadingContainer::Stub::PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::StorageEngineInstance::Result* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PushCSDMetric_, context, request, response);
+::grpc::Status OffloadingContainer::Stub::PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::StorageEngineInstance::Response* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_PushCSDMetric_, context, request, response);
 }
 
-void OffloadingContainer::Stub::async::PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Result* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PushCSDMetric_, context, request, response, std::move(f));
+void OffloadingContainer::Stub::async::PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PushCSDMetric_, context, request, response, std::move(f));
 }
 
-void OffloadingContainer::Stub::async::PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Result* response, ::grpc::ClientUnaryReactor* reactor) {
+void OffloadingContainer::Stub::async::PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_PushCSDMetric_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* OffloadingContainer::Stub::PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Result, ::StorageEngineInstance::CSDStatusList, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PushCSDMetric_, context, request);
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* OffloadingContainer::Stub::PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Response, ::StorageEngineInstance::CSDStatusList, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_PushCSDMetric_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Result>* OffloadingContainer::Stub::AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* OffloadingContainer::Stub::AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDStatusList& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncPushCSDMetricRaw(context, request, cq);
   result->StartCall();
@@ -591,21 +591,21 @@ OffloadingContainer::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       OffloadingContainer_method_names[0],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< OffloadingContainer::Service, ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< OffloadingContainer::Service, ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](OffloadingContainer::Service* service,
              ::grpc::ServerContext* ctx,
              const ::StorageEngineInstance::Snippet* req,
-             ::StorageEngineInstance::Result* resp) {
+             ::StorageEngineInstance::Response* resp) {
                return service->Schedule(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       OffloadingContainer_method_names[1],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< OffloadingContainer::Service, ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Result, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< OffloadingContainer::Service, ::StorageEngineInstance::CSDStatusList, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](OffloadingContainer::Service* service,
              ::grpc::ServerContext* ctx,
              const ::StorageEngineInstance::CSDStatusList* req,
-             ::StorageEngineInstance::Result* resp) {
+             ::StorageEngineInstance::Response* resp) {
                return service->PushCSDMetric(ctx, req, resp);
              }, this)));
 }
@@ -613,14 +613,14 @@ OffloadingContainer::Service::Service() {
 OffloadingContainer::Service::~Service() {
 }
 
-::grpc::Status OffloadingContainer::Service::Schedule(::grpc::ServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Result* response) {
+::grpc::Status OffloadingContainer::Service::Schedule(::grpc::ServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response) {
   (void) context;
   (void) request;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status OffloadingContainer::Service::PushCSDMetric(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Result* response) {
+::grpc::Status OffloadingContainer::Service::PushCSDMetric(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDStatusList* request, ::StorageEngineInstance::Response* response) {
   (void) context;
   (void) request;
   (void) response;

@@ -21,7 +21,7 @@ using grpc::CompletionQueue;
 
 using StorageEngineInstance::MonitoringContainer;
 using StorageEngineInstance::Request;
-using StorageEngineInstance::Result;
+using StorageEngineInstance::Response;
 using StorageEngineInstance::MetaDataResponse;
 using StorageEngineInstance::TableBlockCount;
 using StorageEngineInstance::CSDMetricList;
@@ -30,7 +30,7 @@ using StorageEngineInstance::Snippet;
 
 // Logic and data behind the server's behavior.
 class MonitoringContainerServiceImpl final : public MonitoringContainer::Service {
-  Status SetMetaData(ServerContext* context, const Snippet* snippet, Result* result) override {
+  Status SetMetaData(ServerContext* context, const Snippet* snippet, Response* response) override {
     //PBA 정보 요청, WAL 정보 요청, 결과 구성
     KETILOG::INFOLOG("Monitoring Container", "=: Set Meta Data :=");
     
@@ -63,7 +63,7 @@ class MonitoringContainerServiceImpl final : public MonitoringContainer::Service
       IndexManager::PushQueue(request_);
     }
     
-    result->set_value("Set Meta Data Start");
+    response->set_value("Set Meta Data Start");
 
     return Status::OK;
   }
@@ -72,7 +72,7 @@ class MonitoringContainerServiceImpl final : public MonitoringContainer::Service
     KETILOG::INFOLOG("Monitoring Container", "=: Get Meta Data :=");
     
     string key = TableManager::makeKey(request->query_id(),request->work_id());
-    Response* data = TableManager::GetReturnData(key);
+    MetaDataResponse_* data = TableManager::GetReturnData(key);
     
     unique_lock<mutex> lock(data->mu);
     while (!data->lba2pba_done || !data->wal_done){
@@ -87,7 +87,7 @@ class MonitoringContainerServiceImpl final : public MonitoringContainer::Service
     KETILOG::INFOLOG("Monitoring Container", "=: Get CSD Block Info :=");
     
     string key = TableManager::makeKey(request->query_id(),request->work_id());
-    Response* data = TableManager::GetReturnData(key);
+    MetaDataResponse_* data = TableManager::GetReturnData(key);
 
     unique_lock<mutex> lock(data->mu);
     while (!data->lba2pba_done || !data->wal_done){
@@ -97,7 +97,7 @@ class MonitoringContainerServiceImpl final : public MonitoringContainer::Service
     
     return Status::OK;
   }
-  Status SetCSDMetricsInfo(ServerContext *context, const CSDMetricList *csdMetricList, Result *result) override {
+  Status SetCSDMetricsInfo(ServerContext *context, const CSDMetricList *csdMetricList, Response *response) override {
     KETILOG::INFOLOG("Monitoring Container", "=: Set CSD Metrics Info :=");
     for (int i = 0; i < csdMetricList->csd_metric_list_size(); i++){
       StorageEngineMetricCollector::CSDMetric newCSD;
@@ -122,13 +122,13 @@ class MonitoringContainerServiceImpl final : public MonitoringContainer::Service
       StorageEngineMetricCollector::SetCSDMetric(csd_id,newCSD);
     }
 
-    result->set_value("metric set success");
+    response->set_value("metric set success");
 
     return Status::OK;
   }
 };
 
-void RunServer() {
+void RunGRPCServer() {
   std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT));
   MonitoringContainerServiceImpl service;
 
@@ -144,9 +144,28 @@ void RunServer() {
 
 int main(int argc, char** argv) {
   if (argc >= 2) {
-    KETILOG::SetLogLevel(stoi(argv[1]));
+      KETILOG::SetLogLevel(stoi(argv[1]));
+  }else if (getenv("LOG_LEVEL") != NULL){
+      string env = getenv("LOG_LEVEL");
+      int log_level;
+      if (env == "TRACE"){
+          log_level = DEBUGG_LEVEL::TRACE;
+      }else if (env == "DEBUG"){
+          log_level = DEBUGG_LEVEL::DEBUG;
+      }else if (env == "INFO"){
+          log_level = DEBUGG_LEVEL::INFO;
+      }else if (env == "WARN"){
+          log_level = DEBUGG_LEVEL::WARN;
+      }else if (env == "ERROR"){
+          log_level = DEBUGG_LEVEL::ERROR;
+      }else if (env == "FATAL"){
+          log_level = DEBUGG_LEVEL::FATAL;
+      }else{
+          log_level = DEBUGG_LEVEL::TRACE;
+      }
+      KETILOG::SetLogLevel(log_level);
   }else{
-    KETILOG::SetDefaultLogLevel();
+      KETILOG::SetDefaultLogLevel();
   }
 
   MetricAnalysisModule& instance = MetricAnalysisModule::GetInstance();
@@ -154,7 +173,14 @@ int main(int argc, char** argv) {
   WALQueryAgent::InitWALQueryAgent();
   LBA2PBAQueryAgent::InitLBA2PBAQueryAgent();
   IndexManager::InitIndexManager();
-  RunServer();
+
+  std::thread grpc_thread(RunGRPCServer);//Run Merge Query Manager & Buffer Manager gRPC Server
+
+  httplib::Server server;
+  server.Get("/log-level", KETILOG::HandleSetLogLevel);
+  server.listen("0.0.0.0", 40208);
+
+  grpc_thread.join();
 
   return 0;
 }

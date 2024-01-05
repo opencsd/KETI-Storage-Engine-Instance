@@ -1,6 +1,7 @@
 #include "MergeQueryManager.h"
 #include <grpcpp/grpcpp.h>
 #include "CalculateUsage.h"
+#include "httplib.h"
 
 using grpc::Server;
 using grpc::ServerBuilder;
@@ -12,23 +13,24 @@ using StorageEngineInstance::MergingContainer;
 using StorageEngineInstance::Snippet;
 using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::Result;
+using StorageEngineInstance::Response;
 using StorageEngineInstance::QueryResult;
 
 
 class MergingContainerServiceImpl final : public MergingContainer::Service {
-  Status Aggregation(ServerContext* context, const SnippetRequest* request, Result* result) override {  
+  Status Aggregation(ServerContext* context, const SnippetRequest* request, Response* response) override {  
     string msg = "==:Aggregation:== {" + to_string(request->snippet().query_id()) + "|" + to_string(request->snippet().work_id()) + "}";
     KETILOG::INFOLOG("Merging Container",msg);
 
     // merge query manager instance & run snippet work
     thread MergeQueryInstance = thread(&MergeQueryManager::RunSnippetWork,MergeQueryManager(*request));
     MergeQueryInstance.detach();  
-    result->set_value("Aggregation Start");
+    response->set_value("Aggregation Start");
 
     return Status::OK;
   }
 
-  Status InitBuffer(ServerContext* context, const SnippetRequest* request, Result* result) override {  
+  Status InitBuffer(ServerContext* context, const SnippetRequest* request, Response* response) override {  
     string msg = "==:Init Buffer:== {" + to_string(request->snippet().query_id()) + "|" + to_string(request->snippet().work_id()) + "}";
     KETILOG::INFOLOG("Merging Container",msg);
 
@@ -36,18 +38,18 @@ class MergingContainerServiceImpl final : public MergingContainer::Service {
     // BufferInitWorkInstance.detach();  
     BufferManager::InitWork(request->type(), request->snippet());
  
-    result->set_value("Init Success");
+    response->set_value("Init Success");
 
     return Status::OK;
   }
 
-  Status EndQuery(ServerContext* context, const Request* request, Result* result) override {
+  Status EndQuery(ServerContext* context, const Request* request, Response* response) override {
     string msg = "==:End Query:== {" + to_string(request->query_id()) + "}";
     KETILOG::INFOLOG("Merging Container",msg);
 
     BufferManager::EndQuery(*request);
 
-    result->set_value("End Query");
+    response->set_value("End Query");
     return Status::OK;
   }
 
@@ -114,13 +116,15 @@ class MergingContainerServiceImpl final : public MergingContainer::Service {
         result->mutable_query_result()->insert({col_name, col});
       }
       result->set_row_count(queryResult.row_count);
+      result->set_scanned_row_count(queryResult.scanned_row_count);
+      result->set_filtered_row_count(queryResult.filtered_row_count);
     }
 
     return Status::OK;
   }
 };
 
-void RunServer() {
+void RunGRPCServer() {
   std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_CONTAINER_PORT));
   MergingContainerServiceImpl service;
 
@@ -136,13 +140,39 @@ void RunServer() {
 
 int main(int argc, char** argv){
   if (argc >= 2) {
-    KETILOG::SetLogLevel(stoi(argv[1]));
+      KETILOG::SetLogLevel(stoi(argv[1]));
+  }else if (getenv("LOG_LEVEL") != NULL){
+      string env = getenv("LOG_LEVEL");
+      int log_level;
+      if (env == "TRACE"){
+          log_level = DEBUGG_LEVEL::TRACE;
+      }else if (env == "DEBUG"){
+          log_level = DEBUGG_LEVEL::DEBUG;
+      }else if (env == "INFO"){
+          log_level = DEBUGG_LEVEL::INFO;
+      }else if (env == "WARN"){
+          log_level = DEBUGG_LEVEL::WARN;
+      }else if (env == "ERROR"){
+          log_level = DEBUGG_LEVEL::ERROR;
+      }else if (env == "FATAL"){
+          log_level = DEBUGG_LEVEL::FATAL;
+      }else{
+          log_level = DEBUGG_LEVEL::TRACE;
+      }
+      KETILOG::SetLogLevel(log_level);
   }else{
-    KETILOG::SetDefaultLogLevel();
+      KETILOG::SetDefaultLogLevel();
   }
-
+  
   BufferManager::InitBufferManager(); //Run Buffer Manager TCP/IP Server
-  RunServer(); //Run Merge Query Manager & Buffer Manager gRPC Server
+
+  std::thread grpc_thread(RunGRPCServer);//Run Merge Query Manager & Buffer Manager gRPC Server
+
+  httplib::Server server;
+  server.Get("/log-level", KETILOG::HandleSetLogLevel);
+  server.listen("0.0.0.0", 40207);
+
+  grpc_thread.join();
 
   return 0;
 }

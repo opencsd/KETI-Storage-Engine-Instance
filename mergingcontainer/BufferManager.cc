@@ -29,6 +29,7 @@ void BufferManager::inputBufferManager(){
 	memset(&serv_addr, 0, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
+
 	serv_addr.sin_port = htons(SE_MERGING_CONTAINER_BM_TCP_PORT); 
  
 	if (bind(server_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0){
@@ -41,7 +42,7 @@ void BufferManager::inputBufferManager(){
 		exit(EXIT_FAILURE);
 	}
 
-    KETILOG::WARNLOG(LOGTAG,"CSD Return Server Listening on 10.0.4.82:40204");
+    KETILOG::WARNLOG(LOGTAG,"CSD Return Server Listening on 0.0.0.0:"+to_string(SE_MERGING_CONTAINER_BM_TCP_PORT));
 
 	while(1){
 		if ((client_fd = accept(server_fd, (struct sockaddr*)&client_addr, (socklen_t*)&addrlen)) < 0){
@@ -306,9 +307,10 @@ void BufferManager::mergeBlock(BlockResult result){
         }
     }
 
-    // scheduler.csdworkdec(result.csd_name, result.result_block_count);
     myWorkBuffer->left_block_count -= result.result_block_count;
     myWorkBuffer->row_count += result.row_count;
+    DataBuff[qid]->scanned_row_count += result.scanned_row_count;
+    DataBuff[qid]->filtered_row_count += result.filtered_row_count;
     
     KETILOG::DEBUGLOG(LOGTAG,"# Merging Data{" + to_string(qid) + "|" + to_string(wid) + "|" + myWorkBuffer->table_alias + "} ... (Left Block : " + std::to_string(myWorkBuffer->left_block_count) + ")");
 
@@ -371,9 +373,20 @@ int BufferManager::initWork(int type, StorageEngineInstance::Snippet masked_snip
     DataBuff[masked_snippet.query_id()]->tablename_workid_map[table_alias] = masked_snippet.work_id();
 
     if(type == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET){
-      Monitoring_Container_Interface mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
-      int block_cnt = mc.GetCSDBlockInfo(masked_snippet.query_id(),masked_snippet.work_id());
-      DataBuff[masked_snippet.query_id()]->work_buffer_list[masked_snippet.work_id()]->left_block_count = block_cnt;
+        // int temp_port;
+        // if(table_alias == "ProcessTable10-0"){
+        //     temp_port = 40210;
+        // }else if(table_alias == "ProcessTable10-1"){
+        //     temp_port = 40210;
+        // }else if(table_alias == "ProcessTable10-2"){
+        //     temp_port = 40210;
+        // }else{
+        //     temp_port = SE_MONITORING_CONTAINER_PORT;
+        // }
+        // Monitoring_Container_Interface mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(temp_port), grpc::InsecureChannelCredentials()));
+        Monitoring_Container_Interface mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
+        int block_cnt = mc.GetCSDBlockInfo(masked_snippet.query_id(),masked_snippet.work_id());
+        DataBuff[masked_snippet.query_id()]->work_buffer_list[masked_snippet.work_id()]->left_block_count = block_cnt;
     }
 
     return 1;
@@ -427,6 +440,8 @@ TableData BufferManager::getTableData(int qid, string tname){
                 tableData.table_data = workBuffer->table_data;
                 tableData.valid = true;
                 tableData.row_count = workBuffer->row_count;
+                tableData.scanned_row_count = DataBuff[qid]->scanned_row_count;
+                tableData.filtered_row_count = DataBuff[qid]->filtered_row_count;
 
                 KETILOG::DEBUGLOG(LOGTAG,"# Finished " + to_string(qid) + ":" + tname);
                 if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
@@ -441,6 +456,8 @@ TableData BufferManager::getTableData(int qid, string tname){
                 tableData.table_data = workBuffer->table_data;
                 tableData.valid = true;
                 tableData.row_count = workBuffer->row_count;
+                tableData.scanned_row_count = DataBuff[qid]->scanned_row_count;
+                tableData.filtered_row_count = DataBuff[qid]->scanned_row_count;
 
                 if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
                     cout << "<get table data>" << endl;

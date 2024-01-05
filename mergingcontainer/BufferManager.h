@@ -79,36 +79,41 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
     int result_block_count;
     vector<int> return_datatype;//결과의 컬럼 데이터 타입(csd 결과 파싱용) -> CSD가 리턴
     vector<int> return_offlen;//결과의 컬럼 길이 (csd 결과 파싱용) -> CSD가 리턴
+    int scanned_row_count;
+    int filtered_row_count;
 
     BlockResult(){}
     BlockResult(const char* json_, char* data_){
-        Document document;
-        document.Parse(json_); 
+      Document document;
+      document.Parse(json_); 
 
-        query_id = document["queryID"].GetInt();
-        work_id = document["workID"].GetInt();
-        row_count = document["rowCount"].GetInt();
+      query_id = document["queryID"].GetInt();
+      work_id = document["workID"].GetInt();
+      row_count = document["rowCount"].GetInt();
 
-        Value &row_offset_ = document["rowOffset"];
-        int row_offset_size = row_offset_.Size();
-        for(int i = 0; i<row_offset_size; i++){
-            row_offset.push_back(row_offset_[i].GetInt());
-        }
+      Value &row_offset_ = document["rowOffset"];
+      int row_offset_size = row_offset_.Size();
+      for(int i = 0; i<row_offset_size; i++){
+          row_offset.push_back(row_offset_[i].GetInt());
+      }
 
-        Value &return_datatype_ = document["returnDatatype"];
-        Value &return_offlen_ = document["returnOfflen"];
-        int return_datatype_size = return_datatype_.Size();
-        for(int i = 0; i<return_datatype_size; i++){
-            return_datatype.push_back(return_datatype_[i].GetInt());
-            return_offlen.push_back(return_offlen_[i].GetInt());
-        }        
+      Value &return_datatype_ = document["returnDatatype"];
+      Value &return_offlen_ = document["returnOfflen"];
+      int return_datatype_size = return_datatype_.Size();
+      for(int i = 0; i<return_datatype_size; i++){
+          return_datatype.push_back(return_datatype_[i].GetInt());
+          return_offlen.push_back(return_offlen_[i].GetInt());
+      }        
 
-        length = document["length"].GetInt();
+      length = document["length"].GetInt();
 
-        memcpy(data, data_, length);
+      memcpy(data, data_, length);
 
-        csd_name = document["csdName"].GetString();
-        result_block_count = document["resultBlockCount"].GetInt();
+      csd_name = document["csdName"].GetString();
+      result_block_count = document["resultBlockCount"].GetInt();
+
+      scanned_row_count = document["scannedRowCount"].GetInt();
+      filtered_row_count = document["filteredRowCount"].GetInt();
     }
 };
 
@@ -134,6 +139,8 @@ struct WorkBuffer {
 
 struct QueryBuffer{
   int query_id;//*쿼리ID
+  int scanned_row_count;
+  int filtered_row_count;
   unordered_map<int,WorkBuffer*> work_buffer_list;//워크버퍼 <key:*workID, value:Work_Buffer>
   unordered_map<string,int> tablename_workid_map;//<key:table_name, value: work_id>
 
@@ -141,11 +148,15 @@ struct QueryBuffer{
   :query_id(qid){
     work_buffer_list.clear();
     tablename_workid_map.clear();
+    scanned_row_count = 0;
+    filtered_row_count = 0;
   }
 };
 
 struct TableData{//결과 리턴용
   bool valid;//결과의 유효성
+  int scanned_row_count;
+  int filtered_row_count;
   unordered_map<string,ColData> table_data;//결과 데이터
   int row_count;
 

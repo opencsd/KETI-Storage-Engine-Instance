@@ -19,7 +19,7 @@ public:
         int block_count = 0;
     };
 
-	static int SetCSDMetric(string id, CSDMetric csd_info){
+	static void SetCSDMetric(string id, CSDMetric csd_info){
 		return GetInstance().setCSDMetric(id, csd_info);
 	}
 
@@ -38,7 +38,7 @@ private:
         return *this;
     };
     
-    int setCSDMetric(string id, CSDMetric csd_info){
+    void setCSDMetric(string id, CSDMetric csd_info){
         GetInstance().m_MetricCollector[id] = csd_info;
     }
 

@@ -11,6 +11,7 @@
 
 #include "ip_config.h"
 #include "SnippetManager.h"
+#include "httplib.h"
 
 #include <grpcpp/grpcpp.h>
 #include "storage_engine_instance.grpc.pb.h"
@@ -25,6 +26,7 @@ using StorageEngineInstance::Snippet;
 using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::Result;
 using StorageEngineInstance::Request;
+using StorageEngineInstance::Response;
 
 using namespace std;
 
@@ -65,7 +67,7 @@ void SendQueryStatus(const char* message){
 
 // Logic and data behind the server's behavior.
 class InterfaceContainerServiceImpl final : public InterfaceContainer::Service {
-  Status SetSnippet(ServerContext* context, ServerReaderWriter<Result, SnippetRequest>* stream) override {
+  Status SetSnippet(ServerContext* context, ServerReaderWriter<Response, SnippetRequest>* stream) override {
     SnippetRequest snippet_request;
     bool flag = true;
 
@@ -107,9 +109,11 @@ class InterfaceContainerServiceImpl final : public InterfaceContainer::Service {
     KETILOG::INFOLOG("Interface Container", "==:RUN:== {" + to_string(query_id) + "}");
 
     Merging_Container_Interface mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
-    string query_result = mc.GetQueryResult(query_id, table_name);
+    Result result_ = mc.GetQueryResult(query_id, table_name);
     
-    result->set_value(query_result);
+    result->set_query_result(result_.query_result());
+    result->set_scanned_row_count(result_.scanned_row_count());
+    result->set_filtered_row_count(result_.filtered_row_count());
 
     SnippetManager::EraseQueryID(query_id); //이후 캐시 사용시 고려 필요
     mc.EndQuery(query_id);
@@ -122,7 +126,7 @@ class InterfaceContainerServiceImpl final : public InterfaceContainer::Service {
     return Status::OK;
   }
 
-  Status SetSnippetAndRun(ServerContext* context, grpc::ServerReader<SnippetRequest>* reader, Result* response) override {
+  Status SetSnippetAndRun(ServerContext* context, grpc::ServerReader<SnippetRequest>* reader, Result* result) override {
     SnippetRequest snippet_request;
     bool flag = true;
 
@@ -160,9 +164,11 @@ class InterfaceContainerServiceImpl final : public InterfaceContainer::Service {
     KETILOG::INFOLOG("Interface Container", "==:RUN:== {" + to_string(query_id) + "}");
 
     Merging_Container_Interface mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
-    string query_result = mc.GetQueryResult(query_id, table_name);
+    Result result_ = mc.GetQueryResult(query_id, table_name);
     
-    response->set_value(query_result);
+    result->set_query_result(result_.query_result());
+    result->set_scanned_row_count(result_.scanned_row_count());
+    result->set_filtered_row_count(result_.filtered_row_count());
 
     SnippetManager::EraseQueryID(query_id); //이후 캐시 사용시 고려 필요
     mc.EndQuery(query_id);
@@ -176,7 +182,7 @@ class InterfaceContainerServiceImpl final : public InterfaceContainer::Service {
   }
 };
 
-void RunServer() {
+void RunGRPCServer() {
   std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_INTERFACE_CONTAINER_PORT));
   InterfaceContainerServiceImpl service;
 
@@ -192,12 +198,37 @@ void RunServer() {
 
 int main(int argc, char** argv) {
   if (argc >= 2) {
-    KETILOG::SetLogLevel(stoi(argv[1]));
+      KETILOG::SetLogLevel(stoi(argv[1]));
+  }else if (getenv("LOG_LEVEL") != NULL){
+      string env = getenv("LOG_LEVEL");
+      int log_level;
+      if (env == "TRACE"){
+          log_level = DEBUGG_LEVEL::TRACE;
+      }else if (env == "DEBUG"){
+          log_level = DEBUGG_LEVEL::DEBUG;
+      }else if (env == "INFO"){
+          log_level = DEBUGG_LEVEL::INFO;
+      }else if (env == "WARN"){
+          log_level = DEBUGG_LEVEL::WARN;
+      }else if (env == "ERROR"){
+          log_level = DEBUGG_LEVEL::ERROR;
+      }else if (env == "FATAL"){
+          log_level = DEBUGG_LEVEL::FATAL;
+      }else{
+          log_level = DEBUGG_LEVEL::TRACE;
+      }
+      KETILOG::SetLogLevel(log_level);
   }else{
-    KETILOG::SetDefaultLogLevel();
+      KETILOG::SetDefaultLogLevel();
   }
 
-  RunServer();
+  std::thread grpc_thread(RunGRPCServer);
+
+  httplib::Server server;
+  server.Get("/log-level", KETILOG::HandleSetLogLevel);
+  server.listen("0.0.0.0", 40205);
+
+  grpc_thread.join();
 
   return 0;
 }
