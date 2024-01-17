@@ -215,7 +215,7 @@ int main(int argc, char** argv) {
       }else if (env == "FATAL"){
           log_level = DEBUGG_LEVEL::FATAL;
       }else{
-          log_level = DEBUGG_LEVEL::TRACE;
+          log_level = DEBUGG_LEVEL::INFO;
       }
       KETILOG::SetLogLevel(log_level);
   }else{
