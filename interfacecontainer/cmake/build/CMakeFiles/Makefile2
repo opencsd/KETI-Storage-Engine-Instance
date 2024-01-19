@@ -54,10 +54,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer
+CMAKE_SOURCE_DIR = /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build
+CMAKE_BINARY_DIR = /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/cmake/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -83,14 +83,14 @@ clean: CMakeFiles/interface-container.dir/clean
 CMakeFiles/ss_grpc_proto.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ss_grpc_proto.dir/build.make CMakeFiles/ss_grpc_proto.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ss_grpc_proto.dir/build.make CMakeFiles/ss_grpc_proto.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles --progress-num=3,4,5,6 "Built target ss_grpc_proto"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/cmake/build/CMakeFiles --progress-num=3,4,5,6 "Built target ss_grpc_proto"
 .PHONY : CMakeFiles/ss_grpc_proto.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/ss_grpc_proto.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/cmake/build/CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/ss_grpc_proto.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/cmake/build/CMakeFiles 0
 .PHONY : CMakeFiles/ss_grpc_proto.dir/rule
 
 # Convenience name for target.
@@ -109,14 +109,14 @@ CMakeFiles/ss_grpc_proto.dir/clean:
 CMakeFiles/interface-container.dir/all: CMakeFiles/ss_grpc_proto.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/interface-container.dir/build.make CMakeFiles/interface-container.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/interface-container.dir/build.make CMakeFiles/interface-container.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles --progress-num=1,2 "Built target interface-container"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/cmake/build/CMakeFiles --progress-num=1,2 "Built target interface-container"
 .PHONY : CMakeFiles/interface-container.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/interface-container.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/cmake/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/interface-container.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/cmake/build/CMakeFiles 0
 .PHONY : CMakeFiles/interface-container.dir/rule
 
 # Convenience name for target.

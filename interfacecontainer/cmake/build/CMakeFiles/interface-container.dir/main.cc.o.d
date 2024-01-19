@@ -1,5 +1,5 @@
 CMakeFiles/interface-container.dir/main.cc.o: \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/main.cc \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/main.cc \
  /usr/include/stdc-predef.h /usr/include/c++/11/iostream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -183,8 +183,8 @@ CMakeFiles/interface-container.dir/main.cc.o: \
  /usr/include/netinet/in.h /usr/include/x86_64-linux-gnu/bits/in.h \
  /usr/include/c++/11/cstring /usr/include/string.h /usr/include/strings.h \
  /usr/include/arpa/inet.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/../include/ip_config.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/SnippetManager.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/../include/ip_config.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/SnippetManager.h \
  /usr/include/c++/11/thread /usr/include/c++/11/bits/std_thread.h \
  /usr/include/c++/11/bits/this_thread_sleep.h /usr/include/c++/11/chrono \
  /usr/include/c++/11/ratio /usr/include/c++/11/limits \
@@ -259,13 +259,13 @@ CMakeFiles/interface-container.dir/main.cc.o: \
  /include/google/protobuf/stubs/stl_util.h \
  /include/google/protobuf/message.h \
  /include/google/protobuf/extension_set.h /usr/include/c++/11/cassert \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/../include/keti_log.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/../include/keti_log.h \
  /usr/include/x86_64-linux-gnu/sys/ipc.h \
  /usr/include/x86_64-linux-gnu/bits/ipctypes.h \
  /usr/include/x86_64-linux-gnu/bits/ipc.h \
  /usr/include/x86_64-linux-gnu/sys/msg.h \
  /usr/include/x86_64-linux-gnu/bits/msq.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/../include/httplib.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/../include/httplib.h \
  /usr/include/ifaddrs.h /usr/include/net/if.h /usr/include/netdb.h \
  /usr/include/rpc/netdb.h \
  /usr/include/x86_64-linux-gnu/bits/types/sigevent_t.h \
@@ -358,9 +358,9 @@ CMakeFiles/interface-container.dir/main.cc.o: \
  /usr/include/c++/11/bits/regex_executor.h \
  /usr/include/c++/11/bits/regex_executor.tcc \
  /usr/include/x86_64-linux-gnu/sys/stat.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/../include/internal_queue.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/../include/internal_queue.h \
  /usr/include/c++/11/queue /usr/include/c++/11/bits/stl_queue.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/MonitoringContainerInterface.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/MonitoringContainerInterface.h \
  /include/grpcpp/grpcpp.h /include/grpc/grpc.h \
  /include/grpc/support/port_platform.h \
  /include/grpc/impl/codegen/port_platform.h /usr/include/linux/version.h \
@@ -470,8 +470,8 @@ CMakeFiles/interface-container.dir/main.cc.o: \
  /include/grpcpp/impl/server_builder_plugin.h \
  /include/grpcpp/security/authorization_policy_provider.h \
  /include/grpcpp/server_context.h /include/grpcpp/server_posix.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/storage_engine_instance.grpc.pb.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/storage_engine_instance.pb.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/cmake/build/storage_engine_instance.grpc.pb.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/cmake/build/storage_engine_instance.pb.h \
  /include/google/protobuf/map_entry.h \
  /include/google/protobuf/reflection_ops.h \
  /include/google/protobuf/map_field_inl.h \
@@ -497,6 +497,6 @@ CMakeFiles/interface-container.dir/main.cc.o: \
  /include/grpcpp/impl/codegen/proto_buffer_reader.h \
  /include/grpcpp/impl/codegen/proto_buffer_writer.h \
  /include/grpcpp/impl/codegen/stub_options.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/MergingContainerInterface.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/OffloadingContainerInterface.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/../include/httplib.h
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/MergingContainerInterface.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/OffloadingContainerInterface.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/../include/httplib.h

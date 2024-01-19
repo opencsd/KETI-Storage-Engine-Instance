@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DCARES_STATICLIB
 
-CXX_INCLUDES = -I/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/cmake/build -I/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/../include -isystem /include
+CXX_INCLUDES = -I/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloadingcontainer/cmake/build -I/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloadingcontainer/../include -isystem /include
 
 CXX_FLAGS = -std=gnu++17
 
