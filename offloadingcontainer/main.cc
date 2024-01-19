@@ -29,7 +29,6 @@ using StorageEngineInstance::CSDStatusList_CSDStatus;
 class OffloadingContainerServiceImpl final : public OffloadingContainer::Service {
   Status Schedule(ServerContext* context, const Snippet* snippet, Response* response) override {
     KETILOG::INFOLOG("Offloading Container", "==:Receive Snippet from Interface Container:==");
-    // CalculateStart();
     
     Object schedulingTarget;
     
@@ -44,9 +43,10 @@ class OffloadingContainerServiceImpl final : public OffloadingContainer::Service
     Scheduler::PushQueue(schedulingTarget);
 
     response->set_value("Snippet Scheduling OK");
-    // CalculateEnd();
+
     return Status::OK;
   }
+
   Status PushCSDMetric(ServerContext* context, const CSDStatusList* csdStatusList, Response* response) override {
     // KETILOG("Offloading Container", "==:Push CSD Metric:==");
 

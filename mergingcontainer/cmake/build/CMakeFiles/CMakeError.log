@@ -1,25 +1,25 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
-Change Dir: /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-2ZVHtZ
+Change Dir: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-xvdp8S
 
-Run Build Command(s):/usr/bin/make -f Makefile cmTC_1eea9/fast && /usr/bin/make  -f CMakeFiles/cmTC_1eea9.dir/build.make CMakeFiles/cmTC_1eea9.dir/build
-make[1]: Entering directory '/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-2ZVHtZ'
-Building C object CMakeFiles/cmTC_1eea9.dir/src.c.o
-/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_1eea9.dir/src.c.o -c /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-2ZVHtZ/src.c
-Linking C executable cmTC_1eea9
-/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1eea9.dir/link.txt --verbose=1
-/usr/bin/cc CMakeFiles/cmTC_1eea9.dir/src.c.o -o cmTC_1eea9 
-CMakeFiles/cmTC_1eea9.dir/src.c.o: In function `main':
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_deecc/fast && /usr/bin/make  -f CMakeFiles/cmTC_deecc.dir/build.make CMakeFiles/cmTC_deecc.dir/build
+make[1]: Entering directory '/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-xvdp8S'
+Building C object CMakeFiles/cmTC_deecc.dir/src.c.o
+/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_deecc.dir/src.c.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-xvdp8S/src.c
+Linking C executable cmTC_deecc
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_deecc.dir/link.txt --verbose=1
+/usr/bin/cc CMakeFiles/cmTC_deecc.dir/src.c.o -o cmTC_deecc 
+CMakeFiles/cmTC_deecc.dir/src.c.o: In function `main':
 src.c:(.text+0x3e): undefined reference to `pthread_create'
 src.c:(.text+0x4a): undefined reference to `pthread_detach'
 src.c:(.text+0x56): undefined reference to `pthread_cancel'
 src.c:(.text+0x67): undefined reference to `pthread_join'
 src.c:(.text+0x7b): undefined reference to `pthread_atfork'
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_1eea9.dir/build.make:98: recipe for target 'cmTC_1eea9' failed
-make[1]: *** [cmTC_1eea9] Error 1
-make[1]: Leaving directory '/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-2ZVHtZ'
-Makefile:127: recipe for target 'cmTC_1eea9/fast' failed
-make: *** [cmTC_1eea9/fast] Error 2
+CMakeFiles/cmTC_deecc.dir/build.make:98: recipe for target 'cmTC_deecc' failed
+make[1]: *** [cmTC_deecc] Error 1
+make[1]: Leaving directory '/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-xvdp8S'
+Makefile:127: recipe for target 'cmTC_deecc/fast' failed
+make: *** [cmTC_deecc/fast] Error 2
 
 
 Source file was:
@@ -45,22 +45,22 @@ int main(void)
 
 
 Determining if the function pthread_create exists in the pthreads failed with the following output:
-Change Dir: /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-31lpXR
+Change Dir: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-6RxYQN
 
-Run Build Command(s):/usr/bin/make -f Makefile cmTC_072d2/fast && /usr/bin/make  -f CMakeFiles/cmTC_072d2.dir/build.make CMakeFiles/cmTC_072d2.dir/build
-make[1]: Entering directory '/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-31lpXR'
-Building C object CMakeFiles/cmTC_072d2.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_072d2.dir/CheckFunctionExists.c.o -c /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-31lpXR/CheckFunctionExists.c
-Linking C executable cmTC_072d2
-/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_072d2.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_072d2.dir/CheckFunctionExists.c.o -o cmTC_072d2  -lpthreads 
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_69015/fast && /usr/bin/make  -f CMakeFiles/cmTC_69015.dir/build.make CMakeFiles/cmTC_69015.dir/build
+make[1]: Entering directory '/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-6RxYQN'
+Building C object CMakeFiles/cmTC_69015.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_69015.dir/CheckFunctionExists.c.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-6RxYQN/CheckFunctionExists.c
+Linking C executable cmTC_69015
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_69015.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_69015.dir/CheckFunctionExists.c.o -o cmTC_69015  -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_072d2.dir/build.make:98: recipe for target 'cmTC_072d2' failed
-make[1]: *** [cmTC_072d2] Error 1
-make[1]: Leaving directory '/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-31lpXR'
-Makefile:127: recipe for target 'cmTC_072d2/fast' failed
-make: *** [cmTC_072d2/fast] Error 2
+CMakeFiles/cmTC_69015.dir/build.make:98: recipe for target 'cmTC_69015' failed
+make[1]: *** [cmTC_69015] Error 1
+make[1]: Leaving directory '/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/mergingcontainer/cmake/build/CMakeFiles/CMakeScratch/TryCompile-6RxYQN'
+Makefile:127: recipe for target 'cmTC_69015/fast' failed
+make: *** [cmTC_69015/fast] Error 2
 
 
 

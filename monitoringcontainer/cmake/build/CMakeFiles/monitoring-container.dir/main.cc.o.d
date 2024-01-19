@@ -1,5 +1,5 @@
 CMakeFiles/monitoring-container.dir/main.cc.o: \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/main.cc \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/main.cc \
  /usr/include/stdc-predef.h /include/grpcpp/grpcpp.h /include/grpc/grpc.h \
  /include/grpc/support/port_platform.h \
  /include/grpc/impl/codegen/port_platform.h /usr/include/features.h \
@@ -373,8 +373,8 @@ CMakeFiles/monitoring-container.dir/main.cc.o: \
  /include/google/protobuf/stubs/stl_util.h \
  /include/google/protobuf/message.h \
  /include/google/protobuf/extension_set.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/cmake/build/storage_engine_instance.grpc.pb.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/cmake/build/storage_engine_instance.pb.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/cmake/build/storage_engine_instance.grpc.pb.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/cmake/build/storage_engine_instance.pb.h \
  /include/google/protobuf/map_entry.h \
  /include/google/protobuf/reflection_ops.h \
  /include/google/protobuf/map_field_inl.h \
@@ -400,7 +400,7 @@ CMakeFiles/monitoring-container.dir/main.cc.o: \
  /include/grpcpp/impl/codegen/proto_buffer_reader.h \
  /include/grpcpp/impl/codegen/proto_buffer_writer.h \
  /include/grpcpp/impl/codegen/stub_options.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/TableManager.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/TableManager.h \
  /usr/include/fcntl.h /usr/include/x86_64-linux-gnu/bits/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
  /usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h \
@@ -442,13 +442,13 @@ CMakeFiles/monitoring-container.dir/main.cc.o: \
  /usr/include/rapidjson/stringbuffer.h \
  /usr/include/rapidjson/stringbuffer.h \
  /usr/include/rapidjson/prettywriter.h /usr/include/rapidjson/writer.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/../include/keti_log.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/../include/keti_log.h \
  /usr/include/x86_64-linux-gnu/sys/ipc.h \
  /usr/include/x86_64-linux-gnu/bits/ipctypes.h \
  /usr/include/x86_64-linux-gnu/bits/ipc.h \
  /usr/include/x86_64-linux-gnu/sys/msg.h \
  /usr/include/x86_64-linux-gnu/bits/msq.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/../include/httplib.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/../include/httplib.h \
  /usr/include/arpa/inet.h /usr/include/netinet/in.h \
  /usr/include/x86_64-linux-gnu/sys/socket.h \
  /usr/include/x86_64-linux-gnu/bits/socket.h \
@@ -515,13 +515,13 @@ CMakeFiles/monitoring-container.dir/main.cc.o: \
  /usr/include/x86_64-linux-gnu/sys/stat.h /usr/include/c++/11/thread \
  /usr/include/c++/11/bits/std_thread.h \
  /usr/include/c++/11/bits/this_thread_sleep.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/../include/ip_config.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/LBA2PBAQueryAgent.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/../include/internal_queue.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/../include/ip_config.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/LBA2PBAQueryAgent.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/../include/internal_queue.h \
  /usr/include/c++/11/queue /usr/include/c++/11/bits/stl_queue.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/WALQueryAgent.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/MetricAnalysisModule.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/StorageEngineMetricCollector.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/OffloadingContainerInterface.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/IndexManager.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/../include/CalculateUsage.h
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/WALQueryAgent.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/MetricAnalysisModule.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/StorageEngineMetricCollector.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/OffloadingContainerInterface.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/IndexManager.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/../include/CalculateUsage.h

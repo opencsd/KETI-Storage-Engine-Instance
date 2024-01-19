@@ -187,7 +187,8 @@ message Request{
 message MetaDataResponse {
   message PBAInfo {
     map<string,string> csd_pba_map = 1;
-    repeated string seek_pk_list = 2;
+    int32 total_block_count = 2;
+    repeated string seek_pk_list = 3;
   }
   map<string,PBAInfo> sst_csd_map = 1;
   string wal_json = 2;

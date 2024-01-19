@@ -231,7 +231,8 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT MetaDataResponse_PBAInfo_CsdPba
 constexpr MetaDataResponse_PBAInfo::MetaDataResponse_PBAInfo(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : csd_pba_map_(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{})
-  , seek_pk_list_(){}
+  , seek_pk_list_()
+  , total_block_count_(0){}
 struct MetaDataResponse_PBAInfoDefaultTypeInternal {
   constexpr MetaDataResponse_PBAInfoDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -613,6 +614,7 @@ const uint32_t TableStruct_storage_5fengine_5finstance_2eproto::offsets[] PROTOB
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::MetaDataResponse_PBAInfo, csd_pba_map_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::MetaDataResponse_PBAInfo, total_block_count_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::MetaDataResponse_PBAInfo, seek_pk_list_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::MetaDataResponse_SstCsdMapEntry_DoNotUse, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::MetaDataResponse_SstCsdMapEntry_DoNotUse, _internal_metadata_),
@@ -775,23 +777,23 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 119, -1, -1, sizeof(::StorageEngineInstance::Request)},
   { 128, 136, -1, sizeof(::StorageEngineInstance::MetaDataResponse_PBAInfo_CsdPbaMapEntry_DoNotUse)},
   { 138, -1, -1, sizeof(::StorageEngineInstance::MetaDataResponse_PBAInfo)},
-  { 146, 154, -1, sizeof(::StorageEngineInstance::MetaDataResponse_SstCsdMapEntry_DoNotUse)},
-  { 156, -1, -1, sizeof(::StorageEngineInstance::MetaDataResponse)},
-  { 164, -1, -1, sizeof(::StorageEngineInstance::CSDStatusList_CSDStatus)},
-  { 173, 181, -1, sizeof(::StorageEngineInstance::CSDStatusList_CsdStatusMapEntry_DoNotUse)},
-  { 183, -1, -1, sizeof(::StorageEngineInstance::CSDStatusList)},
-  { 190, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList_CSDMetric)},
-  { 203, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList)},
-  { 210, -1, -1, sizeof(::StorageEngineInstance::Response)},
-  { 217, -1, -1, sizeof(::StorageEngineInstance::Result)},
-  { 226, -1, -1, sizeof(::StorageEngineInstance::Chunk)},
-  { 234, -1, -1, sizeof(::StorageEngineInstance::LBA)},
-  { 242, -1, -1, sizeof(::StorageEngineInstance::LBARequest)},
-  { 249, -1, -1, sizeof(::StorageEngineInstance::PBA)},
-  { 257, -1, -1, sizeof(::StorageEngineInstance::PBAList)},
-  { 265, -1, -1, sizeof(::StorageEngineInstance::PBAResponse)},
-  { 272, -1, -1, sizeof(::StorageEngineInstance::WALRequest)},
-  { 281, -1, -1, sizeof(::StorageEngineInstance::WALResponse)},
+  { 147, 155, -1, sizeof(::StorageEngineInstance::MetaDataResponse_SstCsdMapEntry_DoNotUse)},
+  { 157, -1, -1, sizeof(::StorageEngineInstance::MetaDataResponse)},
+  { 165, -1, -1, sizeof(::StorageEngineInstance::CSDStatusList_CSDStatus)},
+  { 174, 182, -1, sizeof(::StorageEngineInstance::CSDStatusList_CsdStatusMapEntry_DoNotUse)},
+  { 184, -1, -1, sizeof(::StorageEngineInstance::CSDStatusList)},
+  { 191, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList_CSDMetric)},
+  { 204, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList)},
+  { 211, -1, -1, sizeof(::StorageEngineInstance::Response)},
+  { 218, -1, -1, sizeof(::StorageEngineInstance::Result)},
+  { 227, -1, -1, sizeof(::StorageEngineInstance::Chunk)},
+  { 235, -1, -1, sizeof(::StorageEngineInstance::LBA)},
+  { 243, -1, -1, sizeof(::StorageEngineInstance::LBARequest)},
+  { 250, -1, -1, sizeof(::StorageEngineInstance::PBA)},
+  { 258, -1, -1, sizeof(::StorageEngineInstance::PBAList)},
+  { 266, -1, -1, sizeof(::StorageEngineInstance::PBAResponse)},
+  { 273, -1, -1, sizeof(::StorageEngineInstance::WALRequest)},
+  { 282, -1, -1, sizeof(::StorageEngineInstance::WALResponse)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -905,87 +907,87 @@ const char descriptor_table_protodef_storage_5fengine_5finstance_2eproto[] PROTO
   "ngineInstance.Column:\0028\001\",\n\017TableBlockCo"
   "unt\022\031\n\021table_block_count\030\001 \001(\005\"@\n\007Reques"
   "t\022\020\n\010query_id\030\001 \001(\005\022\017\n\007work_id\030\002 \001(\005\022\022\n\n"
-  "table_name\030\003 \001(\t\"\375\002\n\020MetaDataResponse\022K\n"
+  "table_name\030\003 \001(\t\"\230\003\n\020MetaDataResponse\022K\n"
   "\013sst_csd_map\030\001 \003(\01326.StorageEngineInstan"
   "ce.MetaDataResponse.SstCsdMapEntry\022\020\n\010wa"
-  "l_json\030\002 \001(\t\032\246\001\n\007PBAInfo\022S\n\013csd_pba_map\030"
+  "l_json\030\002 \001(\t\032\301\001\n\007PBAInfo\022S\n\013csd_pba_map\030"
   "\001 \003(\0132>.StorageEngineInstance.MetaDataRe"
-  "sponse.PBAInfo.CsdPbaMapEntry\022\024\n\014seek_pk"
-  "_list\030\002 \003(\t\0320\n\016CsdPbaMapEntry\022\013\n\003key\030\001 \001"
-  "(\t\022\r\n\005value\030\002 \001(\t:\0028\001\032a\n\016SstCsdMapEntry\022"
-  "\013\n\003key\030\001 \001(\t\022>\n\005value\030\002 \001(\0132/.StorageEng"
-  "ineInstance.MetaDataResponse.PBAInfo:\0028\001"
-  "\"\201\002\n\rCSDStatusList\022N\n\016csd_status_map\030\001 \003"
-  "(\01326.StorageEngineInstance.CSDStatusList"
-  ".CsdStatusMapEntry\032;\n\tCSDStatus\022\n\n\002ip\030\001 "
-  "\001(\t\022\r\n\005score\030\002 \001(\002\022\023\n\013block_count\030\003 \001(\005\032"
-  "c\n\021CsdStatusMapEntry\022\013\n\003key\030\001 \001(\t\022=\n\005val"
-  "ue\030\002 \001(\0132..StorageEngineInstance.CSDStat"
-  "usList.CSDStatus:\0028\001\"\351\001\n\rCSDMetricList\022G"
-  "\n\017csd_metric_list\030\001 \003(\0132..StorageEngineI"
-  "nstance.CSDMetricList.CSDMetric\032\216\001\n\tCSDM"
-  "etric\022\n\n\002id\030\001 \001(\t\022\n\n\002ip\030\002 \001(\t\022\021\n\tcpu_usa"
-  "ge\030\003 \001(\002\022\024\n\014memory_usage\030\004 \001(\002\022\022\n\ndisk_u"
-  "sage\030\005 \001(\002\022\017\n\007network\030\006 \001(\002\022\033\n\023working_b"
-  "lock_count\030\007 \001(\005\"\031\n\010Response\022\r\n\005value\030\001 "
-  "\001(\t\"U\n\006Result\022\024\n\014query_result\030\001 \001(\t\022\031\n\021s"
-  "canned_row_count\030\002 \001(\005\022\032\n\022filtered_row_c"
-  "ount\030\003 \001(\005\"\'\n\005Chunk\022\016\n\006offset\030\001 \001(\003\022\016\n\006l"
-  "ength\030\002 \001(\005\"F\n\003LBA\022\021\n\tfile_name\030\001 \001(\t\022,\n"
-  "\006chunks\030\002 \003(\0132\034.StorageEngineInstance.Ch"
-  "unk\"\?\n\nLBARequest\0221\n\rfile_lba_list\030\001 \003(\013"
-  "2\032.StorageEngineInstance.LBA\"C\n\003PBA\022\016\n\006c"
-  "sd_id\030\001 \001(\t\022,\n\006chunks\030\002 \003(\0132\034.StorageEng"
-  "ineInstance.Chunk\"N\n\007PBAList\022\021\n\tfile_nam"
-  "e\030\001 \001(\t\0220\n\014csd_pba_list\030\002 \003(\0132\032.StorageE"
-  "ngineInstance.PBA\"D\n\013PBAResponse\0225\n\rfile"
-  "_csd_list\030\001 \003(\0132\036.StorageEngineInstance."
-  "PBAList\":\n\nWALRequest\022\017\n\007req_key\030\001 \001(\t\022\014"
-  "\n\004type\030\002 \001(\t\022\r\n\005value\030\003 \001(\t\"P\n\013WALRespon"
-  "se\022\023\n\013deleted_key\030\001 \003(\t\022\024\n\014inserted_key\030"
-  "\002 \003(\t\022\026\n\016inserted_value\030\003 \003(\t2\226\002\n\022Interf"
-  "aceContainer\022Z\n\nSetSnippet\022%.StorageEngi"
-  "neInstance.SnippetRequest\032\037.StorageEngin"
-  "eInstance.Response\"\000(\0010\001\022F\n\003Run\022\036.Storag"
-  "eEngineInstance.Request\032\035.StorageEngineI"
-  "nstance.Result\"\000\022\\\n\020SetSnippetAndRun\022%.S"
-  "torageEngineInstance.SnippetRequest\032\035.St"
-  "orageEngineInstance.Result\"\000(\0012\352\002\n\020Mergi"
-  "ngContainer\022W\n\013Aggregation\022%.StorageEngi"
-  "neInstance.SnippetRequest\032\037.StorageEngin"
-  "eInstance.Response\"\000\022V\n\nInitBuffer\022%.Sto"
-  "rageEngineInstance.SnippetRequest\032\037.Stor"
-  "ageEngineInstance.Response\"\000\022M\n\010EndQuery"
-  "\022\036.StorageEngineInstance.Request\032\037.Stora"
-  "geEngineInstance.Response\"\000\022V\n\016GetQueryR"
-  "esult\022\036.StorageEngineInstance.Request\032\"."
-  "StorageEngineInstance.QueryResult\"\0002\374\002\n\023"
-  "MonitoringContainer\022P\n\013SetMetaData\022\036.Sto"
-  "rageEngineInstance.Snippet\032\037.StorageEngi"
-  "neInstance.Response\"\000\022X\n\013GetMetaData\022\036.S"
-  "torageEngineInstance.Request\032\'.StorageEn"
-  "gineInstance.MetaDataResponse\"\000\022[\n\017GetCS"
-  "DBlockInfo\022\036.StorageEngineInstance.Reque"
-  "st\032&.StorageEngineInstance.TableBlockCou"
-  "nt\"\000\022\\\n\021SetCSDMetricsInfo\022$.StorageEngin"
-  "eInstance.CSDMetricList\032\037.StorageEngineI"
-  "nstance.Response\"\0002\276\001\n\023OffloadingContain"
-  "er\022M\n\010Schedule\022\036.StorageEngineInstance.S"
-  "nippet\032\037.StorageEngineInstance.Response\""
-  "\000\022X\n\rPushCSDMetric\022$.StorageEngineInstan"
-  "ce.CSDStatusList\032\037.StorageEngineInstance"
-  ".Response\"\0002g\n\016LBA2PBAManager\022U\n\nRequest"
-  "PBA\022!.StorageEngineInstance.LBARequest\032\""
-  ".StorageEngineInstance.PBAResponse\"\0002c\n\n"
-  "WALManager\022U\n\nRequestWAL\022!.StorageEngine"
-  "Instance.WALRequest\032\".StorageEngineInsta"
-  "nce.WALResponse\"\000B6\n\026io.grpc.snippet_sam"
-  "pleB\024snippet_sample_ProtoP\001\242\002\003SSPb\006proto"
-  "3"
+  "sponse.PBAInfo.CsdPbaMapEntry\022\031\n\021total_b"
+  "lock_count\030\002 \001(\005\022\024\n\014seek_pk_list\030\003 \003(\t\0320"
+  "\n\016CsdPbaMapEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002"
+  " \001(\t:\0028\001\032a\n\016SstCsdMapEntry\022\013\n\003key\030\001 \001(\t\022"
+  ">\n\005value\030\002 \001(\0132/.StorageEngineInstance.M"
+  "etaDataResponse.PBAInfo:\0028\001\"\201\002\n\rCSDStatu"
+  "sList\022N\n\016csd_status_map\030\001 \003(\01326.StorageE"
+  "ngineInstance.CSDStatusList.CsdStatusMap"
+  "Entry\032;\n\tCSDStatus\022\n\n\002ip\030\001 \001(\t\022\r\n\005score\030"
+  "\002 \001(\002\022\023\n\013block_count\030\003 \001(\005\032c\n\021CsdStatusM"
+  "apEntry\022\013\n\003key\030\001 \001(\t\022=\n\005value\030\002 \001(\0132..St"
+  "orageEngineInstance.CSDStatusList.CSDSta"
+  "tus:\0028\001\"\351\001\n\rCSDMetricList\022G\n\017csd_metric_"
+  "list\030\001 \003(\0132..StorageEngineInstance.CSDMe"
+  "tricList.CSDMetric\032\216\001\n\tCSDMetric\022\n\n\002id\030\001"
+  " \001(\t\022\n\n\002ip\030\002 \001(\t\022\021\n\tcpu_usage\030\003 \001(\002\022\024\n\014m"
+  "emory_usage\030\004 \001(\002\022\022\n\ndisk_usage\030\005 \001(\002\022\017\n"
+  "\007network\030\006 \001(\002\022\033\n\023working_block_count\030\007 "
+  "\001(\005\"\031\n\010Response\022\r\n\005value\030\001 \001(\t\"U\n\006Result"
+  "\022\024\n\014query_result\030\001 \001(\t\022\031\n\021scanned_row_co"
+  "unt\030\002 \001(\005\022\032\n\022filtered_row_count\030\003 \001(\005\"\'\n"
+  "\005Chunk\022\016\n\006offset\030\001 \001(\003\022\016\n\006length\030\002 \001(\005\"F"
+  "\n\003LBA\022\021\n\tfile_name\030\001 \001(\t\022,\n\006chunks\030\002 \003(\013"
+  "2\034.StorageEngineInstance.Chunk\"\?\n\nLBAReq"
+  "uest\0221\n\rfile_lba_list\030\001 \003(\0132\032.StorageEng"
+  "ineInstance.LBA\"C\n\003PBA\022\016\n\006csd_id\030\001 \001(\t\022,"
+  "\n\006chunks\030\002 \003(\0132\034.StorageEngineInstance.C"
+  "hunk\"N\n\007PBAList\022\021\n\tfile_name\030\001 \001(\t\0220\n\014cs"
+  "d_pba_list\030\002 \003(\0132\032.StorageEngineInstance"
+  ".PBA\"D\n\013PBAResponse\0225\n\rfile_csd_list\030\001 \003"
+  "(\0132\036.StorageEngineInstance.PBAList\":\n\nWA"
+  "LRequest\022\017\n\007req_key\030\001 \001(\t\022\014\n\004type\030\002 \001(\t\022"
+  "\r\n\005value\030\003 \001(\t\"P\n\013WALResponse\022\023\n\013deleted"
+  "_key\030\001 \003(\t\022\024\n\014inserted_key\030\002 \003(\t\022\026\n\016inse"
+  "rted_value\030\003 \003(\t2\226\002\n\022InterfaceContainer\022"
+  "Z\n\nSetSnippet\022%.StorageEngineInstance.Sn"
+  "ippetRequest\032\037.StorageEngineInstance.Res"
+  "ponse\"\000(\0010\001\022F\n\003Run\022\036.StorageEngineInstan"
+  "ce.Request\032\035.StorageEngineInstance.Resul"
+  "t\"\000\022\\\n\020SetSnippetAndRun\022%.StorageEngineI"
+  "nstance.SnippetRequest\032\035.StorageEngineIn"
+  "stance.Result\"\000(\0012\352\002\n\020MergingContainer\022W"
+  "\n\013Aggregation\022%.StorageEngineInstance.Sn"
+  "ippetRequest\032\037.StorageEngineInstance.Res"
+  "ponse\"\000\022V\n\nInitBuffer\022%.StorageEngineIns"
+  "tance.SnippetRequest\032\037.StorageEngineInst"
+  "ance.Response\"\000\022M\n\010EndQuery\022\036.StorageEng"
+  "ineInstance.Request\032\037.StorageEngineInsta"
+  "nce.Response\"\000\022V\n\016GetQueryResult\022\036.Stora"
+  "geEngineInstance.Request\032\".StorageEngine"
+  "Instance.QueryResult\"\0002\374\002\n\023MonitoringCon"
+  "tainer\022P\n\013SetMetaData\022\036.StorageEngineIns"
+  "tance.Snippet\032\037.StorageEngineInstance.Re"
+  "sponse\"\000\022X\n\013GetMetaData\022\036.StorageEngineI"
+  "nstance.Request\032\'.StorageEngineInstance."
+  "MetaDataResponse\"\000\022[\n\017GetCSDBlockInfo\022\036."
+  "StorageEngineInstance.Request\032&.StorageE"
+  "ngineInstance.TableBlockCount\"\000\022\\\n\021SetCS"
+  "DMetricsInfo\022$.StorageEngineInstance.CSD"
+  "MetricList\032\037.StorageEngineInstance.Respo"
+  "nse\"\0002\276\001\n\023OffloadingContainer\022M\n\010Schedul"
+  "e\022\036.StorageEngineInstance.Snippet\032\037.Stor"
+  "ageEngineInstance.Response\"\000\022X\n\rPushCSDM"
+  "etric\022$.StorageEngineInstance.CSDStatusL"
+  "ist\032\037.StorageEngineInstance.Response\"\0002g"
+  "\n\016LBA2PBAManager\022U\n\nRequestPBA\022!.Storage"
+  "EngineInstance.LBARequest\032\".StorageEngin"
+  "eInstance.PBAResponse\"\0002c\n\nWALManager\022U\n"
+  "\nRequestWAL\022!.StorageEngineInstance.WALR"
+  "equest\032\".StorageEngineInstance.WALRespon"
+  "se\"\000B6\n\026io.grpc.snippet_sampleB\024snippet_"
+  "sample_ProtoP\001\242\002\003SSPb\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_storage_5fengine_5finstance_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_storage_5fengine_5finstance_2eproto = {
-  false, false, 6041, descriptor_table_protodef_storage_5fengine_5finstance_2eproto, "storage_engine_instance.proto", 
+  false, false, 6068, descriptor_table_protodef_storage_5fengine_5finstance_2eproto, "storage_engine_instance.proto", 
   &descriptor_table_storage_5fengine_5finstance_2eproto_once, nullptr, 0, 32,
   schemas, file_default_instances, TableStruct_storage_5fengine_5finstance_2eproto::offsets,
   file_level_metadata_storage_5fengine_5finstance_2eproto, file_level_enum_descriptors_storage_5fengine_5finstance_2eproto, file_level_service_descriptors_storage_5fengine_5finstance_2eproto,
@@ -4783,10 +4785,12 @@ MetaDataResponse_PBAInfo::MetaDataResponse_PBAInfo(const MetaDataResponse_PBAInf
       seek_pk_list_(from.seek_pk_list_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   csd_pba_map_.MergeFrom(from.csd_pba_map_);
+  total_block_count_ = from.total_block_count_;
   // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.MetaDataResponse.PBAInfo)
 }
 
 inline void MetaDataResponse_PBAInfo::SharedCtor() {
+total_block_count_ = 0;
 }
 
 MetaDataResponse_PBAInfo::~MetaDataResponse_PBAInfo() {
@@ -4822,6 +4826,7 @@ void MetaDataResponse_PBAInfo::Clear() {
 
   csd_pba_map_.Clear();
   seek_pk_list_.Clear();
+  total_block_count_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -4844,9 +4849,17 @@ const char* MetaDataResponse_PBAInfo::_InternalParse(const char* ptr, ::PROTOBUF
         } else
           goto handle_unusual;
         continue;
-      // repeated string seek_pk_list = 2;
+      // int32 total_block_count = 2;
       case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          total_block_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated string seek_pk_list = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
           ptr -= 1;
           do {
             ptr += 1;
@@ -4855,7 +4868,7 @@ const char* MetaDataResponse_PBAInfo::_InternalParse(const char* ptr, ::PROTOBUF
             CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.MetaDataResponse.PBAInfo.seek_pk_list"));
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
         } else
           goto handle_unusual;
         continue;
@@ -4934,14 +4947,20 @@ uint8_t* MetaDataResponse_PBAInfo::_InternalSerialize(
     }
   }
 
-  // repeated string seek_pk_list = 2;
+  // int32 total_block_count = 2;
+  if (this->_internal_total_block_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_total_block_count(), target);
+  }
+
+  // repeated string seek_pk_list = 3;
   for (int i = 0, n = this->_internal_seek_pk_list_size(); i < n; i++) {
     const auto& s = this->_internal_seek_pk_list(i);
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       s.data(), static_cast<int>(s.length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "StorageEngineInstance.MetaDataResponse.PBAInfo.seek_pk_list");
-    target = stream->WriteString(2, s, target);
+    target = stream->WriteString(3, s, target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -4969,12 +4988,17 @@ size_t MetaDataResponse_PBAInfo::ByteSizeLong() const {
     total_size += MetaDataResponse_PBAInfo_CsdPbaMapEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
   }
 
-  // repeated string seek_pk_list = 2;
+  // repeated string seek_pk_list = 3;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(seek_pk_list_.size());
   for (int i = 0, n = seek_pk_list_.size(); i < n; i++) {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
       seek_pk_list_.Get(i));
+  }
+
+  // int32 total_block_count = 2;
+  if (this->_internal_total_block_count() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_total_block_count());
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -5001,6 +5025,9 @@ void MetaDataResponse_PBAInfo::MergeFrom(const MetaDataResponse_PBAInfo& from) {
 
   csd_pba_map_.MergeFrom(from.csd_pba_map_);
   seek_pk_list_.MergeFrom(from.seek_pk_list_);
+  if (from._internal_total_block_count() != 0) {
+    _internal_set_total_block_count(from._internal_total_block_count());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -5020,6 +5047,7 @@ void MetaDataResponse_PBAInfo::InternalSwap(MetaDataResponse_PBAInfo* other) {
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   csd_pba_map_.InternalSwap(&other->csd_pba_map_);
   seek_pk_list_.InternalSwap(&other->seek_pk_list_);
+  swap(total_block_count_, other->total_block_count_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata MetaDataResponse_PBAInfo::GetMetadata() const {

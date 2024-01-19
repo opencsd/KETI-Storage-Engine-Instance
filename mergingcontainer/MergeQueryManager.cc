@@ -76,7 +76,6 @@ void MergeQueryManager::RunSnippetWork(){
             Filtering(left_table_, snippet.table_filter(), target_table);
             break;
         }case StorageEngineInstance::SnippetRequest::INNER_JOIN_SNIPPET:{
-            
             InnerJoin_hash(left_table_, right_table_, snippet.table_filter(), target_table);
             break;
         }case StorageEngineInstance::SnippetRequest::LEFT_OUTER_JOIN_SNIPPET:{

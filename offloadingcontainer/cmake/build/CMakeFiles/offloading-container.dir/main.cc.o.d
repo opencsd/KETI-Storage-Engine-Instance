@@ -1,5 +1,5 @@
 CMakeFiles/offloading-container.dir/main.cc.o: \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/main.cc \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloadingcontainer/main.cc \
  /usr/include/stdc-predef.h /usr/include/c++/11/iostream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -165,7 +165,7 @@ CMakeFiles/offloading-container.dir/main.cc.o: \
  /usr/include/c++/11/bits/stl_vector.h \
  /usr/include/c++/11/bits/stl_bvector.h \
  /usr/include/c++/11/bits/vector.tcc \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/SnippetScheduler.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloadingcontainer/SnippetScheduler.h \
  /usr/include/c++/11/sstream /usr/include/c++/11/bits/sstream.tcc \
  /usr/include/string.h /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/sys/socket.h \
@@ -222,8 +222,8 @@ CMakeFiles/offloading-container.dir/main.cc.o: \
  /usr/include/rapidjson/stringbuffer.h \
  /usr/include/rapidjson/stringbuffer.h \
  /usr/include/rapidjson/prettywriter.h /usr/include/rapidjson/writer.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/cmake/build/storage_engine_instance.grpc.pb.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/cmake/build/storage_engine_instance.pb.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloadingcontainer/cmake/build/storage_engine_instance.grpc.pb.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloadingcontainer/cmake/build/storage_engine_instance.pb.h \
  /include/google/protobuf/port_def.inc \
  /include/google/protobuf/port_undef.inc \
  /include/google/protobuf/io/coded_stream.h /usr/include/c++/11/atomic \
@@ -411,16 +411,16 @@ CMakeFiles/offloading-container.dir/main.cc.o: \
  /include/grpcpp/impl/codegen/proto_buffer_reader.h \
  /include/grpcpp/impl/codegen/proto_buffer_writer.h \
  /include/grpcpp/impl/codegen/stub_options.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/../include/keti_type.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/../include/ip_config.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/CSDStatusManager.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/../include/keti_log.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloadingcontainer/../include/keti_type.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloadingcontainer/../include/ip_config.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloadingcontainer/CSDStatusManager.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloadingcontainer/../include/keti_log.h \
  /usr/include/x86_64-linux-gnu/sys/ipc.h \
  /usr/include/x86_64-linux-gnu/bits/ipctypes.h \
  /usr/include/x86_64-linux-gnu/bits/ipc.h \
  /usr/include/x86_64-linux-gnu/sys/msg.h \
  /usr/include/x86_64-linux-gnu/bits/msq.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/../include/httplib.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloadingcontainer/../include/httplib.h \
  /usr/include/ifaddrs.h /usr/include/net/if.h /usr/include/netdb.h \
  /usr/include/rpc/netdb.h \
  /usr/include/x86_64-linux-gnu/bits/types/sigevent_t.h \
@@ -488,7 +488,7 @@ CMakeFiles/offloading-container.dir/main.cc.o: \
  /usr/include/c++/11/bits/regex_executor.h \
  /usr/include/c++/11/bits/regex_executor.tcc \
  /usr/include/x86_64-linux-gnu/sys/stat.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/offloadingcontainer/../include/CalculateUsage.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloadingcontainer/../include/CalculateUsage.h \
  /include/grpcpp/grpcpp.h /include/grpc/grpc.h \
  /include/grpc/support/port_platform.h /include/grpc/byte_buffer.h \
  /include/grpc/slice_buffer.h /include/grpc/slice.h \

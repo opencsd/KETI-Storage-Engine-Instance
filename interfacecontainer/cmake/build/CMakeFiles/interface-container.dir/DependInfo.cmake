@@ -8,12 +8,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/main.cc" "CMakeFiles/interface-container.dir/main.cc.o" "gcc" "CMakeFiles/interface-container.dir/main.cc.o.d"
+  "/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/main.cc" "CMakeFiles/interface-container.dir/main.cc.o" "gcc" "CMakeFiles/interface-container.dir/main.cc.o.d"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/root/workspace/Storage-Engine-Instance/storage-engine-instance-container/interfacecontainer/cmake/build/CMakeFiles/ss_grpc_proto.dir/DependInfo.cmake"
+  "/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/interfacecontainer/cmake/build/CMakeFiles/ss_grpc_proto.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

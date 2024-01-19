@@ -1,7 +1,7 @@
 CMakeFiles/ss_grpc_proto.dir/storage_engine_instance.pb.cc.o: \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/cmake/build/storage_engine_instance.pb.cc \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/cmake/build/storage_engine_instance.pb.cc \
  /usr/include/stdc-predef.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/cmake/build/storage_engine_instance.pb.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/cmake/build/storage_engine_instance.pb.h \
  /usr/include/c++/11/limits \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

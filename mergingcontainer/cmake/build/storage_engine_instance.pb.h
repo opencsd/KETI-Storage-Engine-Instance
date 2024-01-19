@@ -3318,7 +3318,8 @@ class MetaDataResponse_PBAInfo final :
 
   enum : int {
     kCsdPbaMapFieldNumber = 1,
-    kSeekPkListFieldNumber = 2,
+    kSeekPkListFieldNumber = 3,
+    kTotalBlockCountFieldNumber = 2,
   };
   // map<string, string> csd_pba_map = 1;
   int csd_pba_map_size() const;
@@ -3337,7 +3338,7 @@ class MetaDataResponse_PBAInfo final :
   ::PROTOBUF_NAMESPACE_ID::Map< std::string, std::string >*
       mutable_csd_pba_map();
 
-  // repeated string seek_pk_list = 2;
+  // repeated string seek_pk_list = 3;
   int seek_pk_list_size() const;
   private:
   int _internal_seek_pk_list_size() const;
@@ -3361,6 +3362,15 @@ class MetaDataResponse_PBAInfo final :
   std::string* _internal_add_seek_pk_list();
   public:
 
+  // int32 total_block_count = 2;
+  void clear_total_block_count();
+  int32_t total_block_count() const;
+  void set_total_block_count(int32_t value);
+  private:
+  int32_t _internal_total_block_count() const;
+  void _internal_set_total_block_count(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:StorageEngineInstance.MetaDataResponse.PBAInfo)
  private:
   class _Internal;
@@ -3374,6 +3384,7 @@ class MetaDataResponse_PBAInfo final :
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING> csd_pba_map_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> seek_pk_list_;
+  int32_t total_block_count_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_storage_5fengine_5finstance_2eproto;
 };
@@ -8317,7 +8328,27 @@ MetaDataResponse_PBAInfo::mutable_csd_pba_map() {
   return _internal_mutable_csd_pba_map();
 }
 
-// repeated string seek_pk_list = 2;
+// int32 total_block_count = 2;
+inline void MetaDataResponse_PBAInfo::clear_total_block_count() {
+  total_block_count_ = 0;
+}
+inline int32_t MetaDataResponse_PBAInfo::_internal_total_block_count() const {
+  return total_block_count_;
+}
+inline int32_t MetaDataResponse_PBAInfo::total_block_count() const {
+  // @@protoc_insertion_point(field_get:StorageEngineInstance.MetaDataResponse.PBAInfo.total_block_count)
+  return _internal_total_block_count();
+}
+inline void MetaDataResponse_PBAInfo::_internal_set_total_block_count(int32_t value) {
+  
+  total_block_count_ = value;
+}
+inline void MetaDataResponse_PBAInfo::set_total_block_count(int32_t value) {
+  _internal_set_total_block_count(value);
+  // @@protoc_insertion_point(field_set:StorageEngineInstance.MetaDataResponse.PBAInfo.total_block_count)
+}
+
+// repeated string seek_pk_list = 3;
 inline int MetaDataResponse_PBAInfo::_internal_seek_pk_list_size() const {
   return seek_pk_list_.size();
 }

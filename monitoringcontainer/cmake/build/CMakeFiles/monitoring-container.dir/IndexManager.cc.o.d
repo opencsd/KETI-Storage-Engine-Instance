@@ -1,7 +1,7 @@
 CMakeFiles/monitoring-container.dir/IndexManager.cc.o: \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/IndexManager.cc \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/IndexManager.cc \
  /usr/include/stdc-predef.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/IndexManager.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/IndexManager.h \
  /usr/include/c++/11/vector /usr/include/c++/11/bits/stl_algobase.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -223,8 +223,8 @@ CMakeFiles/monitoring-container.dir/IndexManager.cc.o: \
  /usr/include/rapidjson/stringbuffer.h \
  /usr/include/rapidjson/stringbuffer.h \
  /usr/include/rapidjson/prettywriter.h /usr/include/rapidjson/writer.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/cmake/build/storage_engine_instance.grpc.pb.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/cmake/build/storage_engine_instance.pb.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/cmake/build/storage_engine_instance.grpc.pb.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/cmake/build/storage_engine_instance.pb.h \
  /include/google/protobuf/port_def.inc \
  /include/google/protobuf/port_undef.inc \
  /include/google/protobuf/io/coded_stream.h /usr/include/c++/11/atomic \
@@ -413,13 +413,13 @@ CMakeFiles/monitoring-container.dir/IndexManager.cc.o: \
  /include/grpcpp/impl/codegen/proto_buffer_reader.h \
  /include/grpcpp/impl/codegen/proto_buffer_writer.h \
  /include/grpcpp/impl/codegen/stub_options.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/../include/keti_log.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/../include/keti_log.h \
  /usr/include/x86_64-linux-gnu/sys/ipc.h \
  /usr/include/x86_64-linux-gnu/bits/ipctypes.h \
  /usr/include/x86_64-linux-gnu/bits/ipc.h \
  /usr/include/x86_64-linux-gnu/sys/msg.h \
  /usr/include/x86_64-linux-gnu/bits/msq.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/../include/httplib.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/../include/httplib.h \
  /usr/include/arpa/inet.h /usr/include/netinet/in.h \
  /usr/include/x86_64-linux-gnu/sys/socket.h \
  /usr/include/x86_64-linux-gnu/bits/socket.h \
@@ -484,7 +484,7 @@ CMakeFiles/monitoring-container.dir/IndexManager.cc.o: \
  /usr/include/c++/11/bits/regex_executor.h \
  /usr/include/c++/11/bits/regex_executor.tcc \
  /usr/include/x86_64-linux-gnu/sys/stat.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/../include/ip_config.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/../include/internal_queue.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/../include/ip_config.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/../include/internal_queue.h \
  /usr/include/c++/11/queue /usr/include/c++/11/bits/stl_queue.h \
- /root/workspace/Storage-Engine-Instance/storage-engine-instance-container/monitoringcontainer/TableManager.h
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoringcontainer/TableManager.h
