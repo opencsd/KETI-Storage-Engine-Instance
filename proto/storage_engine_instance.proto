@@ -7,33 +7,27 @@ option objc_class_prefix = "SSP";
 
 package StorageEngineInstance;
 
-service InterfaceContainer {
-  rpc SetSnippet (stream SnippetRequest) returns (stream Response) {}
-  rpc Run (Request) returns (Result) {}
-  rpc SetSnippetAndRun (stream SnippetRequest) returns (Result) {}
-}
-
-service MergingContainer {
+service MergingModule {
   rpc Aggregation (SnippetRequest) returns (Response) {}
-  rpc InitBuffer (SnippetRequest) returns (Response) {}
   rpc EndQuery (Request) returns (Response) {}
   rpc GetQueryResult (Request) returns (QueryResult) {}
 }
 
-service MonitoringContainer {
-  rpc SetMetaData (Snippet) returns (Response) {}
-  rpc GetMetaData (Request) returns (MetaDataResponse) {}
-  rpc GetCSDBlockInfo (Request) returns (TableBlockCount) {}
-  rpc SetCSDMetricsInfo (CSDMetricList) returns (Response) {}
+service MonitoringModule {
+  rpc GetDataFileInfo (Request) returns (DataFileInfo) {}
+  rpc GetSnippetMetaData (Request) returns (SnippetMetaData) {}
+  rpc SyncMetaDataManager (DBInfo) returns (Response) {}
+  rpc SyncDBFileMonitoring (DataFileInfo) returns (Response) {}
 }
 
-service OffloadingContainer {
-  rpc Schedule (Snippet) returns (Response) {}
-  rpc PushCSDMetric (CSDStatusList) returns (Response) {}
+service OffloadingModule {
+  rpc QueryOffload (stream SnippetRequest) returns (QueryStringResult) {}
+  rpc PushCSDMetric (CSDMetricList) returns (Response) {}
 }
 
-service LBA2PBAManager {
-  rpc RequestPBA (LBARequest) returns (PBAResponse) {}
+service StorageManager {
+  rpc RequestPBA (LBA2PBARequest) returns (LBA2PBAResponse) {}
+  rpc InitDBFileMonitoring (SSTList) returns (DataFileInfo) {}
 }
 
 service WALManager {
@@ -94,7 +88,7 @@ message Snippet {
       KETI_ALL = 15;
       KETI_SUBSTRING = 16;
     }
-    message FilterValue{
+    message FilterValue {
       repeated ValueType type = 1;
       repeated string value = 2;
     }
@@ -119,7 +113,7 @@ message Snippet {
     repeated ValueType value_type = 3;    
   }
   message Order {
-    enum OrderDirection{
+    enum OrderDirection {
       ASC = 0; //DEFAULT
       DESC = 1;
     }
@@ -154,56 +148,73 @@ message Snippet {
   repeated Filter having = 18;
 }
 
-message Column {
-  enum ColType {
-    TYPE_EMPTY = 0;
-    TYPE_STRING = 1;
-    TYPE_INT = 2;
-    TYPE_FLOAT = 3;
-  }
-  ColType col_type = 2;
-  repeated string string_col = 3;
-  repeated int32 int_col = 4;
-  repeated double double_col = 5;
+message Request {
+  int32 query_id = 1;
+  int32 work_id = 2;
+  string db_name = 3;
+  string table_name = 4;
+  int32 table_index_number = 5;
+  map<string, string> sst_csd_map = 6;
+}
+
+message Response {
+  string value = 1;
 }
 
 message QueryResult {
+  message Column {
+    enum ColType {
+      TYPE_EMPTY = 0;
+      TYPE_STRING = 1;
+      TYPE_INT = 2;
+      TYPE_FLOAT = 3;
+    }
+    ColType col_type = 2;
+    repeated string string_col = 3;
+    repeated int32 int_col = 4;
+    repeated double double_col = 5;
+  }
   map<string, Column> query_result = 1;
   int32 row_count = 2;
   int32 scanned_row_count = 3;
   int32 filtered_row_count = 4; 
 }
 
-message TableBlockCount {
-  int32 table_block_count = 1;
+message QueryStringResult {
+  string query_result = 1;
+  int32 scanned_row_count = 2;
+  int32 filtered_row_count = 3; 
 }
 
-message Request{
-  int32 query_id = 1;
-  int32 work_id = 2;
-  string table_name = 3;
-}
-
-message MetaDataResponse {
-  message PBAInfo {
-    map<string,string> csd_pba_map = 1;
-    int32 total_block_count = 2;
-    repeated string seek_pk_list = 3;
+message DBInfo {
+  message Table {
+    string table_name = 1;
+    int32 table_index_number = 2;
+    repeated string sst_list = 3;
   }
-  map<string,PBAInfo> sst_csd_map = 1;
-  string wal_json = 2;
+  map<string, Table> db_list = 1;
 }
 
-message CSDStatusList {
-  message CSDStatus{
-    string ip = 1;
-    float score = 2;
-    int32 block_count = 3;
+message DataFileInfo {
+  message CSD {
+    repeated string csd_id = 1;
+    repeated bool is_primary = 2;
   }
-  map<string,CSDStatus> csd_status_map = 1;
+  map<string,CSD> sst_csd_map = 1;
 }
 
-message CSDMetricList{
+message SSTList {
+  repeated string sst_list = 1;
+}
+
+message SnippetMetaData {
+  map<string,string> sst_pba_map = 1;
+  int32 table_total_block_count = 2;
+  string wal_deleted_key_json = 3;
+  repeated string wal_inserted_row_json = 4;
+}
+
+message CSDMetricList {
   message CSDMetric{
     string id = 1;
     string ip = 2;
@@ -212,52 +223,31 @@ message CSDMetricList{
     float disk_usage = 5;
     float network = 6;
     int32 working_block_count = 7;
+    float score = 8;
   }
   repeated CSDMetric csd_metric_list = 1;
 }
 
-message Response {
-  string value = 1;
+message LBA2PBARequest {
+  int32 table_index_number = 1;
+  map<string,string> sst_csd_map = 2;
 }
 
-message Result {
-  string query_result = 1;
-  int32 scanned_row_count = 2;
-  int32 filtered_row_count = 3; 
-}
-
-message Chunk{
-  int64 offset = 1;
-  int32 length = 2;
-}
-
-message LBA{
-  string file_name = 1;
-  repeated Chunk chunks = 2;
-}
-
-message LBARequest{
-  repeated LBA file_lba_list = 1;
-}
-
-message PBA{
-  string csd_id = 1;
-  repeated Chunk chunks = 2;
-}
-
-message PBAList{
-  string file_name = 1;
-  repeated PBA csd_pba_list = 2;
-}
-
-message PBAResponse{
-  repeated PBAList file_csd_list = 1;
+message LBA2PBAResponse {
+  message Chunk {
+    int64 offset = 1;
+    int32 length = 2;
+  }
+  message PBA {
+    string csd_id = 1;
+    repeated Chunk chunks = 2;
+  }
+  map<string,PBA> sst_pba_map = 1;
 }
 
 message WALRequest {
-  string req_key = 1;
-  string type = 2;
-  string value = 3;
+  string db_name = 1;
+  string table_name = 2;
 }
 
 message WALResponse {
