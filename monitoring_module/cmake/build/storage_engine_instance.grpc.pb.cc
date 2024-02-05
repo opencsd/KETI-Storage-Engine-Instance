@@ -21,6 +21,102 @@
 #include <grpcpp/impl/codegen/sync_stream.h>
 namespace StorageEngineInstance {
 
+static const char* StorageEngineInterface_method_names[] = {
+  "/StorageEngineInstance.StorageEngineInterface/GenericQueryInterface",
+  "/StorageEngineInstance.StorageEngineInterface/OffloadingQueryInterface",
+};
+
+std::unique_ptr< StorageEngineInterface::Stub> StorageEngineInterface::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
+  (void)options;
+  std::unique_ptr< StorageEngineInterface::Stub> stub(new StorageEngineInterface::Stub(channel, options));
+  return stub;
+}
+
+StorageEngineInterface::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
+  : channel_(channel), rpcmethod_GenericQueryInterface_(StorageEngineInterface_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_OffloadingQueryInterface_(StorageEngineInterface_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::CLIENT_STREAMING, channel)
+  {}
+
+::grpc::Status StorageEngineInterface::Stub::GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Response* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_GenericQueryInterface_, context, request, response);
+}
+
+void StorageEngineInterface::Stub::async::GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GenericQueryInterface_, context, request, response, std::move(f));
+}
+
+void StorageEngineInterface::Stub::async::GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GenericQueryInterface_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* StorageEngineInterface::Stub::PrepareAsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Response, ::StorageEngineInstance::Request, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_GenericQueryInterface_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* StorageEngineInterface::Stub::AsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncGenericQueryInterfaceRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::ClientWriter< ::StorageEngineInstance::SnippetRequest>* StorageEngineInterface::Stub::OffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) {
+  return ::grpc::internal::ClientWriterFactory< ::StorageEngineInstance::SnippetRequest>::Create(channel_.get(), rpcmethod_OffloadingQueryInterface_, context, response);
+}
+
+void StorageEngineInterface::Stub::async::OffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) {
+  ::grpc::internal::ClientCallbackWriterFactory< ::StorageEngineInstance::SnippetRequest>::Create(stub_->channel_.get(), stub_->rpcmethod_OffloadingQueryInterface_, context, response, reactor);
+}
+
+::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>* StorageEngineInterface::Stub::AsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) {
+  return ::grpc::internal::ClientAsyncWriterFactory< ::StorageEngineInstance::SnippetRequest>::Create(channel_.get(), cq, rpcmethod_OffloadingQueryInterface_, context, response, true, tag);
+}
+
+::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>* StorageEngineInterface::Stub::PrepareAsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncWriterFactory< ::StorageEngineInstance::SnippetRequest>::Create(channel_.get(), cq, rpcmethod_OffloadingQueryInterface_, context, response, false, nullptr);
+}
+
+StorageEngineInterface::Service::Service() {
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      StorageEngineInterface_method_names[0],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< StorageEngineInterface::Service, ::StorageEngineInstance::Request, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](StorageEngineInterface::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::StorageEngineInstance::Request* req,
+             ::StorageEngineInstance::Response* resp) {
+               return service->GenericQueryInterface(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      StorageEngineInterface_method_names[1],
+      ::grpc::internal::RpcMethod::CLIENT_STREAMING,
+      new ::grpc::internal::ClientStreamingHandler< StorageEngineInterface::Service, ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::QueryStringResult>(
+          [](StorageEngineInterface::Service* service,
+             ::grpc::ServerContext* ctx,
+             ::grpc::ServerReader<::StorageEngineInstance::SnippetRequest>* reader,
+             ::StorageEngineInstance::QueryStringResult* resp) {
+               return service->OffloadingQueryInterface(ctx, reader, resp);
+             }, this)));
+}
+
+StorageEngineInterface::Service::~Service() {
+}
+
+::grpc::Status StorageEngineInterface::Service::GenericQueryInterface(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status StorageEngineInterface::Service::OffloadingQueryInterface(::grpc::ServerContext* context, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* reader, ::StorageEngineInstance::QueryStringResult* response) {
+  (void) context;
+  (void) reader;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+
 static const char* MergingModule_method_names[] = {
   "/StorageEngineInstance.MergingModule/Aggregation",
   "/StorageEngineInstance.MergingModule/EndQuery",
@@ -354,7 +450,7 @@ MonitoringModule::Service::~Service() {
 
 
 static const char* OffloadingModule_method_names[] = {
-  "/StorageEngineInstance.OffloadingModule/QueryOffload",
+  "/StorageEngineInstance.OffloadingModule/Scheduling",
   "/StorageEngineInstance.OffloadingModule/PushCSDMetric",
 };
 
@@ -365,24 +461,31 @@ std::unique_ptr< OffloadingModule::Stub> OffloadingModule::NewStub(const std::sh
 }
 
 OffloadingModule::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
-  : channel_(channel), rpcmethod_QueryOffload_(OffloadingModule_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::CLIENT_STREAMING, channel)
+  : channel_(channel), rpcmethod_Scheduling_(OffloadingModule_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PushCSDMetric_(OffloadingModule_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
-::grpc::ClientWriter< ::StorageEngineInstance::SnippetRequest>* OffloadingModule::Stub::QueryOffloadRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) {
-  return ::grpc::internal::ClientWriterFactory< ::StorageEngineInstance::SnippetRequest>::Create(channel_.get(), rpcmethod_QueryOffload_, context, response);
+::grpc::Status OffloadingModule::Stub::Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Response* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_Scheduling_, context, request, response);
 }
 
-void OffloadingModule::Stub::async::QueryOffload(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) {
-  ::grpc::internal::ClientCallbackWriterFactory< ::StorageEngineInstance::SnippetRequest>::Create(stub_->channel_.get(), stub_->rpcmethod_QueryOffload_, context, response, reactor);
+void OffloadingModule::Stub::async::Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Scheduling_, context, request, response, std::move(f));
 }
 
-::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>* OffloadingModule::Stub::AsyncQueryOffloadRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) {
-  return ::grpc::internal::ClientAsyncWriterFactory< ::StorageEngineInstance::SnippetRequest>::Create(channel_.get(), cq, rpcmethod_QueryOffload_, context, response, true, tag);
+void OffloadingModule::Stub::async::Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_Scheduling_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>* OffloadingModule::Stub::PrepareAsyncQueryOffloadRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncWriterFactory< ::StorageEngineInstance::SnippetRequest>::Create(channel_.get(), cq, rpcmethod_QueryOffload_, context, response, false, nullptr);
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* OffloadingModule::Stub::PrepareAsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Response, ::StorageEngineInstance::Snippet, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_Scheduling_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* OffloadingModule::Stub::AsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncSchedulingRaw(context, request, cq);
+  result->StartCall();
+  return result;
 }
 
 ::grpc::Status OffloadingModule::Stub::PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::StorageEngineInstance::Response* response) {
@@ -411,13 +514,13 @@ void OffloadingModule::Stub::async::PushCSDMetric(::grpc::ClientContext* context
 OffloadingModule::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       OffloadingModule_method_names[0],
-      ::grpc::internal::RpcMethod::CLIENT_STREAMING,
-      new ::grpc::internal::ClientStreamingHandler< OffloadingModule::Service, ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::QueryStringResult>(
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< OffloadingModule::Service, ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](OffloadingModule::Service* service,
              ::grpc::ServerContext* ctx,
-             ::grpc::ServerReader<::StorageEngineInstance::SnippetRequest>* reader,
-             ::StorageEngineInstance::QueryStringResult* resp) {
-               return service->QueryOffload(ctx, reader, resp);
+             const ::StorageEngineInstance::Snippet* req,
+             ::StorageEngineInstance::Response* resp) {
+               return service->Scheduling(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       OffloadingModule_method_names[1],
@@ -434,9 +537,9 @@ OffloadingModule::Service::Service() {
 OffloadingModule::Service::~Service() {
 }
 
-::grpc::Status OffloadingModule::Service::QueryOffload(::grpc::ServerContext* context, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* reader, ::StorageEngineInstance::QueryStringResult* response) {
+::grpc::Status OffloadingModule::Service::Scheduling(::grpc::ServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response) {
   (void) context;
-  (void) reader;
+  (void) request;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }

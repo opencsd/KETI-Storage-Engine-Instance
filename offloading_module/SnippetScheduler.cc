@@ -25,12 +25,12 @@ void Scheduler::scheduling(Snippet snippet, map<string,string> bestcsd){
     for (const auto entry : snippetMetaData.sst_pba_map()) {
         snippetbuf.Clear();
         string sst = entry.first;
-        serialize(snippetbuf, snippet, entry.second, bestcsd[entry.first]);
+        serialize(snippetbuf, snippet, bestcsd[entry.first], entry.second);
         sendSnippetToCSD(snippetbuf.GetString());
     }
 }
 
-void Scheduler::serialize(StringBuffer &snippetbuf, Snippet &snippet, string pba, string csd) {
+void Scheduler::serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd, string pba) {
     Writer<StringBuffer> writer(snippetbuf);
 
     writer.StartObject();
@@ -265,7 +265,6 @@ map<string,string> Scheduler::getBestCSD(DataFileInfo dataFileInfo){
         }
     }
     
-
     return bestCSDList;
 }
 

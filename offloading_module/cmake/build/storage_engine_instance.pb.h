@@ -1997,26 +1997,27 @@ class Snippet final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kTableNameFieldNumber = 3,
-    kTableColFieldNumber = 4,
-    kTableFilterFieldNumber = 5,
-    kTableOffsetFieldNumber = 7,
-    kTableOfflenFieldNumber = 8,
-    kTableDatatypeFieldNumber = 9,
-    kColumnAliasFieldNumber = 11,
-    kColumnProjectionFieldNumber = 12,
-    kColumnFilteringFieldNumber = 13,
-    kGroupByFieldNumber = 14,
-    kHavingFieldNumber = 18,
-    kTableAliasFieldNumber = 10,
-    kDependencyFieldNumber = 6,
-    kOrderByFieldNumber = 15,
-    kLimitFieldNumber = 16,
-    kQueryIDFieldNumber = 1,
-    kWorkIDFieldNumber = 2,
-    kPkNumFieldNumber = 17,
+    kTableNameFieldNumber = 4,
+    kTableColFieldNumber = 5,
+    kTableFilterFieldNumber = 6,
+    kTableOffsetFieldNumber = 8,
+    kTableOfflenFieldNumber = 9,
+    kTableDatatypeFieldNumber = 10,
+    kColumnAliasFieldNumber = 12,
+    kColumnProjectionFieldNumber = 13,
+    kColumnFilteringFieldNumber = 14,
+    kGroupByFieldNumber = 15,
+    kHavingFieldNumber = 19,
+    kDbNameFieldNumber = 1,
+    kTableAliasFieldNumber = 11,
+    kDependencyFieldNumber = 7,
+    kOrderByFieldNumber = 16,
+    kLimitFieldNumber = 17,
+    kQueryIDFieldNumber = 2,
+    kWorkIDFieldNumber = 3,
+    kPkNumFieldNumber = 18,
   };
-  // repeated string table_name = 3;
+  // repeated string table_name = 4;
   int table_name_size() const;
   private:
   int _internal_table_name_size() const;
@@ -2040,7 +2041,7 @@ class Snippet final :
   std::string* _internal_add_table_name();
   public:
 
-  // repeated string table_col = 4;
+  // repeated string table_col = 5;
   int table_col_size() const;
   private:
   int _internal_table_col_size() const;
@@ -2064,7 +2065,7 @@ class Snippet final :
   std::string* _internal_add_table_col();
   public:
 
-  // repeated .StorageEngineInstance.Snippet.Filter table_filter = 5;
+  // repeated .StorageEngineInstance.Snippet.Filter table_filter = 6;
   int table_filter_size() const;
   private:
   int _internal_table_filter_size() const;
@@ -2082,7 +2083,7 @@ class Snippet final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Filter >&
       table_filter() const;
 
-  // repeated int32 table_offset = 7;
+  // repeated int32 table_offset = 8;
   int table_offset_size() const;
   private:
   int _internal_table_offset_size() const;
@@ -2104,7 +2105,7 @@ class Snippet final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
       mutable_table_offset();
 
-  // repeated int32 table_offlen = 8;
+  // repeated int32 table_offlen = 9;
   int table_offlen_size() const;
   private:
   int _internal_table_offlen_size() const;
@@ -2126,7 +2127,7 @@ class Snippet final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
       mutable_table_offlen();
 
-  // repeated int32 table_datatype = 9;
+  // repeated int32 table_datatype = 10;
   int table_datatype_size() const;
   private:
   int _internal_table_datatype_size() const;
@@ -2148,7 +2149,7 @@ class Snippet final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< int32_t >*
       mutable_table_datatype();
 
-  // repeated string column_alias = 11;
+  // repeated string column_alias = 12;
   int column_alias_size() const;
   private:
   int _internal_column_alias_size() const;
@@ -2172,7 +2173,7 @@ class Snippet final :
   std::string* _internal_add_column_alias();
   public:
 
-  // repeated .StorageEngineInstance.Snippet.Projection column_projection = 12;
+  // repeated .StorageEngineInstance.Snippet.Projection column_projection = 13;
   int column_projection_size() const;
   private:
   int _internal_column_projection_size() const;
@@ -2190,7 +2191,7 @@ class Snippet final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Projection >&
       column_projection() const;
 
-  // repeated string column_filtering = 13;
+  // repeated string column_filtering = 14;
   int column_filtering_size() const;
   private:
   int _internal_column_filtering_size() const;
@@ -2214,7 +2215,7 @@ class Snippet final :
   std::string* _internal_add_column_filtering();
   public:
 
-  // repeated string group_by = 14;
+  // repeated string group_by = 15;
   int group_by_size() const;
   private:
   int _internal_group_by_size() const;
@@ -2238,7 +2239,7 @@ class Snippet final :
   std::string* _internal_add_group_by();
   public:
 
-  // repeated .StorageEngineInstance.Snippet.Filter having = 18;
+  // repeated .StorageEngineInstance.Snippet.Filter having = 19;
   int having_size() const;
   private:
   int _internal_having_size() const;
@@ -2256,7 +2257,21 @@ class Snippet final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Filter >&
       having() const;
 
-  // string table_alias = 10;
+  // string db_name = 1;
+  void clear_db_name();
+  const std::string& db_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_db_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_db_name();
+  PROTOBUF_NODISCARD std::string* release_db_name();
+  void set_allocated_db_name(std::string* db_name);
+  private:
+  const std::string& _internal_db_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_db_name(const std::string& value);
+  std::string* _internal_mutable_db_name();
+  public:
+
+  // string table_alias = 11;
   void clear_table_alias();
   const std::string& table_alias() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2270,7 +2285,7 @@ class Snippet final :
   std::string* _internal_mutable_table_alias();
   public:
 
-  // .StorageEngineInstance.Snippet.Dependency dependency = 6;
+  // .StorageEngineInstance.Snippet.Dependency dependency = 7;
   bool has_dependency() const;
   private:
   bool _internal_has_dependency() const;
@@ -2288,7 +2303,7 @@ class Snippet final :
       ::StorageEngineInstance::Snippet_Dependency* dependency);
   ::StorageEngineInstance::Snippet_Dependency* unsafe_arena_release_dependency();
 
-  // .StorageEngineInstance.Snippet.Order order_by = 15;
+  // .StorageEngineInstance.Snippet.Order order_by = 16;
   bool has_order_by() const;
   private:
   bool _internal_has_order_by() const;
@@ -2306,7 +2321,7 @@ class Snippet final :
       ::StorageEngineInstance::Snippet_Order* order_by);
   ::StorageEngineInstance::Snippet_Order* unsafe_arena_release_order_by();
 
-  // .StorageEngineInstance.Snippet.Limit limit = 16;
+  // .StorageEngineInstance.Snippet.Limit limit = 17;
   bool has_limit() const;
   private:
   bool _internal_has_limit() const;
@@ -2324,7 +2339,7 @@ class Snippet final :
       ::StorageEngineInstance::Snippet_Limit* limit);
   ::StorageEngineInstance::Snippet_Limit* unsafe_arena_release_limit();
 
-  // int32 query_ID = 1;
+  // int32 query_ID = 2;
   void clear_query_id();
   int32_t query_id() const;
   void set_query_id(int32_t value);
@@ -2333,7 +2348,7 @@ class Snippet final :
   void _internal_set_query_id(int32_t value);
   public:
 
-  // int32 work_ID = 2;
+  // int32 work_ID = 3;
   void clear_work_id();
   int32_t work_id() const;
   void set_work_id(int32_t value);
@@ -2342,7 +2357,7 @@ class Snippet final :
   void _internal_set_work_id(int32_t value);
   public:
 
-  // int32 pk_num = 17;
+  // int32 pk_num = 18;
   void clear_pk_num();
   int32_t pk_num() const;
   void set_pk_num(int32_t value);
@@ -2372,6 +2387,7 @@ class Snippet final :
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> column_filtering_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> group_by_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::Snippet_Filter > having_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr db_name_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr table_alias_;
   ::StorageEngineInstance::Snippet_Dependency* dependency_;
   ::StorageEngineInstance::Snippet_Order* order_by_;
@@ -6897,7 +6913,58 @@ inline void Snippet_Limit::set_length(int32_t value) {
 
 // Snippet
 
-// int32 query_ID = 1;
+// string db_name = 1;
+inline void Snippet::clear_db_name() {
+  db_name_.ClearToEmpty();
+}
+inline const std::string& Snippet::db_name() const {
+  // @@protoc_insertion_point(field_get:StorageEngineInstance.Snippet.db_name)
+  return _internal_db_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void Snippet::set_db_name(ArgT0&& arg0, ArgT... args) {
+ 
+ db_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:StorageEngineInstance.Snippet.db_name)
+}
+inline std::string* Snippet::mutable_db_name() {
+  std::string* _s = _internal_mutable_db_name();
+  // @@protoc_insertion_point(field_mutable:StorageEngineInstance.Snippet.db_name)
+  return _s;
+}
+inline const std::string& Snippet::_internal_db_name() const {
+  return db_name_.Get();
+}
+inline void Snippet::_internal_set_db_name(const std::string& value) {
+  
+  db_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* Snippet::_internal_mutable_db_name() {
+  
+  return db_name_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* Snippet::release_db_name() {
+  // @@protoc_insertion_point(field_release:StorageEngineInstance.Snippet.db_name)
+  return db_name_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void Snippet::set_allocated_db_name(std::string* db_name) {
+  if (db_name != nullptr) {
+    
+  } else {
+    
+  }
+  db_name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), db_name,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (db_name_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    db_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.Snippet.db_name)
+}
+
+// int32 query_ID = 2;
 inline void Snippet::clear_query_id() {
   query_id_ = 0;
 }
@@ -6917,7 +6984,7 @@ inline void Snippet::set_query_id(int32_t value) {
   // @@protoc_insertion_point(field_set:StorageEngineInstance.Snippet.query_ID)
 }
 
-// int32 work_ID = 2;
+// int32 work_ID = 3;
 inline void Snippet::clear_work_id() {
   work_id_ = 0;
 }
@@ -6937,7 +7004,7 @@ inline void Snippet::set_work_id(int32_t value) {
   // @@protoc_insertion_point(field_set:StorageEngineInstance.Snippet.work_ID)
 }
 
-// repeated string table_name = 3;
+// repeated string table_name = 4;
 inline int Snippet::_internal_table_name_size() const {
   return table_name_.size();
 }
@@ -7012,7 +7079,7 @@ Snippet::mutable_table_name() {
   return &table_name_;
 }
 
-// repeated string table_col = 4;
+// repeated string table_col = 5;
 inline int Snippet::_internal_table_col_size() const {
   return table_col_.size();
 }
@@ -7087,7 +7154,7 @@ Snippet::mutable_table_col() {
   return &table_col_;
 }
 
-// repeated .StorageEngineInstance.Snippet.Filter table_filter = 5;
+// repeated .StorageEngineInstance.Snippet.Filter table_filter = 6;
 inline int Snippet::_internal_table_filter_size() const {
   return table_filter_.size();
 }
@@ -7127,7 +7194,7 @@ Snippet::table_filter() const {
   return table_filter_;
 }
 
-// .StorageEngineInstance.Snippet.Dependency dependency = 6;
+// .StorageEngineInstance.Snippet.Dependency dependency = 7;
 inline bool Snippet::_internal_has_dependency() const {
   return this != internal_default_instance() && dependency_ != nullptr;
 }
@@ -7217,7 +7284,7 @@ inline void Snippet::set_allocated_dependency(::StorageEngineInstance::Snippet_D
   // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.Snippet.dependency)
 }
 
-// repeated int32 table_offset = 7;
+// repeated int32 table_offset = 8;
 inline int Snippet::_internal_table_offset_size() const {
   return table_offset_.size();
 }
@@ -7264,7 +7331,7 @@ Snippet::mutable_table_offset() {
   return _internal_mutable_table_offset();
 }
 
-// repeated int32 table_offlen = 8;
+// repeated int32 table_offlen = 9;
 inline int Snippet::_internal_table_offlen_size() const {
   return table_offlen_.size();
 }
@@ -7311,7 +7378,7 @@ Snippet::mutable_table_offlen() {
   return _internal_mutable_table_offlen();
 }
 
-// repeated int32 table_datatype = 9;
+// repeated int32 table_datatype = 10;
 inline int Snippet::_internal_table_datatype_size() const {
   return table_datatype_.size();
 }
@@ -7358,7 +7425,7 @@ Snippet::mutable_table_datatype() {
   return _internal_mutable_table_datatype();
 }
 
-// string table_alias = 10;
+// string table_alias = 11;
 inline void Snippet::clear_table_alias() {
   table_alias_.ClearToEmpty();
 }
@@ -7409,7 +7476,7 @@ inline void Snippet::set_allocated_table_alias(std::string* table_alias) {
   // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.Snippet.table_alias)
 }
 
-// repeated string column_alias = 11;
+// repeated string column_alias = 12;
 inline int Snippet::_internal_column_alias_size() const {
   return column_alias_.size();
 }
@@ -7484,7 +7551,7 @@ Snippet::mutable_column_alias() {
   return &column_alias_;
 }
 
-// repeated .StorageEngineInstance.Snippet.Projection column_projection = 12;
+// repeated .StorageEngineInstance.Snippet.Projection column_projection = 13;
 inline int Snippet::_internal_column_projection_size() const {
   return column_projection_.size();
 }
@@ -7524,7 +7591,7 @@ Snippet::column_projection() const {
   return column_projection_;
 }
 
-// repeated string column_filtering = 13;
+// repeated string column_filtering = 14;
 inline int Snippet::_internal_column_filtering_size() const {
   return column_filtering_.size();
 }
@@ -7599,7 +7666,7 @@ Snippet::mutable_column_filtering() {
   return &column_filtering_;
 }
 
-// repeated string group_by = 14;
+// repeated string group_by = 15;
 inline int Snippet::_internal_group_by_size() const {
   return group_by_.size();
 }
@@ -7674,7 +7741,7 @@ Snippet::mutable_group_by() {
   return &group_by_;
 }
 
-// .StorageEngineInstance.Snippet.Order order_by = 15;
+// .StorageEngineInstance.Snippet.Order order_by = 16;
 inline bool Snippet::_internal_has_order_by() const {
   return this != internal_default_instance() && order_by_ != nullptr;
 }
@@ -7764,7 +7831,7 @@ inline void Snippet::set_allocated_order_by(::StorageEngineInstance::Snippet_Ord
   // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.Snippet.order_by)
 }
 
-// .StorageEngineInstance.Snippet.Limit limit = 16;
+// .StorageEngineInstance.Snippet.Limit limit = 17;
 inline bool Snippet::_internal_has_limit() const {
   return this != internal_default_instance() && limit_ != nullptr;
 }
@@ -7854,7 +7921,7 @@ inline void Snippet::set_allocated_limit(::StorageEngineInstance::Snippet_Limit*
   // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.Snippet.limit)
 }
 
-// int32 pk_num = 17;
+// int32 pk_num = 18;
 inline void Snippet::clear_pk_num() {
   pk_num_ = 0;
 }
@@ -7874,7 +7941,7 @@ inline void Snippet::set_pk_num(int32_t value) {
   // @@protoc_insertion_point(field_set:StorageEngineInstance.Snippet.pk_num)
 }
 
-// repeated .StorageEngineInstance.Snippet.Filter having = 18;
+// repeated .StorageEngineInstance.Snippet.Filter having = 19;
 inline int Snippet::_internal_having_size() const {
   return having_.size();
 }

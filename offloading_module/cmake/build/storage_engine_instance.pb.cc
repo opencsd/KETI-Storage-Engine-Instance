@@ -132,6 +132,7 @@ constexpr Snippet::Snippet(
   , column_filtering_()
   , group_by_()
   , having_()
+  , db_name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , table_alias_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , dependency_(nullptr)
   , order_by_(nullptr)
@@ -557,6 +558,7 @@ const uint32_t TableStruct_storage_5fengine_5finstance_2eproto::offsets[] PROTOB
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::Snippet, db_name_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::Snippet, query_id_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::Snippet, work_id_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::Snippet, table_name_),
@@ -820,32 +822,32 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 42, -1, -1, sizeof(::StorageEngineInstance::Snippet_Dependency)},
   { 50, -1, -1, sizeof(::StorageEngineInstance::Snippet_Limit)},
   { 58, -1, -1, sizeof(::StorageEngineInstance::Snippet)},
-  { 82, 90, -1, sizeof(::StorageEngineInstance::Request_SstCsdMapEntry_DoNotUse)},
-  { 92, -1, -1, sizeof(::StorageEngineInstance::Request)},
-  { 104, -1, -1, sizeof(::StorageEngineInstance::Response)},
-  { 111, -1, -1, sizeof(::StorageEngineInstance::QueryResult_Column)},
-  { 121, 129, -1, sizeof(::StorageEngineInstance::QueryResult_QueryResultEntry_DoNotUse)},
-  { 131, -1, -1, sizeof(::StorageEngineInstance::QueryResult)},
-  { 141, -1, -1, sizeof(::StorageEngineInstance::QueryStringResult)},
-  { 150, -1, -1, sizeof(::StorageEngineInstance::DBInfo_Table)},
-  { 159, 167, -1, sizeof(::StorageEngineInstance::DBInfo_DbListEntry_DoNotUse)},
-  { 169, -1, -1, sizeof(::StorageEngineInstance::DBInfo)},
-  { 176, -1, -1, sizeof(::StorageEngineInstance::DataFileInfo_CSD)},
-  { 184, 192, -1, sizeof(::StorageEngineInstance::DataFileInfo_SstCsdMapEntry_DoNotUse)},
-  { 194, -1, -1, sizeof(::StorageEngineInstance::DataFileInfo)},
-  { 201, -1, -1, sizeof(::StorageEngineInstance::SSTList)},
-  { 208, 216, -1, sizeof(::StorageEngineInstance::SnippetMetaData_SstPbaMapEntry_DoNotUse)},
-  { 218, -1, -1, sizeof(::StorageEngineInstance::SnippetMetaData)},
-  { 228, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList_CSDMetric)},
-  { 242, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList)},
-  { 249, 257, -1, sizeof(::StorageEngineInstance::LBA2PBARequest_SstCsdMapEntry_DoNotUse)},
-  { 259, -1, -1, sizeof(::StorageEngineInstance::LBA2PBARequest)},
-  { 267, -1, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse_Chunk)},
-  { 275, -1, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse_PBA)},
-  { 283, 291, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse_SstPbaMapEntry_DoNotUse)},
-  { 293, -1, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse)},
-  { 300, -1, -1, sizeof(::StorageEngineInstance::WALRequest)},
-  { 308, -1, -1, sizeof(::StorageEngineInstance::WALResponse)},
+  { 83, 91, -1, sizeof(::StorageEngineInstance::Request_SstCsdMapEntry_DoNotUse)},
+  { 93, -1, -1, sizeof(::StorageEngineInstance::Request)},
+  { 105, -1, -1, sizeof(::StorageEngineInstance::Response)},
+  { 112, -1, -1, sizeof(::StorageEngineInstance::QueryResult_Column)},
+  { 122, 130, -1, sizeof(::StorageEngineInstance::QueryResult_QueryResultEntry_DoNotUse)},
+  { 132, -1, -1, sizeof(::StorageEngineInstance::QueryResult)},
+  { 142, -1, -1, sizeof(::StorageEngineInstance::QueryStringResult)},
+  { 151, -1, -1, sizeof(::StorageEngineInstance::DBInfo_Table)},
+  { 160, 168, -1, sizeof(::StorageEngineInstance::DBInfo_DbListEntry_DoNotUse)},
+  { 170, -1, -1, sizeof(::StorageEngineInstance::DBInfo)},
+  { 177, -1, -1, sizeof(::StorageEngineInstance::DataFileInfo_CSD)},
+  { 185, 193, -1, sizeof(::StorageEngineInstance::DataFileInfo_SstCsdMapEntry_DoNotUse)},
+  { 195, -1, -1, sizeof(::StorageEngineInstance::DataFileInfo)},
+  { 202, -1, -1, sizeof(::StorageEngineInstance::SSTList)},
+  { 209, 217, -1, sizeof(::StorageEngineInstance::SnippetMetaData_SstPbaMapEntry_DoNotUse)},
+  { 219, -1, -1, sizeof(::StorageEngineInstance::SnippetMetaData)},
+  { 229, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList_CSDMetric)},
+  { 243, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList)},
+  { 250, 258, -1, sizeof(::StorageEngineInstance::LBA2PBARequest_SstCsdMapEntry_DoNotUse)},
+  { 260, -1, -1, sizeof(::StorageEngineInstance::LBA2PBARequest)},
+  { 268, -1, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse_Chunk)},
+  { 276, -1, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse_PBA)},
+  { 284, 292, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse_SstPbaMapEntry_DoNotUse)},
+  { 294, -1, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse)},
+  { 301, -1, -1, sizeof(::StorageEngineInstance::WALRequest)},
+  { 309, -1, -1, sizeof(::StorageEngineInstance::WALResponse)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -898,152 +900,157 @@ const char descriptor_table_protodef_storage_5fengine_5finstance_2eproto[] PROTO
   "\005\022\026\n\022CROSS_JOIN_SNIPPET\020\006\022\021\n\rUNION_SNIPP"
   "ET\020\007\022\016\n\nIN_SNIPPET\020\010\022!\n\035DEPENDENCY_INNER"
   "_JOIN_SNIPPET\020\t\022\034\n\030DEPENDENCY_EXIST_SNIP"
-  "PET\020\n\022\031\n\025DEPENDENCY_IN_SNIPPET\020\013\"\226\017\n\007Sni"
-  "ppet\022\020\n\010query_ID\030\001 \001(\005\022\017\n\007work_ID\030\002 \001(\005\022"
-  "\022\n\ntable_name\030\003 \003(\t\022\021\n\ttable_col\030\004 \003(\t\022;"
-  "\n\014table_filter\030\005 \003(\0132%.StorageEngineInst"
-  "ance.Snippet.Filter\022=\n\ndependency\030\006 \001(\0132"
-  ").StorageEngineInstance.Snippet.Dependen"
-  "cy\022\024\n\014table_offset\030\007 \003(\005\022\024\n\014table_offlen"
-  "\030\010 \003(\005\022\026\n\016table_datatype\030\t \003(\005\022\023\n\013table_"
-  "alias\030\n \001(\t\022\024\n\014column_alias\030\013 \003(\t\022D\n\021col"
-  "umn_projection\030\014 \003(\0132).StorageEngineInst"
-  "ance.Snippet.Projection\022\030\n\020column_filter"
-  "ing\030\r \003(\t\022\020\n\010group_by\030\016 \003(\t\0226\n\010order_by\030"
-  "\017 \001(\0132$.StorageEngineInstance.Snippet.Or"
-  "der\0223\n\005limit\030\020 \001(\0132$.StorageEngineInstan"
-  "ce.Snippet.Limit\022\016\n\006pk_num\030\021 \001(\005\0225\n\006havi"
-  "ng\030\022 \003(\0132%.StorageEngineInstance.Snippet"
-  ".Filter\032\241\004\n\006Filter\022=\n\002LV\030\001 \001(\01321.Storage"
-  "EngineInstance.Snippet.Filter.FilterValu"
-  "e\022@\n\010Operator\030\002 \001(\0162..StorageEngineInsta"
-  "nce.Snippet.Filter.OperType\022=\n\002RV\030\003 \001(\0132"
-  "1.StorageEngineInstance.Snippet.Filter.F"
-  "ilterValue\032T\n\013FilterValue\0226\n\004type\030\001 \003(\0162"
-  "(.StorageEngineInstance.Snippet.ValueTyp"
-  "e\022\r\n\005value\030\002 \003(\t\"\200\002\n\010OperType\022\020\n\014KETI_DE"
-  "FAULT\020\000\022\013\n\007KETI_GE\020\001\022\013\n\007KETI_LE\020\002\022\013\n\007KET"
-  "I_GT\020\003\022\013\n\007KETI_LT\020\004\022\013\n\007KETI_ET\020\005\022\013\n\007KETI"
-  "_NE\020\006\022\r\n\tKETI_LIKE\020\007\022\020\n\014KETI_BETWEEN\020\010\022\013"
-  "\n\007KETI_IN\020\t\022\013\n\007KETI_IS\020\n\022\016\n\nKETI_ISNOT\020\013"
-  "\022\014\n\010KETI_NOT\020\014\022\014\n\010KETI_AND\020\r\022\013\n\007KETI_OR\020"
-  "\016\022\014\n\010KETI_ALL\020\017\022\022\n\016KETI_SUBSTRING\020\020\032\234\002\n\n"
-  "Projection\022I\n\013select_type\030\001 \001(\01624.Storag"
-  "eEngineInstance.Snippet.Projection.Selec"
-  "tType\022\r\n\005value\030\002 \003(\t\022<\n\nvalue_type\030\003 \003(\016"
-  "2(.StorageEngineInstance.Snippet.ValueTy"
-  "pe\"v\n\nSelectType\022\016\n\nCOLUMNNAME\020\000\022\007\n\003SUM\020"
-  "\001\022\007\n\003AVG\020\002\022\t\n\005COUNT\020\003\022\r\n\tCOUNTSTAR\020\004\022\021\n\r"
-  "COUNTDISTINCT\020\005\022\007\n\003TOP\020\006\022\007\n\003MIN\020\007\022\007\n\003MAX"
-  "\020\010\032\211\001\n\005Order\022F\n\tascending\030\001 \003(\01623.Storag"
-  "eEngineInstance.Snippet.Order.OrderDirec"
-  "tion\022\023\n\013column_name\030\002 \003(\t\"#\n\016OrderDirect"
-  "ion\022\007\n\003ASC\020\000\022\010\n\004DESC\020\001\032\230\001\n\nDependency\022H\n"
-  "\025dependency_projection\030\001 \003(\0132).StorageEn"
-  "gineInstance.Snippet.Projection\022@\n\021depen"
-  "dency_filter\030\002 \003(\0132%.StorageEngineInstan"
-  "ce.Snippet.Filter\032\'\n\005Limit\022\016\n\006offset\030\001 \001"
-  "(\005\022\016\n\006length\030\002 \001(\005\"\234\001\n\tValueType\022\010\n\004INT8"
-  "\020\000\022\t\n\005INT16\020\001\022\t\n\005INT32\020\002\022\t\n\005INT64\020\003\022\013\n\007F"
-  "LOAT32\020\004\022\013\n\007FLOAT64\020\005\022\013\n\007NUMERIC\020\006\022\010\n\004DA"
-  "TE\020\007\022\r\n\tTIMESTAMP\020\010\022\n\n\006STRING\020\t\022\n\n\006COLUM"
-  "N\020\n\022\014\n\010OPERATOR\020\013\"\343\001\n\007Request\022\020\n\010query_i"
-  "d\030\001 \001(\005\022\017\n\007work_id\030\002 \001(\005\022\017\n\007db_name\030\003 \001("
-  "\t\022\022\n\ntable_name\030\004 \001(\t\022\032\n\022table_index_num"
-  "ber\030\005 \001(\005\022B\n\013sst_csd_map\030\006 \003(\0132-.Storage"
-  "EngineInstance.Request.SstCsdMapEntry\0320\n"
-  "\016SstCsdMapEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 "
-  "\001(\t:\0028\001\"\031\n\010Response\022\r\n\005value\030\001 \001(\t\"\324\003\n\013Q"
-  "ueryResult\022I\n\014query_result\030\001 \003(\01323.Stora"
-  "geEngineInstance.QueryResult.QueryResult"
-  "Entry\022\021\n\trow_count\030\002 \001(\005\022\031\n\021scanned_row_"
-  "count\030\003 \001(\005\022\032\n\022filtered_row_count\030\004 \001(\005\032"
-  "\320\001\n\006Column\022C\n\010col_type\030\002 \001(\01621.StorageEn"
-  "gineInstance.QueryResult.Column.ColType\022"
-  "\022\n\nstring_col\030\003 \003(\t\022\017\n\007int_col\030\004 \003(\005\022\022\n\n"
-  "double_col\030\005 \003(\001\"H\n\007ColType\022\016\n\nTYPE_EMPT"
-  "Y\020\000\022\017\n\013TYPE_STRING\020\001\022\014\n\010TYPE_INT\020\002\022\016\n\nTY"
-  "PE_FLOAT\020\003\032]\n\020QueryResultEntry\022\013\n\003key\030\001 "
-  "\001(\t\0228\n\005value\030\002 \001(\0132).StorageEngineInstan"
-  "ce.QueryResult.Column:\0028\001\"`\n\021QueryString"
-  "Result\022\024\n\014query_result\030\001 \001(\t\022\031\n\021scanned_"
-  "row_count\030\002 \001(\005\022\032\n\022filtered_row_count\030\003 "
-  "\001(\005\"\343\001\n\006DBInfo\022:\n\007db_list\030\001 \003(\0132).Storag"
-  "eEngineInstance.DBInfo.DbListEntry\032I\n\005Ta"
-  "ble\022\022\n\ntable_name\030\001 \001(\t\022\032\n\022table_index_n"
-  "umber\030\002 \001(\005\022\020\n\010sst_list\030\003 \003(\t\032R\n\013DbListE"
-  "ntry\022\013\n\003key\030\001 \001(\t\0222\n\005value\030\002 \001(\0132#.Stora"
-  "geEngineInstance.DBInfo.Table:\0028\001\"\335\001\n\014Da"
-  "taFileInfo\022G\n\013sst_csd_map\030\001 \003(\01322.Storag"
-  "eEngineInstance.DataFileInfo.SstCsdMapEn"
-  "try\032)\n\003CSD\022\016\n\006csd_id\030\001 \003(\t\022\022\n\nis_primary"
-  "\030\002 \003(\010\032Y\n\016SstCsdMapEntry\022\013\n\003key\030\001 \001(\t\0226\n"
-  "\005value\030\002 \001(\0132\'.StorageEngineInstance.Dat"
-  "aFileInfo.CSD:\0028\001\"\033\n\007SSTList\022\020\n\010sst_list"
-  "\030\001 \003(\t\"\355\001\n\017SnippetMetaData\022J\n\013sst_pba_ma"
-  "p\030\001 \003(\01325.StorageEngineInstance.SnippetM"
-  "etaData.SstPbaMapEntry\022\037\n\027table_total_bl"
-  "ock_count\030\002 \001(\005\022\034\n\024wal_deleted_key_json\030"
-  "\003 \001(\t\022\035\n\025wal_inserted_row_json\030\004 \003(\t\0320\n\016"
-  "SstPbaMapEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001"
-  "(\t:\0028\001\"\370\001\n\rCSDMetricList\022G\n\017csd_metric_l"
-  "ist\030\001 \003(\0132..StorageEngineInstance.CSDMet"
-  "ricList.CSDMetric\032\235\001\n\tCSDMetric\022\n\n\002id\030\001 "
-  "\001(\t\022\n\n\002ip\030\002 \001(\t\022\021\n\tcpu_usage\030\003 \001(\002\022\024\n\014me"
-  "mory_usage\030\004 \001(\002\022\022\n\ndisk_usage\030\005 \001(\002\022\017\n\007"
-  "network\030\006 \001(\002\022\033\n\023working_block_count\030\007 \001"
-  "(\005\022\r\n\005score\030\010 \001(\002\"\251\001\n\016LBA2PBARequest\022\032\n\022"
-  "table_index_number\030\001 \001(\005\022I\n\013sst_csd_map\030"
-  "\002 \003(\01324.StorageEngineInstance.LBA2PBAReq"
-  "uest.SstCsdMapEntry\0320\n\016SstCsdMapEntry\022\013\n"
-  "\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\271\002\n\017LBA2PB"
-  "AResponse\022J\n\013sst_pba_map\030\001 \003(\01325.Storage"
-  "EngineInstance.LBA2PBAResponse.SstPbaMap"
-  "Entry\032\'\n\005Chunk\022\016\n\006offset\030\001 \001(\003\022\016\n\006length"
-  "\030\002 \001(\005\032S\n\003PBA\022\016\n\006csd_id\030\001 \001(\t\022<\n\006chunks\030"
-  "\002 \003(\0132,.StorageEngineInstance.LBA2PBARes"
-  "ponse.Chunk\032\\\n\016SstPbaMapEntry\022\013\n\003key\030\001 \001"
-  "(\t\0229\n\005value\030\002 \001(\0132*.StorageEngineInstanc"
-  "e.LBA2PBAResponse.PBA:\0028\001\"1\n\nWALRequest\022"
-  "\017\n\007db_name\030\001 \001(\t\022\022\n\ntable_name\030\002 \001(\t\"P\n\013"
-  "WALResponse\022\023\n\013deleted_key\030\001 \003(\t\022\024\n\014inse"
-  "rted_key\030\002 \003(\t\022\026\n\016inserted_value\030\003 \003(\t2\217"
-  "\002\n\rMergingModule\022W\n\013Aggregation\022%.Storag"
-  "eEngineInstance.SnippetRequest\032\037.Storage"
-  "EngineInstance.Response\"\000\022M\n\010EndQuery\022\036."
-  "StorageEngineInstance.Request\032\037.StorageE"
-  "ngineInstance.Response\"\000\022V\n\016GetQueryResu"
-  "lt\022\036.StorageEngineInstance.Request\032\".Sto"
-  "rageEngineInstance.QueryResult\"\0002\205\003\n\020Mon"
-  "itoringModule\022X\n\017GetDataFileInfo\022\036.Stora"
-  "geEngineInstance.Request\032#.StorageEngine"
-  "Instance.DataFileInfo\"\000\022^\n\022GetSnippetMet"
-  "aData\022\036.StorageEngineInstance.Request\032&."
-  "StorageEngineInstance.SnippetMetaData\"\000\022"
-  "W\n\023SyncMetaDataManager\022\035.StorageEngineIn"
-  "stance.DBInfo\032\037.StorageEngineInstance.Re"
-  "sponse\"\000\022^\n\024SyncDBFileMonitoring\022#.Stora"
-  "geEngineInstance.DataFileInfo\032\037.StorageE"
-  "ngineInstance.Response\"\0002\321\001\n\020OffloadingM"
-  "odule\022c\n\014QueryOffload\022%.StorageEngineIns"
-  "tance.SnippetRequest\032(.StorageEngineInst"
-  "ance.QueryStringResult\"\000(\001\022X\n\rPushCSDMet"
-  "ric\022$.StorageEngineInstance.CSDMetricLis"
-  "t\032\037.StorageEngineInstance.Response\"\0002\316\001\n"
-  "\016StorageManager\022]\n\nRequestPBA\022%.StorageE"
-  "ngineInstance.LBA2PBARequest\032&.StorageEn"
-  "gineInstance.LBA2PBAResponse\"\000\022]\n\024InitDB"
-  "FileMonitoring\022\036.StorageEngineInstance.S"
-  "STList\032#.StorageEngineInstance.DataFileI"
-  "nfo\"\0002c\n\nWALManager\022U\n\nRequestWAL\022!.Stor"
-  "ageEngineInstance.WALRequest\032\".StorageEn"
-  "gineInstance.WALResponse\"\000B6\n\026io.grpc.sn"
-  "ippet_sampleB\024snippet_sample_ProtoP\001\242\002\003S"
-  "SPb\006proto3"
+  "PET\020\n\022\031\n\025DEPENDENCY_IN_SNIPPET\020\013\"\247\017\n\007Sni"
+  "ppet\022\017\n\007db_name\030\001 \001(\t\022\020\n\010query_ID\030\002 \001(\005\022"
+  "\017\n\007work_ID\030\003 \001(\005\022\022\n\ntable_name\030\004 \003(\t\022\021\n\t"
+  "table_col\030\005 \003(\t\022;\n\014table_filter\030\006 \003(\0132%."
+  "StorageEngineInstance.Snippet.Filter\022=\n\n"
+  "dependency\030\007 \001(\0132).StorageEngineInstance"
+  ".Snippet.Dependency\022\024\n\014table_offset\030\010 \003("
+  "\005\022\024\n\014table_offlen\030\t \003(\005\022\026\n\016table_datatyp"
+  "e\030\n \003(\005\022\023\n\013table_alias\030\013 \001(\t\022\024\n\014column_a"
+  "lias\030\014 \003(\t\022D\n\021column_projection\030\r \003(\0132)."
+  "StorageEngineInstance.Snippet.Projection"
+  "\022\030\n\020column_filtering\030\016 \003(\t\022\020\n\010group_by\030\017"
+  " \003(\t\0226\n\010order_by\030\020 \001(\0132$.StorageEngineIn"
+  "stance.Snippet.Order\0223\n\005limit\030\021 \001(\0132$.St"
+  "orageEngineInstance.Snippet.Limit\022\016\n\006pk_"
+  "num\030\022 \001(\005\0225\n\006having\030\023 \003(\0132%.StorageEngin"
+  "eInstance.Snippet.Filter\032\241\004\n\006Filter\022=\n\002L"
+  "V\030\001 \001(\01321.StorageEngineInstance.Snippet."
+  "Filter.FilterValue\022@\n\010Operator\030\002 \001(\0162..S"
+  "torageEngineInstance.Snippet.Filter.Oper"
+  "Type\022=\n\002RV\030\003 \001(\01321.StorageEngineInstance"
+  ".Snippet.Filter.FilterValue\032T\n\013FilterVal"
+  "ue\0226\n\004type\030\001 \003(\0162(.StorageEngineInstance"
+  ".Snippet.ValueType\022\r\n\005value\030\002 \003(\t\"\200\002\n\010Op"
+  "erType\022\020\n\014KETI_DEFAULT\020\000\022\013\n\007KETI_GE\020\001\022\013\n"
+  "\007KETI_LE\020\002\022\013\n\007KETI_GT\020\003\022\013\n\007KETI_LT\020\004\022\013\n\007"
+  "KETI_ET\020\005\022\013\n\007KETI_NE\020\006\022\r\n\tKETI_LIKE\020\007\022\020\n"
+  "\014KETI_BETWEEN\020\010\022\013\n\007KETI_IN\020\t\022\013\n\007KETI_IS\020"
+  "\n\022\016\n\nKETI_ISNOT\020\013\022\014\n\010KETI_NOT\020\014\022\014\n\010KETI_"
+  "AND\020\r\022\013\n\007KETI_OR\020\016\022\014\n\010KETI_ALL\020\017\022\022\n\016KETI"
+  "_SUBSTRING\020\020\032\234\002\n\nProjection\022I\n\013select_ty"
+  "pe\030\001 \001(\01624.StorageEngineInstance.Snippet"
+  ".Projection.SelectType\022\r\n\005value\030\002 \003(\t\022<\n"
+  "\nvalue_type\030\003 \003(\0162(.StorageEngineInstanc"
+  "e.Snippet.ValueType\"v\n\nSelectType\022\016\n\nCOL"
+  "UMNNAME\020\000\022\007\n\003SUM\020\001\022\007\n\003AVG\020\002\022\t\n\005COUNT\020\003\022\r"
+  "\n\tCOUNTSTAR\020\004\022\021\n\rCOUNTDISTINCT\020\005\022\007\n\003TOP\020"
+  "\006\022\007\n\003MIN\020\007\022\007\n\003MAX\020\010\032\211\001\n\005Order\022F\n\tascendi"
+  "ng\030\001 \003(\01623.StorageEngineInstance.Snippet"
+  ".Order.OrderDirection\022\023\n\013column_name\030\002 \003"
+  "(\t\"#\n\016OrderDirection\022\007\n\003ASC\020\000\022\010\n\004DESC\020\001\032"
+  "\230\001\n\nDependency\022H\n\025dependency_projection\030"
+  "\001 \003(\0132).StorageEngineInstance.Snippet.Pr"
+  "ojection\022@\n\021dependency_filter\030\002 \003(\0132%.St"
+  "orageEngineInstance.Snippet.Filter\032\'\n\005Li"
+  "mit\022\016\n\006offset\030\001 \001(\005\022\016\n\006length\030\002 \001(\005\"\234\001\n\t"
+  "ValueType\022\010\n\004INT8\020\000\022\t\n\005INT16\020\001\022\t\n\005INT32\020"
+  "\002\022\t\n\005INT64\020\003\022\013\n\007FLOAT32\020\004\022\013\n\007FLOAT64\020\005\022\013"
+  "\n\007NUMERIC\020\006\022\010\n\004DATE\020\007\022\r\n\tTIMESTAMP\020\010\022\n\n\006"
+  "STRING\020\t\022\n\n\006COLUMN\020\n\022\014\n\010OPERATOR\020\013\"\343\001\n\007R"
+  "equest\022\020\n\010query_id\030\001 \001(\005\022\017\n\007work_id\030\002 \001("
+  "\005\022\017\n\007db_name\030\003 \001(\t\022\022\n\ntable_name\030\004 \001(\t\022\032"
+  "\n\022table_index_number\030\005 \001(\005\022B\n\013sst_csd_ma"
+  "p\030\006 \003(\0132-.StorageEngineInstance.Request."
+  "SstCsdMapEntry\0320\n\016SstCsdMapEntry\022\013\n\003key\030"
+  "\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\031\n\010Response\022\r\n\005"
+  "value\030\001 \001(\t\"\324\003\n\013QueryResult\022I\n\014query_res"
+  "ult\030\001 \003(\01323.StorageEngineInstance.QueryR"
+  "esult.QueryResultEntry\022\021\n\trow_count\030\002 \001("
+  "\005\022\031\n\021scanned_row_count\030\003 \001(\005\022\032\n\022filtered"
+  "_row_count\030\004 \001(\005\032\320\001\n\006Column\022C\n\010col_type\030"
+  "\002 \001(\01621.StorageEngineInstance.QueryResul"
+  "t.Column.ColType\022\022\n\nstring_col\030\003 \003(\t\022\017\n\007"
+  "int_col\030\004 \003(\005\022\022\n\ndouble_col\030\005 \003(\001\"H\n\007Col"
+  "Type\022\016\n\nTYPE_EMPTY\020\000\022\017\n\013TYPE_STRING\020\001\022\014\n"
+  "\010TYPE_INT\020\002\022\016\n\nTYPE_FLOAT\020\003\032]\n\020QueryResu"
+  "ltEntry\022\013\n\003key\030\001 \001(\t\0228\n\005value\030\002 \001(\0132).St"
+  "orageEngineInstance.QueryResult.Column:\002"
+  "8\001\"`\n\021QueryStringResult\022\024\n\014query_result\030"
+  "\001 \001(\t\022\031\n\021scanned_row_count\030\002 \001(\005\022\032\n\022filt"
+  "ered_row_count\030\003 \001(\005\"\343\001\n\006DBInfo\022:\n\007db_li"
+  "st\030\001 \003(\0132).StorageEngineInstance.DBInfo."
+  "DbListEntry\032I\n\005Table\022\022\n\ntable_name\030\001 \001(\t"
+  "\022\032\n\022table_index_number\030\002 \001(\005\022\020\n\010sst_list"
+  "\030\003 \003(\t\032R\n\013DbListEntry\022\013\n\003key\030\001 \001(\t\0222\n\005va"
+  "lue\030\002 \001(\0132#.StorageEngineInstance.DBInfo"
+  ".Table:\0028\001\"\335\001\n\014DataFileInfo\022G\n\013sst_csd_m"
+  "ap\030\001 \003(\01322.StorageEngineInstance.DataFil"
+  "eInfo.SstCsdMapEntry\032)\n\003CSD\022\016\n\006csd_id\030\001 "
+  "\003(\t\022\022\n\nis_primary\030\002 \003(\010\032Y\n\016SstCsdMapEntr"
+  "y\022\013\n\003key\030\001 \001(\t\0226\n\005value\030\002 \001(\0132\'.StorageE"
+  "ngineInstance.DataFileInfo.CSD:\0028\001\"\033\n\007SS"
+  "TList\022\020\n\010sst_list\030\001 \003(\t\"\355\001\n\017SnippetMetaD"
+  "ata\022J\n\013sst_pba_map\030\001 \003(\01325.StorageEngine"
+  "Instance.SnippetMetaData.SstPbaMapEntry\022"
+  "\037\n\027table_total_block_count\030\002 \001(\005\022\034\n\024wal_"
+  "deleted_key_json\030\003 \001(\t\022\035\n\025wal_inserted_r"
+  "ow_json\030\004 \003(\t\0320\n\016SstPbaMapEntry\022\013\n\003key\030\001"
+  " \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\370\001\n\rCSDMetricLis"
+  "t\022G\n\017csd_metric_list\030\001 \003(\0132..StorageEngi"
+  "neInstance.CSDMetricList.CSDMetric\032\235\001\n\tC"
+  "SDMetric\022\n\n\002id\030\001 \001(\t\022\n\n\002ip\030\002 \001(\t\022\021\n\tcpu_"
+  "usage\030\003 \001(\002\022\024\n\014memory_usage\030\004 \001(\002\022\022\n\ndis"
+  "k_usage\030\005 \001(\002\022\017\n\007network\030\006 \001(\002\022\033\n\023workin"
+  "g_block_count\030\007 \001(\005\022\r\n\005score\030\010 \001(\002\"\251\001\n\016L"
+  "BA2PBARequest\022\032\n\022table_index_number\030\001 \001("
+  "\005\022I\n\013sst_csd_map\030\002 \003(\01324.StorageEngineIn"
+  "stance.LBA2PBARequest.SstCsdMapEntry\0320\n\016"
+  "SstCsdMapEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001"
+  "(\t:\0028\001\"\271\002\n\017LBA2PBAResponse\022J\n\013sst_pba_ma"
+  "p\030\001 \003(\01325.StorageEngineInstance.LBA2PBAR"
+  "esponse.SstPbaMapEntry\032\'\n\005Chunk\022\016\n\006offse"
+  "t\030\001 \001(\003\022\016\n\006length\030\002 \001(\005\032S\n\003PBA\022\016\n\006csd_id"
+  "\030\001 \001(\t\022<\n\006chunks\030\002 \003(\0132,.StorageEngineIn"
+  "stance.LBA2PBAResponse.Chunk\032\\\n\016SstPbaMa"
+  "pEntry\022\013\n\003key\030\001 \001(\t\0229\n\005value\030\002 \001(\0132*.Sto"
+  "rageEngineInstance.LBA2PBAResponse.PBA:\002"
+  "8\001\"1\n\nWALRequest\022\017\n\007db_name\030\001 \001(\t\022\022\n\ntab"
+  "le_name\030\002 \001(\t\"P\n\013WALResponse\022\023\n\013deleted_"
+  "key\030\001 \003(\t\022\024\n\014inserted_key\030\002 \003(\t\022\026\n\016inser"
+  "ted_value\030\003 \003(\t2\345\001\n\026StorageEngineInterfa"
+  "ce\022Z\n\025GenericQueryInterface\022\036.StorageEng"
+  "ineInstance.Request\032\037.StorageEngineInsta"
+  "nce.Response\"\000\022o\n\030OffloadingQueryInterfa"
+  "ce\022%.StorageEngineInstance.SnippetReques"
+  "t\032(.StorageEngineInstance.QueryStringRes"
+  "ult\"\000(\0012\217\002\n\rMergingModule\022W\n\013Aggregation"
+  "\022%.StorageEngineInstance.SnippetRequest\032"
+  "\037.StorageEngineInstance.Response\"\000\022M\n\010En"
+  "dQuery\022\036.StorageEngineInstance.Request\032\037"
+  ".StorageEngineInstance.Response\"\000\022V\n\016Get"
+  "QueryResult\022\036.StorageEngineInstance.Requ"
+  "est\032\".StorageEngineInstance.QueryResult\""
+  "\0002\205\003\n\020MonitoringModule\022X\n\017GetDataFileInf"
+  "o\022\036.StorageEngineInstance.Request\032#.Stor"
+  "ageEngineInstance.DataFileInfo\"\000\022^\n\022GetS"
+  "nippetMetaData\022\036.StorageEngineInstance.R"
+  "equest\032&.StorageEngineInstance.SnippetMe"
+  "taData\"\000\022W\n\023SyncMetaDataManager\022\035.Storag"
+  "eEngineInstance.DBInfo\032\037.StorageEngineIn"
+  "stance.Response\"\000\022^\n\024SyncDBFileMonitorin"
+  "g\022#.StorageEngineInstance.DataFileInfo\032\037"
+  ".StorageEngineInstance.Response\"\0002\275\001\n\020Of"
+  "floadingModule\022O\n\nScheduling\022\036.StorageEn"
+  "gineInstance.Snippet\032\037.StorageEngineInst"
+  "ance.Response\"\000\022X\n\rPushCSDMetric\022$.Stora"
+  "geEngineInstance.CSDMetricList\032\037.Storage"
+  "EngineInstance.Response\"\0002\316\001\n\016StorageMan"
+  "ager\022]\n\nRequestPBA\022%.StorageEngineInstan"
+  "ce.LBA2PBARequest\032&.StorageEngineInstanc"
+  "e.LBA2PBAResponse\"\000\022]\n\024InitDBFileMonitor"
+  "ing\022\036.StorageEngineInstance.SSTList\032#.St"
+  "orageEngineInstance.DataFileInfo\"\0002c\n\nWA"
+  "LManager\022U\n\nRequestWAL\022!.StorageEngineIn"
+  "stance.WALRequest\032\".StorageEngineInstanc"
+  "e.WALResponse\"\000B6\n\026io.grpc.snippet_sampl"
+  "eB\024snippet_sample_ProtoP\001\242\002\003SSPb\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_storage_5fengine_5finstance_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_storage_5fengine_5finstance_2eproto = {
-  false, false, 6130, descriptor_table_protodef_storage_5fengine_5finstance_2eproto, "storage_engine_instance.proto", 
+  false, false, 6359, descriptor_table_protodef_storage_5fengine_5finstance_2eproto, "storage_engine_instance.proto", 
   &descriptor_table_storage_5fengine_5finstance_2eproto_once, nullptr, 0, 34,
   schemas, file_default_instances, TableStruct_storage_5fengine_5finstance_2eproto::offsets,
   file_level_metadata_storage_5fengine_5finstance_2eproto, file_level_enum_descriptors_storage_5fengine_5finstance_2eproto, file_level_service_descriptors_storage_5fengine_5finstance_2eproto,
@@ -2987,6 +2994,14 @@ Snippet::Snippet(const Snippet& from)
       group_by_(from.group_by_),
       having_(from.having_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  db_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    db_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_db_name().empty()) {
+    db_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_db_name(), 
+      GetArenaForAllocation());
+  }
   table_alias_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     table_alias_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
@@ -3017,6 +3032,10 @@ Snippet::Snippet(const Snippet& from)
 }
 
 inline void Snippet::SharedCtor() {
+db_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  db_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 table_alias_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
   table_alias_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
@@ -3036,6 +3055,7 @@ Snippet::~Snippet() {
 
 inline void Snippet::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  db_name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   table_alias_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (this != internal_default_instance()) delete dependency_;
   if (this != internal_default_instance()) delete order_by_;
@@ -3069,6 +3089,7 @@ void Snippet::Clear() {
   column_filtering_.Clear();
   group_by_.Clear();
   having_.Clear();
+  db_name_.ClearToEmpty();
   table_alias_.ClearToEmpty();
   if (GetArenaForAllocation() == nullptr && dependency_ != nullptr) {
     delete dependency_;
@@ -3094,25 +3115,35 @@ const char* Snippet::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // int32 query_ID = 1;
+      // string db_name = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_db_name();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.Snippet.db_name"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 query_ID = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           query_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // int32 work_ID = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+      // int32 work_ID = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           work_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // repeated string table_name = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+      // repeated string table_name = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
           ptr -= 1;
           do {
             ptr += 1;
@@ -3121,13 +3152,13 @@ const char* Snippet::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
             CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.Snippet.table_name"));
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<34>(ptr));
         } else
           goto handle_unusual;
         continue;
-      // repeated string table_col = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+      // repeated string table_col = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
           ptr -= 1;
           do {
             ptr += 1;
@@ -3136,67 +3167,67 @@ const char* Snippet::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
             CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.Snippet.table_col"));
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<34>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<42>(ptr));
         } else
           goto handle_unusual;
         continue;
-      // repeated .StorageEngineInstance.Snippet.Filter table_filter = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+      // repeated .StorageEngineInstance.Snippet.Filter table_filter = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
           ptr -= 1;
           do {
             ptr += 1;
             ptr = ctx->ParseMessage(_internal_add_table_filter(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<42>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<50>(ptr));
         } else
           goto handle_unusual;
         continue;
-      // .StorageEngineInstance.Snippet.Dependency dependency = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+      // .StorageEngineInstance.Snippet.Dependency dependency = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
           ptr = ctx->ParseMessage(_internal_mutable_dependency(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // repeated int32 table_offset = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+      // repeated int32 table_offset = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 66)) {
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_table_offset(), ptr, ctx);
           CHK_(ptr);
-        } else if (static_cast<uint8_t>(tag) == 56) {
+        } else if (static_cast<uint8_t>(tag) == 64) {
           _internal_add_table_offset(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // repeated int32 table_offlen = 8;
-      case 8:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 66)) {
+      // repeated int32 table_offlen = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 74)) {
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_table_offlen(), ptr, ctx);
           CHK_(ptr);
-        } else if (static_cast<uint8_t>(tag) == 64) {
+        } else if (static_cast<uint8_t>(tag) == 72) {
           _internal_add_table_offlen(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // repeated int32 table_datatype = 9;
-      case 9:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 74)) {
+      // repeated int32 table_datatype = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedInt32Parser(_internal_mutable_table_datatype(), ptr, ctx);
           CHK_(ptr);
-        } else if (static_cast<uint8_t>(tag) == 72) {
+        } else if (static_cast<uint8_t>(tag) == 80) {
           _internal_add_table_datatype(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr));
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // string table_alias = 10;
-      case 10:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
+      // string table_alias = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 90)) {
           auto str = _internal_mutable_table_alias();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.Snippet.table_alias"));
@@ -3204,9 +3235,9 @@ const char* Snippet::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
         } else
           goto handle_unusual;
         continue;
-      // repeated string column_alias = 11;
-      case 11:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 90)) {
+      // repeated string column_alias = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 98)) {
           ptr -= 1;
           do {
             ptr += 1;
@@ -3215,26 +3246,26 @@ const char* Snippet::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
             CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.Snippet.column_alias"));
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<90>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<98>(ptr));
         } else
           goto handle_unusual;
         continue;
-      // repeated .StorageEngineInstance.Snippet.Projection column_projection = 12;
-      case 12:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 98)) {
+      // repeated .StorageEngineInstance.Snippet.Projection column_projection = 13;
+      case 13:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 106)) {
           ptr -= 1;
           do {
             ptr += 1;
             ptr = ctx->ParseMessage(_internal_add_column_projection(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<98>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<106>(ptr));
         } else
           goto handle_unusual;
         continue;
-      // repeated string column_filtering = 13;
-      case 13:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 106)) {
+      // repeated string column_filtering = 14;
+      case 14:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 114)) {
           ptr -= 1;
           do {
             ptr += 1;
@@ -3243,13 +3274,13 @@ const char* Snippet::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
             CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.Snippet.column_filtering"));
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<106>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<114>(ptr));
         } else
           goto handle_unusual;
         continue;
-      // repeated string group_by = 14;
-      case 14:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 114)) {
+      // repeated string group_by = 15;
+      case 15:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 122)) {
           ptr -= 1;
           do {
             ptr += 1;
@@ -3258,44 +3289,44 @@ const char* Snippet::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
             CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.Snippet.group_by"));
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<114>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<122>(ptr));
         } else
           goto handle_unusual;
         continue;
-      // .StorageEngineInstance.Snippet.Order order_by = 15;
-      case 15:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 122)) {
+      // .StorageEngineInstance.Snippet.Order order_by = 16;
+      case 16:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 130)) {
           ptr = ctx->ParseMessage(_internal_mutable_order_by(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // .StorageEngineInstance.Snippet.Limit limit = 16;
-      case 16:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 130)) {
+      // .StorageEngineInstance.Snippet.Limit limit = 17;
+      case 17:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 138)) {
           ptr = ctx->ParseMessage(_internal_mutable_limit(), ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // int32 pk_num = 17;
-      case 17:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 136)) {
+      // int32 pk_num = 18;
+      case 18:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 144)) {
           pk_num_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // repeated .StorageEngineInstance.Snippet.Filter having = 18;
-      case 18:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 146)) {
+      // repeated .StorageEngineInstance.Snippet.Filter having = 19;
+      case 19:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 154)) {
           ptr -= 2;
           do {
             ptr += 2;
             ptr = ctx->ParseMessage(_internal_add_having(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<146>(ptr));
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<154>(ptr));
         } else
           goto handle_unusual;
         continue;
@@ -3328,157 +3359,167 @@ uint8_t* Snippet::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int32 query_ID = 1;
+  // string db_name = 1;
+  if (!this->_internal_db_name().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_db_name().data(), static_cast<int>(this->_internal_db_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "StorageEngineInstance.Snippet.db_name");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_db_name(), target);
+  }
+
+  // int32 query_ID = 2;
   if (this->_internal_query_id() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_query_id(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_query_id(), target);
   }
 
-  // int32 work_ID = 2;
+  // int32 work_ID = 3;
   if (this->_internal_work_id() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_work_id(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_work_id(), target);
   }
 
-  // repeated string table_name = 3;
+  // repeated string table_name = 4;
   for (int i = 0, n = this->_internal_table_name_size(); i < n; i++) {
     const auto& s = this->_internal_table_name(i);
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       s.data(), static_cast<int>(s.length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "StorageEngineInstance.Snippet.table_name");
-    target = stream->WriteString(3, s, target);
+    target = stream->WriteString(4, s, target);
   }
 
-  // repeated string table_col = 4;
+  // repeated string table_col = 5;
   for (int i = 0, n = this->_internal_table_col_size(); i < n; i++) {
     const auto& s = this->_internal_table_col(i);
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       s.data(), static_cast<int>(s.length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "StorageEngineInstance.Snippet.table_col");
-    target = stream->WriteString(4, s, target);
+    target = stream->WriteString(5, s, target);
   }
 
-  // repeated .StorageEngineInstance.Snippet.Filter table_filter = 5;
+  // repeated .StorageEngineInstance.Snippet.Filter table_filter = 6;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->_internal_table_filter_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(5, this->_internal_table_filter(i), target, stream);
+      InternalWriteMessage(6, this->_internal_table_filter(i), target, stream);
   }
 
-  // .StorageEngineInstance.Snippet.Dependency dependency = 6;
+  // .StorageEngineInstance.Snippet.Dependency dependency = 7;
   if (this->_internal_has_dependency()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        6, _Internal::dependency(this), target, stream);
+        7, _Internal::dependency(this), target, stream);
   }
 
-  // repeated int32 table_offset = 7;
+  // repeated int32 table_offset = 8;
   {
     int byte_size = _table_offset_cached_byte_size_.load(std::memory_order_relaxed);
     if (byte_size > 0) {
       target = stream->WriteInt32Packed(
-          7, _internal_table_offset(), byte_size, target);
+          8, _internal_table_offset(), byte_size, target);
     }
   }
 
-  // repeated int32 table_offlen = 8;
+  // repeated int32 table_offlen = 9;
   {
     int byte_size = _table_offlen_cached_byte_size_.load(std::memory_order_relaxed);
     if (byte_size > 0) {
       target = stream->WriteInt32Packed(
-          8, _internal_table_offlen(), byte_size, target);
+          9, _internal_table_offlen(), byte_size, target);
     }
   }
 
-  // repeated int32 table_datatype = 9;
+  // repeated int32 table_datatype = 10;
   {
     int byte_size = _table_datatype_cached_byte_size_.load(std::memory_order_relaxed);
     if (byte_size > 0) {
       target = stream->WriteInt32Packed(
-          9, _internal_table_datatype(), byte_size, target);
+          10, _internal_table_datatype(), byte_size, target);
     }
   }
 
-  // string table_alias = 10;
+  // string table_alias = 11;
   if (!this->_internal_table_alias().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_table_alias().data(), static_cast<int>(this->_internal_table_alias().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "StorageEngineInstance.Snippet.table_alias");
     target = stream->WriteStringMaybeAliased(
-        10, this->_internal_table_alias(), target);
+        11, this->_internal_table_alias(), target);
   }
 
-  // repeated string column_alias = 11;
+  // repeated string column_alias = 12;
   for (int i = 0, n = this->_internal_column_alias_size(); i < n; i++) {
     const auto& s = this->_internal_column_alias(i);
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       s.data(), static_cast<int>(s.length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "StorageEngineInstance.Snippet.column_alias");
-    target = stream->WriteString(11, s, target);
+    target = stream->WriteString(12, s, target);
   }
 
-  // repeated .StorageEngineInstance.Snippet.Projection column_projection = 12;
+  // repeated .StorageEngineInstance.Snippet.Projection column_projection = 13;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->_internal_column_projection_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(12, this->_internal_column_projection(i), target, stream);
+      InternalWriteMessage(13, this->_internal_column_projection(i), target, stream);
   }
 
-  // repeated string column_filtering = 13;
+  // repeated string column_filtering = 14;
   for (int i = 0, n = this->_internal_column_filtering_size(); i < n; i++) {
     const auto& s = this->_internal_column_filtering(i);
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       s.data(), static_cast<int>(s.length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "StorageEngineInstance.Snippet.column_filtering");
-    target = stream->WriteString(13, s, target);
+    target = stream->WriteString(14, s, target);
   }
 
-  // repeated string group_by = 14;
+  // repeated string group_by = 15;
   for (int i = 0, n = this->_internal_group_by_size(); i < n; i++) {
     const auto& s = this->_internal_group_by(i);
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       s.data(), static_cast<int>(s.length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "StorageEngineInstance.Snippet.group_by");
-    target = stream->WriteString(14, s, target);
+    target = stream->WriteString(15, s, target);
   }
 
-  // .StorageEngineInstance.Snippet.Order order_by = 15;
+  // .StorageEngineInstance.Snippet.Order order_by = 16;
   if (this->_internal_has_order_by()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        15, _Internal::order_by(this), target, stream);
+        16, _Internal::order_by(this), target, stream);
   }
 
-  // .StorageEngineInstance.Snippet.Limit limit = 16;
+  // .StorageEngineInstance.Snippet.Limit limit = 17;
   if (this->_internal_has_limit()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        16, _Internal::limit(this), target, stream);
+        17, _Internal::limit(this), target, stream);
   }
 
-  // int32 pk_num = 17;
+  // int32 pk_num = 18;
   if (this->_internal_pk_num() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(17, this->_internal_pk_num(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(18, this->_internal_pk_num(), target);
   }
 
-  // repeated .StorageEngineInstance.Snippet.Filter having = 18;
+  // repeated .StorageEngineInstance.Snippet.Filter having = 19;
   for (unsigned int i = 0,
       n = static_cast<unsigned int>(this->_internal_having_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(18, this->_internal_having(i), target, stream);
+      InternalWriteMessage(19, this->_internal_having(i), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -3497,7 +3538,7 @@ size_t Snippet::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated string table_name = 3;
+  // repeated string table_name = 4;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(table_name_.size());
   for (int i = 0, n = table_name_.size(); i < n; i++) {
@@ -3505,7 +3546,7 @@ size_t Snippet::ByteSizeLong() const {
       table_name_.Get(i));
   }
 
-  // repeated string table_col = 4;
+  // repeated string table_col = 5;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(table_col_.size());
   for (int i = 0, n = table_col_.size(); i < n; i++) {
@@ -3513,14 +3554,14 @@ size_t Snippet::ByteSizeLong() const {
       table_col_.Get(i));
   }
 
-  // repeated .StorageEngineInstance.Snippet.Filter table_filter = 5;
+  // repeated .StorageEngineInstance.Snippet.Filter table_filter = 6;
   total_size += 1UL * this->_internal_table_filter_size();
   for (const auto& msg : this->table_filter_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
-  // repeated int32 table_offset = 7;
+  // repeated int32 table_offset = 8;
   {
     size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       Int32Size(this->table_offset_);
@@ -3535,7 +3576,7 @@ size_t Snippet::ByteSizeLong() const {
     total_size += data_size;
   }
 
-  // repeated int32 table_offlen = 8;
+  // repeated int32 table_offlen = 9;
   {
     size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       Int32Size(this->table_offlen_);
@@ -3550,7 +3591,7 @@ size_t Snippet::ByteSizeLong() const {
     total_size += data_size;
   }
 
-  // repeated int32 table_datatype = 9;
+  // repeated int32 table_datatype = 10;
   {
     size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       Int32Size(this->table_datatype_);
@@ -3565,7 +3606,7 @@ size_t Snippet::ByteSizeLong() const {
     total_size += data_size;
   }
 
-  // repeated string column_alias = 11;
+  // repeated string column_alias = 12;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(column_alias_.size());
   for (int i = 0, n = column_alias_.size(); i < n; i++) {
@@ -3573,14 +3614,14 @@ size_t Snippet::ByteSizeLong() const {
       column_alias_.Get(i));
   }
 
-  // repeated .StorageEngineInstance.Snippet.Projection column_projection = 12;
+  // repeated .StorageEngineInstance.Snippet.Projection column_projection = 13;
   total_size += 1UL * this->_internal_column_projection_size();
   for (const auto& msg : this->column_projection_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
-  // repeated string column_filtering = 13;
+  // repeated string column_filtering = 14;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(column_filtering_.size());
   for (int i = 0, n = column_filtering_.size(); i < n; i++) {
@@ -3588,7 +3629,7 @@ size_t Snippet::ByteSizeLong() const {
       column_filtering_.Get(i));
   }
 
-  // repeated string group_by = 14;
+  // repeated string group_by = 15;
   total_size += 1 *
       ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(group_by_.size());
   for (int i = 0, n = group_by_.size(); i < n; i++) {
@@ -3596,52 +3637,59 @@ size_t Snippet::ByteSizeLong() const {
       group_by_.Get(i));
   }
 
-  // repeated .StorageEngineInstance.Snippet.Filter having = 18;
+  // repeated .StorageEngineInstance.Snippet.Filter having = 19;
   total_size += 2UL * this->_internal_having_size();
   for (const auto& msg : this->having_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
-  // string table_alias = 10;
+  // string db_name = 1;
+  if (!this->_internal_db_name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_db_name());
+  }
+
+  // string table_alias = 11;
   if (!this->_internal_table_alias().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_table_alias());
   }
 
-  // .StorageEngineInstance.Snippet.Dependency dependency = 6;
+  // .StorageEngineInstance.Snippet.Dependency dependency = 7;
   if (this->_internal_has_dependency()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *dependency_);
   }
 
-  // .StorageEngineInstance.Snippet.Order order_by = 15;
+  // .StorageEngineInstance.Snippet.Order order_by = 16;
   if (this->_internal_has_order_by()) {
-    total_size += 1 +
+    total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *order_by_);
   }
 
-  // .StorageEngineInstance.Snippet.Limit limit = 16;
+  // .StorageEngineInstance.Snippet.Limit limit = 17;
   if (this->_internal_has_limit()) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *limit_);
   }
 
-  // int32 query_ID = 1;
+  // int32 query_ID = 2;
   if (this->_internal_query_id() != 0) {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_query_id());
   }
 
-  // int32 work_ID = 2;
+  // int32 work_ID = 3;
   if (this->_internal_work_id() != 0) {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_work_id());
   }
 
-  // int32 pk_num = 17;
+  // int32 pk_num = 18;
   if (this->_internal_pk_num() != 0) {
     total_size += 2 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
@@ -3681,6 +3729,9 @@ void Snippet::MergeFrom(const Snippet& from) {
   column_filtering_.MergeFrom(from.column_filtering_);
   group_by_.MergeFrom(from.group_by_);
   having_.MergeFrom(from.having_);
+  if (!from._internal_db_name().empty()) {
+    _internal_set_db_name(from._internal_db_name());
+  }
   if (!from._internal_table_alias().empty()) {
     _internal_set_table_alias(from._internal_table_alias());
   }
@@ -3732,6 +3783,11 @@ void Snippet::InternalSwap(Snippet* other) {
   column_filtering_.InternalSwap(&other->column_filtering_);
   group_by_.InternalSwap(&other->group_by_);
   having_.InternalSwap(&other->having_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &db_name_, lhs_arena,
+      &other->db_name_, rhs_arena
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
       &table_alias_, lhs_arena,

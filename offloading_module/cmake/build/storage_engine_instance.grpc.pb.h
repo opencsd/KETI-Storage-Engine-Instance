@@ -27,6 +27,342 @@
 
 namespace StorageEngineInstance {
 
+class StorageEngineInterface final {
+ public:
+  static constexpr char const* service_full_name() {
+    return "StorageEngineInstance.StorageEngineInterface";
+  }
+  class StubInterface {
+   public:
+    virtual ~StubInterface() {}
+    virtual ::grpc::Status GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Response* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncGenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncGenericQueryInterfaceRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncGenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncGenericQueryInterfaceRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientWriterInterface< ::StorageEngineInstance::SnippetRequest>> OffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) {
+      return std::unique_ptr< ::grpc::ClientWriterInterface< ::StorageEngineInstance::SnippetRequest>>(OffloadingQueryInterfaceRaw(context, response));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>> AsyncOffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>>(AsyncOffloadingQueryInterfaceRaw(context, response, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>> PrepareAsyncOffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>>(PrepareAsyncOffloadingQueryInterfaceRaw(context, response, cq));
+    }
+    class async_interface {
+     public:
+      virtual ~async_interface() {}
+      virtual void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void OffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) = 0;
+    };
+    typedef class async_interface experimental_async_interface;
+    virtual class async_interface* async() { return nullptr; }
+    class async_interface* experimental_async() { return async(); }
+   private:
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientWriterInterface< ::StorageEngineInstance::SnippetRequest>* OffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) = 0;
+    virtual ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>* AsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) = 0;
+    virtual ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>* PrepareAsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) = 0;
+  };
+  class Stub final : public StubInterface {
+   public:
+    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+    ::grpc::Status GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Response* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncGenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncGenericQueryInterfaceRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncGenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncGenericQueryInterfaceRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientWriter< ::StorageEngineInstance::SnippetRequest>> OffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) {
+      return std::unique_ptr< ::grpc::ClientWriter< ::StorageEngineInstance::SnippetRequest>>(OffloadingQueryInterfaceRaw(context, response));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>> AsyncOffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) {
+      return std::unique_ptr< ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>>(AsyncOffloadingQueryInterfaceRaw(context, response, cq, tag));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>> PrepareAsyncOffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>>(PrepareAsyncOffloadingQueryInterfaceRaw(context, response, cq));
+    }
+    class async final :
+      public StubInterface::async_interface {
+     public:
+      void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
+      void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void OffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) override;
+     private:
+      friend class Stub;
+      explicit async(Stub* stub): stub_(stub) { }
+      Stub* stub() { return stub_; }
+      Stub* stub_;
+    };
+    class async* async() override { return &async_stub_; }
+
+   private:
+    std::shared_ptr< ::grpc::ChannelInterface> channel_;
+    class async async_stub_{this};
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientWriter< ::StorageEngineInstance::SnippetRequest>* OffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) override;
+    ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>* AsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) override;
+    ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>* PrepareAsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_GenericQueryInterface_;
+    const ::grpc::internal::RpcMethod rpcmethod_OffloadingQueryInterface_;
+  };
+  static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+
+  class Service : public ::grpc::Service {
+   public:
+    Service();
+    virtual ~Service();
+    virtual ::grpc::Status GenericQueryInterface(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response);
+    virtual ::grpc::Status OffloadingQueryInterface(::grpc::ServerContext* context, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* reader, ::StorageEngineInstance::QueryStringResult* response);
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_GenericQueryInterface : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_GenericQueryInterface() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_GenericQueryInterface() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGenericQueryInterface(::grpc::ServerContext* context, ::StorageEngineInstance::Request* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_OffloadingQueryInterface : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_OffloadingQueryInterface() {
+      ::grpc::Service::MarkMethodAsync(1);
+    }
+    ~WithAsyncMethod_OffloadingQueryInterface() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status OffloadingQueryInterface(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* /*reader*/, ::StorageEngineInstance::QueryStringResult* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestOffloadingQueryInterface(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::StorageEngineInstance::QueryStringResult, ::StorageEngineInstance::SnippetRequest>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncClientStreaming(1, context, reader, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_GenericQueryInterface<WithAsyncMethod_OffloadingQueryInterface<Service > > AsyncService;
+  template <class BaseClass>
+  class WithCallbackMethod_GenericQueryInterface : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_GenericQueryInterface() {
+      ::grpc::Service::MarkMethodCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response) { return this->GenericQueryInterface(context, request, response); }));}
+    void SetMessageAllocatorFor_GenericQueryInterface(
+        ::grpc::MessageAllocator< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_GenericQueryInterface() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GenericQueryInterface(
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_OffloadingQueryInterface : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_OffloadingQueryInterface() {
+      ::grpc::Service::MarkMethodCallback(1,
+          new ::grpc::internal::CallbackClientStreamingHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::QueryStringResult>(
+            [this](
+                   ::grpc::CallbackServerContext* context, ::StorageEngineInstance::QueryStringResult* response) { return this->OffloadingQueryInterface(context, response); }));
+    }
+    ~WithCallbackMethod_OffloadingQueryInterface() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status OffloadingQueryInterface(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* /*reader*/, ::StorageEngineInstance::QueryStringResult* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerReadReactor< ::StorageEngineInstance::SnippetRequest>* OffloadingQueryInterface(
+      ::grpc::CallbackServerContext* /*context*/, ::StorageEngineInstance::QueryStringResult* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_GenericQueryInterface<WithCallbackMethod_OffloadingQueryInterface<Service > > CallbackService;
+  typedef CallbackService ExperimentalCallbackService;
+  template <class BaseClass>
+  class WithGenericMethod_GenericQueryInterface : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_GenericQueryInterface() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_GenericQueryInterface() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_OffloadingQueryInterface : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_OffloadingQueryInterface() {
+      ::grpc::Service::MarkMethodGeneric(1);
+    }
+    ~WithGenericMethod_OffloadingQueryInterface() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status OffloadingQueryInterface(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* /*reader*/, ::StorageEngineInstance::QueryStringResult* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_GenericQueryInterface : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_GenericQueryInterface() {
+      ::grpc::Service::MarkMethodRaw(0);
+    }
+    ~WithRawMethod_GenericQueryInterface() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGenericQueryInterface(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_OffloadingQueryInterface : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_OffloadingQueryInterface() {
+      ::grpc::Service::MarkMethodRaw(1);
+    }
+    ~WithRawMethod_OffloadingQueryInterface() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status OffloadingQueryInterface(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* /*reader*/, ::StorageEngineInstance::QueryStringResult* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestOffloadingQueryInterface(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::grpc::ByteBuffer, ::grpc::ByteBuffer>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncClientStreaming(1, context, reader, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_GenericQueryInterface : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_GenericQueryInterface() {
+      ::grpc::Service::MarkMethodRawCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GenericQueryInterface(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_GenericQueryInterface() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GenericQueryInterface(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_OffloadingQueryInterface : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_OffloadingQueryInterface() {
+      ::grpc::Service::MarkMethodRawCallback(1,
+          new ::grpc::internal::CallbackClientStreamingHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, ::grpc::ByteBuffer* response) { return this->OffloadingQueryInterface(context, response); }));
+    }
+    ~WithRawCallbackMethod_OffloadingQueryInterface() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status OffloadingQueryInterface(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* /*reader*/, ::StorageEngineInstance::QueryStringResult* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerReadReactor< ::grpc::ByteBuffer>* OffloadingQueryInterface(
+      ::grpc::CallbackServerContext* /*context*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_GenericQueryInterface : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_GenericQueryInterface() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>* streamer) {
+                       return this->StreamedGenericQueryInterface(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_GenericQueryInterface() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedGenericQueryInterface(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Request,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_GenericQueryInterface<Service > StreamedUnaryService;
+  typedef Service SplitStreamedService;
+  typedef WithStreamedUnaryMethod_GenericQueryInterface<Service > StreamedService;
+};
+
 class MergingModule final {
  public:
   static constexpr char const* service_full_name() {
@@ -1234,14 +1570,12 @@ class OffloadingModule final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    std::unique_ptr< ::grpc::ClientWriterInterface< ::StorageEngineInstance::SnippetRequest>> QueryOffload(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) {
-      return std::unique_ptr< ::grpc::ClientWriterInterface< ::StorageEngineInstance::SnippetRequest>>(QueryOffloadRaw(context, response));
+    virtual ::grpc::Status Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Response* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncScheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncSchedulingRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>> AsyncQueryOffload(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) {
-      return std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>>(AsyncQueryOffloadRaw(context, response, cq, tag));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>> PrepareAsyncQueryOffload(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>>(PrepareAsyncQueryOffloadRaw(context, response, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncScheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncSchedulingRaw(context, request, cq));
     }
     virtual ::grpc::Status PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::StorageEngineInstance::Response* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
@@ -1253,7 +1587,8 @@ class OffloadingModule final {
     class async_interface {
      public:
       virtual ~async_interface() {}
-      virtual void QueryOffload(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) = 0;
+      virtual void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
       virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
@@ -1261,23 +1596,20 @@ class OffloadingModule final {
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
-    virtual ::grpc::ClientWriterInterface< ::StorageEngineInstance::SnippetRequest>* QueryOffloadRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) = 0;
-    virtual ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>* AsyncQueryOffloadRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) = 0;
-    virtual ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>* PrepareAsyncQueryOffloadRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-    std::unique_ptr< ::grpc::ClientWriter< ::StorageEngineInstance::SnippetRequest>> QueryOffload(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) {
-      return std::unique_ptr< ::grpc::ClientWriter< ::StorageEngineInstance::SnippetRequest>>(QueryOffloadRaw(context, response));
+    ::grpc::Status Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Response* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncScheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncSchedulingRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>> AsyncQueryOffload(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) {
-      return std::unique_ptr< ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>>(AsyncQueryOffloadRaw(context, response, cq, tag));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>> PrepareAsyncQueryOffload(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>>(PrepareAsyncQueryOffloadRaw(context, response, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncScheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncSchedulingRaw(context, request, cq));
     }
     ::grpc::Status PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::StorageEngineInstance::Response* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
@@ -1289,7 +1621,8 @@ class OffloadingModule final {
     class async final :
       public StubInterface::async_interface {
      public:
-      void QueryOffload(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) override;
+      void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
+      void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
       void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
       void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
@@ -1303,12 +1636,11 @@ class OffloadingModule final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
-    ::grpc::ClientWriter< ::StorageEngineInstance::SnippetRequest>* QueryOffloadRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) override;
-    ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>* AsyncQueryOffloadRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) override;
-    ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>* PrepareAsyncQueryOffloadRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
-    const ::grpc::internal::RpcMethod rpcmethod_QueryOffload_;
+    const ::grpc::internal::RpcMethod rpcmethod_Scheduling_;
     const ::grpc::internal::RpcMethod rpcmethod_PushCSDMetric_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
@@ -1317,27 +1649,27 @@ class OffloadingModule final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status QueryOffload(::grpc::ServerContext* context, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* reader, ::StorageEngineInstance::QueryStringResult* response);
+    virtual ::grpc::Status Scheduling(::grpc::ServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response);
     virtual ::grpc::Status PushCSDMetric(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response);
   };
   template <class BaseClass>
-  class WithAsyncMethod_QueryOffload : public BaseClass {
+  class WithAsyncMethod_Scheduling : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithAsyncMethod_QueryOffload() {
+    WithAsyncMethod_Scheduling() {
       ::grpc::Service::MarkMethodAsync(0);
     }
-    ~WithAsyncMethod_QueryOffload() override {
+    ~WithAsyncMethod_Scheduling() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status QueryOffload(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* /*reader*/, ::StorageEngineInstance::QueryStringResult* /*response*/) override {
+    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestQueryOffload(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::StorageEngineInstance::QueryStringResult, ::StorageEngineInstance::SnippetRequest>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncClientStreaming(0, context, reader, new_call_cq, notification_cq, tag);
+    void RequestScheduling(::grpc::ServerContext* context, ::StorageEngineInstance::Snippet* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1360,28 +1692,33 @@ class OffloadingModule final {
       ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_QueryOffload<WithAsyncMethod_PushCSDMetric<Service > > AsyncService;
+  typedef WithAsyncMethod_Scheduling<WithAsyncMethod_PushCSDMetric<Service > > AsyncService;
   template <class BaseClass>
-  class WithCallbackMethod_QueryOffload : public BaseClass {
+  class WithCallbackMethod_Scheduling : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithCallbackMethod_QueryOffload() {
+    WithCallbackMethod_Scheduling() {
       ::grpc::Service::MarkMethodCallback(0,
-          new ::grpc::internal::CallbackClientStreamingHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::QueryStringResult>(
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>(
             [this](
-                   ::grpc::CallbackServerContext* context, ::StorageEngineInstance::QueryStringResult* response) { return this->QueryOffload(context, response); }));
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response) { return this->Scheduling(context, request, response); }));}
+    void SetMessageAllocatorFor_Scheduling(
+        ::grpc::MessageAllocator< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>*>(handler)
+              ->SetMessageAllocator(allocator);
     }
-    ~WithCallbackMethod_QueryOffload() override {
+    ~WithCallbackMethod_Scheduling() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status QueryOffload(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* /*reader*/, ::StorageEngineInstance::QueryStringResult* /*response*/) override {
+    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    virtual ::grpc::ServerReadReactor< ::StorageEngineInstance::SnippetRequest>* QueryOffload(
-      ::grpc::CallbackServerContext* /*context*/, ::StorageEngineInstance::QueryStringResult* /*response*/)  { return nullptr; }
+    virtual ::grpc::ServerUnaryReactor* Scheduling(
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_PushCSDMetric : public BaseClass {
@@ -1410,21 +1747,21 @@ class OffloadingModule final {
     virtual ::grpc::ServerUnaryReactor* PushCSDMetric(
       ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_QueryOffload<WithCallbackMethod_PushCSDMetric<Service > > CallbackService;
+  typedef WithCallbackMethod_Scheduling<WithCallbackMethod_PushCSDMetric<Service > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
-  class WithGenericMethod_QueryOffload : public BaseClass {
+  class WithGenericMethod_Scheduling : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithGenericMethod_QueryOffload() {
+    WithGenericMethod_Scheduling() {
       ::grpc::Service::MarkMethodGeneric(0);
     }
-    ~WithGenericMethod_QueryOffload() override {
+    ~WithGenericMethod_Scheduling() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status QueryOffload(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* /*reader*/, ::StorageEngineInstance::QueryStringResult* /*response*/) override {
+    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1447,23 +1784,23 @@ class OffloadingModule final {
     }
   };
   template <class BaseClass>
-  class WithRawMethod_QueryOffload : public BaseClass {
+  class WithRawMethod_Scheduling : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithRawMethod_QueryOffload() {
+    WithRawMethod_Scheduling() {
       ::grpc::Service::MarkMethodRaw(0);
     }
-    ~WithRawMethod_QueryOffload() override {
+    ~WithRawMethod_Scheduling() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status QueryOffload(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* /*reader*/, ::StorageEngineInstance::QueryStringResult* /*response*/) override {
+    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestQueryOffload(::grpc::ServerContext* context, ::grpc::ServerAsyncReader< ::grpc::ByteBuffer, ::grpc::ByteBuffer>* reader, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncClientStreaming(0, context, reader, new_call_cq, notification_cq, tag);
+    void RequestScheduling(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1487,26 +1824,26 @@ class OffloadingModule final {
     }
   };
   template <class BaseClass>
-  class WithRawCallbackMethod_QueryOffload : public BaseClass {
+  class WithRawCallbackMethod_Scheduling : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithRawCallbackMethod_QueryOffload() {
+    WithRawCallbackMethod_Scheduling() {
       ::grpc::Service::MarkMethodRawCallback(0,
-          new ::grpc::internal::CallbackClientStreamingHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
-                   ::grpc::CallbackServerContext* context, ::grpc::ByteBuffer* response) { return this->QueryOffload(context, response); }));
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Scheduling(context, request, response); }));
     }
-    ~WithRawCallbackMethod_QueryOffload() override {
+    ~WithRawCallbackMethod_Scheduling() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status QueryOffload(::grpc::ServerContext* /*context*/, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* /*reader*/, ::StorageEngineInstance::QueryStringResult* /*response*/) override {
+    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    virtual ::grpc::ServerReadReactor< ::grpc::ByteBuffer>* QueryOffload(
-      ::grpc::CallbackServerContext* /*context*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+    virtual ::grpc::ServerUnaryReactor* Scheduling(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithRawCallbackMethod_PushCSDMetric : public BaseClass {
@@ -1529,6 +1866,33 @@ class OffloadingModule final {
     }
     virtual ::grpc::ServerUnaryReactor* PushCSDMetric(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_Scheduling : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_Scheduling() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>* streamer) {
+                       return this->StreamedScheduling(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_Scheduling() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedScheduling(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Snippet,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_PushCSDMetric : public BaseClass {
@@ -1557,9 +1921,9 @@ class OffloadingModule final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedPushCSDMetric(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::CSDMetricList,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_PushCSDMetric<Service > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_Scheduling<WithStreamedUnaryMethod_PushCSDMetric<Service > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_PushCSDMetric<Service > StreamedService;
+  typedef WithStreamedUnaryMethod_Scheduling<WithStreamedUnaryMethod_PushCSDMetric<Service > > StreamedService;
 };
 
 class StorageManager final {

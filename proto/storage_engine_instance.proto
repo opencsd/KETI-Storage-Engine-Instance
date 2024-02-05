@@ -7,6 +7,11 @@ option objc_class_prefix = "SSP";
 
 package StorageEngineInstance;
 
+service StorageEngineInterface {
+  rpc GenericQueryInterface(Request) returns (Response) {}
+  rpc OffloadingQueryInterface (stream SnippetRequest) returns (QueryStringResult) {}
+}
+
 service MergingModule {
   rpc Aggregation (SnippetRequest) returns (Response) {}
   rpc EndQuery (Request) returns (Response) {}
@@ -21,7 +26,7 @@ service MonitoringModule {
 }
 
 service OffloadingModule {
-  rpc QueryOffload (stream SnippetRequest) returns (QueryStringResult) {}
+  rpc Scheduling (Snippet) returns (Response) {}
   rpc PushCSDMetric (CSDMetricList) returns (Response) {}
 }
 
@@ -128,24 +133,25 @@ message Snippet {
     int32 offset = 1;
     int32 length = 2;
   }
-  int32 query_ID = 1;
-  int32 work_ID = 2;
-  repeated string table_name = 3;
-  repeated string table_col = 4;
-  repeated Filter table_filter = 5;
-  Dependency dependency = 6;
-  repeated int32 table_offset = 7;
-  repeated int32 table_offlen = 8;
-  repeated int32 table_datatype = 9;
-  string table_alias = 10;
-  repeated string column_alias = 11;
-  repeated Projection column_projection = 12;
-  repeated string column_filtering = 13;
-  repeated string group_by = 14;
-  Order order_by = 15;
-  Limit limit = 16;
-  int32 pk_num = 17;
-  repeated Filter having = 18;
+  string db_name = 1;
+  int32 query_ID = 2;
+  int32 work_ID = 3;
+  repeated string table_name = 4;
+  repeated string table_col = 5;
+  repeated Filter table_filter = 6;
+  Dependency dependency = 7;
+  repeated int32 table_offset = 8;
+  repeated int32 table_offlen = 9;
+  repeated int32 table_datatype = 10;
+  string table_alias = 11;
+  repeated string column_alias = 12;
+  repeated Projection column_projection = 13;
+  repeated string column_filtering = 14;
+  repeated string group_by = 15;
+  Order order_by = 16;
+  Limit limit = 17;
+  int32 pk_num = 18;
+  repeated Filter having = 19;
 }
 
 message Request {
