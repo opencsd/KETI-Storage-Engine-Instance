@@ -90,16 +90,16 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
 
       if(snippet_request.type() == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET){
         KETILOG::DEBUGLOG("Interface","# Send Snippet to Offloading Module");
-        Offloading_Module_Connector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
+        Offloading_Module_Connector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_PORT), grpc::InsecureChannelCredentials()));
         offloadingModule.Scheduling(snippet_request.snippet());
       }else{
         KETILOG::DEBUGLOG("Interface","# Send Snippet to Merging Module");
-        Merging_Module_Connector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
+        Merging_Module_Connector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_PORT), grpc::InsecureChannelCredentials()));
         mergingModule.Aggregation(snippet_request);
       }
     }
 
-    Merging_Module_Connector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
+    Merging_Module_Connector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_PORT), grpc::InsecureChannelCredentials()));
     cout << "@ " << snippet_request.snippet().query_id() <<  snippet_request.snippet().table_alias() << endl;
     QueryStringResult result_ = mergingModule.GetQueryResult(snippet_request.snippet().query_id(), snippet_request.snippet().table_alias());
 
@@ -115,7 +115,7 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
 };
 
 void RunGRPCServer() {
-  std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_OFFLOADING_CONTAINER_PORT));
+  std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_INTERFACE_PORT));
   StorageEngineInterfaceServiceImpl service;
 
   ServerBuilder builder;

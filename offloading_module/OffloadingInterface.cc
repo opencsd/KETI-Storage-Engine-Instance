@@ -53,7 +53,7 @@ class OffloadingModuleServiceImpl final : public OffloadingModule::Service {
 };
 
 void RunGRPCServer() {
-  std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_OFFLOADING_CONTAINER_PORT));
+  std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_OFFLOADING_PORT));
   OffloadingModuleServiceImpl service;
 
   ServerBuilder builder;

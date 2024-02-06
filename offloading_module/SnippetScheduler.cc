@@ -4,7 +4,7 @@ void Scheduler::runScheduler(){
     while (1){
         Snippet snippet = Scheduler::PopQueue();
 
-        Monitoring_Module_Connector mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
+        Monitoring_Module_Connector mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_PORT), grpc::InsecureChannelCredentials()));
         DataFileInfo dataFileInfo = mc.GetDataFileInfo("tpc_h"/*need db name in snippet*/,snippet.table_name(0));
 
         //get best csd
@@ -18,7 +18,7 @@ void Scheduler::runScheduler(){
 
 void Scheduler::scheduling(Snippet snippet, map<string,string> bestcsd){
     //get PBA & WAL
-    Monitoring_Module_Connector mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
+    Monitoring_Module_Connector mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_PORT), grpc::InsecureChannelCredentials()));
     SnippetMetaData snippetMetaData = mc.GetSnippetMetaData("tpc_h"/*need db name in snippet*/,snippet.table_name(0), bestcsd);
 
     StringBuffer snippetbuf;
@@ -208,9 +208,9 @@ void Scheduler::serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd
     string port = "";
 
     if (getenv("SE_MERGING_CONTAINER_POD_PORT") != NULL){
-        port = to_string(SE_MERGING_CONTAINER_BM_TCP_CLOUD_PORT);
+        port = to_string(SE_MERGING_BM_TCP_CLOUD_PORT);
     }else{
-        port = to_string(SE_MERGING_CONTAINER_BM_TCP_PORT);
+        port = to_string(SE_MERGING_BM_TCP_PORT);
     }
 
     writer.Key("storageEnginePort");
@@ -234,7 +234,7 @@ void Scheduler::sendSnippetToCSD(string snippet_json){
 
     /*Send Snippet To CSD Proxy*/
     serv_addr.sin_addr.s_addr = inet_addr(CSD_IDENTIFIER_IP);
-    serv_addr.sin_port = htons(CSD_IDENTIFIER_CLOUD_PORT);
+    serv_addr.sin_port = htons(CSD_IDENTIFIER_PORT);
     connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 
     {

@@ -85,11 +85,11 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
     walRequest.set_db_name(db_name);
     walRequest.set_table_name(table_name);
 
-    Storage_Manager_Connector smc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
+    Storage_Manager_Connector smc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_PORT), grpc::InsecureChannelCredentials()));
     smc.RequestPBA(lbaRequest, total_block_count, sst_pba_map); //async
     cout << "request pba" << endl;
 
-    WAL_Handler wh(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
+    WAL_Handler wh(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_PORT), grpc::InsecureChannelCredentials()));
     wh.RequestWAL(walRequest, sst_count, wal_deleted_key_json, wal_inserted_row_json); //async
     cout << "request wal" << endl;
 
@@ -152,7 +152,7 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
 };
 
 void RunGRPCServer() {
-  std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT));
+  std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_PORT));
   MonitoringModuleServiceImpl service;
 
   ServerBuilder builder;
