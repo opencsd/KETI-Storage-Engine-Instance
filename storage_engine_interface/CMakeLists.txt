@@ -66,7 +66,7 @@ if (UNIX)
 endif (UNIX)
 
 # interface module
-add_executable(storage-engine-interface "StorageEngineInterface.cc")
+add_executable(storage-engine-interface "storage_engine_interface.cc")
 target_link_libraries(storage-engine-interface
   ss_grpc_proto
   ${LINKING_LIBRARIES}

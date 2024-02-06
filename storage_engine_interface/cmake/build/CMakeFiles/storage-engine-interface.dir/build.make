@@ -69,28 +69,28 @@ include CMakeFiles/storage-engine-interface.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/storage-engine-interface.dir/flags.make
 
-CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.o: CMakeFiles/storage-engine-interface.dir/flags.make
-CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.o: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/StorageEngineInterface.cc
-CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.o: CMakeFiles/storage-engine-interface.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.o -MF CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.o.d -o CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/StorageEngineInterface.cc
+CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.o: CMakeFiles/storage-engine-interface.dir/flags.make
+CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.o: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/storage_engine_interface.cc
+CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.o: CMakeFiles/storage-engine-interface.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.o -MF CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.o.d -o CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/storage_engine_interface.cc
 
-CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/StorageEngineInterface.cc > CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.i
+CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/storage_engine_interface.cc > CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.i
 
-CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/StorageEngineInterface.cc -o CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.s
+CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/storage_engine_interface.cc -o CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.s
 
 # Object files for target storage-engine-interface
 storage__engine__interface_OBJECTS = \
-"CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.o"
+"CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.o"
 
 # External object files for target storage-engine-interface
 storage__engine__interface_EXTERNAL_OBJECTS =
 
-storage-engine-interface: CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.o
+storage-engine-interface: CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.o
 storage-engine-interface: CMakeFiles/storage-engine-interface.dir/build.make
 storage-engine-interface: libss_grpc_proto.a
 storage-engine-interface: /lib/libgrpc++_reflection.a

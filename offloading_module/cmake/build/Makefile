@@ -142,53 +142,53 @@ offloading-module/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/build
 .PHONY : offloading-module/fast
 
-OffloadingInterface.o: OffloadingInterface.cc.o
-.PHONY : OffloadingInterface.o
+offloading_interface.o: offloading_interface.cc.o
+.PHONY : offloading_interface.o
 
 # target to build an object file
-OffloadingInterface.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/OffloadingInterface.cc.o
-.PHONY : OffloadingInterface.cc.o
+offloading_interface.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/offloading_interface.cc.o
+.PHONY : offloading_interface.cc.o
 
-OffloadingInterface.i: OffloadingInterface.cc.i
-.PHONY : OffloadingInterface.i
+offloading_interface.i: offloading_interface.cc.i
+.PHONY : offloading_interface.i
 
 # target to preprocess a source file
-OffloadingInterface.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/OffloadingInterface.cc.i
-.PHONY : OffloadingInterface.cc.i
+offloading_interface.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/offloading_interface.cc.i
+.PHONY : offloading_interface.cc.i
 
-OffloadingInterface.s: OffloadingInterface.cc.s
-.PHONY : OffloadingInterface.s
+offloading_interface.s: offloading_interface.cc.s
+.PHONY : offloading_interface.s
 
 # target to generate assembly for a file
-OffloadingInterface.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/OffloadingInterface.cc.s
-.PHONY : OffloadingInterface.cc.s
+offloading_interface.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/offloading_interface.cc.s
+.PHONY : offloading_interface.cc.s
 
-SnippetScheduler.o: SnippetScheduler.cc.o
-.PHONY : SnippetScheduler.o
+snippet_scheduler.o: snippet_scheduler.cc.o
+.PHONY : snippet_scheduler.o
 
 # target to build an object file
-SnippetScheduler.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/SnippetScheduler.cc.o
-.PHONY : SnippetScheduler.cc.o
+snippet_scheduler.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o
+.PHONY : snippet_scheduler.cc.o
 
-SnippetScheduler.i: SnippetScheduler.cc.i
-.PHONY : SnippetScheduler.i
+snippet_scheduler.i: snippet_scheduler.cc.i
+.PHONY : snippet_scheduler.i
 
 # target to preprocess a source file
-SnippetScheduler.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/SnippetScheduler.cc.i
-.PHONY : SnippetScheduler.cc.i
+snippet_scheduler.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/snippet_scheduler.cc.i
+.PHONY : snippet_scheduler.cc.i
 
-SnippetScheduler.s: SnippetScheduler.cc.s
-.PHONY : SnippetScheduler.s
+snippet_scheduler.s: snippet_scheduler.cc.s
+.PHONY : snippet_scheduler.s
 
 # target to generate assembly for a file
-SnippetScheduler.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/SnippetScheduler.cc.s
-.PHONY : SnippetScheduler.cc.s
+snippet_scheduler.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/snippet_scheduler.cc.s
+.PHONY : snippet_scheduler.cc.s
 
 storage_engine_instance.grpc.pb.o: storage_engine_instance.grpc.pb.cc.o
 .PHONY : storage_engine_instance.grpc.pb.o
@@ -248,12 +248,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... offloading-module"
 	@echo "... ss_grpc_proto"
-	@echo "... OffloadingInterface.o"
-	@echo "... OffloadingInterface.i"
-	@echo "... OffloadingInterface.s"
-	@echo "... SnippetScheduler.o"
-	@echo "... SnippetScheduler.i"
-	@echo "... SnippetScheduler.s"
+	@echo "... offloading_interface.o"
+	@echo "... offloading_interface.i"
+	@echo "... offloading_interface.s"
+	@echo "... snippet_scheduler.o"
+	@echo "... snippet_scheduler.i"
+	@echo "... snippet_scheduler.s"
 	@echo "... storage_engine_instance.grpc.pb.o"
 	@echo "... storage_engine_instance.grpc.pb.i"
 	@echo "... storage_engine_instance.grpc.pb.s"

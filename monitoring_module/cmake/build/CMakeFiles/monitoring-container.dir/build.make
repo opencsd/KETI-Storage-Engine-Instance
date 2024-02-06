@@ -69,28 +69,28 @@ include CMakeFiles/monitoring-container.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/monitoring-container.dir/flags.make
 
-CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.o: CMakeFiles/monitoring-container.dir/flags.make
-CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.o: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/MonitoringModuleInterface.cc
-CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.o: CMakeFiles/monitoring-container.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.o -MF CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.o.d -o CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/MonitoringModuleInterface.cc
+CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.o: CMakeFiles/monitoring-container.dir/flags.make
+CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.o: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/monitoring_module_interface.cc
+CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.o: CMakeFiles/monitoring-container.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.o -MF CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.o.d -o CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/monitoring_module_interface.cc
 
-CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/MonitoringModuleInterface.cc > CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.i
+CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/monitoring_module_interface.cc > CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.i
 
-CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/MonitoringModuleInterface.cc -o CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.s
+CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/monitoring_module_interface.cc -o CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.s
 
 # Object files for target monitoring-container
 monitoring__container_OBJECTS = \
-"CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.o"
+"CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.o"
 
 # External object files for target monitoring-container
 monitoring__container_EXTERNAL_OBJECTS =
 
-monitoring-container: CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.o
+monitoring-container: CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.o
 monitoring-container: CMakeFiles/monitoring-container.dir/build.make
 monitoring-container: libss_grpc_proto.a
 monitoring-container: /lib/libgrpc++_reflection.a

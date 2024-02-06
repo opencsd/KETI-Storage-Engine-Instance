@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.o"
-  "CMakeFiles/monitoring-container.dir/MonitoringModuleInterface.cc.o.d"
+  "CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.o"
+  "CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.o.d"
   "monitoring-container"
   "monitoring-container.pdb"
 )
