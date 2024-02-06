@@ -41,6 +41,8 @@
 using namespace std;
 using namespace rapidjson;
 
+using StorageEngineInstance::Snippet;
+
 #define NUM_OF_BLOCKS 15
 #define BUFF_SIZE (NUM_OF_BLOCKS * 5000)
 #define NCONNECTION 8
@@ -173,24 +175,16 @@ struct TableData{//결과 리턴용
 
 class BufferManager{
   public:
-    static int InitWork(int type, StorageEngineInstance::Snippet masked_snippet){
-      return GetInstance().initWork(type,masked_snippet);
-    }
-
-    static void InitQuery(int qid){
-      return GetInstance().initQuery(qid);
-    }
-    
     static int CheckTableStatus(int qid, string tname){
-      return GetInstance().checkTableStatus(qid,tname);
+      return GetInstance().checkTableStatus(qid, tname);
     }
 
     static TableData GetTableData(int qid, string tname){
-      return GetInstance().getTableData(qid,tname);
+      return GetInstance().getTableData(qid, tname);
     }
 
-    static int SaveTableData(int qid, string tname, TableData &table_data_, int offset, int length){
-      return GetInstance().saveTableData(qid,tname,table_data_, offset, length);
+    static int SaveTableData(Snippet snippet, TableData &table_data_, int offset, int length){
+      return GetInstance().saveTableData(snippet, table_data_, offset, length);
     }
 
     static int EndQuery(StorageEngineInstance::Request qid){
@@ -219,13 +213,9 @@ class BufferManager{
     void bufferManagerInterface();
     void pushResult(BlockResult blockResult);
     void mergeResult(int qid, int wid);
-    void runBufferManager();
-    void mergeBlock(BlockResult result);
-    int initWork(int type, StorageEngineInstance::Snippet masked_snippet);//must init buffer first
-    void initQuery(int qid);
     int checkTableStatus(int qid, string tname);//return true only when the snippet work done
     TableData getTableData(int qid, string tname);//return table data on queryID/tableName
-    int saveTableData(int qid, string tname, TableData &table_data_, int offset, int length);
+    int saveTableData(Snippet snippet, TableData &table_data_, int offset, int length);
     int endQuery(StorageEngineInstance::Request qid);
 
     inline const static std::string LOGTAG = "Merging::Buffer Manager";

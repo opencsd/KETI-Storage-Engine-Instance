@@ -413,14 +413,31 @@ TableData BufferManager::getTableData(int qid, string tname){
     return tableData;
 }
 
-int BufferManager::saveTableData(int qid, string tname, TableData &table_data_, int offset, int length){
-    string msg = "# Save Table {" + to_string(qid) + "|" + tname + "}";
+int BufferManager::saveTableData(Snippet snippet, TableData &table_data_, int offset, int length){
+    int qid = snippet.query_id();
+    int wid = snippet.work_id();
+    string table_name = snippet.table_alias();
+
+    string msg = "# Save Table {" + to_string(qid) + "|" + table_name + "}";
     KETILOG::DEBUGLOG(LOGTAG,msg);
 
-    int wid = DataBuffer_[qid]->tablename_workid_map[tname];
-    WorkBuffer* workBuffer = DataBuffer_[qid]->work_buffer_list[wid];
+    if(DataBuffer_.find(qid) == DataBuffer_.end()){
+        QueryBuffer* queryBuffer = new QueryBuffer(qid);
+        DataBuffer_.insert(pair<int,QueryBuffer*>(qid,queryBuffer));
+    }
+    
+    WorkBuffer* workBuffer = new WorkBuffer();
     unique_lock<mutex> lock(workBuffer->mu);
 
+    workBuffer->table_alias = table_name;
+    for(int i = 0; i < snippet.column_alias_size(); i++){
+        workBuffer->table_column.push_back(snippet.column_alias(i));
+        workBuffer->table_data.insert({snippet.column_alias(i),ColData{}});
+    }
+
+    DataBuffer_[qid]->tablename_workid_map[table_name] = wid;
+    DataBuffer_[qid]->work_buffer_list[wid] = workBuffer;
+    
     if(length <= table_data_.row_count){
         for(auto &coldata: table_data_.table_data){
             ColData column;
@@ -441,7 +458,6 @@ int BufferManager::saveTableData(int qid, string tname, TableData &table_data_, 
                 KETILOG::FATALLOG(LOGTAG,"save table row type check plz... ");
             }
             column.type = coldata.second.type;
-            // workBuffer->table_data.insert({coldata.first, column});
             workBuffer->table_data[coldata.first] = column;
         }
         workBuffer->row_count = length - offset;

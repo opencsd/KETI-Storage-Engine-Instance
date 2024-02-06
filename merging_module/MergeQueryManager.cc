@@ -197,16 +197,16 @@ void MergeQueryManager::RunSnippetWork(){
             OrderBy(having_table_, snippet.order_by(), order_by_table_);
             //Save "order_by_table"
             if(isLimit){
-                BufferManager::SaveTableData(snippet.query_id(),snippet.table_alias(),order_by_table_,snippet.limit().offset(),snippet.limit().length());
+                BufferManager::SaveTableData(snippet,order_by_table_,snippet.limit().offset(),snippet.limit().length());
             }else{
-                BufferManager::SaveTableData(snippet.query_id(),snippet.table_alias(),order_by_table_,0,order_by_table_.row_count);
+                BufferManager::SaveTableData(snippet,order_by_table_,0,order_by_table_.row_count);
             }
         }else{
             //Save "result_table"
             if(isLimit){
-                BufferManager::SaveTableData(snippet.query_id(),snippet.table_alias(),having_table_,snippet.limit().offset(),snippet.limit().length());
+                BufferManager::SaveTableData(snippet,having_table_,snippet.limit().offset(),snippet.limit().length());
             }else{
-                BufferManager::SaveTableData(snippet.query_id(),snippet.table_alias(),having_table_,0,having_table_.row_count);
+                BufferManager::SaveTableData(snippet,having_table_,0,having_table_.row_count);
             } 
         }
     }else{
@@ -215,16 +215,16 @@ void MergeQueryManager::RunSnippetWork(){
             OrderBy(result_table_, snippet.order_by(), order_by_table_);
             //Save "order_by_table"
             if(isLimit){
-                BufferManager::SaveTableData(snippet.query_id(),snippet.table_alias(),order_by_table_,snippet.limit().offset(),snippet.limit().length());
+                BufferManager::SaveTableData(snippet,order_by_table_,snippet.limit().offset(),snippet.limit().length());
             }else{
-                BufferManager::SaveTableData(snippet.query_id(),snippet.table_alias(),order_by_table_,0,order_by_table_.row_count);
+                BufferManager::SaveTableData(snippet,order_by_table_,0,order_by_table_.row_count);
             }
         }else{
             //Save "result_table"
             if(isLimit){
-                BufferManager::SaveTableData(snippet.query_id(),snippet.table_alias(),result_table_,snippet.limit().offset(),snippet.limit().length());
+                BufferManager::SaveTableData(snippet,result_table_,snippet.limit().offset(),snippet.limit().length());
             }else{
-                BufferManager::SaveTableData(snippet.query_id(),snippet.table_alias(),result_table_,0,result_table_.row_count);
+                BufferManager::SaveTableData(snippet,result_table_,0,result_table_.row_count);
             } 
         }
     }

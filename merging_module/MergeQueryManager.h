@@ -3,6 +3,8 @@
 #include "BufferManager.h"
 
 using namespace std;
+using StorageEngineInstance::Snippet;
+using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::Snippet_Projection;
 using StorageEngineInstance::Snippet_Filter;
 using StorageEngineInstance::Snippet_Order;
@@ -39,7 +41,7 @@ struct T{
 
 class MergeQueryManager{	
 public:
-    MergeQueryManager(StorageEngineInstance::SnippetRequest snippet_){
+    MergeQueryManager(SnippetRequest snippet_){
         this->snippet = snippet_.snippet();
         this->snippetType = snippet_.type();
         this->group_by_table_.clear();
@@ -52,7 +54,7 @@ public:
     inline const static std::string LOGTAG = "Merging::Merge Query Manager";
 
 private:
-    StorageEngineInstance::Snippet snippet;//스니펫
+    Snippet snippet;//스니펫
     int snippetType;//스니펫 작업 타입
     int tableCnt;//작업 대상 테이블 개수
     bool isGroupby;//그룹바이 여부
@@ -92,5 +94,5 @@ private:
     string makeGroupbyKey(TableData &groupby_table, const RepeatedPtrField<string>& groups, int row_index);
 
     void InnerJoin_nestedloop(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, TableData &dest);//inner join (nested loop join)
-    void LeftOuterJoin_nestedloop();//left outer join (nested loop join)
+    // void LeftOuterJoin_nestedloop();//left outer join (nested loop join)
 };
