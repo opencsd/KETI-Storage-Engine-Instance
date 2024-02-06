@@ -72,7 +72,7 @@ class Scheduler{
     map<string,string> FileDistribution(DataFileInfo dataFileInfo); //CSD 순서대로
     map<string,string> RoundRobbin(DataFileInfo dataFileInfo); //CSD 병렬 처리 우선
     map<string,string> AlgorithmAutoSelection(DataFileInfo dataFileInfo); //CSD 순서대로
-    void serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd, string pba); // snippet -> json 구성
+    void serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd, string pba, int table_total_block_count); // snippet -> json 구성
     void sendSnippetToCSD(string snippet_json); // CSD 전달
   
   public:

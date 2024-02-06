@@ -28,6 +28,14 @@ using StorageEngineInstance::DBInfo;
 
 class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
   Status GetDataFileInfo(ServerContext *context, const Request *request, DataFileInfo *response) override {
+    while(true){
+      if(TableManager::IsTableManagerInitialized()){
+        break;
+      }
+      KETILOG::WARNLOG("Monitoring", "Table Manager Not Initialized!");
+      sleep(1);
+    }
+    
     string db_name = request->db_name();
     string table_name = request->table_name();
 
@@ -48,6 +56,14 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
   }
 
   Status GetSnippetMetaData(ServerContext *context, const Request *request, SnippetMetaData *response) override {
+    while(true){
+      if(TableManager::IsTableManagerInitialized()){
+        break;
+      }
+      KETILOG::WARNLOG("Monitoring", "Table Manager Not Initialized!");
+      sleep(1);
+    }
+
     string db_name = request->db_name();
     string table_name = request->table_name();
     int table_index_number = TableManager::GetTableIndexNumber(db_name, table_name);
@@ -71,9 +87,11 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
 
     Storage_Manager_Connector smc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
     smc.RequestPBA(lbaRequest, total_block_count, sst_pba_map); //async
+    cout << "request pba" << endl;
 
     WAL_Handler wh(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
     wh.RequestWAL(walRequest, sst_count, wal_deleted_key_json, wal_inserted_row_json); //async
+    cout << "request wal" << endl;
 
     //finish
 
@@ -92,113 +110,45 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
   }
 
   Status SyncMetaDataManager(ServerContext *context, const DBInfo *request, Response *response) override {
-    
+    for(const auto db : request->db_list()){
+      string db_name = db.first;
+
+      TableManager::DB new_db;
+      for(const auto table : db.second.table_list()){
+        TableManager::Table new_table;
+        new_table.sst_list.assign(table.second.sst_list().begin(),table.second.sst_list().end());
+        new_table.table_index_number = table.second.table_index_number();
+
+        new_db.table[table.first] = new_table;
+      }
+      
+      TableManager::SetDBInfo(db_name, new_db);
+    }
+
+    if(!TableManager::IsMetaDataInitialized()){
+      TableManager::SetMetaDataInitialized();
+    }
 
     return Status::OK;
   }
 
   Status SyncDBFileMonitoring(ServerContext *context, const DataFileInfo *request, Response *response) override {
-    
+    for(const auto entry : request->sst_csd_map()){
+      string sst_name = entry.first;
+      TableManager::CSD csd;
+      csd.csd_list.assign(entry.second.csd_id().begin(),entry.second.csd_id().end());
+      vector<bool> is_primary(true,entry.second.csd_id_size());
+      csd.is_primary = is_primary;
+
+      TableManager::SetCSD(sst_name, csd);
+    }
+
+    if(!TableManager::IsDBFileInitialized()){
+      TableManager::SetDBFileInitialized();
+    }
 
     return Status::OK;
   }
-
-  // Status SetMetaData(ServerContext* context, const Snippet* snippet, Response* response) override {
-  //   //PBA 정보 요청, WAL 정보 요청, 결과 구성
-  //   KETILOG::INFOLOG("Monitoring Module", "=: Set Meta Data :=");
-    
-  //   string key = TableManager::makeKey(snippet->query_id(),snippet->work_id());
-  //   TableManager::SetReturnData(key);
-
-  //   Request request_;
-  //   request_.set_query_id(snippet->query_id());
-  //   request_.set_work_id(snippet->work_id());
-  //   request_.set_table_name(snippet->table_name(0));
-
-  //   InternalRequest internal_request;
-  //   internal_request.query_id = snippet->query_id();
-  //   internal_request.work_id = snippet->work_id();
-  //   internal_request.table_name = snippet->table_name(0);
-
-  //   bool temp_index_scan = false;
-
-  //   // Snippet snippet_;
-
-  //   // TableManager::SetResponseSnippet(snippet_,key);
-  //   // TableManager::GetReturnData(key)->snippet->CopyFrom(new_snippet);
-  //   TableManager::GetReturnData(key)->wal_done = true;
-  //   // WALManager::PushQueue(request_);
-
-  //   if(!temp_index_scan){ //full scan
-  //     TableManager::GetReturnData(key)->index_scan_done = true;
-  //     LBA2PBAQueryAgent::PushQueue(request_);
-  //   }else{ //index scan
-  //     IndexManager::PushQueue(request_);
-  //   }
-    
-  //   response->set_value("Set Meta Data Start");
-
-  //   return Status::OK;
-  // }
-  // Status GetMetaData(ServerContext* context, const Request* request, MetaDataResponse* result) override {
-  //   // call from offloading container; 저장된 메타 정보 전달, 구성 완료 전이면 대기
-  //   KETILOG::INFOLOG("Monitoring Container", "=: Get Meta Data :=");
-    
-  //   string key = TableManager::makeKey(request->query_id(),request->work_id());
-  //   MetaDataResponse_* data = TableManager::GetReturnData(key);
-    
-  //   unique_lock<mutex> lock(data->mu);
-  //   while (!data->lba2pba_done || !data->wal_done){
-  //     data->cond.wait(lock);
-  //   }
-    
-  //   result->CopyFrom(*data->metadataResponse);
-  //   return Status::OK;
-  // }
-  // Status GetCSDBlockInfo(ServerContext* context, const Request* request, TableBlockCount* result) override {
-  //   // call from merging container; 저장된 블록 수 정보 전달, 구성 완료 전이면 대기
-  //   KETILOG::INFOLOG("Monitoring Container", "=: Get CSD Block Info :=");
-    
-  //   string key = TableManager::makeKey(request->query_id(),request->work_id());
-  //   MetaDataResponse_* data = TableManager::GetReturnData(key);
-
-  //   unique_lock<mutex> lock(data->mu);
-  //   while (!data->lba2pba_done || !data->wal_done){
-  //     data->cond.wait(lock);
-  //   }
-  //   result->set_table_block_count(data->block_count);
-    
-  //   return Status::OK;
-  // }
-  // Status SetCSDMetricsInfo(ServerContext *context, const CSDMetricList *csdMetricList, Response *response) override {
-  //   KETILOG::INFOLOG("Monitoring Container", "=: Set CSD Metrics Info :=");
-  //   for (int i = 0; i < csdMetricList->csd_metric_list_size(); i++){
-  //     StorageEngineMetricCollector::CSDMetric newCSD;
-
-  //     string csd_id =  csdMetricList->csd_metric_list(i).id();
-  //     newCSD.ip = csdMetricList->csd_metric_list(i).ip();
-  //     newCSD.cpu_usage = csdMetricList->csd_metric_list(i).cpu_usage();
-  //     newCSD.mem_usage = csdMetricList->csd_metric_list(i).memory_usage();
-  //     newCSD.disk_usage = csdMetricList->csd_metric_list(i).disk_usage();
-  //     newCSD.network = csdMetricList->csd_metric_list(i).network();
-  //     newCSD.block_count = csdMetricList->csd_metric_list(i).working_block_count();
-
-  //     {
-  //     // // Debugg Code
-  //     // cout << "CSD IP: " << newCSD.ip;
-  //     // cout << ", CPU Usage: " << newCSD.cpu_usage;
-  //     // cout << "%, Memory Usage: " << newCSD.mem_usage;
-  //     // cout << "%, disk Usage: " << newCSD.disk_usage;
-  //     // cout << "%, network: " <<  newCSD.network << endl;
-  //     }
-      
-  //     StorageEngineMetricCollector::SetCSDMetric(csd_id,newCSD);
-  //   }
-
-  //   response->set_value("metric set success");
-
-  //   return Status::OK;
-  // }
 };
 
 void RunGRPCServer() {
@@ -210,7 +160,7 @@ void RunGRPCServer() {
   builder.RegisterService(&service);
   std::unique_ptr<Server> server(builder.BuildAndStart());
 
-  KETILOG::WARNLOG("Monitoring Container", "Monitoring Container Server listening on "+server_address);
+  KETILOG::WARNLOG("Monitoring", "Monitoring Container Server listening on "+server_address);
 
   server->Wait();
 }

@@ -21,6 +21,7 @@ class TableManager { /* modify as singleton class */
 public:	
 	struct CSD {
 		vector<string> csd_list;
+		vector<bool> is_primary;
 	};
 
 	struct Table {
@@ -31,6 +32,26 @@ public:
 	struct DB {
 		map<string, Table> table;
 	};
+
+	static bool IsMetaDataInitialized(){
+		return GetInstance().isMetaDataInitialized();
+	}
+
+	static bool IsDBFileInitialized(){
+		return GetInstance().isDBFileInitialized();
+	}
+
+	static bool IsTableManagerInitialized(){
+		return GetInstance().isTableManagerInitialized();
+	}
+
+	static bool CheckExistDB(string db_name){
+		return GetInstance().checkExistDB(db_name);
+	}
+
+	static bool CheckExistTable(string db_name, string table_name){
+		return GetInstance().checkExistTable(db_name, table_name);
+	}
 
 	static vector<string> GetCSD(string sst_name){
 		return GetInstance().getCSD(sst_name);
@@ -44,8 +65,16 @@ public:
 		return GetInstance().getTableIndexNumber(db_name, table_name);
 	}
 
-	static void SetCSD(string sst_name, vector<string> csd_list){
-		return GetInstance().setCSD(sst_name, csd_list);
+	static void SetMetaDataInitialized(){
+		return GetInstance().setMetaDataInitialized();
+	}
+
+	static void SetDBFileInitialized(){
+		return GetInstance().setDBFileInitialized();
+	}
+
+	static void SetCSD(string sst_name, CSD csd){
+		return GetInstance().setCSD(sst_name, csd);
 	}
 
 	static void SetTableInfo(string db_name, string table_name, Table table){
@@ -57,7 +86,10 @@ public:
 	}
 
 private:
-	TableManager() {};
+	TableManager() {
+		MetaDataInitialized_ = false;
+		DBFileInitialized_= false;
+	};
     TableManager(const TableManager&);
     TableManager& operator=(const TableManager&){
         return *this;
@@ -67,6 +99,28 @@ private:
         static TableManager _instance;
         return _instance;
     }
+
+	bool isMetaDataInitialized(){
+		return GetInstance().MetaDataInitialized_;
+	}
+	
+	bool isDBFileInitialized(){
+		return GetInstance().DBFileInitialized_;
+	}
+
+	bool isTableManagerInitialized(){
+		return GetInstance().MetaDataInitialized_ && GetInstance().DBFileInitialized_;
+	}
+
+	bool checkExistDB(string db_name){
+		std::lock_guard<std::mutex> lock(mutex_);
+		return GetInstance().TableManager_.find(db_name) != GetInstance().TableManager_.end();
+	}
+
+	bool checkExistTable(string db_name, string table_name){
+		std::lock_guard<std::mutex> lock(mutex_);
+		return GetInstance().TableManager_[db_name].table.find(table_name) != GetInstance().TableManager_[db_name].table.end();
+	}
 
 	vector<string> getCSD(string sst_name){
 		std::lock_guard<std::mutex> lock(mutex_);
@@ -83,9 +137,17 @@ private:
 		return GetInstance().TableManager_[db_name].table[table_name].table_index_number;
 	}
 
-	void setCSD(string sst_name, vector<string> csd_list){
+	void setMetaDataInitialized(){
+		GetInstance().MetaDataInitialized_ = true;
+	}
+
+	void setDBFileInitialized(){
+		GetInstance().DBFileInitialized_ = true;
+	}
+
+	void setCSD(string sst_name, CSD csd){
 		std::lock_guard<std::mutex> lock(mutex_);
-		SSTCSDMap_[sst_name].csd_list = csd_list;
+		SSTCSDMap_[sst_name] = csd;
 	}
 
 	void setTableInfo(string db_name, string table_name, Table table){
@@ -104,6 +166,8 @@ public:
 
 private:
     mutex mutex_;
+	bool MetaDataInitialized_;
+	bool DBFileInitialized_;
 	unordered_map<string,struct DB> TableManager_;
 	unordered_map<string, struct CSD> SSTCSDMap_;
 };

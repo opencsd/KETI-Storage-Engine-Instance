@@ -3,13 +3,11 @@
 void getColOffset(const char* row_data, int* col_offset_list, vector<int> return_datatype, vector<int> table_offlen);
 
 void BufferManager::initBufferManager(){
-    std::thread BufferManager_Input_Thread(&BufferManager::inputBufferManager,this);
-    std::thread BufferManager_Save_Thread(&BufferManager::runBufferManager,this);
-    BufferManager_Input_Thread.detach();
-    BufferManager_Save_Thread.detach();
+    std::thread BufferManagerInterface(&BufferManager::bufferManagerInterface,this);
+    BufferManagerInterface.detach();
 }
 
-void BufferManager::inputBufferManager(){
+void BufferManager::bufferManagerInterface(){
     int server_fd, client_fd;
 	int opt = 1;
 	struct sockaddr_in serv_addr, client_addr;
@@ -50,7 +48,7 @@ void BufferManager::inputBufferManager(){
         	exit(EXIT_FAILURE);
 		}
 
-		std::string json = "";\
+		std::string json = "";
         int njson;
 		size_t ljson;
 
@@ -95,325 +93,265 @@ void BufferManager::inputBufferManager(){
 
         send(client_fd, cMsg, strlen(cMsg), 0);
 
-        PushQueue(BlockResult(json.c_str(), data));
+        pushResult(BlockResult(json.c_str(), data));
         
         close(client_fd);		
 	}   
 	close(server_fd);
 }
 
-void BufferManager::runBufferManager(){
-    while (1){
-        BlockResult blockResult = PopQueue();
+void BufferManager::pushResult(BlockResult blockResult){
+    int qid = blockResult.query_id;
+    int wid = blockResult.work_id;
 
-        string msg = "# Receive Data from CSD#" + blockResult.csd_name + " Return Interface {" + to_string(blockResult.query_id) + "|" + to_string(blockResult.work_id) + "}";
-        KETILOG::DEBUGLOG(LOGTAG, msg);
-
-        // // 테스트 출력
-        // cout << "\n----------------------------------------------\n";
-        // for(int i = 0; i < blockResult.length; i++){
-        //     printf("%02X",(u_char)blockResult.data[i]);
-        // }
-        // cout << "\n------------------------------------------------\n";
-
-        if((DataBuff.find(blockResult.query_id) == DataBuff.end()) || 
-           (DataBuff[blockResult.query_id]->work_buffer_list.find(blockResult.work_id) 
-                    == DataBuff[blockResult.query_id]->work_buffer_list.end())){
-            string msg = "<error> Work(" + to_string(blockResult.query_id) + "-" + to_string(blockResult.work_id) + ") Initialize First!";
-            KETILOG::FATALLOG(LOGTAG, msg);
-        }   
-
-        mergeBlock(blockResult);
-    }
-}
-
-void BufferManager::mergeBlock(BlockResult result){
-    int qid = result.query_id;
-    int wid = result.work_id;
-    string col_name;
-
-    WorkBuffer* myWorkBuffer = DataBuff[qid]->work_buffer_list[wid];
-    unique_lock<mutex> lock(myWorkBuffer->mu);
-
-    if(myWorkBuffer->status == WorkDone){
-        string msg = " error>> Work {" + to_string(qid) + "|" + to_string(wid) + "} is already done!";
-        KETILOG::FATALLOG(LOGTAG, msg);
-        return;
+    if(DataBuffer_.find(blockResult.query_id) == DataBuffer_.end()){
+        QueryBuffer* queryBuffer = new QueryBuffer(qid);
+        DataBuffer_.insert(pair<int,QueryBuffer*>(qid,queryBuffer));
     }
     
-    if(result.length != 0){
-        int col_type, col_offset, col_len, origin_row_len, col_count = 0;
-        vector<int> new_row_offset;
-        new_row_offset.assign(result.row_offset.begin(), result.row_offset.end());
-        new_row_offset.push_back(result.length);
+    if((DataBuffer_[blockResult.query_id]->work_buffer_list.find(blockResult.work_id) 
+            == DataBuffer_[blockResult.query_id]->work_buffer_list.end())){
+        WorkBuffer* workBuffer = new WorkBuffer();
 
-        if(KETILOG::IsLogLevelUnder(TRACE)){
-            // 리턴 데이터 형식 확인 - Debug Code   
-            for(int i = 0; i<result.return_datatype.size(); i++){
-                cout << result.return_datatype[i] << " ";
-            }
-            cout << endl;
-            for(int i = 0; i<result.return_datatype.size(); i++){
-                cout << result.return_offlen[i] << " ";
-            }
-            cout << endl;  
+        workBuffer->table_alias = blockResult.table_alias;
+        for(int i = 0; i < blockResult.column_alias.size(); i++){
+            workBuffer->table_column.push_back(blockResult.column_alias[i]);
+            workBuffer->table_data.insert({blockResult.column_alias[i],ColData{}});
         }
 
-        for(int i=0; i<result.row_count; i++){
-            origin_row_len = new_row_offset[i+1] - new_row_offset[i];
-            char row_data[origin_row_len];
-            memcpy(row_data,result.data+result.row_offset[i],origin_row_len);
+        DataBuffer_[qid]->tablename_workid_map[blockResult.table_alias] = wid;
+        DataBuffer_[qid]->work_buffer_list[wid] = workBuffer;
+        DataBuffer_[qid]->work_buffer_list[wid]->left_block_count = blockResult.total_block_count;
+        DataBuffer_[qid]->work_buffer_list[wid]->work_buffer_queue.push_work(blockResult);
 
-            col_count = myWorkBuffer->table_column.size();
-            int col_offset_list[col_count + 1];
-            
-            getColOffset(row_data, col_offset_list, result.return_datatype, result.return_offlen);
-            col_offset_list[col_count] = origin_row_len;
+        std::thread mergeResultThread(&BufferManager::mergeResult,this, qid, wid);
+        mergeResultThread.detach();
+    }
 
-            for(size_t j=0; j<myWorkBuffer->table_column.size(); j++){
-                col_name = myWorkBuffer->table_column[j];
-                col_offset = col_offset_list[j];
-                col_len = col_offset_list[j+1] - col_offset_list[j];
-                col_type = result.return_datatype[j];
+    DataBuffer_[qid]->work_buffer_list[wid]->work_buffer_queue.push_work(blockResult);
+}
 
-                switch (col_type){
-                    case MySQL_BYTE:{
-                        char tempbuf[col_len];
-                        memcpy(tempbuf,row_data+col_offset,col_len);
-                        int64_t my_value = *((int8_t *)tempbuf);
-                        myWorkBuffer->table_data[col_name].intvec.push_back(my_value);
-                        break;
-                    }case MySQL_INT16:{
-                        char tempbuf[col_len];
-                        memcpy(tempbuf,row_data+col_offset,col_len);
-                        int64_t my_value = *((int16_t *)tempbuf);
-                        myWorkBuffer->table_data[col_name].intvec.push_back(my_value);     
-                        break;
-                    }case MySQL_INT32:{
-                        char tempbuf[col_len];
-                        memcpy(tempbuf,row_data+col_offset,col_len);
-                        int64_t my_value = *((int32_t *)tempbuf);
-                        myWorkBuffer->table_data[col_name].intvec.push_back(my_value);
-                        break;
-                    }case MySQL_INT64:{
-                        char tempbuf[col_len];
-                        memcpy(tempbuf,row_data+col_offset,col_len);
-                        int64_t my_value = *((int64_t *)tempbuf);
-                        myWorkBuffer->table_data[col_name].intvec.push_back(my_value);
-                        break;
-                    }case MySQL_FLOAT32:{
-                        //아직 처리X
-                        char tempbuf[col_len];//col_len = 4
-                        memcpy(tempbuf,row_data+col_offset,col_len);
-                        double my_value = *((float *)tempbuf);
-                        myWorkBuffer->table_data[col_name].floatvec.push_back(my_value);
-                        break;
-                    }case MySQL_DOUBLE:{
-                        //아직 처리X
-                        char tempbuf[col_len];//col_len = 8
-                        memcpy(tempbuf,row_data+col_offset,col_len);
-                        double my_value = *((double *)tempbuf);
-                        myWorkBuffer->table_data[col_name].floatvec.push_back(my_value);
-                        break;
-                    }case MySQL_NEWDECIMAL:{
-                        //decimal(15,2)만 고려한 상황 -> col_len = 7 or 8 (integer:6/real:1 or 2 or 3)
-                        char tempbuf[col_len];//col_len = 7 or 8 or 9
-                        memcpy(tempbuf,row_data+col_offset,col_len);
-                        bool is_negative = false;
-                        if(std::bitset<8>(tempbuf[0])[7] == 0){//음수일때 not +1
-                            is_negative = true;
-                            for(int i = 0; i<7; i++){
-                                tempbuf[i] = ~tempbuf[i];//not연산
+void BufferManager::mergeResult(int qid, int wid){
+    WorkBuffer* myWorkBuffer = DataBuffer_[qid]->work_buffer_list[wid];
+
+    while (1){
+        BlockResult result = myWorkBuffer->work_buffer_queue.wait_and_pop();
+        unique_lock<mutex> lock(myWorkBuffer->mu);
+
+        string col_name;
+        
+        if(result.length != 0){
+            int col_type, col_offset, col_len, origin_row_len, col_count = 0;
+            vector<int> new_row_offset;
+            new_row_offset.assign(result.row_offset.begin(), result.row_offset.end());
+            new_row_offset.push_back(result.length);
+
+            if(KETILOG::IsLogLevelUnder(TRACE)){
+                // 리턴 데이터 형식 확인 - Debug Code   
+                for(int i = 0; i<result.return_datatype.size(); i++){
+                    cout << result.return_datatype[i] << " ";
+                }
+                cout << endl;
+                for(int i = 0; i<result.return_datatype.size(); i++){
+                    cout << result.return_offlen[i] << " ";
+                }
+                cout << endl;  
+            }
+
+            for(int i=0; i<result.row_count; i++){
+                origin_row_len = new_row_offset[i+1] - new_row_offset[i];
+                char row_data[origin_row_len];
+                memcpy(row_data,result.data+result.row_offset[i],origin_row_len);
+
+                col_count = myWorkBuffer->table_column.size();
+                int col_offset_list[col_count + 1];
+                
+                getColOffset(row_data, col_offset_list, result.return_datatype, result.return_offlen);
+                col_offset_list[col_count] = origin_row_len;
+
+                for(size_t j=0; j<myWorkBuffer->table_column.size(); j++){
+                    col_name = myWorkBuffer->table_column[j];
+                    col_offset = col_offset_list[j];
+                    col_len = col_offset_list[j+1] - col_offset_list[j];
+                    col_type = result.return_datatype[j];
+
+                    switch (col_type){
+                        case MySQL_BYTE:{
+                            char tempbuf[col_len];
+                            memcpy(tempbuf,row_data+col_offset,col_len);
+                            int64_t my_value = *((int8_t *)tempbuf);
+                            myWorkBuffer->table_data[col_name].intvec.push_back(my_value);
+                            break;
+                        }case MySQL_INT16:{
+                            char tempbuf[col_len];
+                            memcpy(tempbuf,row_data+col_offset,col_len);
+                            int64_t my_value = *((int16_t *)tempbuf);
+                            myWorkBuffer->table_data[col_name].intvec.push_back(my_value);     
+                            break;
+                        }case MySQL_INT32:{
+                            char tempbuf[col_len];
+                            memcpy(tempbuf,row_data+col_offset,col_len);
+                            int64_t my_value = *((int32_t *)tempbuf);
+                            myWorkBuffer->table_data[col_name].intvec.push_back(my_value);
+                            break;
+                        }case MySQL_INT64:{
+                            char tempbuf[col_len];
+                            memcpy(tempbuf,row_data+col_offset,col_len);
+                            int64_t my_value = *((int64_t *)tempbuf);
+                            myWorkBuffer->table_data[col_name].intvec.push_back(my_value);
+                            break;
+                        }case MySQL_FLOAT32:{
+                            //아직 처리X
+                            char tempbuf[col_len];//col_len = 4
+                            memcpy(tempbuf,row_data+col_offset,col_len);
+                            double my_value = *((float *)tempbuf);
+                            myWorkBuffer->table_data[col_name].floatvec.push_back(my_value);
+                            break;
+                        }case MySQL_DOUBLE:{
+                            //아직 처리X
+                            char tempbuf[col_len];//col_len = 8
+                            memcpy(tempbuf,row_data+col_offset,col_len);
+                            double my_value = *((double *)tempbuf);
+                            myWorkBuffer->table_data[col_name].floatvec.push_back(my_value);
+                            break;
+                        }case MySQL_NEWDECIMAL:{
+                            //decimal(15,2)만 고려한 상황 -> col_len = 7 or 8 (integer:6/real:1 or 2 or 3)
+                            char tempbuf[col_len];//col_len = 7 or 8 or 9
+                            memcpy(tempbuf,row_data+col_offset,col_len);
+                            bool is_negative = false;
+                            if(std::bitset<8>(tempbuf[0])[7] == 0){//음수일때 not +1
+                                is_negative = true;
+                                for(int i = 0; i<7; i++){
+                                    tempbuf[i] = ~tempbuf[i];//not연산
+                                }
+                                // tempbuf[6] = tempbuf[6] +1;//+1
+                            }   
+                            char integer[8];
+                            memset(&integer, 0, 8);
+                            for(int k=0; k<5; k++){
+                                integer[k] = tempbuf[5-k];
                             }
-                            // tempbuf[6] = tempbuf[6] +1;//+1
-                        }   
-                        char integer[8];
-                        memset(&integer, 0, 8);
-                        for(int k=0; k<5; k++){
-                            integer[k] = tempbuf[5-k];
-                        }
 
-                        int64_t ivalue = *((int64_t *)integer); 
-                        double rvalue;
-                        if(col_len == 7){
-                            char real[1];
-                            real[0] = tempbuf[6];
-                            rvalue = *((int8_t *)real); 
-                            rvalue *= 0.01;
-                        }else if(col_len == 8){
-                            char real[2];
-                            real[0] = tempbuf[7];
-                            real[1] = tempbuf[6];
-                            rvalue = *((int16_t *)real); 
-                            rvalue *= 0.0001;
-                        }else if(col_len == 9){
-                            char real[4];
-                            real[0] = tempbuf[8];
-                            real[1] = tempbuf[7];
-                            real[2] = tempbuf[6];
-                            real[3] = 0x00;
-                            rvalue = *((int32_t *)real); 
-                            rvalue *= 0.000001;
-                        }else{
-                            KETILOG::FATALLOG("","Mysql_newdecimal>else : " + to_string(col_len));
+                            int64_t ivalue = *((int64_t *)integer); 
+                            double rvalue;
+                            if(col_len == 7){
+                                char real[1];
+                                real[0] = tempbuf[6];
+                                rvalue = *((int8_t *)real); 
+                                rvalue *= 0.01;
+                            }else if(col_len == 8){
+                                char real[2];
+                                real[0] = tempbuf[7];
+                                real[1] = tempbuf[6];
+                                rvalue = *((int16_t *)real); 
+                                rvalue *= 0.0001;
+                            }else if(col_len == 9){
+                                char real[4];
+                                real[0] = tempbuf[8];
+                                real[1] = tempbuf[7];
+                                real[2] = tempbuf[6];
+                                real[3] = 0x00;
+                                rvalue = *((int32_t *)real); 
+                                rvalue *= 0.000001;
+                            }else{
+                                KETILOG::FATALLOG("","Mysql_newdecimal>else : " + to_string(col_len));
+                            }
+                            double my_value = ivalue + rvalue;
+                            if(is_negative){
+                                my_value *= -1;
+                            }
+                            myWorkBuffer->table_data[col_name].floatvec.push_back(my_value);
+                            break;
+                        }case MySQL_DATE:{
+                            char tempbuf[col_len+1];
+                            memcpy(tempbuf,row_data+col_offset,col_len);
+                            tempbuf[3] = 0x00;
+                            int64_t my_value = *((int *)tempbuf);
+                            myWorkBuffer->table_data[col_name].intvec.push_back(my_value);
+                            break;
+                        }case MySQL_TIMESTAMP:{
+                            //아직 처리X
+                            char tempbuf[col_len];
+                            memcpy(tempbuf,row_data+col_offset,col_len);
+                            int my_value = *((int *)tempbuf);
+                            myWorkBuffer->table_data[col_name].intvec.push_back(my_value);
+                            break;
+                        }case MySQL_STRING:{
+                            char tempbuf[col_len+1];
+                            memcpy(tempbuf,row_data+col_offset,col_len);
+                            tempbuf[col_len] = '\0';
+                            string my_value(tempbuf);
+                            myWorkBuffer->table_data[col_name].strvec.push_back(my_value);
+                            break;
+                        }case MySQL_VARSTRING:{
+                            char tempbuf[col_len];
+                            if(col_len < 258){//0~257 (_1_,___256____)
+                                memcpy(tempbuf,row_data+col_offset+1,col_len-1);
+                                tempbuf[col_len-1] = '\0';
+                            }else{//259~65535 (__2__,_____65535______)
+                                memcpy(tempbuf,row_data+col_offset+2,col_len-2);
+                                tempbuf[col_len-2] = '\0';
+                            }
+                            string my_value(tempbuf);
+                            myWorkBuffer->table_data[col_name].strvec.push_back(my_value);
+                            break;
+                        }default:{
+                            string msg = " error>> Type: " + to_string(col_type) + " is not defined!";
+                            KETILOG::FATALLOG(LOGTAG, msg);
                         }
-                        double my_value = ivalue + rvalue;
-                        if(is_negative){
-                            my_value *= -1;
-                        }
-                        myWorkBuffer->table_data[col_name].floatvec.push_back(my_value);
-                        break;
-                    }case MySQL_DATE:{
-                        char tempbuf[col_len+1];
-                        memcpy(tempbuf,row_data+col_offset,col_len);
-                        tempbuf[3] = 0x00;
-                        int64_t my_value = *((int *)tempbuf);
-                        myWorkBuffer->table_data[col_name].intvec.push_back(my_value);
-                        break;
-                    }case MySQL_TIMESTAMP:{
-                        //아직 처리X
-                        char tempbuf[col_len];
-                        memcpy(tempbuf,row_data+col_offset,col_len);
-                        int my_value = *((int *)tempbuf);
-                        myWorkBuffer->table_data[col_name].intvec.push_back(my_value);
-                        break;
-                    }case MySQL_STRING:{
-                        char tempbuf[col_len+1];
-                        memcpy(tempbuf,row_data+col_offset,col_len);
-                        tempbuf[col_len] = '\0';
-                        string my_value(tempbuf);
-                        myWorkBuffer->table_data[col_name].strvec.push_back(my_value);
-                        break;
-                    }case MySQL_VARSTRING:{
-                        char tempbuf[col_len];
-                        if(col_len < 258){//0~257 (_1_,___256____)
-                            memcpy(tempbuf,row_data+col_offset+1,col_len-1);
-                            tempbuf[col_len-1] = '\0';
-                        }else{//259~65535 (__2__,_____65535______)
-                            memcpy(tempbuf,row_data+col_offset+2,col_len-2);
-                            tempbuf[col_len-2] = '\0';
-                        }
-                        string my_value(tempbuf);
-                        myWorkBuffer->table_data[col_name].strvec.push_back(my_value);
-                        break;
-                    }default:{
-                        string msg = " error>> Type: " + to_string(col_type) + " is not defined!";
-                        KETILOG::FATALLOG(LOGTAG, msg);
+                    }
+                    myWorkBuffer->table_data[col_name].isnull.push_back(false);
+                    myWorkBuffer->table_data[col_name].row_count++;
+                }
+            }
+        }
+
+        myWorkBuffer->left_block_count -= result.result_block_count;
+        myWorkBuffer->row_count += result.row_count;
+        DataBuffer_[qid]->scanned_row_count += result.scanned_row_count;
+        DataBuffer_[qid]->filtered_row_count += result.filtered_row_count;
+        
+        KETILOG::DEBUGLOG(LOGTAG,"# Merging Data{" + to_string(qid) + "|" + to_string(wid) + "|" + myWorkBuffer->table_alias + "} ... (Left Block : " + std::to_string(myWorkBuffer->left_block_count) + ")");
+
+        if(myWorkBuffer->left_block_count == 0){ //Work Done
+            string msg = "# Merging Data {" + to_string(qid) + "|" + to_string(wid) + "|" + myWorkBuffer->table_alias + "} Done";
+            KETILOG::DEBUGLOG(LOGTAG,msg);
+
+            for(auto it = myWorkBuffer->table_data.begin(); it != myWorkBuffer->table_data.end(); it++){
+                    if((*it).second.floatvec.size() != 0){
+                        (*it).second.type = TYPE_FLOAT;
+                    }else if((*it).second.intvec.size() != 0){
+                        (*it).second.type = TYPE_INT;
+                    }else if((*it).second.strvec.size() != 0){
+                        (*it).second.type = TYPE_STRING;
                     }
                 }
-                myWorkBuffer->table_data[col_name].isnull.push_back(false);
-                myWorkBuffer->table_data[col_name].row_count++;
-            }
+
+            myWorkBuffer->status = WorkDone;
+            myWorkBuffer->cond.notify_all();
+
+            break;
         }
     }
-
-    myWorkBuffer->left_block_count -= result.result_block_count;
-    myWorkBuffer->row_count += result.row_count;
-    DataBuff[qid]->scanned_row_count += result.scanned_row_count;
-    DataBuff[qid]->filtered_row_count += result.filtered_row_count;
-    
-    KETILOG::DEBUGLOG(LOGTAG,"# Merging Data{" + to_string(qid) + "|" + to_string(wid) + "|" + myWorkBuffer->table_alias + "} ... (Left Block : " + std::to_string(myWorkBuffer->left_block_count) + ")");
-
-    if(myWorkBuffer->left_block_count == 0){ //Work Done
-        string msg = "# Merging Data {" + to_string(qid) + "|" + to_string(wid) + "|" + myWorkBuffer->table_alias + "} Done";
-        KETILOG::DEBUGLOG(LOGTAG,msg);
-
-        // if(myWorkBuffer->row_count == 0){
-        //     for(int c = 0; c < myWorkBuffer->table_column.size(); c++){
-        //         myWorkBuffer->table_data[myWorkBuffer->table_column[c]].row_count = 0;
-        //         myWorkBuffer->table_data[myWorkBuffer->table_column[c]].type = TYPE_EMPTY;
-        //     }
-        // }else{
-        //     for(auto it = myWorkBuffer->table_data.begin(); it != myWorkBuffer->table_data.end(); it++){
-        //         if((*it).second.floatvec.size() != 0){
-        //             (*it).second.type = TYPE_FLOAT;
-        //         }else if((*it).second.intvec.size() != 0){
-        //             (*it).second.type = TYPE_INT;
-        //         }else if((*it).second.strvec.size() != 0){
-        //             (*it).second.type = TYPE_STRING;
-        //         }
-        //     }
-        // }
-
-        for(auto it = myWorkBuffer->table_data.begin(); it != myWorkBuffer->table_data.end(); it++){
-                if((*it).second.floatvec.size() != 0){
-                    (*it).second.type = TYPE_FLOAT;
-                }else if((*it).second.intvec.size() != 0){
-                    (*it).second.type = TYPE_INT;
-                }else if((*it).second.strvec.size() != 0){
-                    (*it).second.type = TYPE_STRING;
-                }
-            }
-
-        myWorkBuffer->status = WorkDone;
-        myWorkBuffer->cond.notify_all();
-    }
-}
-
-int BufferManager::initWork(int type, StorageEngineInstance::Snippet masked_snippet){
-    if(DataBuff.find(masked_snippet.query_id()) == DataBuff.end()){
-        InitQuery(masked_snippet.query_id());
-    }else if(DataBuff[masked_snippet.query_id()]->work_buffer_list.find(masked_snippet.work_id()) 
-                != DataBuff[masked_snippet.query_id()]->work_buffer_list.end()){
-        string msg = " error>> ID Duplicate Error {" + to_string(masked_snippet.query_id()) + "|" + to_string(masked_snippet.work_id()) + "}";
-        KETILOG::FATALLOG(LOGTAG, msg);
-        return -1;            
-    }   
-
-    WorkBuffer* workBuffer = new WorkBuffer();
-
-    string table_alias = masked_snippet.table_alias();
-    workBuffer->table_alias = table_alias;
-    for(int i = 0; i < masked_snippet.column_alias_size(); i++){
-        workBuffer->table_column.push_back(masked_snippet.column_alias(i));
-        workBuffer->table_data.insert({masked_snippet.column_alias(i),ColData{}});
-    }
-
-    DataBuff[masked_snippet.query_id()]->work_buffer_list[masked_snippet.work_id()] = workBuffer;
-    DataBuff[masked_snippet.query_id()]->tablename_workid_map[table_alias] = masked_snippet.work_id();
-
-    if(type == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET){
-        // int temp_port;
-        // if(table_alias == "ProcessTable10-0"){
-        //     temp_port = 40210;
-        // }else if(table_alias == "ProcessTable10-1"){
-        //     temp_port = 40210;
-        // }else if(table_alias == "ProcessTable10-2"){
-        //     temp_port = 40210;
-        // }else{
-        //     temp_port = SE_MONITORING_CONTAINER_PORT;
-        // }
-        // Monitoring_Container_Interface mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(temp_port), grpc::InsecureChannelCredentials()));
-        Monitoring_Container_Interface mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_CONTAINER_PORT), grpc::InsecureChannelCredentials()));
-        int block_cnt = mc.GetCSDBlockInfo(masked_snippet.query_id(),masked_snippet.work_id());
-        DataBuff[masked_snippet.query_id()]->work_buffer_list[masked_snippet.work_id()]->left_block_count = block_cnt;
-    }
-
-    return 1;
-}
-
-void BufferManager::initQuery(int qid){
-    QueryBuffer* queryBuffer = new QueryBuffer(qid);
-    DataBuff.insert(pair<int,QueryBuffer*>(qid,queryBuffer));
 }
 
 int BufferManager::checkTableStatus(int qid, string tname){
-    if(DataBuff.find(qid) == DataBuff.end()){
+    if(DataBuffer_.find(qid) == DataBuffer_.end()){
         return NonInitQuery;
-    }else if(DataBuff[qid]->tablename_workid_map.find(tname) == DataBuff[qid]->tablename_workid_map.end()){
+    }else if(DataBuffer_[qid]->tablename_workid_map.find(tname) == DataBuffer_[qid]->tablename_workid_map.end()){
         return NonInitTable;
     }else{
-        return DataBuff[qid]->work_buffer_list[DataBuff[qid]->tablename_workid_map[tname]]->status;
+        return DataBuffer_[qid]->work_buffer_list[DataBuffer_[qid]->tablename_workid_map[tname]]->status;
     }
 }
 
 int BufferManager::endQuery(StorageEngineInstance::Request qid){
-    if(DataBuff.find(qid.query_id()) == DataBuff.end()){
+    if(DataBuffer_.find(qid.query_id()) == DataBuffer_.end()){
         string msg = " error>> There's No Query ID {" + to_string(qid.query_id()) + "}";
         KETILOG::FATALLOG(LOGTAG, msg);
         return 0;
     }
-    DataBuff.erase(qid.query_id());
+    DataBuffer_.erase(qid.query_id());
     return 1;
 }
 
@@ -427,8 +365,8 @@ TableData BufferManager::getTableData(int qid, string tname){
             KETILOG::DEBUGLOG(LOGTAG,"# Buffer Not Init " + to_string(qid) + ":" + tname);
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }else{
-            int wid = DataBuff[qid]->tablename_workid_map[tname];
-            WorkBuffer* workBuffer = DataBuff[qid]->work_buffer_list[wid];
+            int wid = DataBuffer_[qid]->tablename_workid_map[tname];
+            WorkBuffer* workBuffer = DataBuffer_[qid]->work_buffer_list[wid];
             unique_lock<mutex> buffer_lock(workBuffer->mu);
 
             int status = CheckTableStatus(qid,tname);
@@ -440,8 +378,8 @@ TableData BufferManager::getTableData(int qid, string tname){
                 tableData.table_data = workBuffer->table_data;
                 tableData.valid = true;
                 tableData.row_count = workBuffer->row_count;
-                tableData.scanned_row_count = DataBuff[qid]->scanned_row_count;
-                tableData.filtered_row_count = DataBuff[qid]->filtered_row_count;
+                tableData.scanned_row_count = DataBuffer_[qid]->scanned_row_count;
+                tableData.filtered_row_count = DataBuffer_[qid]->filtered_row_count;
 
                 KETILOG::DEBUGLOG(LOGTAG,"# Finished " + to_string(qid) + ":" + tname);
                 if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
@@ -456,8 +394,8 @@ TableData BufferManager::getTableData(int qid, string tname){
                 tableData.table_data = workBuffer->table_data;
                 tableData.valid = true;
                 tableData.row_count = workBuffer->row_count;
-                tableData.scanned_row_count = DataBuff[qid]->scanned_row_count;
-                tableData.filtered_row_count = DataBuff[qid]->scanned_row_count;
+                tableData.scanned_row_count = DataBuffer_[qid]->scanned_row_count;
+                tableData.filtered_row_count = DataBuffer_[qid]->scanned_row_count;
 
                 if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
                     cout << "<get table data>" << endl;
@@ -479,8 +417,8 @@ int BufferManager::saveTableData(int qid, string tname, TableData &table_data_, 
     string msg = "# Save Table {" + to_string(qid) + "|" + tname + "}";
     KETILOG::DEBUGLOG(LOGTAG,msg);
 
-    int wid = DataBuff[qid]->tablename_workid_map[tname];
-    WorkBuffer* workBuffer = DataBuff[qid]->work_buffer_list[wid];
+    int wid = DataBuffer_[qid]->tablename_workid_map[tname];
+    WorkBuffer* workBuffer = DataBuffer_[qid]->work_buffer_list[wid];
     unique_lock<mutex> lock(workBuffer->mu);
 
     if(length <= table_data_.row_count){
@@ -508,18 +446,18 @@ int BufferManager::saveTableData(int qid, string tname, TableData &table_data_, 
         }
         workBuffer->row_count = length - offset;
     }else{
-        DataBuff[qid]->work_buffer_list[wid]->table_data = table_data_.table_data;
-        DataBuff[qid]->work_buffer_list[wid]->row_count = table_data_.row_count;
+        DataBuffer_[qid]->work_buffer_list[wid]->table_data = table_data_.table_data;
+        DataBuffer_[qid]->work_buffer_list[wid]->row_count = table_data_.row_count;
     }
 
-    DataBuff[qid]->work_buffer_list[wid]->status = WorkDone;
-    DataBuff[qid]->work_buffer_list[wid]->cond.notify_all();
+    DataBuffer_[qid]->work_buffer_list[wid]->status = WorkDone;
+    DataBuffer_[qid]->work_buffer_list[wid]->cond.notify_all();
     
     // Debug Code   
-    // for(auto it = DataBuff[qid]->work_buffer_list.begin(); it != DataBuff[qid]->work_buffer_list.end(); it++){
+    // for(auto it = DataBuffer_[qid]->work_buffer_list.begin(); it != DataBuffer_[qid]->work_buffer_list.end(); it++){
     //     cout << "workID: " << (*it).first << " tableName: " << (*it).second->table_alias << endl;
     // }
-    // for(auto it = DataBuff[qid]->table_status.begin(); it != DataBuff[qid]->table_status.end(); it++){
+    // for(auto it = DataBuffer_[qid]->table_status.begin(); it != DataBuffer_[qid]->table_status.end(); it++){
     //     cout << "tableName: " << (*it).first << " workID: " << (*it).second.first << "status: " << (*it).second.second << endl;
     // }
     

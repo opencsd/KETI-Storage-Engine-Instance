@@ -189,11 +189,6 @@ void MergeQueryManager::RunSnippetWork(){
         }
     }
 
-    // if(snippet.table_alias() == "ResultTable13"){
-    //     sleep(3);
-    // }
-    
-
     if(isHaving){
         Filtering(result_table_, snippet.having(), having_table_);
 
@@ -2393,22 +2388,3 @@ bool MergeQueryManager::compareByOperator(int oper, const T& arg1, const U& arg2
     
     return passed;
 }
-
-// template <typename T>
-// bool MergeQueryManager::compareByOperator(int oper, const T& arg1, const T& arg2) {
-//     bool passed;
-//     if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_ET){
-//         passed = (arg1 == arg2) ? true : false;
-//     }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_GE){
-//         passed = (arg1 >= arg2) ? true : false;
-//     }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_LE){
-//         passed = (arg1 <= arg2) ? true : false;
-//     }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_GT){
-//         passed = (arg1 > arg2) ? true : false;
-//     }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_LT){
-//         passed = (arg1 < arg2) ? true : false;
-//     }else if(oper == Snippet_Filter_OperType::Snippet_Filter_OperType_KETI_NE){
-//         passed = (arg1 != arg2) ? true : false;
-//     }
-//     return passed;
-// }

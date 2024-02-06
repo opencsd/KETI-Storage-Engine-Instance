@@ -26,6 +26,7 @@ using namespace std;
 using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
+using grpc::ClientAsyncResponseReader;
 using StorageEngineInstance::StorageManager;
 using StorageEngineInstance::LBA2PBARequest;
 using StorageEngineInstance::LBA2PBAResponse;
@@ -44,20 +45,66 @@ public:
     void RequestPBA(LBA2PBARequest lba2pbaRequest, int &total_block_count, map<string,string> &sst_pba_map) {
         LBA2PBAResponse pbaResponse;
         ClientContext context;
-        
-        Status status = stub_->RequestPBA(&context, lba2pbaRequest, &pbaResponse);
+        CompletionQueue cq;
 
-        if (!status.ok()) {
-            KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
-			KETILOG::FATALLOG(LOGTAG,"RPC failed");
-        }
+        std::unique_ptr<ClientAsyncResponseReader<LBA2PBAResponse> > rpc(
+            stub_->RequestPBA(&context, lba2pbaRequest, &cq));
+
+        Status status;
+        rpc->Finish(&pbaResponse, &status, (void*)1);
+        
+        // Status status = stub_->RequestPBA(&context, lba2pbaRequest, &pbaResponse);
+
+        // if (!status.ok()) {
+        //     KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
+		// 	KETILOG::FATALLOG(LOGTAG,"RPC failed");
+        // }
 
         for (const auto entry : pbaResponse.sst_pba_map()) {
             string sst_name = entry.first;
-            
+            LBA2PBAResponse_PBA csd_pba = entry.second;
+            string csd_id = csd_pba.csd_id();
+
+            //json 구성
+            StringBuffer buffer;
+            buffer.Clear();
+            Writer<StringBuffer> writer(buffer);
+            writer.StartObject();
+            writer.Key("blockList");
+            writer.StartArray();
+            writer.StartObject();
+            for(int l=0; l<csd_pba.chunks_size(); l++){
+                if(l == 0){
+                    writer.Key("offset");
+                    writer.Int64(csd_pba.chunks(l).offset());
+                    writer.Key("length");
+                    writer.StartArray();
+                }else{
+                    if(csd_pba.chunks(l-1).offset()+csd_pba.chunks(l-1).length() != csd_pba.chunks(l).offset()){
+                        writer.EndArray();
+                        writer.EndObject();
+                        writer.StartObject();
+                        writer.Key("offset");
+                        writer.Int64(csd_pba.chunks(l).offset());
+                        writer.Key("length");
+                        writer.StartArray();
+                    }
+                }
+                writer.Int(csd_pba.chunks(l).length());
+
+                if(l == csd_pba.chunks_size() - 1){
+                    writer.EndArray();
+                    writer.EndObject();
+                }
+            }
+            writer.EndArray();
+            writer.EndObject();
+
+            total_block_count += csd_pba.chunks_size();
+
+            string pba_string = buffer.GetString();
+            sst_pba_map.insert({sst_name, pba_string});
         }
-        
-        return;
     }
 
     DataFileInfo InitDBFileMonitoring(SSTList request) {

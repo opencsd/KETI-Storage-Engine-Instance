@@ -25,12 +25,12 @@ void Scheduler::scheduling(Snippet snippet, map<string,string> bestcsd){
     for (const auto entry : snippetMetaData.sst_pba_map()) {
         snippetbuf.Clear();
         string sst = entry.first;
-        serialize(snippetbuf, snippet, bestcsd[entry.first], entry.second);
+        serialize(snippetbuf, snippet, bestcsd[entry.first], entry.second, snippetMetaData.table_total_block_count());
         sendSnippetToCSD(snippetbuf.GetString());
     }
 }
 
-void Scheduler::serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd, string pba) {
+void Scheduler::serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd, string pba, int table_total_block_count) {
     Writer<StringBuffer> writer(snippetbuf);
 
     writer.StartObject();
@@ -201,6 +201,9 @@ void Scheduler::serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd
 
     writer.Key("csdName");
     writer.String(csd.c_str());
+
+    writer.Key("tableTotalBlockCount");
+    writer.Int(table_total_block_count);
 
     string port = "";
 

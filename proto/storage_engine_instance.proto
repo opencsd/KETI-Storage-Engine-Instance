@@ -10,6 +10,9 @@ package StorageEngineInstance;
 service StorageEngineInterface {
   rpc GenericQueryInterface(Request) returns (Response) {}
   rpc OffloadingQueryInterface (stream SnippetRequest) returns (QueryStringResult) {}
+  rpc SyncMetaDataManager (DBInfo) returns (Response) {}
+  rpc SyncDBFileMonitoring (DataFileInfo) returns (Response) {}
+  rpc PushCSDMetric (CSDMetricList) returns (Response) {}
 }
 
 service MergingModule {
@@ -193,12 +196,14 @@ message QueryStringResult {
 }
 
 message DBInfo {
-  message Table {
-    string table_name = 1;
-    int32 table_index_number = 2;
-    repeated string sst_list = 3;
+  message DB {
+    message Table {
+      int32 table_index_number = 1;
+      repeated string sst_list = 2;
+    }
+    map<string, Table> table_list = 1;
   }
-  map<string, Table> db_list = 1;
+  map<string, DB> db_list = 1;
 }
 
 message DataFileInfo {

@@ -75,11 +75,14 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
     vector<int> row_offset; 
     int row_count;
     string csd_name;
+    int total_block_count;
     int result_block_count;
     vector<int> return_datatype;//결과의 컬럼 데이터 타입(csd 결과 파싱용) -> CSD가 리턴
     vector<int> return_offlen;//결과의 컬럼 길이 (csd 결과 파싱용) -> CSD가 리턴
     int scanned_row_count;
     int filtered_row_count;
+    string table_alias;
+    vector<string> column_alias;
 
     BlockResult(){}
     BlockResult(const char* json_, char* data_){
@@ -110,6 +113,7 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
 
       csd_name = document["csdName"].GetString();
       result_block_count = document["resultBlockCount"].GetInt();
+      total_block_count = document["totalBlockCount"].GetInt();
 
       scanned_row_count = document["scannedRowCount"].GetInt();
       filtered_row_count = document["filteredRowCount"].GetInt();
@@ -117,6 +121,7 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
 };
 
 struct WorkBuffer {
+  kQueue<BlockResult> work_buffer_queue;
   string table_alias;//*결과 테이블의 별칭
   vector<string> table_column;//*결과 컬럼명
   unordered_map<string,ColData> table_data;//결과의 컬럼 별 데이터(컬럼명,타입,데이터)
@@ -192,15 +197,6 @@ class BufferManager{
       return GetInstance().endQuery(qid);
     }
 
-    static void PushQueue(BlockResult block_result){
-      GetInstance().BlockResultQueue.push_work(block_result);
-    }
-
-    static BlockResult PopQueue(){
-      BlockResult blockResult = GetInstance().BlockResultQueue.wait_and_pop();
-      return blockResult;
-    }
-
     static void InitBufferManager(){
       GetInstance().initBufferManager();
     }
@@ -220,7 +216,9 @@ class BufferManager{
     }
 
     void initBufferManager();
-    void inputBufferManager();
+    void bufferManagerInterface();
+    void pushResult(BlockResult blockResult);
+    void mergeResult(int qid, int wid);
     void runBufferManager();
     void mergeBlock(BlockResult result);
     int initWork(int type, StorageEngineInstance::Snippet masked_snippet);//must init buffer first
@@ -230,11 +228,9 @@ class BufferManager{
     int saveTableData(int qid, string tname, TableData &table_data_, int offset, int length);
     int endQuery(StorageEngineInstance::Request qid);
 
-    inline const static std::string LOGTAG = "Merging Container::Buffer Manager";
+    inline const static std::string LOGTAG = "Merging::Buffer Manager";
 
   private:
-    unordered_map<int, struct QueryBuffer*> DataBuff;//buffer manager data buffer
-    kQueue<BlockResult> BlockResultQueue;//buffer manager csd result input queue
-    thread BufferManager_Input_Thread;//get csd result thread
-    thread BufferManager_Save_Thread;//save csd result thread
+    unordered_map<int, struct QueryBuffer*> DataBuffer_;//buffer manager data buffer
+    thread BufferManagerInterface;//get csd result thread
 };

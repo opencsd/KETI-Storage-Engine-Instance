@@ -66,7 +66,7 @@ if (UNIX)
 endif (UNIX)
 
 # merging-container
-add_executable(merging-container "main.cc" "BufferManager.cc" "MergeQueryManager.cc")
+add_executable(merging-container "MergingInterface.cc" "BufferManager.cc" "MergeQueryManager.cc")
 target_link_libraries(merging-container
   ss_grpc_proto
   ${LINKING_LIBRARIES}

@@ -49,7 +49,7 @@ public:
 
     void RunSnippetWork();//스니펫 작업 수행
 
-    inline const static std::string LOGTAG = "Merging Container::Merge Query Manager";
+    inline const static std::string LOGTAG = "Merging::Merge Query Manager";
 
 private:
     StorageEngineInstance::Snippet snippet;//스니펫
@@ -87,8 +87,6 @@ private:
     void DependencyIn(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, const Snippet_Dependency &dependency, TableData &dest);//dependency in/not in
     void Filtering(TableData &filter_table, const RepeatedPtrField<Snippet_Filter>& filters, TableData &dest);//single table filtering
     void createHashTable(TableData &table, vector<string> equal_join_column);//create hash table for hash join
-    // template <typename T>
-    // bool compareByOperator(int oper, const T& arg1, const T& arg2);
     template <typename T,typename U>
     bool compareByOperator(int oper, const T& arg1, const U& arg2);
     string makeGroupbyKey(TableData &groupby_table, const RepeatedPtrField<string>& groups, int row_index);

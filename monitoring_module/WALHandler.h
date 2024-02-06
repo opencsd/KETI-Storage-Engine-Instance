@@ -47,6 +47,8 @@ public:
 			KETILOG::FATALLOG(LOGTAG,"RPC failed");
         }
 
+        
+
         return;
     }
 
