@@ -14,18 +14,32 @@ using grpc::Status;
 using StorageEngineInstance::OffloadingModule;
 using StorageEngineInstance::Snippet;
 using StorageEngineInstance::Response; 
+using StorageEngineInstance::CSDMetricList; 
 
 using namespace std;
 
-class Offloading_Module_Connector {
+class OffloadingModuleConnector {
 	public:
-		Offloading_Module_Connector(std::shared_ptr<Channel> channel) : stub_(OffloadingModule::NewStub(channel)) {}
+		OffloadingModuleConnector(std::shared_ptr<Channel> channel) : stub_(OffloadingModule::NewStub(channel)) {}
 
 		void Scheduling(Snippet snippet) {
 			Response response;
     		ClientContext context;
 			
 			Status status = stub_->Scheduling(&context, snippet, &response);
+
+	  		if (!status.ok()) {
+				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
+				KETILOG::FATALLOG(LOGTAG,"RPC failed");
+			}
+			return;
+		}
+
+		void PushCSDMetric(CSDMetricList csdMetricList) {
+			Response response;
+    		ClientContext context;
+			
+			Status status = stub_->PushCSDMetric(&context, csdMetricList, &response);
 
 	  		if (!status.ok()) {
 				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());

@@ -22,9 +22,9 @@ using StorageEngineInstance::QueryResult_Column;
 
 using namespace std;
 
-class Merging_Module_Connector {
+class MergingModuleConnector {
 	public:
-		Merging_Module_Connector(std::shared_ptr<Channel> channel) : stub_(MergingModule::NewStub(channel)) {}
+		MergingModuleConnector(std::shared_ptr<Channel> channel) : stub_(MergingModule::NewStub(channel)) {}
 
 		string Aggregation(SnippetRequest snippet_request) {
 			Response response;

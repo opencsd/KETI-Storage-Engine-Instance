@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/monitoring_module_interface.cc" "CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.o" "gcc" "CMakeFiles/monitoring-container.dir/monitoring_module_interface.cc.o.d"
+  "/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/monitoring_interface.cc" "CMakeFiles/monitoring-container.dir/monitoring_interface.cc.o" "gcc" "CMakeFiles/monitoring-container.dir/monitoring_interface.cc.o.d"
   )
 
 # Targets to which this target links.

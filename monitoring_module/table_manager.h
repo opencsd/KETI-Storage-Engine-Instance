@@ -33,16 +33,12 @@ public:
 		map<string, Table> table;
 	};
 
+	static void DumpTableManager(){
+		return GetInstance().dumpTableManager();
+	}
+
 	static bool IsMetaDataInitialized(){
 		return GetInstance().isMetaDataInitialized();
-	}
-
-	static bool IsDBFileInitialized(){
-		return GetInstance().isDBFileInitialized();
-	}
-
-	static bool IsTableManagerInitialized(){
-		return GetInstance().isTableManagerInitialized();
 	}
 
 	static bool CheckExistDB(string db_name){
@@ -51,10 +47,6 @@ public:
 
 	static bool CheckExistTable(string db_name, string table_name){
 		return GetInstance().checkExistTable(db_name, table_name);
-	}
-
-	static vector<string> GetCSD(string sst_name){
-		return GetInstance().getCSD(sst_name);
 	}
 
 	static vector<string> GetSST(string db_name, string table_name){
@@ -69,14 +61,6 @@ public:
 		return GetInstance().setMetaDataInitialized();
 	}
 
-	static void SetDBFileInitialized(){
-		return GetInstance().setDBFileInitialized();
-	}
-
-	static void SetCSD(string sst_name, CSD csd){
-		return GetInstance().setCSD(sst_name, csd);
-	}
-
 	static void SetTableInfo(string db_name, string table_name, Table table){
 		return GetInstance().setTableInfo(db_name, table_name, table);
 	}
@@ -88,7 +72,6 @@ public:
 private:
 	TableManager() {
 		MetaDataInitialized_ = false;
-		DBFileInitialized_= false;
 	};
     TableManager(const TableManager&);
     TableManager& operator=(const TableManager&){
@@ -100,16 +83,29 @@ private:
         return _instance;
     }
 
-	bool isMetaDataInitialized(){
-		return GetInstance().MetaDataInitialized_;
-	}
-	
-	bool isDBFileInitialized(){
-		return GetInstance().DBFileInitialized_;
+	void dumpTableManager(){
+		cout << "-------------------------------------" << endl;
+		cout << "# DB Info" << endl;
+		int db_numbering = 1;
+		for(const auto db : GetInstance().TableManager_){
+			cout << db_numbering << ". db_name: " << db.first << endl;
+			int table_numbering = 1;
+			for(const auto table : db.second.table){
+				cout << db_numbering << "-" << table_numbering << ". table_name: " << table.first << endl;
+				cout << db_numbering << "-" << table_numbering << ". sst_list: ";
+				for(int i=0; i<table.second.sst_list.size(); i++){
+					cout << table.second.sst_list[i] << ", ";
+				}
+				cout << endl;
+				table_numbering++;
+			}
+			db_numbering++;
+		}
+		cout << "-------------------------------------" << endl;
 	}
 
-	bool isTableManagerInitialized(){
-		return GetInstance().MetaDataInitialized_ && GetInstance().DBFileInitialized_;
+	bool isMetaDataInitialized(){
+		return GetInstance().MetaDataInitialized_;
 	}
 
 	bool checkExistDB(string db_name){
@@ -120,11 +116,6 @@ private:
 	bool checkExistTable(string db_name, string table_name){
 		std::lock_guard<std::mutex> lock(mutex_);
 		return GetInstance().TableManager_[db_name].table.find(table_name) != GetInstance().TableManager_[db_name].table.end();
-	}
-
-	vector<string> getCSD(string sst_name){
-		std::lock_guard<std::mutex> lock(mutex_);
-		return GetInstance().SSTCSDMap_[sst_name].csd_list;
 	}
 
 	vector<string> getSST(string db_name, string table_name){
@@ -139,15 +130,6 @@ private:
 
 	void setMetaDataInitialized(){
 		GetInstance().MetaDataInitialized_ = true;
-	}
-
-	void setDBFileInitialized(){
-		GetInstance().DBFileInitialized_ = true;
-	}
-
-	void setCSD(string sst_name, CSD csd){
-		std::lock_guard<std::mutex> lock(mutex_);
-		SSTCSDMap_[sst_name] = csd;
 	}
 
 	void setTableInfo(string db_name, string table_name, Table table){
@@ -167,7 +149,5 @@ public:
 private:
     mutex mutex_;
 	bool MetaDataInitialized_;
-	bool DBFileInitialized_;
 	unordered_map<string,struct DB> TableManager_;
-	unordered_map<string, struct CSD> SSTCSDMap_;
 };

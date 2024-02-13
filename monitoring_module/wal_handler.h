@@ -31,10 +31,10 @@ using StorageEngineInstance::WALResponse;
 
 #define BUFF_SIZE 4096
 
-class WAL_Handler {
+class WALHandler {
     
 public:
-    WAL_Handler(std::shared_ptr<Channel> channel) : stub_(WALManager::NewStub(channel)) {}
+    WALHandler(std::shared_ptr<Channel> channel) : stub_(WALManager::NewStub(channel)) {}
 
     void RequestWAL(WALRequest walRequset, int sst_count, string &wal_deleted_key_json, vector<string> &wal_inserted_row_json) {
         WALResponse walResponse;

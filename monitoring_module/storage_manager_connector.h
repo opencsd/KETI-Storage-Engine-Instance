@@ -37,21 +37,21 @@ using StorageEngineInstance::SSTList;
 
 #define BUFF_SIZE 4096
 
-class Storage_Manager_Connector {
+class StorageManagerConnector {
 
 public:
-    Storage_Manager_Connector(std::shared_ptr<Channel> channel) : stub_(StorageManager::NewStub(channel)) {}
+    StorageManagerConnector(std::shared_ptr<Channel> channel) : stub_(StorageManager::NewStub(channel)) {}
 
     void RequestPBA(LBA2PBARequest lba2pbaRequest, int &total_block_count, map<string,string> &sst_pba_map) {
         LBA2PBAResponse pbaResponse;
-        ClientContext context;
-        CompletionQueue cq;
+        // ClientContext context;
+        // CompletionQueue cq;
 
-        std::unique_ptr<ClientAsyncResponseReader<LBA2PBAResponse> > rpc(
-            stub_->RequestPBA(&context, lba2pbaRequest, &cq));
+        // std::unique_ptr<ClientAsyncResponseReader<LBA2PBAResponse> > rpc(
+        //     stub_->RequestPBA(&context, lba2pbaRequest, &cq));
 
-        Status status;
-        rpc->Finish(&pbaResponse, &status, (void*)1);
+        // Status status;
+        // rpc->Finish(&pbaResponse, &status, (void*)1);
         
         // Status status = stub_->RequestPBA(&context, lba2pbaRequest, &pbaResponse);
 
@@ -107,17 +107,20 @@ public:
         }
     }
 
-    DataFileInfo InitDBFileMonitoring(SSTList request) {
-        DataFileInfo dbFileInfo;
+    DataFileInfo GetDataFileInfo(vector<string> sstList_){
+        SSTList request;
         ClientContext context;
+        DataFileInfo response;
 
-        Status status = stub_->InitDBFileMonitoring(&context, request, &dbFileInfo);
-
+        request.mutable_sst_list()->Add(sstList_.begin(), sstList_.end());
+        Status status = stub_->GetDataFileInfo(&context, request, &response);
+        
         if (!status.ok()) {
             KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
-			KETILOG::FATALLOG(LOGTAG,"RPC failed");
+            KETILOG::FATALLOG(LOGTAG,"RPC failed");
         }
-        return dbFileInfo;
+
+        return response;    
     }
 
 private:

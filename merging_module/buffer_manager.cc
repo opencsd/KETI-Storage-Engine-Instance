@@ -27,8 +27,7 @@ void BufferManager::bufferManagerInterface(){
 	memset(&serv_addr, 0, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
-
-	serv_addr.sin_port = htons(SE_MERGING_BM_TCP_PORT); 
+    serv_addr.sin_port = htons(SE_MERGING_TCP_PORT);
  
 	if (bind(server_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0){
 		perror("bind");
@@ -40,7 +39,7 @@ void BufferManager::bufferManagerInterface(){
 		exit(EXIT_FAILURE);
 	}
 
-    KETILOG::WARNLOG(LOGTAG,"CSD Return Server Listening on 0.0.0.0:"+to_string(SE_MERGING_BM_TCP_PORT));
+    KETILOG::WARNLOG(LOGTAG,"CSD Return Server Listening on 0.0.0.0:"+to_string(SE_MERGING_TCP_PORT));
 
 	while(1){
 		if ((client_fd = accept(server_fd, (struct sockaddr*)&client_addr, (socklen_t*)&addrlen)) < 0){

@@ -16,9 +16,9 @@ using StorageEngineInstance::Request;
 using StorageEngineInstance::SnippetMetaData;
 using StorageEngineInstance::DataFileInfo;
 
-class Monitoring_Module_Connector {
+class MonitoringModuleConnector {
 	public:
-		Monitoring_Module_Connector(std::shared_ptr<Channel> channel) : stub_(MonitoringModule::NewStub(channel)) {}
+		MonitoringModuleConnector(std::shared_ptr<Channel> channel) : stub_(MonitoringModule::NewStub(channel)) {}
 
 		DataFileInfo GetDataFileInfo(string dbname, string tname) {
 			ClientContext context;

@@ -4,7 +4,7 @@ void Scheduler::runScheduler(){
     while (1){
         Snippet snippet = Scheduler::PopQueue();
 
-        Monitoring_Module_Connector mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_PORT), grpc::InsecureChannelCredentials()));
+        MonitoringModuleConnector mc(grpc::CreateChannel((string)LOCALHOST+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
         DataFileInfo dataFileInfo = mc.GetDataFileInfo("tpc_h"/*need db name in snippet*/,snippet.table_name(0));
 
         //get best csd
@@ -18,7 +18,7 @@ void Scheduler::runScheduler(){
 
 void Scheduler::scheduling(Snippet snippet, map<string,string> bestcsd){
     //get PBA & WAL
-    Monitoring_Module_Connector mc(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_PORT), grpc::InsecureChannelCredentials()));
+    MonitoringModuleConnector mc(grpc::CreateChannel((string)LOCALHOST+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
     SnippetMetaData snippetMetaData = mc.GetSnippetMetaData("tpc_h"/*need db name in snippet*/,snippet.table_name(0), bestcsd);
 
     StringBuffer snippetbuf;
@@ -207,12 +207,8 @@ void Scheduler::serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd
 
     string port = "";
 
-    if (getenv("SE_MERGING_CONTAINER_POD_PORT") != NULL){
-        port = to_string(SE_MERGING_BM_TCP_CLOUD_PORT);
-    }else{
-        port = to_string(SE_MERGING_BM_TCP_PORT);
-    }
-
+    port = (string)SE_MONITORING_NODE_PORT;
+    
     writer.Key("storageEnginePort");
     writer.String(port.c_str());
 
@@ -233,8 +229,11 @@ void Scheduler::sendSnippetToCSD(string snippet_json){
     serv_addr.sin_family = AF_INET;
 
     /*Send Snippet To CSD Proxy*/
-    serv_addr.sin_addr.s_addr = inet_addr(CSD_IDENTIFIER_IP);
-    serv_addr.sin_port = htons(CSD_IDENTIFIER_PORT);
+    serv_addr.sin_addr.s_addr = inet_addr(STORAGE_CLUSTER_MASTER_IP);
+    std::istringstream port_((string)CSD_IDENTIFIER_PORT);
+    std::uint16_t port{};
+    port_ >> port;
+    serv_addr.sin_port = htons(port);
     connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 
     {

@@ -18,7 +18,6 @@ using StorageEngineInstance::QueryResult;
 using StorageEngineInstance::QueryResult_Column;
 using StorageEngineInstance::QueryResult_Column_ColType;
 
-
 class MergingModuleServiceImpl final : public MergingModule::Service {
   Status Aggregation(ServerContext* context, const SnippetRequest* request, Response* response) override {  
     string msg = "==:Aggregation:== {" + to_string(request->snippet().query_id()) + "|" + to_string(request->snippet().work_id()) + "}";
@@ -103,29 +102,6 @@ class MergingModuleServiceImpl final : public MergingModule::Service {
 
     return Status::OK;
   }
-  
-  // Status InitBuffer(ServerContext* context, const SnippetRequest* request, Response* response) override {  
-  //   string msg = "==:Init Buffer:== {" + to_string(request->snippet().query_id()) + "|" + to_string(request->snippet().work_id()) + "}";
-  //   KETILOG::INFOLOG("Merging Container",msg);
-
-  //   // thread BufferInitWorkInstance = thread(&BufferManager::InitWork,request->type(), request->snippet());
-  //   // BufferInitWorkInstance.detach();  
-  //   BufferManager::InitWork(request->type(), request->snippet());
- 
-  //   response->set_value("Init Success");
-
-  //   return Status::OK;
-  // }
-
-  // Status EndQuery(ServerContext* context, const Request* request, Response* response) override {
-  //   string msg = "==:End Query:== {" + to_string(request->query_id()) + "}";
-  //   KETILOG::INFOLOG("Merging Container",msg);
-
-  //   BufferManager::EndQuery(*request);
-
-  //   response->set_value("End Query");
-  //   return Status::OK;
-  // }
 };
 
 void RunGRPCServer() {

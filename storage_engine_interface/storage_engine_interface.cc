@@ -7,6 +7,7 @@
 #include "generic_query_connector.h"
 #include "merging_module_connector.h"
 #include "offloading_module_connector.h"
+#include "monitoring_module_connector.h"
 #include "ip_config.h"
 
 #include <grpcpp/grpcpp.h>
@@ -22,6 +23,8 @@ using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::QueryStringResult;
 using StorageEngineInstance::Response;
 using StorageEngineInstance::CSDMetricList;
+using StorageEngineInstance::DataFileInfo;
+using StorageEngineInstance::DBInfo;
 
 using namespace std;
 
@@ -63,52 +66,68 @@ void SendQueryStatus(const char* message){
 // Logic and data behind the server's behavior.
 class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::Service {
   Status OffloadingQueryInterface(ServerContext* context, ServerReader<SnippetRequest>* stream, QueryStringResult* result) override {
+    KETILOG::WARNLOG("Interface", "Offloading Snippet Request");
+    
     SnippetRequest snippet_request;
-    bool flag = true;
 
     if(KETILOG::IsLogLevel(METRIC)){
       const char* Qstart = "Query Start";
       SendQueryStatus(Qstart);
     }
-
     while (stream->Read(&snippet_request)) {      
-      if(flag){
-        string msg = "==:Set Snippet:== {" + to_string(snippet_request.snippet().query_id()) + "}";
-        KETILOG::INFOLOG("Interface", msg);
-        flag = false;
-      } 
-
-      // Check Recv Snippet
-      {
-        std::string test_json;
-        google::protobuf::util::JsonPrintOptions options;
-        options.always_print_primitive_fields = true;
-        options.always_print_enums_as_ints = true;
-        google::protobuf::util::MessageToJsonString(snippet_request,&test_json,options);
-        std::cout << endl << test_json << std::endl << std::endl; 
-      }
+      // // Check Recv Snippet
+      // {
+      //   std::string test_json;
+      //   google::protobuf::util::JsonPrintOptions options;
+      //   options.always_print_primitive_fields = true;
+      //   options.always_print_enums_as_ints = true;
+      //   google::protobuf::util::MessageToJsonString(snippet_request,&test_json,options);
+      //   std::cout << endl << test_json << std::endl << std::endl; 
+      // }
 
       if(snippet_request.type() == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET){
         KETILOG::DEBUGLOG("Interface","# Send Snippet to Offloading Module");
-        Offloading_Module_Connector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_PORT), grpc::InsecureChannelCredentials()));
+        OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
         offloadingModule.Scheduling(snippet_request.snippet());
       }else{
         KETILOG::DEBUGLOG("Interface","# Send Snippet to Merging Module");
-        Merging_Module_Connector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_PORT), grpc::InsecureChannelCredentials()));
+        MergingModuleConnector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_MERGING_NODE_PORT, grpc::InsecureChannelCredentials()));
         mergingModule.Aggregation(snippet_request);
       }
     }
 
-    Merging_Module_Connector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_PORT), grpc::InsecureChannelCredentials()));
-    cout << "@ " << snippet_request.snippet().query_id() <<  snippet_request.snippet().table_alias() << endl;
+    MergingModuleConnector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_MERGING_NODE_PORT, grpc::InsecureChannelCredentials()));
     QueryStringResult result_ = mergingModule.GetQueryResult(snippet_request.snippet().query_id(), snippet_request.snippet().table_alias());
-
-    cout << "@@ " << result_.query_result() << endl;
 
     return Status::OK;
   }
 
   Status GenericQueryInterface(ServerContext *context, const Request *request, Response *response) override {
+    //Generic Query 처리 필요 ==> send to myrocks container
+
+    return Status::OK;
+  }
+
+  Status SyncMetaDataManager(ServerContext *context, const DBInfo *request, Response *response) override {
+    // // Check Recv Snippet
+    // {
+    //   std::string test_json;
+    //   google::protobuf::util::JsonPrintOptions options;
+    //   options.always_print_primitive_fields = true;
+    //   options.always_print_enums_as_ints = true;
+    //   google::protobuf::util::MessageToJsonString(*request,&test_json,options);
+    //   std::cout << endl << test_json << std::endl << std::endl; 
+    // }
+
+    MonitoringModuleConnector monitoringModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
+    monitoringModule.SyncMetaDataManager(*request);
+
+    return Status::OK;
+  }
+
+  Status PushCSDMetric(ServerContext *context, const CSDMetricList *request, Response *response) override {
+    OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
+    offloadingModule.PushCSDMetric(*request);
 
     return Status::OK;
   }
@@ -127,7 +146,6 @@ void RunGRPCServer() {
   
   server->Wait();
 }
-
 
 int main(int argc, char** argv) {
   if (argc >= 2) {

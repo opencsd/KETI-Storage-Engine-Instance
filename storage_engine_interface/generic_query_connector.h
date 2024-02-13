@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class Generic_Query_Connector {
+class GenericQueryConnector {
 	public:
 		
 

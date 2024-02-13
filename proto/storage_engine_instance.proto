@@ -11,7 +11,6 @@ service StorageEngineInterface {
   rpc GenericQueryInterface(Request) returns (Response) {}
   rpc OffloadingQueryInterface (stream SnippetRequest) returns (QueryStringResult) {}
   rpc SyncMetaDataManager (DBInfo) returns (Response) {}
-  rpc SyncDBFileMonitoring (DataFileInfo) returns (Response) {}
   rpc PushCSDMetric (CSDMetricList) returns (Response) {}
 }
 
@@ -25,7 +24,6 @@ service MonitoringModule {
   rpc GetDataFileInfo (Request) returns (DataFileInfo) {}
   rpc GetSnippetMetaData (Request) returns (SnippetMetaData) {}
   rpc SyncMetaDataManager (DBInfo) returns (Response) {}
-  rpc SyncDBFileMonitoring (DataFileInfo) returns (Response) {}
 }
 
 service OffloadingModule {
@@ -34,8 +32,8 @@ service OffloadingModule {
 }
 
 service StorageManager {
+  rpc GetDataFileInfo (SSTList) returns (DataFileInfo) {}
   rpc RequestPBA (LBA2PBARequest) returns (LBA2PBAResponse) {}
-  rpc InitDBFileMonitoring (SSTList) returns (DataFileInfo) {}
 }
 
 service WALManager {

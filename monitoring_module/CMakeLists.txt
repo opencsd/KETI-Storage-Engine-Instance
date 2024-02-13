@@ -66,7 +66,7 @@ if (UNIX)
 endif (UNIX)
 
 # merging_container
-add_executable(monitoring-container "monitoring_module_interface.cc")
+add_executable(monitoring-container "monitoring_interface.cc")
 target_link_libraries(monitoring-container
   ss_grpc_proto
   ${LINKING_LIBRARIES}

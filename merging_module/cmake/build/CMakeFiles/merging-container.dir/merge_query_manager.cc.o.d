@@ -50,7 +50,9 @@ CMakeFiles/merging-container.dir/merge_query_manager.cc.o: \
  /usr/include/c++/11/bits/hashtable_policy.h /usr/include/c++/11/tuple \
  /usr/include/c++/11/utility /usr/include/c++/11/bits/stl_relops.h \
  /usr/include/c++/11/array /usr/include/c++/11/bits/uses_allocator.h \
- /usr/include/c++/11/bits/invoke.h /usr/include/c++/11/bits/node_handle.h \
+ /usr/include/c++/11/bits/invoke.h \
+ /usr/include/c++/11/bits/enable_special_members.h \
+ /usr/include/c++/11/bits/node_handle.h \
  /usr/include/c++/11/bits/unordered_map.h \
  /usr/include/c++/11/bits/erase_if.h /usr/include/fcntl.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -132,7 +134,6 @@ CMakeFiles/merging-container.dir/merge_query_manager.cc.o: \
  /usr/include/c++/11/bits/ostream_insert.h \
  /usr/include/c++/11/bits/cxxabi_forced.h \
  /usr/include/c++/11/bits/basic_string.h /usr/include/c++/11/string_view \
- /usr/include/c++/11/bits/ranges_base.h \
  /usr/include/c++/11/bits/string_view.tcc \
  /usr/include/c++/11/ext/string_conversions.h /usr/include/c++/11/cstdlib \
  /usr/include/stdlib.h /usr/include/x86_64-linux-gnu/bits/waitflags.h \
