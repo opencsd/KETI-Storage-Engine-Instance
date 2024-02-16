@@ -16,12 +16,12 @@ void MergeQueryManager::RunSnippetWork(){
     //Save "base_table"
     for(int i=0; i<tableCnt; i++){
         if(i==0){
-            left_table_ = BufferManager::GetTableData(snippet.query_id(),snippet.table_name(i));
+            left_table_ = BufferManager::GetTableData(snippet.query_id(),-1,snippet.table_name(i));
             if(!left_table_.valid){
                 KETILOG::FATALLOG(LOGTAG,"error>> query_id error or non init table");
             }
         }else{
-            right_table_ = BufferManager::GetTableData(snippet.query_id(),snippet.table_name(i));
+            right_table_ = BufferManager::GetTableData(snippet.query_id(),-1,snippet.table_name(i));
             if(!right_table_.valid){
                 KETILOG::FATALLOG(LOGTAG,"error>> query_id error or non init table");
             }

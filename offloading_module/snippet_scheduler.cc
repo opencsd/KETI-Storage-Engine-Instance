@@ -5,7 +5,16 @@ void Scheduler::runScheduler(){
         Snippet snippet = Scheduler::PopQueue();
 
         MonitoringModuleConnector mc(grpc::CreateChannel((string)LOCALHOST+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
-        DataFileInfo dataFileInfo = mc.GetDataFileInfo("tpc_h"/*need db name in snippet*/,snippet.table_name(0));
+        DataFileInfo dataFileInfo = mc.GetDataFileInfo("tpch_origin"/*need db name in snippet*/,snippet.table_name(0));
+
+        {
+        // std::string test_json;
+        // google::protobuf::util::JsonPrintOptions options;
+        // options.always_print_primitive_fields = true;
+        // options.always_print_enums_as_ints = true;
+        // google::protobuf::util::MessageToJsonString(dataFileInfo,&test_json,options);
+        // std::cout << endl << test_json << std::endl << std::endl; 
+        }
 
         //get best csd
         map<string,string> bestcsd = getBestCSD(dataFileInfo);
@@ -19,7 +28,16 @@ void Scheduler::runScheduler(){
 void Scheduler::scheduling(Snippet snippet, map<string,string> bestcsd){
     //get PBA & WAL
     MonitoringModuleConnector mc(grpc::CreateChannel((string)LOCALHOST+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
-    SnippetMetaData snippetMetaData = mc.GetSnippetMetaData("tpc_h"/*need db name in snippet*/,snippet.table_name(0), bestcsd);
+    SnippetMetaData snippetMetaData = mc.GetSnippetMetaData("tpch_origin"/*need db name in snippet*/,snippet.table_name(0), bestcsd);
+
+    {
+    // std::string test_json;
+    // google::protobuf::util::JsonPrintOptions options;
+    // options.always_print_primitive_fields = true;
+    // options.always_print_enums_as_ints = true;
+    // google::protobuf::util::MessageToJsonString(snippetMetaData,&test_json,options);
+    // std::cout << endl << test_json << std::endl << std::endl; 
+    }
 
     StringBuffer snippetbuf;
     for (const auto entry : snippetMetaData.sst_pba_map()) {
@@ -191,6 +209,13 @@ void Scheduler::serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd
     for (int i = 0; i < snippet.table_datatype_size(); i++){
         writer.Int(snippet.table_datatype()[i]);
     }
+    writer.EndArray();    
+
+    writer.Key("columnAlias");
+    writer.StartArray();
+    for (int i = 0; i < snippet.column_alias_size(); i++){
+        writer.String(snippet.column_alias(i).c_str());
+    }
     writer.EndArray();
 
     writer.Key("pba");
@@ -204,10 +229,13 @@ void Scheduler::serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd
 
     writer.Key("tableTotalBlockCount");
     writer.Int(table_total_block_count);
+    
+    writer.Key("tableAlias");
+    writer.String(snippet.table_alias().c_str());
 
     string port = "";
 
-    port = (string)SE_MONITORING_NODE_PORT;
+    port = (string)SE_MERGING_TCP_NODE_PORT;
     
     writer.Key("storageEnginePort");
     writer.String(port.c_str());
@@ -222,24 +250,24 @@ void Scheduler::serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd
 }
 
 void Scheduler::sendSnippetToCSD(string snippet_json){
-    int sock;
-    struct sockaddr_in serv_addr;
-    sock = socket(PF_INET, SOCK_STREAM, 0);
-    memset(&serv_addr, 0, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
+    int sock = socket(PF_INET, SOCK_STREAM, 0);
 
-    /*Send Snippet To CSD Proxy*/
-    serv_addr.sin_addr.s_addr = inet_addr(STORAGE_CLUSTER_MASTER_IP);
+    struct sockaddr_in serv_addr;
+    memset(&serv_addr, 0, sizeof(serv_addr));
+
     std::istringstream port_((string)CSD_IDENTIFIER_PORT);
     std::uint16_t port{};
     port_ >> port;
+
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.s_addr = inet_addr(STORAGE_CLUSTER_MASTER_IP);
     serv_addr.sin_port = htons(port);
-    connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 
     {
-    // // CSD 스니펫 내용 확인 - Debug Code  
     // cout << endl << snippet_json.c_str() << endl << endl;
     }
+
+    connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 
     size_t len = strlen(snippet_json.c_str());
     send(sock, &len, sizeof(len), 0);

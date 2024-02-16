@@ -65,9 +65,9 @@ if (UNIX)
 	set(LINKING_LIBRARIES ${LINKING_LIBRARIES} Threads::Threads)
 endif (UNIX)
 
-# merging_container
-add_executable(monitoring-container "monitoring_interface.cc")
-target_link_libraries(monitoring-container
+# monitoring-module
+add_executable(monitoring-module "monitoring_interface.cc")
+target_link_libraries(monitoring-module
   ss_grpc_proto
   ${LINKING_LIBRARIES}
   ${_REFLECTION}

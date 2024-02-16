@@ -130,24 +130,24 @@ ss_grpc_proto/fast:
 .PHONY : ss_grpc_proto/fast
 
 #=============================================================================
-# Target rules for targets named monitoring-container
+# Target rules for targets named monitoring-module
 
 # Build rule for target.
-monitoring-container: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 monitoring-container
-.PHONY : monitoring-container
+monitoring-module: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 monitoring-module
+.PHONY : monitoring-module
 
 # fast build rule for target.
-monitoring-container/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/build
-.PHONY : monitoring-container/fast
+monitoring-module/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-module.dir/build.make CMakeFiles/monitoring-module.dir/build
+.PHONY : monitoring-module/fast
 
 monitoring_interface.o: monitoring_interface.cc.o
 .PHONY : monitoring_interface.o
 
 # target to build an object file
 monitoring_interface.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/monitoring_interface.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-module.dir/build.make CMakeFiles/monitoring-module.dir/monitoring_interface.cc.o
 .PHONY : monitoring_interface.cc.o
 
 monitoring_interface.i: monitoring_interface.cc.i
@@ -155,7 +155,7 @@ monitoring_interface.i: monitoring_interface.cc.i
 
 # target to preprocess a source file
 monitoring_interface.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/monitoring_interface.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-module.dir/build.make CMakeFiles/monitoring-module.dir/monitoring_interface.cc.i
 .PHONY : monitoring_interface.cc.i
 
 monitoring_interface.s: monitoring_interface.cc.s
@@ -163,7 +163,7 @@ monitoring_interface.s: monitoring_interface.cc.s
 
 # target to generate assembly for a file
 monitoring_interface.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-container.dir/build.make CMakeFiles/monitoring-container.dir/monitoring_interface.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/monitoring-module.dir/build.make CMakeFiles/monitoring-module.dir/monitoring_interface.cc.s
 .PHONY : monitoring_interface.cc.s
 
 storage_engine_instance.grpc.pb.o: storage_engine_instance.grpc.pb.cc.o
@@ -222,7 +222,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... monitoring-container"
+	@echo "... monitoring-module"
 	@echo "... ss_grpc_proto"
 	@echo "... monitoring_interface.o"
 	@echo "... monitoring_interface.i"

@@ -27,6 +27,8 @@ using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
 using grpc::ClientAsyncResponseReader;
+using grpc::CompletionQueue;
+
 using StorageEngineInstance::StorageManager;
 using StorageEngineInstance::LBA2PBARequest;
 using StorageEngineInstance::LBA2PBAResponse;
@@ -35,6 +37,7 @@ using StorageEngineInstance::LBA2PBAResponse_Chunk;
 using StorageEngineInstance::DataFileInfo;
 using StorageEngineInstance::SSTList;
 
+
 #define BUFF_SIZE 4096
 
 class StorageManagerConnector {
@@ -42,23 +45,28 @@ class StorageManagerConnector {
 public:
     StorageManagerConnector(std::shared_ptr<Channel> channel) : stub_(StorageManager::NewStub(channel)) {}
 
-    void RequestPBA(LBA2PBARequest lba2pbaRequest, int &total_block_count, map<string,string> &sst_pba_map) {
+    void RequestPBA(LBA2PBARequest lba2pbaRequest, int &total_block_count, map<string,string> &sst_pba_map, CompletionQueue *cq) {
         LBA2PBAResponse pbaResponse;
-        // ClientContext context;
-        // CompletionQueue cq;
+        ClientContext context;
 
-        // std::unique_ptr<ClientAsyncResponseReader<LBA2PBAResponse> > rpc(
-        //     stub_->RequestPBA(&context, lba2pbaRequest, &cq));
-
-        // Status status;
+        // std::unique_ptr<ClientAsyncResponseReader<LBA2PBAResponse>> rpc(stub_->AsyncRequestPBA(&context,lba2pbaRequest,&test));        
         // rpc->Finish(&pbaResponse, &status, (void*)1);
-        
-        // Status status = stub_->RequestPBA(&context, lba2pbaRequest, &pbaResponse);
 
-        // if (!status.ok()) {
-        //     KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
-		// 	KETILOG::FATALLOG(LOGTAG,"RPC failed");
-        // }
+        Status status = stub_->RequestPBA(&context, lba2pbaRequest, &pbaResponse);
+
+        if (!status.ok()) {
+            KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
+			KETILOG::FATALLOG(LOGTAG,"RPC failed");
+        }
+
+        {
+        // std::string test_json;
+        // google::protobuf::util::JsonPrintOptions options;
+        // options.always_print_primitive_fields = true;
+        // options.always_print_enums_as_ints = true;
+        // google::protobuf::util::MessageToJsonString(pbaResponse,&test_json,options);
+        // std::cout << endl << test_json << std::endl << std::endl; 
+        }
 
         for (const auto entry : pbaResponse.sst_pba_map()) {
             string sst_name = entry.first;
@@ -101,9 +109,8 @@ public:
             writer.EndObject();
 
             total_block_count += csd_pba.chunks_size();
-
             string pba_string = buffer.GetString();
-            sst_pba_map.insert({sst_name, pba_string});
+            sst_pba_map[sst_name] = pba_string;
         }
     }
 

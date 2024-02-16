@@ -76,7 +76,7 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
     vector<int> row_offset; 
     int row_count;
     string csd_name;
-    int total_block_count;
+    int table_total_block_count;
     int result_block_count;
     vector<int> return_datatype;//결과의 컬럼 데이터 타입(csd 결과 파싱용) -> CSD가 리턴
     vector<int> return_offlen;//결과의 컬럼 길이 (csd 결과 파싱용) -> CSD가 리턴
@@ -92,18 +92,23 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
 
       query_id = document["queryID"].GetInt();
       work_id = document["workID"].GetInt();
+      table_alias = document["tableAlias"].GetString();
+
       row_count = document["rowCount"].GetInt();
 
       Value &row_offset_ = document["rowOffset"];
-      int row_offset_size = row_offset_.Size();
-      for(int i = 0; i<row_offset_size; i++){
+      for(int i = 0; i<row_offset_.Size(); i++){
           row_offset.push_back(row_offset_[i].GetInt());
+      }
+
+      Value &column_alias_ = document["columnAlias"];
+      for(int i = 0; i<column_alias_.Size(); i++){
+          column_alias.push_back(column_alias_[i].GetString());
       }
 
       Value &return_datatype_ = document["returnDatatype"];
       Value &return_offlen_ = document["returnOfflen"];
-      int return_datatype_size = return_datatype_.Size();
-      for(int i = 0; i<return_datatype_size; i++){
+      for(int i = 0; i<return_datatype_.Size(); i++){
           return_datatype.push_back(return_datatype_[i].GetInt());
           return_offlen.push_back(return_offlen_[i].GetInt());
       }        
@@ -114,7 +119,7 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
 
       csd_name = document["csdName"].GetString();
       result_block_count = document["resultBlockCount"].GetInt();
-      total_block_count = document["totalBlockCount"].GetInt();
+      table_total_block_count = document["tableTotalBlockCount"].GetInt();
 
       scanned_row_count = document["scannedRowCount"].GetInt();
       filtered_row_count = document["filteredRowCount"].GetInt();
@@ -135,7 +140,7 @@ struct WorkBuffer {
   WorkBuffer(){
     table_alias.clear();
     table_column.clear();
-    status = NotFinished;
+    status = Initialized;
     table_data.clear();
     left_block_count = 0;
     row_count = 0;
@@ -174,12 +179,12 @@ struct TableData{//결과 리턴용
 
 class BufferManager{
   public:
-    static int CheckTableStatus(int qid, string tname){
-      return GetInstance().checkTableStatus(qid, tname);
+    static void InitializeBuffer(int qid, int wid, string tname){
+      return GetInstance().initializeBuffer(qid, wid, tname);
     }
 
-    static TableData GetTableData(int qid, string tname){
-      return GetInstance().getTableData(qid, tname);
+    static TableData GetTableData(int qid, int wid, string tname){
+      return GetInstance().getTableData(qid, wid, tname);
     }
 
     static int SaveTableData(Snippet snippet, TableData &table_data_, int offset, int length){
@@ -212,8 +217,8 @@ class BufferManager{
     void bufferManagerInterface();
     void pushResult(BlockResult blockResult);
     void mergeResult(int qid, int wid);
-    int checkTableStatus(int qid, string tname);//return true only when the snippet work done
-    TableData getTableData(int qid, string tname);//return table data on queryID/tableName
+    void initializeBuffer(int qid, int wid, string tname);//return true only when the snippet work done
+    TableData getTableData(int qid, int wid, string tname);//return table data on queryID/tableName
     int saveTableData(Snippet snippet, TableData &table_data_, int offset, int length);
     int endQuery(StorageEngineInstance::Request qid);
 
@@ -222,4 +227,5 @@ class BufferManager{
   private:
     unordered_map<int, struct QueryBuffer*> DataBuffer_;//buffer manager data buffer
     thread BufferManagerInterface;//get csd result thread
+    mutex buffer_mutex_;
 };

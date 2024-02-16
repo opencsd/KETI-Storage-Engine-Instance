@@ -4121,7 +4121,6 @@ class DataFileInfo_CSD final :
 
   enum : int {
     kCsdIdFieldNumber = 1,
-    kIsPrimaryFieldNumber = 2,
   };
   // repeated string csd_id = 1;
   int csd_id_size() const;
@@ -4147,28 +4146,6 @@ class DataFileInfo_CSD final :
   std::string* _internal_add_csd_id();
   public:
 
-  // repeated bool is_primary = 2;
-  int is_primary_size() const;
-  private:
-  int _internal_is_primary_size() const;
-  public:
-  void clear_is_primary();
-  private:
-  bool _internal_is_primary(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >&
-      _internal_is_primary() const;
-  void _internal_add_is_primary(bool value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >*
-      _internal_mutable_is_primary();
-  public:
-  bool is_primary(int index) const;
-  void set_is_primary(int index, bool value);
-  void add_is_primary(bool value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >&
-      is_primary() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >*
-      mutable_is_primary();
-
   // @@protoc_insertion_point(class_scope:StorageEngineInstance.DataFileInfo.CSD)
  private:
   class _Internal;
@@ -4177,7 +4154,6 @@ class DataFileInfo_CSD final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> csd_id_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool > is_primary_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_storage_5fengine_5finstance_2eproto;
 };
@@ -9039,53 +9015,6 @@ inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
 DataFileInfo_CSD::mutable_csd_id() {
   // @@protoc_insertion_point(field_mutable_list:StorageEngineInstance.DataFileInfo.CSD.csd_id)
   return &csd_id_;
-}
-
-// repeated bool is_primary = 2;
-inline int DataFileInfo_CSD::_internal_is_primary_size() const {
-  return is_primary_.size();
-}
-inline int DataFileInfo_CSD::is_primary_size() const {
-  return _internal_is_primary_size();
-}
-inline void DataFileInfo_CSD::clear_is_primary() {
-  is_primary_.Clear();
-}
-inline bool DataFileInfo_CSD::_internal_is_primary(int index) const {
-  return is_primary_.Get(index);
-}
-inline bool DataFileInfo_CSD::is_primary(int index) const {
-  // @@protoc_insertion_point(field_get:StorageEngineInstance.DataFileInfo.CSD.is_primary)
-  return _internal_is_primary(index);
-}
-inline void DataFileInfo_CSD::set_is_primary(int index, bool value) {
-  is_primary_.Set(index, value);
-  // @@protoc_insertion_point(field_set:StorageEngineInstance.DataFileInfo.CSD.is_primary)
-}
-inline void DataFileInfo_CSD::_internal_add_is_primary(bool value) {
-  is_primary_.Add(value);
-}
-inline void DataFileInfo_CSD::add_is_primary(bool value) {
-  _internal_add_is_primary(value);
-  // @@protoc_insertion_point(field_add:StorageEngineInstance.DataFileInfo.CSD.is_primary)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >&
-DataFileInfo_CSD::_internal_is_primary() const {
-  return is_primary_;
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >&
-DataFileInfo_CSD::is_primary() const {
-  // @@protoc_insertion_point(field_list:StorageEngineInstance.DataFileInfo.CSD.is_primary)
-  return _internal_is_primary();
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >*
-DataFileInfo_CSD::_internal_mutable_is_primary() {
-  return &is_primary_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< bool >*
-DataFileInfo_CSD::mutable_is_primary() {
-  // @@protoc_insertion_point(field_mutable_list:StorageEngineInstance.DataFileInfo.CSD.is_primary)
-  return _internal_mutable_is_primary();
 }
 
 // -------------------------------------------------------------------

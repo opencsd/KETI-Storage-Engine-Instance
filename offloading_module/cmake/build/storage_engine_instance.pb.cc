@@ -307,8 +307,7 @@ struct DBInfoDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT DBInfoDefaultTypeInternal _DBInfo_default_instance_;
 constexpr DataFileInfo_CSD::DataFileInfo_CSD(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : csd_id_()
-  , is_primary_(){}
+  : csd_id_(){}
 struct DataFileInfo_CSDDefaultTypeInternal {
   constexpr DataFileInfo_CSDDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -716,7 +715,6 @@ const uint32_t TableStruct_storage_5fengine_5finstance_2eproto::offsets[] PROTOB
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::DataFileInfo_CSD, csd_id_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::DataFileInfo_CSD, is_primary_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::DataFileInfo_SstCsdMapEntry_DoNotUse, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::DataFileInfo_SstCsdMapEntry_DoNotUse, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -873,21 +871,21 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 176, 184, -1, sizeof(::StorageEngineInstance::DBInfo_DbListEntry_DoNotUse)},
   { 186, -1, -1, sizeof(::StorageEngineInstance::DBInfo)},
   { 193, -1, -1, sizeof(::StorageEngineInstance::DataFileInfo_CSD)},
-  { 201, 209, -1, sizeof(::StorageEngineInstance::DataFileInfo_SstCsdMapEntry_DoNotUse)},
-  { 211, -1, -1, sizeof(::StorageEngineInstance::DataFileInfo)},
-  { 218, -1, -1, sizeof(::StorageEngineInstance::SSTList)},
-  { 225, 233, -1, sizeof(::StorageEngineInstance::SnippetMetaData_SstPbaMapEntry_DoNotUse)},
-  { 235, -1, -1, sizeof(::StorageEngineInstance::SnippetMetaData)},
-  { 245, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList_CSDMetric)},
-  { 259, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList)},
-  { 266, 274, -1, sizeof(::StorageEngineInstance::LBA2PBARequest_SstCsdMapEntry_DoNotUse)},
-  { 276, -1, -1, sizeof(::StorageEngineInstance::LBA2PBARequest)},
-  { 284, -1, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse_Chunk)},
-  { 292, -1, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse_PBA)},
-  { 300, 308, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse_SstPbaMapEntry_DoNotUse)},
-  { 310, -1, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse)},
-  { 317, -1, -1, sizeof(::StorageEngineInstance::WALRequest)},
-  { 325, -1, -1, sizeof(::StorageEngineInstance::WALResponse)},
+  { 200, 208, -1, sizeof(::StorageEngineInstance::DataFileInfo_SstCsdMapEntry_DoNotUse)},
+  { 210, -1, -1, sizeof(::StorageEngineInstance::DataFileInfo)},
+  { 217, -1, -1, sizeof(::StorageEngineInstance::SSTList)},
+  { 224, 232, -1, sizeof(::StorageEngineInstance::SnippetMetaData_SstPbaMapEntry_DoNotUse)},
+  { 234, -1, -1, sizeof(::StorageEngineInstance::SnippetMetaData)},
+  { 244, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList_CSDMetric)},
+  { 258, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList)},
+  { 265, 273, -1, sizeof(::StorageEngineInstance::LBA2PBARequest_SstCsdMapEntry_DoNotUse)},
+  { 275, -1, -1, sizeof(::StorageEngineInstance::LBA2PBARequest)},
+  { 283, -1, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse_Chunk)},
+  { 291, -1, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse_PBA)},
+  { 299, 307, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse_SstPbaMapEntry_DoNotUse)},
+  { 309, -1, -1, sizeof(::StorageEngineInstance::LBA2PBAResponse)},
+  { 316, -1, -1, sizeof(::StorageEngineInstance::WALRequest)},
+  { 324, -1, -1, sizeof(::StorageEngineInstance::WALResponse)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -1021,84 +1019,83 @@ const char descriptor_table_protodef_storage_5fengine_5finstance_2eproto[] PROTO
   "\022\013\n\003key\030\001 \001(\t\0225\n\005value\030\002 \001(\0132&.StorageEn"
   "gineInstance.DBInfo.DB.Table:\0028\001\032O\n\013DbLi"
   "stEntry\022\013\n\003key\030\001 \001(\t\022/\n\005value\030\002 \001(\0132 .St"
-  "orageEngineInstance.DBInfo.DB:\0028\001\"\335\001\n\014Da"
+  "orageEngineInstance.DBInfo.DB:\0028\001\"\311\001\n\014Da"
   "taFileInfo\022G\n\013sst_csd_map\030\001 \003(\01322.Storag"
   "eEngineInstance.DataFileInfo.SstCsdMapEn"
-  "try\032)\n\003CSD\022\016\n\006csd_id\030\001 \003(\t\022\022\n\nis_primary"
-  "\030\002 \003(\010\032Y\n\016SstCsdMapEntry\022\013\n\003key\030\001 \001(\t\0226\n"
-  "\005value\030\002 \001(\0132\'.StorageEngineInstance.Dat"
-  "aFileInfo.CSD:\0028\001\"\033\n\007SSTList\022\020\n\010sst_list"
-  "\030\001 \003(\t\"\355\001\n\017SnippetMetaData\022J\n\013sst_pba_ma"
-  "p\030\001 \003(\01325.StorageEngineInstance.SnippetM"
-  "etaData.SstPbaMapEntry\022\037\n\027table_total_bl"
-  "ock_count\030\002 \001(\005\022\034\n\024wal_deleted_key_json\030"
-  "\003 \001(\t\022\035\n\025wal_inserted_row_json\030\004 \003(\t\0320\n\016"
-  "SstPbaMapEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001"
-  "(\t:\0028\001\"\370\001\n\rCSDMetricList\022G\n\017csd_metric_l"
-  "ist\030\001 \003(\0132..StorageEngineInstance.CSDMet"
-  "ricList.CSDMetric\032\235\001\n\tCSDMetric\022\n\n\002id\030\001 "
-  "\001(\t\022\n\n\002ip\030\002 \001(\t\022\021\n\tcpu_usage\030\003 \001(\002\022\024\n\014me"
-  "mory_usage\030\004 \001(\002\022\022\n\ndisk_usage\030\005 \001(\002\022\017\n\007"
-  "network\030\006 \001(\002\022\033\n\023working_block_count\030\007 \001"
-  "(\005\022\r\n\005score\030\010 \001(\002\"\251\001\n\016LBA2PBARequest\022\032\n\022"
-  "table_index_number\030\001 \001(\005\022I\n\013sst_csd_map\030"
-  "\002 \003(\01324.StorageEngineInstance.LBA2PBAReq"
-  "uest.SstCsdMapEntry\0320\n\016SstCsdMapEntry\022\013\n"
-  "\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\271\002\n\017LBA2PB"
-  "AResponse\022J\n\013sst_pba_map\030\001 \003(\01325.Storage"
-  "EngineInstance.LBA2PBAResponse.SstPbaMap"
-  "Entry\032\'\n\005Chunk\022\016\n\006offset\030\001 \001(\003\022\016\n\006length"
-  "\030\002 \001(\005\032S\n\003PBA\022\016\n\006csd_id\030\001 \001(\t\022<\n\006chunks\030"
-  "\002 \003(\0132,.StorageEngineInstance.LBA2PBARes"
-  "ponse.Chunk\032\\\n\016SstPbaMapEntry\022\013\n\003key\030\001 \001"
-  "(\t\0229\n\005value\030\002 \001(\0132*.StorageEngineInstanc"
-  "e.LBA2PBAResponse.PBA:\0028\001\"1\n\nWALRequest\022"
-  "\017\n\007db_name\030\001 \001(\t\022\022\n\ntable_name\030\002 \001(\t\"P\n\013"
-  "WALResponse\022\023\n\013deleted_key\030\001 \003(\t\022\024\n\014inse"
-  "rted_key\030\002 \003(\t\022\026\n\016inserted_value\030\003 \003(\t2\230"
-  "\003\n\026StorageEngineInterface\022Z\n\025GenericQuer"
-  "yInterface\022\036.StorageEngineInstance.Reque"
-  "st\032\037.StorageEngineInstance.Response\"\000\022o\n"
-  "\030OffloadingQueryInterface\022%.StorageEngin"
-  "eInstance.SnippetRequest\032(.StorageEngine"
-  "Instance.QueryStringResult\"\000(\001\022W\n\023SyncMe"
-  "taDataManager\022\035.StorageEngineInstance.DB"
-  "Info\032\037.StorageEngineInstance.Response\"\000\022"
-  "X\n\rPushCSDMetric\022$.StorageEngineInstance"
-  ".CSDMetricList\032\037.StorageEngineInstance.R"
-  "esponse\"\0002\217\002\n\rMergingModule\022W\n\013Aggregati"
-  "on\022%.StorageEngineInstance.SnippetReques"
-  "t\032\037.StorageEngineInstance.Response\"\000\022M\n\010"
-  "EndQuery\022\036.StorageEngineInstance.Request"
-  "\032\037.StorageEngineInstance.Response\"\000\022V\n\016G"
-  "etQueryResult\022\036.StorageEngineInstance.Re"
-  "quest\032\".StorageEngineInstance.QueryResul"
-  "t\"\0002\245\002\n\020MonitoringModule\022X\n\017GetDataFileI"
-  "nfo\022\036.StorageEngineInstance.Request\032#.St"
-  "orageEngineInstance.DataFileInfo\"\000\022^\n\022Ge"
-  "tSnippetMetaData\022\036.StorageEngineInstance"
-  ".Request\032&.StorageEngineInstance.Snippet"
-  "MetaData\"\000\022W\n\023SyncMetaDataManager\022\035.Stor"
+  "try\032\025\n\003CSD\022\016\n\006csd_id\030\001 \003(\t\032Y\n\016SstCsdMapE"
+  "ntry\022\013\n\003key\030\001 \001(\t\0226\n\005value\030\002 \001(\0132\'.Stora"
+  "geEngineInstance.DataFileInfo.CSD:\0028\001\"\033\n"
+  "\007SSTList\022\020\n\010sst_list\030\001 \003(\t\"\355\001\n\017SnippetMe"
+  "taData\022J\n\013sst_pba_map\030\001 \003(\01325.StorageEng"
+  "ineInstance.SnippetMetaData.SstPbaMapEnt"
+  "ry\022\037\n\027table_total_block_count\030\002 \001(\005\022\034\n\024w"
+  "al_deleted_key_json\030\003 \001(\t\022\035\n\025wal_inserte"
+  "d_row_json\030\004 \003(\t\0320\n\016SstPbaMapEntry\022\013\n\003ke"
+  "y\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\"\370\001\n\rCSDMetric"
+  "List\022G\n\017csd_metric_list\030\001 \003(\0132..StorageE"
+  "ngineInstance.CSDMetricList.CSDMetric\032\235\001"
+  "\n\tCSDMetric\022\n\n\002id\030\001 \001(\t\022\n\n\002ip\030\002 \001(\t\022\021\n\tc"
+  "pu_usage\030\003 \001(\002\022\024\n\014memory_usage\030\004 \001(\002\022\022\n\n"
+  "disk_usage\030\005 \001(\002\022\017\n\007network\030\006 \001(\002\022\033\n\023wor"
+  "king_block_count\030\007 \001(\005\022\r\n\005score\030\010 \001(\002\"\251\001"
+  "\n\016LBA2PBARequest\022\032\n\022table_index_number\030\001"
+  " \001(\005\022I\n\013sst_csd_map\030\002 \003(\01324.StorageEngin"
+  "eInstance.LBA2PBARequest.SstCsdMapEntry\032"
+  "0\n\016SstCsdMapEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030"
+  "\002 \001(\t:\0028\001\"\271\002\n\017LBA2PBAResponse\022J\n\013sst_pba"
+  "_map\030\001 \003(\01325.StorageEngineInstance.LBA2P"
+  "BAResponse.SstPbaMapEntry\032\'\n\005Chunk\022\016\n\006of"
+  "fset\030\001 \001(\003\022\016\n\006length\030\002 \001(\005\032S\n\003PBA\022\016\n\006csd"
+  "_id\030\001 \001(\t\022<\n\006chunks\030\002 \003(\0132,.StorageEngin"
+  "eInstance.LBA2PBAResponse.Chunk\032\\\n\016SstPb"
+  "aMapEntry\022\013\n\003key\030\001 \001(\t\0229\n\005value\030\002 \001(\0132*."
+  "StorageEngineInstance.LBA2PBAResponse.PB"
+  "A:\0028\001\"1\n\nWALRequest\022\017\n\007db_name\030\001 \001(\t\022\022\n\n"
+  "table_name\030\002 \001(\t\"P\n\013WALResponse\022\023\n\013delet"
+  "ed_key\030\001 \003(\t\022\024\n\014inserted_key\030\002 \003(\t\022\026\n\016in"
+  "serted_value\030\003 \003(\t2\230\003\n\026StorageEngineInte"
+  "rface\022Z\n\025GenericQueryInterface\022\036.Storage"
+  "EngineInstance.Request\032\037.StorageEngineIn"
+  "stance.Response\"\000\022o\n\030OffloadingQueryInte"
+  "rface\022%.StorageEngineInstance.SnippetReq"
+  "uest\032(.StorageEngineInstance.QueryString"
+  "Result\"\000(\001\022W\n\023SyncMetaDataManager\022\035.Stor"
   "ageEngineInstance.DBInfo\032\037.StorageEngine"
-  "Instance.Response\"\0002\275\001\n\020OffloadingModule"
-  "\022O\n\nScheduling\022\036.StorageEngineInstance.S"
-  "nippet\032\037.StorageEngineInstance.Response\""
-  "\000\022X\n\rPushCSDMetric\022$.StorageEngineInstan"
-  "ce.CSDMetricList\032\037.StorageEngineInstance"
-  ".Response\"\0002\311\001\n\016StorageManager\022X\n\017GetDat"
-  "aFileInfo\022\036.StorageEngineInstance.SSTLis"
-  "t\032#.StorageEngineInstance.DataFileInfo\"\000"
-  "\022]\n\nRequestPBA\022%.StorageEngineInstance.L"
-  "BA2PBARequest\032&.StorageEngineInstance.LB"
-  "A2PBAResponse\"\0002c\n\nWALManager\022U\n\nRequest"
-  "WAL\022!.StorageEngineInstance.WALRequest\032\""
-  ".StorageEngineInstance.WALResponse\"\000B6\n\026"
-  "io.grpc.snippet_sampleB\024snippet_sample_P"
-  "rotoP\001\242\002\003SSPb\006proto3"
+  "Instance.Response\"\000\022X\n\rPushCSDMetric\022$.S"
+  "torageEngineInstance.CSDMetricList\032\037.Sto"
+  "rageEngineInstance.Response\"\0002\217\002\n\rMergin"
+  "gModule\022W\n\013Aggregation\022%.StorageEngineIn"
+  "stance.SnippetRequest\032\037.StorageEngineIns"
+  "tance.Response\"\000\022M\n\010EndQuery\022\036.StorageEn"
+  "gineInstance.Request\032\037.StorageEngineInst"
+  "ance.Response\"\000\022V\n\016GetQueryResult\022\036.Stor"
+  "ageEngineInstance.Request\032\".StorageEngin"
+  "eInstance.QueryResult\"\0002\245\002\n\020MonitoringMo"
+  "dule\022X\n\017GetDataFileInfo\022\036.StorageEngineI"
+  "nstance.Request\032#.StorageEngineInstance."
+  "DataFileInfo\"\000\022^\n\022GetSnippetMetaData\022\036.S"
+  "torageEngineInstance.Request\032&.StorageEn"
+  "gineInstance.SnippetMetaData\"\000\022W\n\023SyncMe"
+  "taDataManager\022\035.StorageEngineInstance.DB"
+  "Info\032\037.StorageEngineInstance.Response\"\0002"
+  "\275\001\n\020OffloadingModule\022O\n\nScheduling\022\036.Sto"
+  "rageEngineInstance.Snippet\032\037.StorageEngi"
+  "neInstance.Response\"\000\022X\n\rPushCSDMetric\022$"
+  ".StorageEngineInstance.CSDMetricList\032\037.S"
+  "torageEngineInstance.Response\"\0002\311\001\n\016Stor"
+  "ageManager\022X\n\017GetDataFileInfo\022\036.StorageE"
+  "ngineInstance.SSTList\032#.StorageEngineIns"
+  "tance.DataFileInfo\"\000\022]\n\nRequestPBA\022%.Sto"
+  "rageEngineInstance.LBA2PBARequest\032&.Stor"
+  "ageEngineInstance.LBA2PBAResponse\"\0002c\n\nW"
+  "ALManager\022U\n\nRequestWAL\022!.StorageEngineI"
+  "nstance.WALRequest\032\".StorageEngineInstan"
+  "ce.WALResponse\"\000B6\n\026io.grpc.snippet_samp"
+  "leB\024snippet_sample_ProtoP\001\242\002\003SSPb\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_storage_5fengine_5finstance_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_storage_5fengine_5finstance_2eproto = {
-  false, false, 6580, descriptor_table_protodef_storage_5fengine_5finstance_2eproto, "storage_engine_instance.proto", 
+  false, false, 6560, descriptor_table_protodef_storage_5fengine_5finstance_2eproto, "storage_engine_instance.proto", 
   &descriptor_table_storage_5fengine_5finstance_2eproto_once, nullptr, 0, 36,
   schemas, file_default_instances, TableStruct_storage_5fengine_5finstance_2eproto::offsets,
   file_level_metadata_storage_5fengine_5finstance_2eproto, file_level_enum_descriptors_storage_5fengine_5finstance_2eproto, file_level_service_descriptors_storage_5fengine_5finstance_2eproto,
@@ -6062,8 +6059,7 @@ class DataFileInfo_CSD::_Internal {
 DataFileInfo_CSD::DataFileInfo_CSD(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
-  csd_id_(arena),
-  is_primary_(arena) {
+  csd_id_(arena) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
@@ -6072,8 +6068,7 @@ DataFileInfo_CSD::DataFileInfo_CSD(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 }
 DataFileInfo_CSD::DataFileInfo_CSD(const DataFileInfo_CSD& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
-      csd_id_(from.csd_id_),
-      is_primary_(from.is_primary_) {
+      csd_id_(from.csd_id_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.DataFileInfo.CSD)
 }
@@ -6109,7 +6104,6 @@ void DataFileInfo_CSD::Clear() {
   (void) cached_has_bits;
 
   csd_id_.Clear();
-  is_primary_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -6131,17 +6125,6 @@ const char* DataFileInfo_CSD::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPA
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
-        } else
-          goto handle_unusual;
-        continue;
-      // repeated bool is_primary = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedBoolParser(_internal_mutable_is_primary(), ptr, ctx);
-          CHK_(ptr);
-        } else if (static_cast<uint8_t>(tag) == 16) {
-          _internal_add_is_primary(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr));
-          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -6184,11 +6167,6 @@ uint8_t* DataFileInfo_CSD::_InternalSerialize(
     target = stream->WriteString(1, s, target);
   }
 
-  // repeated bool is_primary = 2;
-  if (this->_internal_is_primary_size() > 0) {
-    target = stream->WriteFixedPacked(2, _internal_is_primary(), target);
-  }
-
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -6211,18 +6189,6 @@ size_t DataFileInfo_CSD::ByteSizeLong() const {
   for (int i = 0, n = csd_id_.size(); i < n; i++) {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
       csd_id_.Get(i));
-  }
-
-  // repeated bool is_primary = 2;
-  {
-    unsigned int count = static_cast<unsigned int>(this->_internal_is_primary_size());
-    size_t data_size = 1UL * count;
-    if (data_size > 0) {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-            static_cast<int32_t>(data_size));
-    }
-    total_size += data_size;
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -6248,7 +6214,6 @@ void DataFileInfo_CSD::MergeFrom(const DataFileInfo_CSD& from) {
   (void) cached_has_bits;
 
   csd_id_.MergeFrom(from.csd_id_);
-  is_primary_.MergeFrom(from.is_primary_);
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -6267,7 +6232,6 @@ void DataFileInfo_CSD::InternalSwap(DataFileInfo_CSD* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   csd_id_.InternalSwap(&other->csd_id_);
-  is_primary_.InternalSwap(&other->is_primary_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata DataFileInfo_CSD::GetMetadata() const {

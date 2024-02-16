@@ -68,8 +68,7 @@ typedef enum KETI_Type{
 }KETI_Type;
 
 typedef enum Work_Status_Type{
-    NonInitQuery,
-    NonInitTable,
+    Initialized,
     NotFinished,
     WorkDone,
 }Work_Status_Type;

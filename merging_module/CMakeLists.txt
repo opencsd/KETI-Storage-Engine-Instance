@@ -19,7 +19,7 @@
 
 cmake_minimum_required(VERSION 3.5.1)
 
-project(MergingContainer C CXX)
+project(Mergingmodule C CXX)
 
 include(../cmake/common.cmake)
 
@@ -65,9 +65,9 @@ if (UNIX)
 	set(LINKING_LIBRARIES ${LINKING_LIBRARIES} Threads::Threads)
 endif (UNIX)
 
-# merging-container
-add_executable(merging-container "merging_interface.cc" "buffer_manager.cc" "merge_query_manager.cc")
-target_link_libraries(merging-container
+# merging-module
+add_executable(merging-module "merging_interface.cc" "buffer_manager.cc" "merge_query_manager.cc")
+target_link_libraries(merging-module
   ss_grpc_proto
   ${LINKING_LIBRARIES}
   ${_REFLECTION}

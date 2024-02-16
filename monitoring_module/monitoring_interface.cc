@@ -28,6 +28,8 @@ using StorageEngineInstance::DBInfo;
 
 class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
   Status GetDataFileInfo(ServerContext *context, const Request *request, DataFileInfo *response) override {
+    KETILOG::DEBUGLOG("Monitoring", "# called get data file info");
+
     while(true){
       if(TableManager::IsMetaDataInitialized()){
         break;
@@ -43,12 +45,23 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
     StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)STORAGE_MANAGER_PORT, grpc::InsecureChannelCredentials()));
     DataFileInfo dataFileInfo = smc.GetDataFileInfo(table_sst_list);
 
+    {
+    // std::string test_json;
+    // google::protobuf::util::JsonPrintOptions options;
+    // options.always_print_primitive_fields = true;
+    // options.always_print_enums_as_ints = true;
+    // google::protobuf::util::MessageToJsonString(dataFileInfo,&test_json,options);
+    // std::cout << endl << test_json << std::endl << std::endl; 
+    }
+
     response->CopyFrom(dataFileInfo);
-    
+
     return Status::OK;
   }
 
   Status GetSnippetMetaData(ServerContext *context, const Request *request, SnippetMetaData *response) override {
+    KETILOG::DEBUGLOG("Monitoring", "# called get snippet metadata");
+
     while(true){
       if(TableManager::IsMetaDataInitialized()){
         break;
@@ -56,13 +69,22 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
       KETILOG::WARNLOG("Monitoring", "Table Manager Not Initialized!");
       sleep(1);
     }
+    
+    {
+    // std::string test_json;
+    // google::protobuf::util::JsonPrintOptions options;
+    // options.always_print_primitive_fields = true;
+    // options.always_print_enums_as_ints = true;
+    // google::protobuf::util::MessageToJsonString(*request,&test_json,options);
+    // std::cout << endl << test_json << std::endl << std::endl; 
+    }
 
     string db_name = request->db_name();
     string table_name = request->table_name();
     int table_index_number = TableManager::GetTableIndexNumber(db_name, table_name);
 
     LBA2PBARequest lbaRequest;
-    int total_block_count;
+    int total_block_count = 0;
     map<string,string> sst_pba_map;
 
     lbaRequest.set_table_index_number(table_index_number);
@@ -78,31 +100,39 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
     walRequest.set_db_name(db_name);
     walRequest.set_table_name(table_name);
 
+    CompletionQueue *cq;
+
     StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)STORAGE_MANAGER_PORT, grpc::InsecureChannelCredentials()));
-    smc.RequestPBA(lbaRequest, total_block_count, sst_pba_map); //async
-    cout << "request pba" << endl;
+    smc.RequestPBA(lbaRequest, total_block_count, sst_pba_map, cq); //async로 구현할것!
 
-    WALHandler wh(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)WAL_MANAGER_PORT, grpc::InsecureChannelCredentials()));
-    wh.RequestWAL(walRequest, sst_count, wal_deleted_key_json, wal_inserted_row_json); //async
-    cout << "request wal" << endl;
+    // WALHandler wh(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)WAL_MANAGER_PORT, grpc::InsecureChannelCredentials()));
+    // wh.RequestWAL(walRequest, sst_count, wal_deleted_key_json, wal_inserted_row_json, cq); //async
 
-    //finish
+    // cout << "request wal" << endl;
+
+    // void* got_tag;
+    // bool ok = false;
+    // GPR_ASSERT(cq->Next(&got_tag, &ok));
+    // GPR_ASSERT(got_tag == (void*)1);
+    // GPR_ASSERT(ok);
 
     int index = 0;
     for(const auto entry : sst_pba_map){
       string sst_name = entry.first;
       string pba = entry.second;
       response->mutable_sst_pba_map()->insert({sst_name, pba});
-      response->add_wal_inserted_row_json(wal_inserted_row_json[index]);
+      // response->add_wal_inserted_row_json(wal_inserted_row_json[index]);
       index++;
     }
     response->set_table_total_block_count(total_block_count);
-    response->set_wal_deleted_key_json(wal_deleted_key_json);
+    // response->set_wal_deleted_key_json(wal_deleted_key_json);
 
     return Status::OK;
   }
 
   Status SyncMetaDataManager(ServerContext *context, const DBInfo *request, Response *response) override {
+    KETILOG::INFOLOG("Monitoring", "metadata sync success");
+
     for(const auto db : request->db_list()){
       string db_name = db.first;
 

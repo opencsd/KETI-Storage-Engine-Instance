@@ -40,9 +40,10 @@ class MergingModuleConnector {
 			return response.value();
 		}
 
-		QueryStringResult GetQueryResult(int qid, string tname) {
+		QueryStringResult GetQueryResult(int qid, int wid, string tname) {
 			Request request;
 			request.set_query_id(qid);
+			request.set_work_id(wid);
 			request.set_table_name(tname);
 			
 			QueryResult query_result;

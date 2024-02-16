@@ -207,7 +207,6 @@ message DBInfo {
 message DataFileInfo {
   message CSD {
     repeated string csd_id = 1;
-    repeated bool is_primary = 2;
   }
   map<string,CSD> sst_csd_map = 1;
 }

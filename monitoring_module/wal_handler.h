@@ -24,6 +24,9 @@ using namespace rapidjson;
 using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
+using grpc::ClientAsyncResponseReader;
+using grpc::CompletionQueue;
+
 using StorageEngineInstance::Request;
 using StorageEngineInstance::WALManager;
 using StorageEngineInstance::WALRequest;
@@ -36,18 +39,18 @@ class WALHandler {
 public:
     WALHandler(std::shared_ptr<Channel> channel) : stub_(WALManager::NewStub(channel)) {}
 
-    void RequestWAL(WALRequest walRequset, int sst_count, string &wal_deleted_key_json, vector<string> &wal_inserted_row_json) {
+    void RequestWAL(WALRequest walRequset, int sst_count, string &wal_deleted_key_json, vector<string> &wal_inserted_row_json, CompletionQueue *cq) {
         WALResponse walResponse;
         ClientContext context;
-        
-        Status status = stub_->RequestWAL(&context, walRequset, &walResponse);
+        Status status;
+
+        std::unique_ptr<ClientAsyncResponseReader<WALResponse>> rpc(stub_->AsyncRequestWAL(&context,walRequset,cq));
+        rpc->Finish(&walResponse, &status, (void*)2);
 
         if (!status.ok()) {
             KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
 			KETILOG::FATALLOG(LOGTAG,"RPC failed");
         }
-
-        
 
         return;
     }

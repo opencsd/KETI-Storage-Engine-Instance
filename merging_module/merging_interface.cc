@@ -20,7 +20,17 @@ using StorageEngineInstance::QueryResult_Column_ColType;
 
 class MergingModuleServiceImpl final : public MergingModule::Service {
   Status Aggregation(ServerContext* context, const SnippetRequest* request, Response* response) override {  
-    string msg = "==:Aggregation:== {" + to_string(request->snippet().query_id()) + "|" + to_string(request->snippet().work_id()) + "}";
+    // // Check Recv Snippet
+    // {
+    // std::string test_json;
+    // google::protobuf::util::JsonPrintOptions options;
+    // options.always_print_primitive_fields = true;
+    // options.always_print_enums_as_ints = true;
+    // google::protobuf::util::MessageToJsonString(*request,&test_json,options);
+    // std::cout << endl << test_json << std::endl << std::endl; 
+    // }
+
+    string msg = "# aggregation {" + to_string(request->snippet().query_id()) + "|" + to_string(request->snippet().work_id()) + "}";
     KETILOG::INFOLOG("Merging",msg);
 
     // merge query manager instance & run snippet work
@@ -32,12 +42,10 @@ class MergingModuleServiceImpl final : public MergingModule::Service {
   }
 
   Status GetQueryResult(ServerContext* context, const Request* request, QueryResult* result) override {
-    string msg = "==:Get Query Result:== {" + to_string(request->query_id()) + "|" + request->table_name() + "}";
+    string msg = "# get query result {" + to_string(request->query_id()) + "|" + to_string(request->work_id()) + "|" + request->table_name() + "}";
     KETILOG::INFOLOG("Merging", msg);
-
-    string key = to_string(request->query_id()) + "|" + request->table_name();
      
-    TableData queryResult = BufferManager::GetTableData(request->query_id(),request->table_name());//이걸 막기
+    TableData queryResult = BufferManager::GetTableData(request->query_id(),request->work_id(),request->table_name());
 
     if(KETILOG::IsLogLevelUnder(TRACE)){
       // // 테이블 데이터 로우 수 확인 - Debug Code   

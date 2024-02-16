@@ -130,24 +130,24 @@ ss_grpc_proto/fast:
 .PHONY : ss_grpc_proto/fast
 
 #=============================================================================
-# Target rules for targets named merging-container
+# Target rules for targets named merging-module
 
 # Build rule for target.
-merging-container: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 merging-container
-.PHONY : merging-container
+merging-module: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 merging-module
+.PHONY : merging-module
 
 # fast build rule for target.
-merging-container/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/build
-.PHONY : merging-container/fast
+merging-module/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/build
+.PHONY : merging-module/fast
 
 buffer_manager.o: buffer_manager.cc.o
 .PHONY : buffer_manager.o
 
 # target to build an object file
 buffer_manager.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/buffer_manager.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/buffer_manager.cc.o
 .PHONY : buffer_manager.cc.o
 
 buffer_manager.i: buffer_manager.cc.i
@@ -155,7 +155,7 @@ buffer_manager.i: buffer_manager.cc.i
 
 # target to preprocess a source file
 buffer_manager.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/buffer_manager.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/buffer_manager.cc.i
 .PHONY : buffer_manager.cc.i
 
 buffer_manager.s: buffer_manager.cc.s
@@ -163,7 +163,7 @@ buffer_manager.s: buffer_manager.cc.s
 
 # target to generate assembly for a file
 buffer_manager.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/buffer_manager.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/buffer_manager.cc.s
 .PHONY : buffer_manager.cc.s
 
 merge_query_manager.o: merge_query_manager.cc.o
@@ -171,7 +171,7 @@ merge_query_manager.o: merge_query_manager.cc.o
 
 # target to build an object file
 merge_query_manager.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/merge_query_manager.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/merge_query_manager.cc.o
 .PHONY : merge_query_manager.cc.o
 
 merge_query_manager.i: merge_query_manager.cc.i
@@ -179,7 +179,7 @@ merge_query_manager.i: merge_query_manager.cc.i
 
 # target to preprocess a source file
 merge_query_manager.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/merge_query_manager.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/merge_query_manager.cc.i
 .PHONY : merge_query_manager.cc.i
 
 merge_query_manager.s: merge_query_manager.cc.s
@@ -187,7 +187,7 @@ merge_query_manager.s: merge_query_manager.cc.s
 
 # target to generate assembly for a file
 merge_query_manager.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/merge_query_manager.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/merge_query_manager.cc.s
 .PHONY : merge_query_manager.cc.s
 
 merging_interface.o: merging_interface.cc.o
@@ -195,7 +195,7 @@ merging_interface.o: merging_interface.cc.o
 
 # target to build an object file
 merging_interface.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/merging_interface.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/merging_interface.cc.o
 .PHONY : merging_interface.cc.o
 
 merging_interface.i: merging_interface.cc.i
@@ -203,7 +203,7 @@ merging_interface.i: merging_interface.cc.i
 
 # target to preprocess a source file
 merging_interface.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/merging_interface.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/merging_interface.cc.i
 .PHONY : merging_interface.cc.i
 
 merging_interface.s: merging_interface.cc.s
@@ -211,7 +211,7 @@ merging_interface.s: merging_interface.cc.s
 
 # target to generate assembly for a file
 merging_interface.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/merging_interface.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/merging_interface.cc.s
 .PHONY : merging_interface.cc.s
 
 storage_engine_instance.grpc.pb.o: storage_engine_instance.grpc.pb.cc.o
@@ -270,7 +270,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... merging-container"
+	@echo "... merging-module"
 	@echo "... ss_grpc_proto"
 	@echo "... buffer_manager.o"
 	@echo "... buffer_manager.i"
