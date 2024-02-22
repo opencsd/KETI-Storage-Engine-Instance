@@ -42,7 +42,7 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
     string table_name = request->table_name();
     vector<string> table_sst_list = TableManager::GetSST(db_name, table_name);
 
-    StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)STORAGE_MANAGER_PORT, grpc::InsecureChannelCredentials()));
+    StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)LBA2PBA_MANAGER_PORT, grpc::InsecureChannelCredentials()));
     DataFileInfo dataFileInfo = smc.GetDataFileInfo(table_sst_list);
 
     {
@@ -102,7 +102,7 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
 
     CompletionQueue *cq;
 
-    StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)STORAGE_MANAGER_PORT, grpc::InsecureChannelCredentials()));
+    StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)LBA2PBA_MANAGER_PORT, grpc::InsecureChannelCredentials()));
     smc.RequestPBA(lbaRequest, total_block_count, sst_pba_map, cq); //async로 구현할것!
 
     // WALHandler wh(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)WAL_MANAGER_PORT, grpc::InsecureChannelCredentials()));

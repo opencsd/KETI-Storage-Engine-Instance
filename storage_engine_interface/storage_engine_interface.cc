@@ -119,22 +119,6 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
     return Status::OK;
   }
 
-  Status SyncMetaDataManager(ServerContext *context, const DBInfo *request, Response *response) override {
-    {
-      std::string test_json;
-      google::protobuf::util::JsonPrintOptions options;
-      options.always_print_primitive_fields = true;
-      options.always_print_enums_as_ints = true;
-      google::protobuf::util::MessageToJsonString(*request,&test_json,options);
-      std::cout << endl << test_json << std::endl << std::endl; 
-    }
-
-    MonitoringModuleConnector monitoringModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
-    monitoringModule.SyncMetaDataManager(*request);
-
-    return Status::OK;
-  }
-
   Status PushCSDMetric(ServerContext *context, const CSDMetricList *request, Response *response) override {
     OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
     offloadingModule.PushCSDMetric(*request);
