@@ -66,7 +66,7 @@ if (UNIX)
 endif (UNIX)
 
 # offloading module
-add_executable(offloading-module "OffloadingInterface.cc" "SnippetScheduler.cc")
+add_executable(offloading-module "offloading_interface.cc" "snippet_scheduler.cc")
 target_link_libraries(offloading-module
   ss_grpc_proto
   ${LINKING_LIBRARIES}

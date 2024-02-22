@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/offloading-module.dir/OffloadingInterface.cc.o"
-  "CMakeFiles/offloading-module.dir/OffloadingInterface.cc.o.d"
-  "CMakeFiles/offloading-module.dir/SnippetScheduler.cc.o"
-  "CMakeFiles/offloading-module.dir/SnippetScheduler.cc.o.d"
+  "CMakeFiles/offloading-module.dir/offloading_interface.cc.o"
+  "CMakeFiles/offloading-module.dir/offloading_interface.cc.o.d"
+  "CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o"
+  "CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o.d"
   "offloading-module"
   "offloading-module.pdb"
 )

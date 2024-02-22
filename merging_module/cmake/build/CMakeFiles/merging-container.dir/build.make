@@ -69,60 +69,60 @@ include CMakeFiles/merging-container.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/merging-container.dir/flags.make
 
-CMakeFiles/merging-container.dir/main.cc.o: CMakeFiles/merging-container.dir/flags.make
-CMakeFiles/merging-container.dir/main.cc.o: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/main.cc
-CMakeFiles/merging-container.dir/main.cc.o: CMakeFiles/merging-container.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/merging-container.dir/main.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/merging-container.dir/main.cc.o -MF CMakeFiles/merging-container.dir/main.cc.o.d -o CMakeFiles/merging-container.dir/main.cc.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/main.cc
+CMakeFiles/merging-container.dir/merging_interface.cc.o: CMakeFiles/merging-container.dir/flags.make
+CMakeFiles/merging-container.dir/merging_interface.cc.o: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/merging_interface.cc
+CMakeFiles/merging-container.dir/merging_interface.cc.o: CMakeFiles/merging-container.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/merging-container.dir/merging_interface.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/merging-container.dir/merging_interface.cc.o -MF CMakeFiles/merging-container.dir/merging_interface.cc.o.d -o CMakeFiles/merging-container.dir/merging_interface.cc.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/merging_interface.cc
 
-CMakeFiles/merging-container.dir/main.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/merging-container.dir/main.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/main.cc > CMakeFiles/merging-container.dir/main.cc.i
+CMakeFiles/merging-container.dir/merging_interface.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/merging-container.dir/merging_interface.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/merging_interface.cc > CMakeFiles/merging-container.dir/merging_interface.cc.i
 
-CMakeFiles/merging-container.dir/main.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/merging-container.dir/main.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/main.cc -o CMakeFiles/merging-container.dir/main.cc.s
+CMakeFiles/merging-container.dir/merging_interface.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/merging-container.dir/merging_interface.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/merging_interface.cc -o CMakeFiles/merging-container.dir/merging_interface.cc.s
 
-CMakeFiles/merging-container.dir/BufferManager.cc.o: CMakeFiles/merging-container.dir/flags.make
-CMakeFiles/merging-container.dir/BufferManager.cc.o: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/BufferManager.cc
-CMakeFiles/merging-container.dir/BufferManager.cc.o: CMakeFiles/merging-container.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/merging-container.dir/BufferManager.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/merging-container.dir/BufferManager.cc.o -MF CMakeFiles/merging-container.dir/BufferManager.cc.o.d -o CMakeFiles/merging-container.dir/BufferManager.cc.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/BufferManager.cc
+CMakeFiles/merging-container.dir/buffer_manager.cc.o: CMakeFiles/merging-container.dir/flags.make
+CMakeFiles/merging-container.dir/buffer_manager.cc.o: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/buffer_manager.cc
+CMakeFiles/merging-container.dir/buffer_manager.cc.o: CMakeFiles/merging-container.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/merging-container.dir/buffer_manager.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/merging-container.dir/buffer_manager.cc.o -MF CMakeFiles/merging-container.dir/buffer_manager.cc.o.d -o CMakeFiles/merging-container.dir/buffer_manager.cc.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/buffer_manager.cc
 
-CMakeFiles/merging-container.dir/BufferManager.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/merging-container.dir/BufferManager.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/BufferManager.cc > CMakeFiles/merging-container.dir/BufferManager.cc.i
+CMakeFiles/merging-container.dir/buffer_manager.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/merging-container.dir/buffer_manager.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/buffer_manager.cc > CMakeFiles/merging-container.dir/buffer_manager.cc.i
 
-CMakeFiles/merging-container.dir/BufferManager.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/merging-container.dir/BufferManager.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/BufferManager.cc -o CMakeFiles/merging-container.dir/BufferManager.cc.s
+CMakeFiles/merging-container.dir/buffer_manager.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/merging-container.dir/buffer_manager.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/buffer_manager.cc -o CMakeFiles/merging-container.dir/buffer_manager.cc.s
 
-CMakeFiles/merging-container.dir/MergeQueryManager.cc.o: CMakeFiles/merging-container.dir/flags.make
-CMakeFiles/merging-container.dir/MergeQueryManager.cc.o: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/MergeQueryManager.cc
-CMakeFiles/merging-container.dir/MergeQueryManager.cc.o: CMakeFiles/merging-container.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/merging-container.dir/MergeQueryManager.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/merging-container.dir/MergeQueryManager.cc.o -MF CMakeFiles/merging-container.dir/MergeQueryManager.cc.o.d -o CMakeFiles/merging-container.dir/MergeQueryManager.cc.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/MergeQueryManager.cc
+CMakeFiles/merging-container.dir/merge_query_manager.cc.o: CMakeFiles/merging-container.dir/flags.make
+CMakeFiles/merging-container.dir/merge_query_manager.cc.o: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/merge_query_manager.cc
+CMakeFiles/merging-container.dir/merge_query_manager.cc.o: CMakeFiles/merging-container.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/merging-container.dir/merge_query_manager.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/merging-container.dir/merge_query_manager.cc.o -MF CMakeFiles/merging-container.dir/merge_query_manager.cc.o.d -o CMakeFiles/merging-container.dir/merge_query_manager.cc.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/merge_query_manager.cc
 
-CMakeFiles/merging-container.dir/MergeQueryManager.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/merging-container.dir/MergeQueryManager.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/MergeQueryManager.cc > CMakeFiles/merging-container.dir/MergeQueryManager.cc.i
+CMakeFiles/merging-container.dir/merge_query_manager.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/merging-container.dir/merge_query_manager.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/merge_query_manager.cc > CMakeFiles/merging-container.dir/merge_query_manager.cc.i
 
-CMakeFiles/merging-container.dir/MergeQueryManager.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/merging-container.dir/MergeQueryManager.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/MergeQueryManager.cc -o CMakeFiles/merging-container.dir/MergeQueryManager.cc.s
+CMakeFiles/merging-container.dir/merge_query_manager.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/merging-container.dir/merge_query_manager.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/merge_query_manager.cc -o CMakeFiles/merging-container.dir/merge_query_manager.cc.s
 
 # Object files for target merging-container
 merging__container_OBJECTS = \
-"CMakeFiles/merging-container.dir/main.cc.o" \
-"CMakeFiles/merging-container.dir/BufferManager.cc.o" \
-"CMakeFiles/merging-container.dir/MergeQueryManager.cc.o"
+"CMakeFiles/merging-container.dir/merging_interface.cc.o" \
+"CMakeFiles/merging-container.dir/buffer_manager.cc.o" \
+"CMakeFiles/merging-container.dir/merge_query_manager.cc.o"
 
 # External object files for target merging-container
 merging__container_EXTERNAL_OBJECTS =
 
-merging-container: CMakeFiles/merging-container.dir/main.cc.o
-merging-container: CMakeFiles/merging-container.dir/BufferManager.cc.o
-merging-container: CMakeFiles/merging-container.dir/MergeQueryManager.cc.o
+merging-container: CMakeFiles/merging-container.dir/merging_interface.cc.o
+merging-container: CMakeFiles/merging-container.dir/buffer_manager.cc.o
+merging-container: CMakeFiles/merging-container.dir/merge_query_manager.cc.o
 merging-container: CMakeFiles/merging-container.dir/build.make
 merging-container: libss_grpc_proto.a
 merging-container: /lib/libgrpc++_reflection.a

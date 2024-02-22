@@ -8,9 +8,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/BufferManager.cc" "CMakeFiles/merging-container.dir/BufferManager.cc.o" "gcc" "CMakeFiles/merging-container.dir/BufferManager.cc.o.d"
-  "/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/MergeQueryManager.cc" "CMakeFiles/merging-container.dir/MergeQueryManager.cc.o" "gcc" "CMakeFiles/merging-container.dir/MergeQueryManager.cc.o.d"
-  "/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/main.cc" "CMakeFiles/merging-container.dir/main.cc.o" "gcc" "CMakeFiles/merging-container.dir/main.cc.o.d"
+  "/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/buffer_manager.cc" "CMakeFiles/merging-container.dir/buffer_manager.cc.o" "gcc" "CMakeFiles/merging-container.dir/buffer_manager.cc.o.d"
+  "/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/merge_query_manager.cc" "CMakeFiles/merging-container.dir/merge_query_manager.cc.o" "gcc" "CMakeFiles/merging-container.dir/merge_query_manager.cc.o.d"
+  "/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/merging_module/merging_interface.cc" "CMakeFiles/merging-container.dir/merging_interface.cc.o" "gcc" "CMakeFiles/merging-container.dir/merging_interface.cc.o.d"
   )
 
 # Targets to which this target links.

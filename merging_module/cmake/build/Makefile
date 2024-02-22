@@ -130,89 +130,89 @@ ss_grpc_proto/fast:
 .PHONY : ss_grpc_proto/fast
 
 #=============================================================================
-# Target rules for targets named merging-container
+# Target rules for targets named merging-module
 
 # Build rule for target.
-merging-container: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 merging-container
-.PHONY : merging-container
+merging-module: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 merging-module
+.PHONY : merging-module
 
 # fast build rule for target.
-merging-container/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/build
-.PHONY : merging-container/fast
+merging-module/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/build
+.PHONY : merging-module/fast
 
-BufferManager.o: BufferManager.cc.o
-.PHONY : BufferManager.o
-
-# target to build an object file
-BufferManager.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/BufferManager.cc.o
-.PHONY : BufferManager.cc.o
-
-BufferManager.i: BufferManager.cc.i
-.PHONY : BufferManager.i
-
-# target to preprocess a source file
-BufferManager.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/BufferManager.cc.i
-.PHONY : BufferManager.cc.i
-
-BufferManager.s: BufferManager.cc.s
-.PHONY : BufferManager.s
-
-# target to generate assembly for a file
-BufferManager.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/BufferManager.cc.s
-.PHONY : BufferManager.cc.s
-
-MergeQueryManager.o: MergeQueryManager.cc.o
-.PHONY : MergeQueryManager.o
+buffer_manager.o: buffer_manager.cc.o
+.PHONY : buffer_manager.o
 
 # target to build an object file
-MergeQueryManager.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/MergeQueryManager.cc.o
-.PHONY : MergeQueryManager.cc.o
+buffer_manager.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/buffer_manager.cc.o
+.PHONY : buffer_manager.cc.o
 
-MergeQueryManager.i: MergeQueryManager.cc.i
-.PHONY : MergeQueryManager.i
+buffer_manager.i: buffer_manager.cc.i
+.PHONY : buffer_manager.i
 
 # target to preprocess a source file
-MergeQueryManager.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/MergeQueryManager.cc.i
-.PHONY : MergeQueryManager.cc.i
+buffer_manager.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/buffer_manager.cc.i
+.PHONY : buffer_manager.cc.i
 
-MergeQueryManager.s: MergeQueryManager.cc.s
-.PHONY : MergeQueryManager.s
+buffer_manager.s: buffer_manager.cc.s
+.PHONY : buffer_manager.s
 
 # target to generate assembly for a file
-MergeQueryManager.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/MergeQueryManager.cc.s
-.PHONY : MergeQueryManager.cc.s
+buffer_manager.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/buffer_manager.cc.s
+.PHONY : buffer_manager.cc.s
 
-main.o: main.cc.o
-.PHONY : main.o
+merge_query_manager.o: merge_query_manager.cc.o
+.PHONY : merge_query_manager.o
 
 # target to build an object file
-main.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/main.cc.o
-.PHONY : main.cc.o
+merge_query_manager.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/merge_query_manager.cc.o
+.PHONY : merge_query_manager.cc.o
 
-main.i: main.cc.i
-.PHONY : main.i
+merge_query_manager.i: merge_query_manager.cc.i
+.PHONY : merge_query_manager.i
 
 # target to preprocess a source file
-main.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/main.cc.i
-.PHONY : main.cc.i
+merge_query_manager.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/merge_query_manager.cc.i
+.PHONY : merge_query_manager.cc.i
 
-main.s: main.cc.s
-.PHONY : main.s
+merge_query_manager.s: merge_query_manager.cc.s
+.PHONY : merge_query_manager.s
 
 # target to generate assembly for a file
-main.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-container.dir/build.make CMakeFiles/merging-container.dir/main.cc.s
-.PHONY : main.cc.s
+merge_query_manager.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/merge_query_manager.cc.s
+.PHONY : merge_query_manager.cc.s
+
+merging_interface.o: merging_interface.cc.o
+.PHONY : merging_interface.o
+
+# target to build an object file
+merging_interface.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/merging_interface.cc.o
+.PHONY : merging_interface.cc.o
+
+merging_interface.i: merging_interface.cc.i
+.PHONY : merging_interface.i
+
+# target to preprocess a source file
+merging_interface.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/merging_interface.cc.i
+.PHONY : merging_interface.cc.i
+
+merging_interface.s: merging_interface.cc.s
+.PHONY : merging_interface.s
+
+# target to generate assembly for a file
+merging_interface.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/merging-module.dir/build.make CMakeFiles/merging-module.dir/merging_interface.cc.s
+.PHONY : merging_interface.cc.s
 
 storage_engine_instance.grpc.pb.o: storage_engine_instance.grpc.pb.cc.o
 .PHONY : storage_engine_instance.grpc.pb.o
@@ -270,17 +270,17 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... merging-container"
+	@echo "... merging-module"
 	@echo "... ss_grpc_proto"
-	@echo "... BufferManager.o"
-	@echo "... BufferManager.i"
-	@echo "... BufferManager.s"
-	@echo "... MergeQueryManager.o"
-	@echo "... MergeQueryManager.i"
-	@echo "... MergeQueryManager.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... buffer_manager.o"
+	@echo "... buffer_manager.i"
+	@echo "... buffer_manager.s"
+	@echo "... merge_query_manager.o"
+	@echo "... merge_query_manager.i"
+	@echo "... merge_query_manager.s"
+	@echo "... merging_interface.o"
+	@echo "... merging_interface.i"
+	@echo "... merging_interface.s"
 	@echo "... storage_engine_instance.grpc.pb.o"
 	@echo "... storage_engine_instance.grpc.pb.i"
 	@echo "... storage_engine_instance.grpc.pb.s"

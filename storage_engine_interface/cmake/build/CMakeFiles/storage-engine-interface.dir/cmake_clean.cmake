@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.o"
-  "CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.o.d"
+  "CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.o"
+  "CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.o.d"
   "storage-engine-interface"
   "storage-engine-interface.pdb"
 )

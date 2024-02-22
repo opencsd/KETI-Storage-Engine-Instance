@@ -142,30 +142,6 @@ storage-engine-interface/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage-engine-interface.dir/build.make CMakeFiles/storage-engine-interface.dir/build
 .PHONY : storage-engine-interface/fast
 
-StorageEngineInterface.o: StorageEngineInterface.cc.o
-.PHONY : StorageEngineInterface.o
-
-# target to build an object file
-StorageEngineInterface.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage-engine-interface.dir/build.make CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.o
-.PHONY : StorageEngineInterface.cc.o
-
-StorageEngineInterface.i: StorageEngineInterface.cc.i
-.PHONY : StorageEngineInterface.i
-
-# target to preprocess a source file
-StorageEngineInterface.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage-engine-interface.dir/build.make CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.i
-.PHONY : StorageEngineInterface.cc.i
-
-StorageEngineInterface.s: StorageEngineInterface.cc.s
-.PHONY : StorageEngineInterface.s
-
-# target to generate assembly for a file
-StorageEngineInterface.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage-engine-interface.dir/build.make CMakeFiles/storage-engine-interface.dir/StorageEngineInterface.cc.s
-.PHONY : StorageEngineInterface.cc.s
-
 storage_engine_instance.grpc.pb.o: storage_engine_instance.grpc.pb.cc.o
 .PHONY : storage_engine_instance.grpc.pb.o
 
@@ -214,6 +190,30 @@ storage_engine_instance.pb.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ss_grpc_proto.dir/build.make CMakeFiles/ss_grpc_proto.dir/storage_engine_instance.pb.cc.s
 .PHONY : storage_engine_instance.pb.cc.s
 
+storage_engine_interface.o: storage_engine_interface.cc.o
+.PHONY : storage_engine_interface.o
+
+# target to build an object file
+storage_engine_interface.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage-engine-interface.dir/build.make CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.o
+.PHONY : storage_engine_interface.cc.o
+
+storage_engine_interface.i: storage_engine_interface.cc.i
+.PHONY : storage_engine_interface.i
+
+# target to preprocess a source file
+storage_engine_interface.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage-engine-interface.dir/build.make CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.i
+.PHONY : storage_engine_interface.cc.i
+
+storage_engine_interface.s: storage_engine_interface.cc.s
+.PHONY : storage_engine_interface.s
+
+# target to generate assembly for a file
+storage_engine_interface.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/storage-engine-interface.dir/build.make CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.s
+.PHONY : storage_engine_interface.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -224,15 +224,15 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... ss_grpc_proto"
 	@echo "... storage-engine-interface"
-	@echo "... StorageEngineInterface.o"
-	@echo "... StorageEngineInterface.i"
-	@echo "... StorageEngineInterface.s"
 	@echo "... storage_engine_instance.grpc.pb.o"
 	@echo "... storage_engine_instance.grpc.pb.i"
 	@echo "... storage_engine_instance.grpc.pb.s"
 	@echo "... storage_engine_instance.pb.o"
 	@echo "... storage_engine_instance.pb.i"
 	@echo "... storage_engine_instance.pb.s"
+	@echo "... storage_engine_interface.o"
+	@echo "... storage_engine_interface.i"
+	@echo "... storage_engine_interface.s"
 .PHONY : help
 
 
