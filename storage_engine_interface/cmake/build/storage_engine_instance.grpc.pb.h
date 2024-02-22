@@ -35,11 +35,11 @@ class StorageEngineInterface final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    virtual ::grpc::Status GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Response* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncGenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+    virtual ::grpc::Status GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::StorageEngineInstance::Response* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncGenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncGenericQueryInterfaceRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncGenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncGenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncGenericQueryInterfaceRaw(context, request, cq));
     }
     std::unique_ptr< ::grpc::ClientWriterInterface< ::StorageEngineInstance::SnippetRequest>> OffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) {
@@ -68,8 +68,8 @@ class StorageEngineInterface final {
     class async_interface {
      public:
       virtual ~async_interface() {}
-      virtual void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void OffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) = 0;
       virtual void SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
       virtual void SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
@@ -80,8 +80,8 @@ class StorageEngineInterface final {
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientWriterInterface< ::StorageEngineInstance::SnippetRequest>* OffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) = 0;
     virtual ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>* AsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) = 0;
     virtual ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>* PrepareAsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) = 0;
@@ -93,11 +93,11 @@ class StorageEngineInterface final {
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-    ::grpc::Status GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Response* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncGenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+    ::grpc::Status GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::StorageEngineInstance::Response* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncGenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncGenericQueryInterfaceRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncGenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncGenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncGenericQueryInterfaceRaw(context, request, cq));
     }
     std::unique_ptr< ::grpc::ClientWriter< ::StorageEngineInstance::SnippetRequest>> OffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) {
@@ -126,8 +126,8 @@ class StorageEngineInterface final {
     class async final :
       public StubInterface::async_interface {
      public:
-      void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
-      void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
+      void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
       void OffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) override;
       void SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
       void SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
@@ -144,8 +144,8 @@ class StorageEngineInterface final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientWriter< ::StorageEngineInstance::SnippetRequest>* OffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) override;
     ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>* AsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) override;
     ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>* PrepareAsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) override;
@@ -164,7 +164,7 @@ class StorageEngineInterface final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status GenericQueryInterface(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response);
+    virtual ::grpc::Status GenericQueryInterface(::grpc::ServerContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response);
     virtual ::grpc::Status OffloadingQueryInterface(::grpc::ServerContext* context, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* reader, ::StorageEngineInstance::QueryStringResult* response);
     virtual ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response);
     virtual ::grpc::Status PushCSDMetric(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response);
@@ -181,11 +181,11 @@ class StorageEngineInterface final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::GenericQuery* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestGenericQueryInterface(::grpc::ServerContext* context, ::StorageEngineInstance::Request* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestGenericQueryInterface(::grpc::ServerContext* context, ::StorageEngineInstance::GenericQuery* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -257,25 +257,25 @@ class StorageEngineInterface final {
    public:
     WithCallbackMethod_GenericQueryInterface() {
       ::grpc::Service::MarkMethodCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>(
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::GenericQuery, ::StorageEngineInstance::Response>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response) { return this->GenericQueryInterface(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response) { return this->GenericQueryInterface(context, request, response); }));}
     void SetMessageAllocatorFor_GenericQueryInterface(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>* allocator) {
+        ::grpc::MessageAllocator< ::StorageEngineInstance::GenericQuery, ::StorageEngineInstance::Response>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::GenericQuery, ::StorageEngineInstance::Response>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_GenericQueryInterface() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::GenericQuery* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* GenericQueryInterface(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::GenericQuery* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_OffloadingQueryInterface : public BaseClass {
@@ -367,7 +367,7 @@ class StorageEngineInterface final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::GenericQuery* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -435,7 +435,7 @@ class StorageEngineInterface final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::GenericQuery* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -518,7 +518,7 @@ class StorageEngineInterface final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::GenericQuery* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -599,10 +599,10 @@ class StorageEngineInterface final {
     WithStreamedUnaryMethod_GenericQueryInterface() {
       ::grpc::Service::MarkMethodStreamed(0,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>(
+          ::StorageEngineInstance::GenericQuery, ::StorageEngineInstance::Response>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::Request, ::StorageEngineInstance::Response>* streamer) {
+                     ::StorageEngineInstance::GenericQuery, ::StorageEngineInstance::Response>* streamer) {
                        return this->StreamedGenericQueryInterface(context,
                          streamer);
                   }));
@@ -611,12 +611,12 @@ class StorageEngineInterface final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+    ::grpc::Status GenericQueryInterface(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::GenericQuery* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedGenericQueryInterface(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Request,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedGenericQueryInterface(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::GenericQuery,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_SyncMetaDataManager : public BaseClass {

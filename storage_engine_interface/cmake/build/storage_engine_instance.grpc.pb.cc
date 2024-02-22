@@ -41,23 +41,23 @@ StorageEngineInterface::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterfa
   , rpcmethod_PushCSDMetric_(StorageEngineInterface_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
-::grpc::Status StorageEngineInterface::Stub::GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::Response* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_GenericQueryInterface_, context, request, response);
+::grpc::Status StorageEngineInterface::Stub::GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::StorageEngineInstance::Response* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::GenericQuery, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_GenericQueryInterface_, context, request, response);
 }
 
-void StorageEngineInterface::Stub::async::GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::Request, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GenericQueryInterface_, context, request, response, std::move(f));
+void StorageEngineInterface::Stub::async::GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::GenericQuery, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GenericQueryInterface_, context, request, response, std::move(f));
 }
 
-void StorageEngineInterface::Stub::async::GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) {
+void StorageEngineInterface::Stub::async::GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_GenericQueryInterface_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* StorageEngineInterface::Stub::PrepareAsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Response, ::StorageEngineInstance::Request, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_GenericQueryInterface_, context, request);
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* StorageEngineInterface::Stub::PrepareAsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Response, ::StorageEngineInstance::GenericQuery, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_GenericQueryInterface_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* StorageEngineInterface::Stub::AsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* StorageEngineInterface::Stub::AsyncGenericQueryInterfaceRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncGenericQueryInterfaceRaw(context, request, cq);
   result->StartCall();
@@ -130,10 +130,10 @@ StorageEngineInterface::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       StorageEngineInterface_method_names[0],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< StorageEngineInterface::Service, ::StorageEngineInstance::Request, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< StorageEngineInterface::Service, ::StorageEngineInstance::GenericQuery, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](StorageEngineInterface::Service* service,
              ::grpc::ServerContext* ctx,
-             const ::StorageEngineInstance::Request* req,
+             const ::StorageEngineInstance::GenericQuery* req,
              ::StorageEngineInstance::Response* resp) {
                return service->GenericQueryInterface(ctx, req, resp);
              }, this)));
@@ -172,7 +172,7 @@ StorageEngineInterface::Service::Service() {
 StorageEngineInterface::Service::~Service() {
 }
 
-::grpc::Status StorageEngineInterface::Service::GenericQueryInterface(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::Response* response) {
+::grpc::Status StorageEngineInterface::Service::GenericQueryInterface(::grpc::ServerContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response) {
   (void) context;
   (void) request;
   (void) response;

@@ -22,6 +22,7 @@ using StorageEngineInstance::StorageEngineInterface;
 using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::QueryStringResult;
 using StorageEngineInstance::Response;
+using StorageEngineInstance::GenericQuery;
 using StorageEngineInstance::CSDMetricList;
 using StorageEngineInstance::DataFileInfo;
 using StorageEngineInstance::DBInfo;
@@ -76,12 +77,12 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
     }
     while (stream->Read(&snippet_request)) {      
       {
-        // std::string test_json;
-        // google::protobuf::util::JsonPrintOptions options;
-        // options.always_print_primitive_fields = true;
-        // options.always_print_enums_as_ints = true;
-        // google::protobuf::util::MessageToJsonString(snippet_request,&test_json,options);
-        // std::cout << endl << test_json << std::endl << std::endl; 
+        std::string test_json;
+        google::protobuf::util::JsonPrintOptions options;
+        options.always_print_primitive_fields = true;
+        options.always_print_enums_as_ints = true;
+        google::protobuf::util::MessageToJsonString(snippet_request,&test_json,options);
+        std::cout << endl << test_json << std::endl << std::endl; 
       }
 
       if(snippet_request.type() == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET){
@@ -112,22 +113,21 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
     return Status::OK;
   }
 
-  Status GenericQueryInterface(ServerContext *context, const Request *request, Response *response) override {
+  Status GenericQueryInterface(ServerContext *context, const GenericQuery *request, Response *response) override {
     //Generic Query 처리 필요 ==> send to myrocks container
 
     return Status::OK;
   }
 
   Status SyncMetaDataManager(ServerContext *context, const DBInfo *request, Response *response) override {
-    // // Check Recv Snippet
-    // {
-    //   std::string test_json;
-    //   google::protobuf::util::JsonPrintOptions options;
-    //   options.always_print_primitive_fields = true;
-    //   options.always_print_enums_as_ints = true;
-    //   google::protobuf::util::MessageToJsonString(*request,&test_json,options);
-    //   std::cout << endl << test_json << std::endl << std::endl; 
-    // }
+    {
+      std::string test_json;
+      google::protobuf::util::JsonPrintOptions options;
+      options.always_print_primitive_fields = true;
+      options.always_print_enums_as_ints = true;
+      google::protobuf::util::MessageToJsonString(*request,&test_json,options);
+      std::cout << endl << test_json << std::endl << std::endl; 
+    }
 
     MonitoringModuleConnector monitoringModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
     monitoringModule.SyncMetaDataManager(*request);
