@@ -10,7 +10,6 @@ package StorageEngineInstance;
 service StorageEngineInterface {
   rpc GenericQueryInterface(GenericQuery) returns (Response) {}
   rpc OffloadingQueryInterface (stream SnippetRequest) returns (QueryStringResult) {}
-  rpc SyncMetaDataManager (DBInfo) returns (Response) {}
   rpc PushCSDMetric (CSDMetricList) returns (Response) {}
 }
 
@@ -58,6 +57,21 @@ message SnippetRequest {
   }
   SnippetType type = 1;
   Snippet snippet = 2;
+  ScanInfo scanInfo = 3;
+}
+
+message Chunk {
+  int64 offset = 1;
+  int32 length = 2;
+}
+
+message ScanInfo {
+  message BlockInfo {
+    string sst_name = 1;
+    repeated string csd_list = 2;
+    repeated Chunk lba_chunks = 3;
+  }
+  repeated BlockInfo block_info = 1;
 }
 
 message Snippet {
@@ -247,11 +261,12 @@ message LBA2PBARequest {
   map<string,string> sst_csd_map = 2;
 }
 
+message Chunk {
+  int64 offset = 1;
+  int32 length = 2;
+}
+
 message LBA2PBAResponse {
-  message Chunk {
-    int64 offset = 1;
-    int32 length = 2;
-  }
   message PBA {
     string csd_id = 1;
     repeated Chunk chunks = 2;
