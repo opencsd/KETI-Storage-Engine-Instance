@@ -7,7 +7,6 @@
 #include "generic_query_connector.h"
 #include "merging_module_connector.h"
 #include "offloading_module_connector.h"
-#include "monitoring_module_connector.h"
 #include "ip_config.h"
 
 #include <grpcpp/grpcpp.h>
@@ -24,9 +23,6 @@ using StorageEngineInstance::QueryStringResult;
 using StorageEngineInstance::Response;
 using StorageEngineInstance::GenericQuery;
 using StorageEngineInstance::CSDMetricList;
-using StorageEngineInstance::DataFileInfo;
-using StorageEngineInstance::DBInfo;
-
 using namespace std;
 
 void SendQueryStatus(const char* message){
@@ -77,18 +73,18 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
     }
     while (stream->Read(&snippet_request)) {      
       {
-        std::string test_json;
-        google::protobuf::util::JsonPrintOptions options;
-        options.always_print_primitive_fields = true;
-        options.always_print_enums_as_ints = true;
-        google::protobuf::util::MessageToJsonString(snippet_request,&test_json,options);
-        std::cout << endl << test_json << std::endl << std::endl; 
+        // std::string test_json;
+        // google::protobuf::util::JsonPrintOptions options;
+        // options.always_print_primitive_fields = true;
+        // options.always_print_enums_as_ints = true;
+        // google::protobuf::util::MessageToJsonString(snippet_request,&test_json,options);
+        // std::cout << endl << test_json << std::endl << std::endl; 
       }
 
       if(snippet_request.type() == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET){
         KETILOG::DEBUGLOG("Interface","# Send Snippet to Offloading Module");
         OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
-        offloadingModule.Scheduling(snippet_request.snippet());
+        offloadingModule.Scheduling(snippet_request);
       }else{
         KETILOG::DEBUGLOG("Interface","# Send Snippet to Merging Module");
         MergingModuleConnector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_MERGING_NODE_PORT, grpc::InsecureChannelCredentials()));

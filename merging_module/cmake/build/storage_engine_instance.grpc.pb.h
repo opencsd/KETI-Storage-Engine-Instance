@@ -51,13 +51,6 @@ class StorageEngineInterface final {
     std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>> PrepareAsyncOffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>>(PrepareAsyncOffloadingQueryInterfaceRaw(context, response, cq));
     }
-    virtual ::grpc::Status SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::StorageEngineInstance::Response* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncSyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncSyncMetaDataManagerRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncSyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncSyncMetaDataManagerRaw(context, request, cq));
-    }
     virtual ::grpc::Status PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::StorageEngineInstance::Response* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncPushCSDMetricRaw(context, request, cq));
@@ -71,8 +64,6 @@ class StorageEngineInterface final {
       virtual void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
       virtual void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void OffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) = 0;
-      virtual void SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
       virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
@@ -85,8 +76,6 @@ class StorageEngineInterface final {
     virtual ::grpc::ClientWriterInterface< ::StorageEngineInstance::SnippetRequest>* OffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) = 0;
     virtual ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>* AsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) = 0;
     virtual ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>* PrepareAsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncSyncMetaDataManagerRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncSyncMetaDataManagerRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
   };
@@ -109,13 +98,6 @@ class StorageEngineInterface final {
     std::unique_ptr< ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>> PrepareAsyncOffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>>(PrepareAsyncOffloadingQueryInterfaceRaw(context, response, cq));
     }
-    ::grpc::Status SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::StorageEngineInstance::Response* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncSyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncSyncMetaDataManagerRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncSyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncSyncMetaDataManagerRaw(context, request, cq));
-    }
     ::grpc::Status PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::StorageEngineInstance::Response* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncPushCSDMetricRaw(context, request, cq));
@@ -129,8 +111,6 @@ class StorageEngineInterface final {
       void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
       void GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
       void OffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) override;
-      void SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
-      void SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
       void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
       void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
@@ -149,13 +129,10 @@ class StorageEngineInterface final {
     ::grpc::ClientWriter< ::StorageEngineInstance::SnippetRequest>* OffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response) override;
     ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>* AsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq, void* tag) override;
     ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>* PrepareAsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncSyncMetaDataManagerRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncSyncMetaDataManagerRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_GenericQueryInterface_;
     const ::grpc::internal::RpcMethod rpcmethod_OffloadingQueryInterface_;
-    const ::grpc::internal::RpcMethod rpcmethod_SyncMetaDataManager_;
     const ::grpc::internal::RpcMethod rpcmethod_PushCSDMetric_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
@@ -166,7 +143,6 @@ class StorageEngineInterface final {
     virtual ~Service();
     virtual ::grpc::Status GenericQueryInterface(::grpc::ServerContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response);
     virtual ::grpc::Status OffloadingQueryInterface(::grpc::ServerContext* context, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* reader, ::StorageEngineInstance::QueryStringResult* response);
-    virtual ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response);
     virtual ::grpc::Status PushCSDMetric(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response);
   };
   template <class BaseClass>
@@ -210,32 +186,12 @@ class StorageEngineInterface final {
     }
   };
   template <class BaseClass>
-  class WithAsyncMethod_SyncMetaDataManager : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithAsyncMethod_SyncMetaDataManager() {
-      ::grpc::Service::MarkMethodAsync(2);
-    }
-    ~WithAsyncMethod_SyncMetaDataManager() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    void RequestSyncMetaDataManager(::grpc::ServerContext* context, ::StorageEngineInstance::DBInfo* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
-    }
-  };
-  template <class BaseClass>
   class WithAsyncMethod_PushCSDMetric : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_PushCSDMetric() {
-      ::grpc::Service::MarkMethodAsync(3);
+      ::grpc::Service::MarkMethodAsync(2);
     }
     ~WithAsyncMethod_PushCSDMetric() override {
       BaseClassMustBeDerivedFromService(this);
@@ -246,10 +202,10 @@ class StorageEngineInterface final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestPushCSDMetric(::grpc::ServerContext* context, ::StorageEngineInstance::CSDMetricList* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_GenericQueryInterface<WithAsyncMethod_OffloadingQueryInterface<WithAsyncMethod_SyncMetaDataManager<WithAsyncMethod_PushCSDMetric<Service > > > > AsyncService;
+  typedef WithAsyncMethod_GenericQueryInterface<WithAsyncMethod_OffloadingQueryInterface<WithAsyncMethod_PushCSDMetric<Service > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_GenericQueryInterface : public BaseClass {
    private:
@@ -300,45 +256,18 @@ class StorageEngineInterface final {
       ::grpc::CallbackServerContext* /*context*/, ::StorageEngineInstance::QueryStringResult* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class WithCallbackMethod_SyncMetaDataManager : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithCallbackMethod_SyncMetaDataManager() {
-      ::grpc::Service::MarkMethodCallback(2,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::DBInfo, ::StorageEngineInstance::Response>(
-            [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response) { return this->SyncMetaDataManager(context, request, response); }));}
-    void SetMessageAllocatorFor_SyncMetaDataManager(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::DBInfo, ::StorageEngineInstance::Response>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::DBInfo, ::StorageEngineInstance::Response>*>(handler)
-              ->SetMessageAllocator(allocator);
-    }
-    ~WithCallbackMethod_SyncMetaDataManager() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    virtual ::grpc::ServerUnaryReactor* SyncMetaDataManager(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
-  };
-  template <class BaseClass>
   class WithCallbackMethod_PushCSDMetric : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_PushCSDMetric() {
-      ::grpc::Service::MarkMethodCallback(3,
+      ::grpc::Service::MarkMethodCallback(2,
           new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Response>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response) { return this->PushCSDMetric(context, request, response); }));}
     void SetMessageAllocatorFor_PushCSDMetric(
         ::grpc::MessageAllocator< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Response>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
       static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Response>*>(handler)
               ->SetMessageAllocator(allocator);
     }
@@ -353,7 +282,7 @@ class StorageEngineInterface final {
     virtual ::grpc::ServerUnaryReactor* PushCSDMetric(
       ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_GenericQueryInterface<WithCallbackMethod_OffloadingQueryInterface<WithCallbackMethod_SyncMetaDataManager<WithCallbackMethod_PushCSDMetric<Service > > > > CallbackService;
+  typedef WithCallbackMethod_GenericQueryInterface<WithCallbackMethod_OffloadingQueryInterface<WithCallbackMethod_PushCSDMetric<Service > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_GenericQueryInterface : public BaseClass {
@@ -390,29 +319,12 @@ class StorageEngineInterface final {
     }
   };
   template <class BaseClass>
-  class WithGenericMethod_SyncMetaDataManager : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithGenericMethod_SyncMetaDataManager() {
-      ::grpc::Service::MarkMethodGeneric(2);
-    }
-    ~WithGenericMethod_SyncMetaDataManager() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-  };
-  template <class BaseClass>
   class WithGenericMethod_PushCSDMetric : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_PushCSDMetric() {
-      ::grpc::Service::MarkMethodGeneric(3);
+      ::grpc::Service::MarkMethodGeneric(2);
     }
     ~WithGenericMethod_PushCSDMetric() override {
       BaseClassMustBeDerivedFromService(this);
@@ -464,32 +376,12 @@ class StorageEngineInterface final {
     }
   };
   template <class BaseClass>
-  class WithRawMethod_SyncMetaDataManager : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithRawMethod_SyncMetaDataManager() {
-      ::grpc::Service::MarkMethodRaw(2);
-    }
-    ~WithRawMethod_SyncMetaDataManager() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    void RequestSyncMetaDataManager(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
-    }
-  };
-  template <class BaseClass>
   class WithRawMethod_PushCSDMetric : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_PushCSDMetric() {
-      ::grpc::Service::MarkMethodRaw(3);
+      ::grpc::Service::MarkMethodRaw(2);
     }
     ~WithRawMethod_PushCSDMetric() override {
       BaseClassMustBeDerivedFromService(this);
@@ -500,7 +392,7 @@ class StorageEngineInterface final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestPushCSDMetric(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -548,34 +440,12 @@ class StorageEngineInterface final {
       ::grpc::CallbackServerContext* /*context*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class WithRawCallbackMethod_SyncMetaDataManager : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithRawCallbackMethod_SyncMetaDataManager() {
-      ::grpc::Service::MarkMethodRawCallback(2,
-          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
-            [this](
-                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SyncMetaDataManager(context, request, response); }));
-    }
-    ~WithRawCallbackMethod_SyncMetaDataManager() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    virtual ::grpc::ServerUnaryReactor* SyncMetaDataManager(
-      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
-  };
-  template <class BaseClass>
   class WithRawCallbackMethod_PushCSDMetric : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_PushCSDMetric() {
-      ::grpc::Service::MarkMethodRawCallback(3,
+      ::grpc::Service::MarkMethodRawCallback(2,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->PushCSDMetric(context, request, response); }));
@@ -619,39 +489,12 @@ class StorageEngineInterface final {
     virtual ::grpc::Status StreamedGenericQueryInterface(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::GenericQuery,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
-  class WithStreamedUnaryMethod_SyncMetaDataManager : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithStreamedUnaryMethod_SyncMetaDataManager() {
-      ::grpc::Service::MarkMethodStreamed(2,
-        new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::DBInfo, ::StorageEngineInstance::Response>(
-            [this](::grpc::ServerContext* context,
-                   ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::DBInfo, ::StorageEngineInstance::Response>* streamer) {
-                       return this->StreamedSyncMetaDataManager(context,
-                         streamer);
-                  }));
-    }
-    ~WithStreamedUnaryMethod_SyncMetaDataManager() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable regular version of this method
-    ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedSyncMetaDataManager(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::DBInfo,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
-  };
-  template <class BaseClass>
   class WithStreamedUnaryMethod_PushCSDMetric : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_PushCSDMetric() {
-      ::grpc::Service::MarkMethodStreamed(3,
+      ::grpc::Service::MarkMethodStreamed(2,
         new ::grpc::internal::StreamedUnaryHandler<
           ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Response>(
             [this](::grpc::ServerContext* context,
@@ -672,9 +515,9 @@ class StorageEngineInterface final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedPushCSDMetric(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::CSDMetricList,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_GenericQueryInterface<WithStreamedUnaryMethod_SyncMetaDataManager<WithStreamedUnaryMethod_PushCSDMetric<Service > > > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_GenericQueryInterface<WithStreamedUnaryMethod_PushCSDMetric<Service > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_GenericQueryInterface<WithStreamedUnaryMethod_SyncMetaDataManager<WithStreamedUnaryMethod_PushCSDMetric<Service > > > StreamedService;
+  typedef WithStreamedUnaryMethod_GenericQueryInterface<WithStreamedUnaryMethod_PushCSDMetric<Service > > StreamedService;
 };
 
 class MergingModule final {
@@ -1206,81 +1049,41 @@ class MonitoringModule final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    virtual ::grpc::Status GetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::DataFileInfo* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::DataFileInfo>> AsyncGetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::DataFileInfo>>(AsyncGetDataFileInfoRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::DataFileInfo>> PrepareAsyncGetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::DataFileInfo>>(PrepareAsyncGetDataFileInfoRaw(context, request, cq));
-    }
-    virtual ::grpc::Status GetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::SnippetMetaData* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::SnippetMetaData>> AsyncGetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+    virtual ::grpc::Status GetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest& request, ::StorageEngineInstance::SnippetMetaData* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::SnippetMetaData>> AsyncGetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::SnippetMetaData>>(AsyncGetSnippetMetaDataRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::SnippetMetaData>> PrepareAsyncGetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::SnippetMetaData>> PrepareAsyncGetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::SnippetMetaData>>(PrepareAsyncGetSnippetMetaDataRaw(context, request, cq));
-    }
-    virtual ::grpc::Status SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::StorageEngineInstance::Response* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncSyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncSyncMetaDataManagerRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncSyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncSyncMetaDataManagerRaw(context, request, cq));
     }
     class async_interface {
      public:
       virtual ~async_interface() {}
-      virtual void GetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::DataFileInfo* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void GetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::DataFileInfo* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void GetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::SnippetMetaData* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void GetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::SnippetMetaData* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void GetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest* request, ::StorageEngineInstance::SnippetMetaData* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest* request, ::StorageEngineInstance::SnippetMetaData* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::DataFileInfo>* AsyncGetDataFileInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::DataFileInfo>* PrepareAsyncGetDataFileInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::SnippetMetaData>* AsyncGetSnippetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::SnippetMetaData>* PrepareAsyncGetSnippetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncSyncMetaDataManagerRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncSyncMetaDataManagerRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::SnippetMetaData>* AsyncGetSnippetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::SnippetMetaData>* PrepareAsyncGetSnippetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-    ::grpc::Status GetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::DataFileInfo* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::DataFileInfo>> AsyncGetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::DataFileInfo>>(AsyncGetDataFileInfoRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::DataFileInfo>> PrepareAsyncGetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::DataFileInfo>>(PrepareAsyncGetDataFileInfoRaw(context, request, cq));
-    }
-    ::grpc::Status GetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::StorageEngineInstance::SnippetMetaData* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::SnippetMetaData>> AsyncGetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+    ::grpc::Status GetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest& request, ::StorageEngineInstance::SnippetMetaData* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::SnippetMetaData>> AsyncGetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::SnippetMetaData>>(AsyncGetSnippetMetaDataRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::SnippetMetaData>> PrepareAsyncGetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) {
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::SnippetMetaData>> PrepareAsyncGetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::SnippetMetaData>>(PrepareAsyncGetSnippetMetaDataRaw(context, request, cq));
-    }
-    ::grpc::Status SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::StorageEngineInstance::Response* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncSyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncSyncMetaDataManagerRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncSyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncSyncMetaDataManagerRaw(context, request, cq));
     }
     class async final :
       public StubInterface::async_interface {
      public:
-      void GetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::DataFileInfo* response, std::function<void(::grpc::Status)>) override;
-      void GetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::DataFileInfo* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void GetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::SnippetMetaData* response, std::function<void(::grpc::Status)>) override;
-      void GetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::SnippetMetaData* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
-      void SyncMetaDataManager(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void GetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest* request, ::StorageEngineInstance::SnippetMetaData* response, std::function<void(::grpc::Status)>) override;
+      void GetSnippetMetaData(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest* request, ::StorageEngineInstance::SnippetMetaData* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -1292,15 +1095,9 @@ class MonitoringModule final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::DataFileInfo>* AsyncGetDataFileInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::DataFileInfo>* PrepareAsyncGetDataFileInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::SnippetMetaData>* AsyncGetSnippetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::SnippetMetaData>* PrepareAsyncGetSnippetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Request& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncSyncMetaDataManagerRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncSyncMetaDataManagerRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::DBInfo& request, ::grpc::CompletionQueue* cq) override;
-    const ::grpc::internal::RpcMethod rpcmethod_GetDataFileInfo_;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::SnippetMetaData>* AsyncGetSnippetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::SnippetMetaData>* PrepareAsyncGetSnippetMetaDataRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::MetaDataRequest& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_GetSnippetMetaData_;
-    const ::grpc::internal::RpcMethod rpcmethod_SyncMetaDataManager_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -1308,29 +1105,7 @@ class MonitoringModule final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status GetDataFileInfo(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::DataFileInfo* response);
-    virtual ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::SnippetMetaData* response);
-    virtual ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response);
-  };
-  template <class BaseClass>
-  class WithAsyncMethod_GetDataFileInfo : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithAsyncMethod_GetDataFileInfo() {
-      ::grpc::Service::MarkMethodAsync(0);
-    }
-    ~WithAsyncMethod_GetDataFileInfo() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status GetDataFileInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    void RequestGetDataFileInfo(::grpc::ServerContext* context, ::StorageEngineInstance::Request* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::DataFileInfo>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
-    }
+    virtual ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* context, const ::StorageEngineInstance::MetaDataRequest* request, ::StorageEngineInstance::SnippetMetaData* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_GetSnippetMetaData : public BaseClass {
@@ -1338,193 +1113,65 @@ class MonitoringModule final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_GetSnippetMetaData() {
-      ::grpc::Service::MarkMethodAsync(1);
+      ::grpc::Service::MarkMethodAsync(0);
     }
     ~WithAsyncMethod_GetSnippetMetaData() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/) override {
+    ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::MetaDataRequest* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestGetSnippetMetaData(::grpc::ServerContext* context, ::StorageEngineInstance::Request* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::SnippetMetaData>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    void RequestGetSnippetMetaData(::grpc::ServerContext* context, ::StorageEngineInstance::MetaDataRequest* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::SnippetMetaData>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  template <class BaseClass>
-  class WithAsyncMethod_SyncMetaDataManager : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithAsyncMethod_SyncMetaDataManager() {
-      ::grpc::Service::MarkMethodAsync(2);
-    }
-    ~WithAsyncMethod_SyncMetaDataManager() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    void RequestSyncMetaDataManager(::grpc::ServerContext* context, ::StorageEngineInstance::DBInfo* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
-    }
-  };
-  typedef WithAsyncMethod_GetDataFileInfo<WithAsyncMethod_GetSnippetMetaData<WithAsyncMethod_SyncMetaDataManager<Service > > > AsyncService;
-  template <class BaseClass>
-  class WithCallbackMethod_GetDataFileInfo : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithCallbackMethod_GetDataFileInfo() {
-      ::grpc::Service::MarkMethodCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Request, ::StorageEngineInstance::DataFileInfo>(
-            [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::DataFileInfo* response) { return this->GetDataFileInfo(context, request, response); }));}
-    void SetMessageAllocatorFor_GetDataFileInfo(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::Request, ::StorageEngineInstance::DataFileInfo>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Request, ::StorageEngineInstance::DataFileInfo>*>(handler)
-              ->SetMessageAllocator(allocator);
-    }
-    ~WithCallbackMethod_GetDataFileInfo() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status GetDataFileInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    virtual ::grpc::ServerUnaryReactor* GetDataFileInfo(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/)  { return nullptr; }
-  };
+  typedef WithAsyncMethod_GetSnippetMetaData<Service > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_GetSnippetMetaData : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_GetSnippetMetaData() {
-      ::grpc::Service::MarkMethodCallback(1,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Request, ::StorageEngineInstance::SnippetMetaData>(
+      ::grpc::Service::MarkMethodCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::MetaDataRequest, ::StorageEngineInstance::SnippetMetaData>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Request* request, ::StorageEngineInstance::SnippetMetaData* response) { return this->GetSnippetMetaData(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::MetaDataRequest* request, ::StorageEngineInstance::SnippetMetaData* response) { return this->GetSnippetMetaData(context, request, response); }));}
     void SetMessageAllocatorFor_GetSnippetMetaData(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::Request, ::StorageEngineInstance::SnippetMetaData>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Request, ::StorageEngineInstance::SnippetMetaData>*>(handler)
+        ::grpc::MessageAllocator< ::StorageEngineInstance::MetaDataRequest, ::StorageEngineInstance::SnippetMetaData>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::MetaDataRequest, ::StorageEngineInstance::SnippetMetaData>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_GetSnippetMetaData() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/) override {
+    ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::MetaDataRequest* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* GetSnippetMetaData(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::MetaDataRequest* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/)  { return nullptr; }
   };
-  template <class BaseClass>
-  class WithCallbackMethod_SyncMetaDataManager : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithCallbackMethod_SyncMetaDataManager() {
-      ::grpc::Service::MarkMethodCallback(2,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::DBInfo, ::StorageEngineInstance::Response>(
-            [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::DBInfo* request, ::StorageEngineInstance::Response* response) { return this->SyncMetaDataManager(context, request, response); }));}
-    void SetMessageAllocatorFor_SyncMetaDataManager(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::DBInfo, ::StorageEngineInstance::Response>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::DBInfo, ::StorageEngineInstance::Response>*>(handler)
-              ->SetMessageAllocator(allocator);
-    }
-    ~WithCallbackMethod_SyncMetaDataManager() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    virtual ::grpc::ServerUnaryReactor* SyncMetaDataManager(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
-  };
-  typedef WithCallbackMethod_GetDataFileInfo<WithCallbackMethod_GetSnippetMetaData<WithCallbackMethod_SyncMetaDataManager<Service > > > CallbackService;
+  typedef WithCallbackMethod_GetSnippetMetaData<Service > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
-  template <class BaseClass>
-  class WithGenericMethod_GetDataFileInfo : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithGenericMethod_GetDataFileInfo() {
-      ::grpc::Service::MarkMethodGeneric(0);
-    }
-    ~WithGenericMethod_GetDataFileInfo() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status GetDataFileInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-  };
   template <class BaseClass>
   class WithGenericMethod_GetSnippetMetaData : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_GetSnippetMetaData() {
-      ::grpc::Service::MarkMethodGeneric(1);
+      ::grpc::Service::MarkMethodGeneric(0);
     }
     ~WithGenericMethod_GetSnippetMetaData() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/) override {
+    ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::MetaDataRequest* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-  };
-  template <class BaseClass>
-  class WithGenericMethod_SyncMetaDataManager : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithGenericMethod_SyncMetaDataManager() {
-      ::grpc::Service::MarkMethodGeneric(2);
-    }
-    ~WithGenericMethod_SyncMetaDataManager() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-  };
-  template <class BaseClass>
-  class WithRawMethod_GetDataFileInfo : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithRawMethod_GetDataFileInfo() {
-      ::grpc::Service::MarkMethodRaw(0);
-    }
-    ~WithRawMethod_GetDataFileInfo() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status GetDataFileInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    void RequestGetDataFileInfo(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1533,61 +1180,19 @@ class MonitoringModule final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_GetSnippetMetaData() {
-      ::grpc::Service::MarkMethodRaw(1);
+      ::grpc::Service::MarkMethodRaw(0);
     }
     ~WithRawMethod_GetSnippetMetaData() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/) override {
+    ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::MetaDataRequest* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetSnippetMetaData(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
-  };
-  template <class BaseClass>
-  class WithRawMethod_SyncMetaDataManager : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithRawMethod_SyncMetaDataManager() {
-      ::grpc::Service::MarkMethodRaw(2);
-    }
-    ~WithRawMethod_SyncMetaDataManager() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    void RequestSyncMetaDataManager(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
-    }
-  };
-  template <class BaseClass>
-  class WithRawCallbackMethod_GetDataFileInfo : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithRawCallbackMethod_GetDataFileInfo() {
-      ::grpc::Service::MarkMethodRawCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
-            [this](
-                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetDataFileInfo(context, request, response); }));
-    }
-    ~WithRawCallbackMethod_GetDataFileInfo() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status GetDataFileInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    virtual ::grpc::ServerUnaryReactor* GetDataFileInfo(
-      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithRawCallbackMethod_GetSnippetMetaData : public BaseClass {
@@ -1595,7 +1200,7 @@ class MonitoringModule final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_GetSnippetMetaData() {
-      ::grpc::Service::MarkMethodRawCallback(1,
+      ::grpc::Service::MarkMethodRawCallback(0,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetSnippetMetaData(context, request, response); }));
@@ -1604,7 +1209,7 @@ class MonitoringModule final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/) override {
+    ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::MetaDataRequest* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1612,66 +1217,17 @@ class MonitoringModule final {
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class WithRawCallbackMethod_SyncMetaDataManager : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithRawCallbackMethod_SyncMetaDataManager() {
-      ::grpc::Service::MarkMethodRawCallback(2,
-          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
-            [this](
-                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->SyncMetaDataManager(context, request, response); }));
-    }
-    ~WithRawCallbackMethod_SyncMetaDataManager() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    virtual ::grpc::ServerUnaryReactor* SyncMetaDataManager(
-      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
-  };
-  template <class BaseClass>
-  class WithStreamedUnaryMethod_GetDataFileInfo : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithStreamedUnaryMethod_GetDataFileInfo() {
-      ::grpc::Service::MarkMethodStreamed(0,
-        new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::Request, ::StorageEngineInstance::DataFileInfo>(
-            [this](::grpc::ServerContext* context,
-                   ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::Request, ::StorageEngineInstance::DataFileInfo>* streamer) {
-                       return this->StreamedGetDataFileInfo(context,
-                         streamer);
-                  }));
-    }
-    ~WithStreamedUnaryMethod_GetDataFileInfo() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable regular version of this method
-    ::grpc::Status GetDataFileInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedGetDataFileInfo(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Request,::StorageEngineInstance::DataFileInfo>* server_unary_streamer) = 0;
-  };
-  template <class BaseClass>
   class WithStreamedUnaryMethod_GetSnippetMetaData : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_GetSnippetMetaData() {
-      ::grpc::Service::MarkMethodStreamed(1,
+      ::grpc::Service::MarkMethodStreamed(0,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::Request, ::StorageEngineInstance::SnippetMetaData>(
+          ::StorageEngineInstance::MetaDataRequest, ::StorageEngineInstance::SnippetMetaData>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::Request, ::StorageEngineInstance::SnippetMetaData>* streamer) {
+                     ::StorageEngineInstance::MetaDataRequest, ::StorageEngineInstance::SnippetMetaData>* streamer) {
                        return this->StreamedGetSnippetMetaData(context,
                          streamer);
                   }));
@@ -1680,43 +1236,16 @@ class MonitoringModule final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Request* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/) override {
+    ::grpc::Status GetSnippetMetaData(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::MetaDataRequest* /*request*/, ::StorageEngineInstance::SnippetMetaData* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedGetSnippetMetaData(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Request,::StorageEngineInstance::SnippetMetaData>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedGetSnippetMetaData(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::MetaDataRequest,::StorageEngineInstance::SnippetMetaData>* server_unary_streamer) = 0;
   };
-  template <class BaseClass>
-  class WithStreamedUnaryMethod_SyncMetaDataManager : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithStreamedUnaryMethod_SyncMetaDataManager() {
-      ::grpc::Service::MarkMethodStreamed(2,
-        new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::DBInfo, ::StorageEngineInstance::Response>(
-            [this](::grpc::ServerContext* context,
-                   ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::DBInfo, ::StorageEngineInstance::Response>* streamer) {
-                       return this->StreamedSyncMetaDataManager(context,
-                         streamer);
-                  }));
-    }
-    ~WithStreamedUnaryMethod_SyncMetaDataManager() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable regular version of this method
-    ::grpc::Status SyncMetaDataManager(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::DBInfo* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedSyncMetaDataManager(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::DBInfo,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
-  };
-  typedef WithStreamedUnaryMethod_GetDataFileInfo<WithStreamedUnaryMethod_GetSnippetMetaData<WithStreamedUnaryMethod_SyncMetaDataManager<Service > > > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_GetSnippetMetaData<Service > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_GetDataFileInfo<WithStreamedUnaryMethod_GetSnippetMetaData<WithStreamedUnaryMethod_SyncMetaDataManager<Service > > > StreamedService;
+  typedef WithStreamedUnaryMethod_GetSnippetMetaData<Service > StreamedService;
 };
 
 class OffloadingModule final {
@@ -1727,11 +1256,11 @@ class OffloadingModule final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    virtual ::grpc::Status Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Response* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncScheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+    virtual ::grpc::Status Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Response* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> AsyncScheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(AsyncSchedulingRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncScheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncScheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncSchedulingRaw(context, request, cq));
     }
     virtual ::grpc::Status PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::StorageEngineInstance::Response* response) = 0;
@@ -1744,8 +1273,8 @@ class OffloadingModule final {
     class async_interface {
      public:
       virtual ~async_interface() {}
-      virtual void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
       virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
@@ -1753,19 +1282,19 @@ class OffloadingModule final {
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-    ::grpc::Status Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::StorageEngineInstance::Response* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncScheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+    ::grpc::Status Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Response* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> AsyncScheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(AsyncSchedulingRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncScheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) {
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncScheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncSchedulingRaw(context, request, cq));
     }
     ::grpc::Status PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::StorageEngineInstance::Response* response) override;
@@ -1778,8 +1307,8 @@ class OffloadingModule final {
     class async final :
       public StubInterface::async_interface {
      public:
-      void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
-      void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
+      void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
       void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
       void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
@@ -1793,8 +1322,8 @@ class OffloadingModule final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Snippet& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_Scheduling_;
@@ -1806,7 +1335,7 @@ class OffloadingModule final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status Scheduling(::grpc::ServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response);
+    virtual ::grpc::Status Scheduling(::grpc::ServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response);
     virtual ::grpc::Status PushCSDMetric(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response);
   };
   template <class BaseClass>
@@ -1821,11 +1350,11 @@ class OffloadingModule final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestScheduling(::grpc::ServerContext* context, ::StorageEngineInstance::Snippet* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestScheduling(::grpc::ServerContext* context, ::StorageEngineInstance::SnippetRequest* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -1857,25 +1386,25 @@ class OffloadingModule final {
    public:
     WithCallbackMethod_Scheduling() {
       ::grpc::Service::MarkMethodCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>(
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Snippet* request, ::StorageEngineInstance::Response* response) { return this->Scheduling(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response) { return this->Scheduling(context, request, response); }));}
     void SetMessageAllocatorFor_Scheduling(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>* allocator) {
+        ::grpc::MessageAllocator< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* allocator) {
       ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>*>(handler)
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_Scheduling() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* Scheduling(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithCallbackMethod_PushCSDMetric : public BaseClass {
@@ -1918,7 +1447,7 @@ class OffloadingModule final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1952,7 +1481,7 @@ class OffloadingModule final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1995,7 +1524,7 @@ class OffloadingModule final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2032,10 +1561,10 @@ class OffloadingModule final {
     WithStreamedUnaryMethod_Scheduling() {
       ::grpc::Service::MarkMethodStreamed(0,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>(
+          ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::Snippet, ::StorageEngineInstance::Response>* streamer) {
+                     ::StorageEngineInstance::SnippetRequest, ::StorageEngineInstance::Response>* streamer) {
                        return this->StreamedScheduling(context,
                          streamer);
                   }));
@@ -2044,12 +1573,12 @@ class OffloadingModule final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Snippet* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+    ::grpc::Status Scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SnippetRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedScheduling(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Snippet,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedScheduling(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::SnippetRequest,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_PushCSDMetric : public BaseClass {
@@ -2091,61 +1620,61 @@ class StorageManager final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
-    virtual ::grpc::Status GetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList& request, ::StorageEngineInstance::DataFileInfo* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::DataFileInfo>> AsyncGetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::DataFileInfo>>(AsyncGetDataFileInfoRaw(context, request, cq));
+    virtual ::grpc::Status RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo& request, ::StorageEngineInstance::PBAResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::PBAResponse>> AsyncRequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::PBAResponse>>(AsyncRequestPBARaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::DataFileInfo>> PrepareAsyncGetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::DataFileInfo>>(PrepareAsyncGetDataFileInfoRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::PBAResponse>> PrepareAsyncRequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::PBAResponse>>(PrepareAsyncRequestPBARaw(context, request, cq));
     }
-    virtual ::grpc::Status RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest& request, ::StorageEngineInstance::LBA2PBAResponse* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::LBA2PBAResponse>> AsyncRequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::LBA2PBAResponse>>(AsyncRequestPBARaw(context, request, cq));
+    virtual ::grpc::Status RequestVolumeAllocation(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest& request, ::StorageEngineInstance::AllocatedVolumeInfo* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::AllocatedVolumeInfo>> AsyncRequestVolumeAllocation(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::AllocatedVolumeInfo>>(AsyncRequestVolumeAllocationRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::LBA2PBAResponse>> PrepareAsyncRequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::LBA2PBAResponse>>(PrepareAsyncRequestPBARaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::AllocatedVolumeInfo>> PrepareAsyncRequestVolumeAllocation(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::AllocatedVolumeInfo>>(PrepareAsyncRequestVolumeAllocationRaw(context, request, cq));
     }
     class async_interface {
      public:
       virtual ~async_interface() {}
-      virtual void GetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList* request, ::StorageEngineInstance::DataFileInfo* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void GetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList* request, ::StorageEngineInstance::DataFileInfo* response, ::grpc::ClientUnaryReactor* reactor) = 0;
-      virtual void RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest* request, ::StorageEngineInstance::LBA2PBAResponse* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest* request, ::StorageEngineInstance::LBA2PBAResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo* request, ::StorageEngineInstance::PBAResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo* request, ::StorageEngineInstance::PBAResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void RequestVolumeAllocation(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest* request, ::StorageEngineInstance::AllocatedVolumeInfo* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void RequestVolumeAllocation(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest* request, ::StorageEngineInstance::AllocatedVolumeInfo* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::DataFileInfo>* AsyncGetDataFileInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::DataFileInfo>* PrepareAsyncGetDataFileInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::LBA2PBAResponse>* AsyncRequestPBARaw(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::LBA2PBAResponse>* PrepareAsyncRequestPBARaw(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::PBAResponse>* AsyncRequestPBARaw(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::PBAResponse>* PrepareAsyncRequestPBARaw(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::AllocatedVolumeInfo>* AsyncRequestVolumeAllocationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::AllocatedVolumeInfo>* PrepareAsyncRequestVolumeAllocationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
-    ::grpc::Status GetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList& request, ::StorageEngineInstance::DataFileInfo* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::DataFileInfo>> AsyncGetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::DataFileInfo>>(AsyncGetDataFileInfoRaw(context, request, cq));
+    ::grpc::Status RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo& request, ::StorageEngineInstance::PBAResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::PBAResponse>> AsyncRequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::PBAResponse>>(AsyncRequestPBARaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::DataFileInfo>> PrepareAsyncGetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::DataFileInfo>>(PrepareAsyncGetDataFileInfoRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::PBAResponse>> PrepareAsyncRequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::PBAResponse>>(PrepareAsyncRequestPBARaw(context, request, cq));
     }
-    ::grpc::Status RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest& request, ::StorageEngineInstance::LBA2PBAResponse* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::LBA2PBAResponse>> AsyncRequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::LBA2PBAResponse>>(AsyncRequestPBARaw(context, request, cq));
+    ::grpc::Status RequestVolumeAllocation(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest& request, ::StorageEngineInstance::AllocatedVolumeInfo* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::AllocatedVolumeInfo>> AsyncRequestVolumeAllocation(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::AllocatedVolumeInfo>>(AsyncRequestVolumeAllocationRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::LBA2PBAResponse>> PrepareAsyncRequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::LBA2PBAResponse>>(PrepareAsyncRequestPBARaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::AllocatedVolumeInfo>> PrepareAsyncRequestVolumeAllocation(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::AllocatedVolumeInfo>>(PrepareAsyncRequestVolumeAllocationRaw(context, request, cq));
     }
     class async final :
       public StubInterface::async_interface {
      public:
-      void GetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList* request, ::StorageEngineInstance::DataFileInfo* response, std::function<void(::grpc::Status)>) override;
-      void GetDataFileInfo(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList* request, ::StorageEngineInstance::DataFileInfo* response, ::grpc::ClientUnaryReactor* reactor) override;
-      void RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest* request, ::StorageEngineInstance::LBA2PBAResponse* response, std::function<void(::grpc::Status)>) override;
-      void RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest* request, ::StorageEngineInstance::LBA2PBAResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo* request, ::StorageEngineInstance::PBAResponse* response, std::function<void(::grpc::Status)>) override;
+      void RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo* request, ::StorageEngineInstance::PBAResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void RequestVolumeAllocation(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest* request, ::StorageEngineInstance::AllocatedVolumeInfo* response, std::function<void(::grpc::Status)>) override;
+      void RequestVolumeAllocation(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest* request, ::StorageEngineInstance::AllocatedVolumeInfo* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -2157,12 +1686,12 @@ class StorageManager final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::DataFileInfo>* AsyncGetDataFileInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::DataFileInfo>* PrepareAsyncGetDataFileInfoRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SSTList& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::LBA2PBAResponse>* AsyncRequestPBARaw(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::LBA2PBAResponse>* PrepareAsyncRequestPBARaw(::grpc::ClientContext* context, const ::StorageEngineInstance::LBA2PBARequest& request, ::grpc::CompletionQueue* cq) override;
-    const ::grpc::internal::RpcMethod rpcmethod_GetDataFileInfo_;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::PBAResponse>* AsyncRequestPBARaw(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::PBAResponse>* PrepareAsyncRequestPBARaw(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::AllocatedVolumeInfo>* AsyncRequestVolumeAllocationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::AllocatedVolumeInfo>* PrepareAsyncRequestVolumeAllocationRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::VolumeRequest& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_RequestPBA_;
+    const ::grpc::internal::RpcMethod rpcmethod_RequestVolumeAllocation_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -2170,28 +1699,8 @@ class StorageManager final {
    public:
     Service();
     virtual ~Service();
-    virtual ::grpc::Status GetDataFileInfo(::grpc::ServerContext* context, const ::StorageEngineInstance::SSTList* request, ::StorageEngineInstance::DataFileInfo* response);
-    virtual ::grpc::Status RequestPBA(::grpc::ServerContext* context, const ::StorageEngineInstance::LBA2PBARequest* request, ::StorageEngineInstance::LBA2PBAResponse* response);
-  };
-  template <class BaseClass>
-  class WithAsyncMethod_GetDataFileInfo : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
-   public:
-    WithAsyncMethod_GetDataFileInfo() {
-      ::grpc::Service::MarkMethodAsync(0);
-    }
-    ~WithAsyncMethod_GetDataFileInfo() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status GetDataFileInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SSTList* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    void RequestGetDataFileInfo(::grpc::ServerContext* context, ::StorageEngineInstance::SSTList* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::DataFileInfo>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
-    }
+    virtual ::grpc::Status RequestPBA(::grpc::ServerContext* context, const ::StorageEngineInstance::ScanInfo* request, ::StorageEngineInstance::PBAResponse* response);
+    virtual ::grpc::Status RequestVolumeAllocation(::grpc::ServerContext* context, const ::StorageEngineInstance::VolumeRequest* request, ::StorageEngineInstance::AllocatedVolumeInfo* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_RequestPBA : public BaseClass {
@@ -2199,129 +1708,129 @@ class StorageManager final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_RequestPBA() {
-      ::grpc::Service::MarkMethodAsync(1);
+      ::grpc::Service::MarkMethodAsync(0);
     }
     ~WithAsyncMethod_RequestPBA() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status RequestPBA(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::LBA2PBARequest* /*request*/, ::StorageEngineInstance::LBA2PBAResponse* /*response*/) override {
+    ::grpc::Status RequestPBA(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::ScanInfo* /*request*/, ::StorageEngineInstance::PBAResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestRequestPBA(::grpc::ServerContext* context, ::StorageEngineInstance::LBA2PBARequest* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::LBA2PBAResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    void RequestRequestPBA(::grpc::ServerContext* context, ::StorageEngineInstance::ScanInfo* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::PBAResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_GetDataFileInfo<WithAsyncMethod_RequestPBA<Service > > AsyncService;
   template <class BaseClass>
-  class WithCallbackMethod_GetDataFileInfo : public BaseClass {
+  class WithAsyncMethod_RequestVolumeAllocation : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithCallbackMethod_GetDataFileInfo() {
-      ::grpc::Service::MarkMethodCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::SSTList, ::StorageEngineInstance::DataFileInfo>(
-            [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::SSTList* request, ::StorageEngineInstance::DataFileInfo* response) { return this->GetDataFileInfo(context, request, response); }));}
-    void SetMessageAllocatorFor_GetDataFileInfo(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::SSTList, ::StorageEngineInstance::DataFileInfo>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::SSTList, ::StorageEngineInstance::DataFileInfo>*>(handler)
-              ->SetMessageAllocator(allocator);
+    WithAsyncMethod_RequestVolumeAllocation() {
+      ::grpc::Service::MarkMethodAsync(1);
     }
-    ~WithCallbackMethod_GetDataFileInfo() override {
+    ~WithAsyncMethod_RequestVolumeAllocation() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetDataFileInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SSTList* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/) override {
+    ::grpc::Status RequestVolumeAllocation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::VolumeRequest* /*request*/, ::StorageEngineInstance::AllocatedVolumeInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    virtual ::grpc::ServerUnaryReactor* GetDataFileInfo(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::SSTList* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/)  { return nullptr; }
+    void RequestRequestVolumeAllocation(::grpc::ServerContext* context, ::StorageEngineInstance::VolumeRequest* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::AllocatedVolumeInfo>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
   };
+  typedef WithAsyncMethod_RequestPBA<WithAsyncMethod_RequestVolumeAllocation<Service > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_RequestPBA : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_RequestPBA() {
-      ::grpc::Service::MarkMethodCallback(1,
-          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::LBA2PBARequest, ::StorageEngineInstance::LBA2PBAResponse>(
+      ::grpc::Service::MarkMethodCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::ScanInfo, ::StorageEngineInstance::PBAResponse>(
             [this](
-                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::LBA2PBARequest* request, ::StorageEngineInstance::LBA2PBAResponse* response) { return this->RequestPBA(context, request, response); }));}
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::ScanInfo* request, ::StorageEngineInstance::PBAResponse* response) { return this->RequestPBA(context, request, response); }));}
     void SetMessageAllocatorFor_RequestPBA(
-        ::grpc::MessageAllocator< ::StorageEngineInstance::LBA2PBARequest, ::StorageEngineInstance::LBA2PBAResponse>* allocator) {
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
-      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::LBA2PBARequest, ::StorageEngineInstance::LBA2PBAResponse>*>(handler)
+        ::grpc::MessageAllocator< ::StorageEngineInstance::ScanInfo, ::StorageEngineInstance::PBAResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::ScanInfo, ::StorageEngineInstance::PBAResponse>*>(handler)
               ->SetMessageAllocator(allocator);
     }
     ~WithCallbackMethod_RequestPBA() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status RequestPBA(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::LBA2PBARequest* /*request*/, ::StorageEngineInstance::LBA2PBAResponse* /*response*/) override {
+    ::grpc::Status RequestPBA(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::ScanInfo* /*request*/, ::StorageEngineInstance::PBAResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* RequestPBA(
-      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::LBA2PBARequest* /*request*/, ::StorageEngineInstance::LBA2PBAResponse* /*response*/)  { return nullptr; }
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::ScanInfo* /*request*/, ::StorageEngineInstance::PBAResponse* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_GetDataFileInfo<WithCallbackMethod_RequestPBA<Service > > CallbackService;
-  typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
-  class WithGenericMethod_GetDataFileInfo : public BaseClass {
+  class WithCallbackMethod_RequestVolumeAllocation : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithGenericMethod_GetDataFileInfo() {
-      ::grpc::Service::MarkMethodGeneric(0);
+    WithCallbackMethod_RequestVolumeAllocation() {
+      ::grpc::Service::MarkMethodCallback(1,
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::VolumeRequest, ::StorageEngineInstance::AllocatedVolumeInfo>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::VolumeRequest* request, ::StorageEngineInstance::AllocatedVolumeInfo* response) { return this->RequestVolumeAllocation(context, request, response); }));}
+    void SetMessageAllocatorFor_RequestVolumeAllocation(
+        ::grpc::MessageAllocator< ::StorageEngineInstance::VolumeRequest, ::StorageEngineInstance::AllocatedVolumeInfo>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::VolumeRequest, ::StorageEngineInstance::AllocatedVolumeInfo>*>(handler)
+              ->SetMessageAllocator(allocator);
     }
-    ~WithGenericMethod_GetDataFileInfo() override {
+    ~WithCallbackMethod_RequestVolumeAllocation() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetDataFileInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SSTList* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/) override {
+    ::grpc::Status RequestVolumeAllocation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::VolumeRequest* /*request*/, ::StorageEngineInstance::AllocatedVolumeInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
+    virtual ::grpc::ServerUnaryReactor* RequestVolumeAllocation(
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::VolumeRequest* /*request*/, ::StorageEngineInstance::AllocatedVolumeInfo* /*response*/)  { return nullptr; }
   };
+  typedef WithCallbackMethod_RequestPBA<WithCallbackMethod_RequestVolumeAllocation<Service > > CallbackService;
+  typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_RequestPBA : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_RequestPBA() {
-      ::grpc::Service::MarkMethodGeneric(1);
+      ::grpc::Service::MarkMethodGeneric(0);
     }
     ~WithGenericMethod_RequestPBA() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status RequestPBA(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::LBA2PBARequest* /*request*/, ::StorageEngineInstance::LBA2PBAResponse* /*response*/) override {
+    ::grpc::Status RequestPBA(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::ScanInfo* /*request*/, ::StorageEngineInstance::PBAResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
   };
   template <class BaseClass>
-  class WithRawMethod_GetDataFileInfo : public BaseClass {
+  class WithGenericMethod_RequestVolumeAllocation : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithRawMethod_GetDataFileInfo() {
-      ::grpc::Service::MarkMethodRaw(0);
+    WithGenericMethod_RequestVolumeAllocation() {
+      ::grpc::Service::MarkMethodGeneric(1);
     }
-    ~WithRawMethod_GetDataFileInfo() override {
+    ~WithGenericMethod_RequestVolumeAllocation() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetDataFileInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SSTList* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/) override {
+    ::grpc::Status RequestVolumeAllocation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::VolumeRequest* /*request*/, ::StorageEngineInstance::AllocatedVolumeInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    void RequestGetDataFileInfo(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2330,41 +1839,39 @@ class StorageManager final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_RequestPBA() {
-      ::grpc::Service::MarkMethodRaw(1);
+      ::grpc::Service::MarkMethodRaw(0);
     }
     ~WithRawMethod_RequestPBA() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status RequestPBA(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::LBA2PBARequest* /*request*/, ::StorageEngineInstance::LBA2PBAResponse* /*response*/) override {
+    ::grpc::Status RequestPBA(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::ScanInfo* /*request*/, ::StorageEngineInstance::PBAResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestRequestPBA(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
-  class WithRawCallbackMethod_GetDataFileInfo : public BaseClass {
+  class WithRawMethod_RequestVolumeAllocation : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithRawCallbackMethod_GetDataFileInfo() {
-      ::grpc::Service::MarkMethodRawCallback(0,
-          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
-            [this](
-                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetDataFileInfo(context, request, response); }));
+    WithRawMethod_RequestVolumeAllocation() {
+      ::grpc::Service::MarkMethodRaw(1);
     }
-    ~WithRawCallbackMethod_GetDataFileInfo() override {
+    ~WithRawMethod_RequestVolumeAllocation() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetDataFileInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SSTList* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/) override {
+    ::grpc::Status RequestVolumeAllocation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::VolumeRequest* /*request*/, ::StorageEngineInstance::AllocatedVolumeInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    virtual ::grpc::ServerUnaryReactor* GetDataFileInfo(
-      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+    void RequestRequestVolumeAllocation(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
   };
   template <class BaseClass>
   class WithRawCallbackMethod_RequestPBA : public BaseClass {
@@ -2372,7 +1879,7 @@ class StorageManager final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_RequestPBA() {
-      ::grpc::Service::MarkMethodRawCallback(1,
+      ::grpc::Service::MarkMethodRawCallback(0,
           new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->RequestPBA(context, request, response); }));
@@ -2381,7 +1888,7 @@ class StorageManager final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status RequestPBA(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::LBA2PBARequest* /*request*/, ::StorageEngineInstance::LBA2PBAResponse* /*response*/) override {
+    ::grpc::Status RequestPBA(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::ScanInfo* /*request*/, ::StorageEngineInstance::PBAResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -2389,31 +1896,26 @@ class StorageManager final {
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
-  class WithStreamedUnaryMethod_GetDataFileInfo : public BaseClass {
+  class WithRawCallbackMethod_RequestVolumeAllocation : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithStreamedUnaryMethod_GetDataFileInfo() {
-      ::grpc::Service::MarkMethodStreamed(0,
-        new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::SSTList, ::StorageEngineInstance::DataFileInfo>(
-            [this](::grpc::ServerContext* context,
-                   ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::SSTList, ::StorageEngineInstance::DataFileInfo>* streamer) {
-                       return this->StreamedGetDataFileInfo(context,
-                         streamer);
-                  }));
+    WithRawCallbackMethod_RequestVolumeAllocation() {
+      ::grpc::Service::MarkMethodRawCallback(1,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->RequestVolumeAllocation(context, request, response); }));
     }
-    ~WithStreamedUnaryMethod_GetDataFileInfo() override {
+    ~WithRawCallbackMethod_RequestVolumeAllocation() override {
       BaseClassMustBeDerivedFromService(this);
     }
-    // disable regular version of this method
-    ::grpc::Status GetDataFileInfo(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::SSTList* /*request*/, ::StorageEngineInstance::DataFileInfo* /*response*/) override {
+    // disable synchronous version of this method
+    ::grpc::Status RequestVolumeAllocation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::VolumeRequest* /*request*/, ::StorageEngineInstance::AllocatedVolumeInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedGetDataFileInfo(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::SSTList,::StorageEngineInstance::DataFileInfo>* server_unary_streamer) = 0;
+    virtual ::grpc::ServerUnaryReactor* RequestVolumeAllocation(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_RequestPBA : public BaseClass {
@@ -2421,12 +1923,12 @@ class StorageManager final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_RequestPBA() {
-      ::grpc::Service::MarkMethodStreamed(1,
+      ::grpc::Service::MarkMethodStreamed(0,
         new ::grpc::internal::StreamedUnaryHandler<
-          ::StorageEngineInstance::LBA2PBARequest, ::StorageEngineInstance::LBA2PBAResponse>(
+          ::StorageEngineInstance::ScanInfo, ::StorageEngineInstance::PBAResponse>(
             [this](::grpc::ServerContext* context,
                    ::grpc::ServerUnaryStreamer<
-                     ::StorageEngineInstance::LBA2PBARequest, ::StorageEngineInstance::LBA2PBAResponse>* streamer) {
+                     ::StorageEngineInstance::ScanInfo, ::StorageEngineInstance::PBAResponse>* streamer) {
                        return this->StreamedRequestPBA(context,
                          streamer);
                   }));
@@ -2435,16 +1937,43 @@ class StorageManager final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status RequestPBA(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::LBA2PBARequest* /*request*/, ::StorageEngineInstance::LBA2PBAResponse* /*response*/) override {
+    ::grpc::Status RequestPBA(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::ScanInfo* /*request*/, ::StorageEngineInstance::PBAResponse* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedRequestPBA(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::LBA2PBARequest,::StorageEngineInstance::LBA2PBAResponse>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedRequestPBA(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::ScanInfo,::StorageEngineInstance::PBAResponse>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_GetDataFileInfo<WithStreamedUnaryMethod_RequestPBA<Service > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_RequestVolumeAllocation : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_RequestVolumeAllocation() {
+      ::grpc::Service::MarkMethodStreamed(1,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::StorageEngineInstance::VolumeRequest, ::StorageEngineInstance::AllocatedVolumeInfo>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::StorageEngineInstance::VolumeRequest, ::StorageEngineInstance::AllocatedVolumeInfo>* streamer) {
+                       return this->StreamedRequestVolumeAllocation(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_RequestVolumeAllocation() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status RequestVolumeAllocation(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::VolumeRequest* /*request*/, ::StorageEngineInstance::AllocatedVolumeInfo* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedRequestVolumeAllocation(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::VolumeRequest,::StorageEngineInstance::AllocatedVolumeInfo>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_RequestPBA<WithStreamedUnaryMethod_RequestVolumeAllocation<Service > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_GetDataFileInfo<WithStreamedUnaryMethod_RequestPBA<Service > > StreamedService;
+  typedef WithStreamedUnaryMethod_RequestPBA<WithStreamedUnaryMethod_RequestVolumeAllocation<Service > > StreamedService;
 };
 
 class WALManager final {

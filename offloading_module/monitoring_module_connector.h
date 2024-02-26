@@ -12,41 +12,28 @@ using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
 using StorageEngineInstance::MonitoringModule;
-using StorageEngineInstance::Request;
+using StorageEngineInstance::MetaDataRequest;
 using StorageEngineInstance::SnippetMetaData;
-using StorageEngineInstance::DataFileInfo;
+using StorageEngineInstance::ScanInfo;
+using StorageEngineInstance::ScanInfo_BlockInfo;
 
 class MonitoringModuleConnector {
 	public:
 		MonitoringModuleConnector(std::shared_ptr<Channel> channel) : stub_(MonitoringModule::NewStub(channel)) {}
 
-		DataFileInfo GetDataFileInfo(string dbname, string tname) {
+		SnippetMetaData GetSnippetMetaData(string dbname, string tname, ScanInfo scanInfo, map<string,string> sst_csd_map) {
 			ClientContext context;
-			Request request;
-			DataFileInfo response;
-			
-			request.set_db_name(dbname);
-			request.set_table_name(tname);
-			Status status = stub_->GetDataFileInfo(&context, request, &response);
-			
-	  		if (!status.ok()) {
-				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
-				KETILOG::FATALLOG(LOGTAG,"RPC failed");
-			}
-
-			return response;
-		}
-
-		SnippetMetaData GetSnippetMetaData(string dbname, string tname, map<string,string> sst_csd_map) {
-			ClientContext context;
-			Request request;
+			MetaDataRequest request;
 			SnippetMetaData response;
 			
 			request.set_db_name(dbname);
 			request.set_table_name(tname);
+			request.mutable_scan_info()->CopyFrom(scanInfo);
 
-			for (const auto& [key, value] : sst_csd_map) {
-				request.mutable_sst_csd_map()->insert({key, value});
+			for(int i=0; i<request.scan_info().block_info_size(); i++){
+				string sst_name = request.scan_info().block_info(i).sst_name();
+				request.mutable_scan_info()->mutable_block_info(i)->clear_csd_list();
+				request.mutable_scan_info()->mutable_block_info(i)->add_csd_list(sst_csd_map[sst_name]);
 			}
 			
 			Status status = stub_->GetSnippetMetaData(&context, request, &response);

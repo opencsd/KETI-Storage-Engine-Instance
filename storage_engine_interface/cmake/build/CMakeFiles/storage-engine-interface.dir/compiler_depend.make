@@ -606,13 +606,10 @@ CMakeFiles/storage-engine-interface.dir/storage_engine_interface.cc.o: /root/wor
   /usr/include/c++/11/bits/std_thread.h \
   /usr/include/c++/11/bits/this_thread_sleep.h \
   /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/offloading_module_connector.h \
-  /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/monitoring_module_connector.h \
   /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/include/ip_config.h
 
 
 /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/include/ip_config.h:
-
-/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/monitoring_module_connector.h:
 
 /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/storage_engine_interface/offloading_module_connector.h:
 

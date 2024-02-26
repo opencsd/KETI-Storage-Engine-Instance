@@ -34,17 +34,17 @@ using namespace std;
 using namespace rapidjson;
 
 using StorageEngineInstance::Snippet;
-using StorageEngineInstance::DataFileInfo;
-using StorageEngineInstance::DataFileInfo_CSD;
+using StorageEngineInstance::SnippetRequest;
+using StorageEngineInstance::ScanInfo;
 
 class Scheduler{
   public: 
-    static void PushQueue(Snippet snippet){
+    static void PushQueue(SnippetRequest snippet){
       GetInstance().SnippetQueue_.push_work(snippet);
     }
 
-    static Snippet PopQueue(){
-      Snippet scheduling_target = GetInstance().SnippetQueue_.wait_and_pop();
+    static SnippetRequest PopQueue(){
+      SnippetRequest scheduling_target = GetInstance().SnippetQueue_.wait_and_pop();
       return scheduling_target;
     }
 
@@ -66,13 +66,13 @@ class Scheduler{
     }
 
     void runScheduler();
-    void scheduling(Snippet snippetToSchedule, map<string,string> bestcsd);
-    map<string,string> getBestCSD(DataFileInfo dataFileInfo);
-    map<string,string> CSDMetricScore(DataFileInfo dataFileInfo); //CSD 병렬 처리 우선
-    map<string,string> FileDistribution(DataFileInfo dataFileInfo); //CSD 순서대로
-    map<string,string> RoundRobbin(DataFileInfo dataFileInfo); //CSD 병렬 처리 우선
-    map<string,string> AlgorithmAutoSelection(DataFileInfo dataFileInfo); //CSD 순서대로
-    void serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd, string pba, int table_total_block_count); // snippet -> json 구성
+    void scheduling(SnippetRequest snippetToSchedule, map<string,string> bestcsd);
+    map<string,string> getBestCSD(ScanInfo scanInfo);
+    map<string,string> CSDMetricScore(ScanInfo scanInfo); //CSD 병렬 처리 우선
+    map<string,string> FileDistribution(ScanInfo scanInfo); //CSD 순서대로
+    map<string,string> RoundRobbin(ScanInfo scanInfo); //CSD 병렬 처리 우선
+    map<string,string> AlgorithmAutoSelection(ScanInfo scanInfo); //CSD 순서대로
+    void serialize(StringBuffer &snippetbuf, Snippet snippet, string csd, string pba, int table_total_block_count); // snippet -> json 구성
     void sendSnippetToCSD(string snippet_json); // CSD 전달
   
   public:
@@ -80,6 +80,6 @@ class Scheduler{
 
   private:
     thread SchedulerThread_;
-    kQueue<Snippet> SnippetQueue_;
+    kQueue<SnippetRequest> SnippetQueue_;
     int SCHEDULING_ALGORITHM;
 };

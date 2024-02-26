@@ -12,7 +12,7 @@ using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
 using StorageEngineInstance::OffloadingModule;
-using StorageEngineInstance::Snippet;
+using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::Response; 
 using StorageEngineInstance::CSDMetricList; 
 
@@ -22,7 +22,7 @@ class OffloadingModuleConnector {
 	public:
 		OffloadingModuleConnector(std::shared_ptr<Channel> channel) : stub_(OffloadingModule::NewStub(channel)) {}
 
-		void Scheduling(Snippet snippet) {
+		void Scheduling(SnippetRequest snippet) {
 			Response response;
     		ClientContext context;
 			

@@ -15,7 +15,7 @@ using grpc::ServerReader;
 using grpc::Status;
 
 using StorageEngineInstance::OffloadingModule;
-using StorageEngineInstance::Snippet;
+using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::Response;
 using StorageEngineInstance::CSDMetricList;
 
@@ -23,7 +23,7 @@ using namespace std;
 
 // Logic and data behind the server's behavior.
 class OffloadingModuleServiceImpl final : public OffloadingModule::Service {
-  Status Scheduling(ServerContext *context, const Snippet *snippet, Response *response) override {
+  Status Scheduling(ServerContext *context, const SnippetRequest *snippet, Response *response) override {
     KETILOG::DEBUGLOG("Offloading","# Snippet Scheduling");
 
     {

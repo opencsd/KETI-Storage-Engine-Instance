@@ -37,10 +37,6 @@ public:
 		return GetInstance().dumpTableManager();
 	}
 
-	static bool IsMetaDataInitialized(){
-		return GetInstance().isMetaDataInitialized();
-	}
-
 	static bool CheckExistDB(string db_name){
 		return GetInstance().checkExistDB(db_name);
 	}
@@ -57,10 +53,6 @@ public:
 		return GetInstance().getTableIndexNumber(db_name, table_name);
 	}
 
-	static void SetMetaDataInitialized(){
-		return GetInstance().setMetaDataInitialized();
-	}
-
 	static void SetTableInfo(string db_name, string table_name, Table table){
 		return GetInstance().setTableInfo(db_name, table_name, table);
 	}
@@ -70,9 +62,7 @@ public:
 	}
 
 private:
-	TableManager() {
-		MetaDataInitialized_ = false;
-	};
+	TableManager();
     TableManager(const TableManager&);
     TableManager& operator=(const TableManager&){
         return *this;
@@ -104,10 +94,6 @@ private:
 		cout << "-------------------------------------" << endl;
 	}
 
-	bool isMetaDataInitialized(){
-		return GetInstance().MetaDataInitialized_;
-	}
-
 	bool checkExistDB(string db_name){
 		std::lock_guard<std::mutex> lock(mutex_);
 		return GetInstance().TableManager_.find(db_name) != GetInstance().TableManager_.end();
@@ -128,10 +114,6 @@ private:
 		return GetInstance().TableManager_[db_name].table[table_name].table_index_number;
 	}
 
-	void setMetaDataInitialized(){
-		GetInstance().MetaDataInitialized_ = true;
-	}
-
 	void setTableInfo(string db_name, string table_name, Table table){
 		std::lock_guard<std::mutex> lock(mutex_);
 		TableManager_[db_name].table[table_name] = table;
@@ -148,6 +130,5 @@ public:
 
 private:
     mutex mutex_;
-	bool MetaDataInitialized_;
 	unordered_map<string,struct DB> TableManager_;
 };

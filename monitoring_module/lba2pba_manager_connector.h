@@ -30,13 +30,10 @@ using grpc::ClientAsyncResponseReader;
 using grpc::CompletionQueue;
 
 using StorageEngineInstance::StorageManager;
-using StorageEngineInstance::LBA2PBARequest;
-using StorageEngineInstance::LBA2PBAResponse;
-using StorageEngineInstance::LBA2PBAResponse_PBA;
-using StorageEngineInstance::LBA2PBAResponse_Chunk;
-using StorageEngineInstance::DataFileInfo;
-using StorageEngineInstance::SSTList;
-
+using StorageEngineInstance::ScanInfo;
+using StorageEngineInstance::PBAResponse;
+using StorageEngineInstance::PBAResponse_PBA;
+using StorageEngineInstance::Chunk;
 
 #define BUFF_SIZE 4096
 
@@ -45,33 +42,23 @@ class StorageManagerConnector {
 public:
     StorageManagerConnector(std::shared_ptr<Channel> channel) : stub_(StorageManager::NewStub(channel)) {}
 
-    void RequestPBA(LBA2PBARequest lba2pbaRequest, int &total_block_count, map<string,string> &sst_pba_map, CompletionQueue *cq) {
-        LBA2PBAResponse pbaResponse;
+    void RequestPBA(ScanInfo lbaRequest, int &total_block_count, map<string,string> &sst_pba_map, CompletionQueue *cq) {
+        PBAResponse pbaResponse;
         ClientContext context;
 
         // std::unique_ptr<ClientAsyncResponseReader<LBA2PBAResponse>> rpc(stub_->AsyncRequestPBA(&context,lba2pbaRequest,&test));        
         // rpc->Finish(&pbaResponse, &status, (void*)1);
-
-        Status status = stub_->RequestPBA(&context, lba2pbaRequest, &pbaResponse);
+        
+        Status status = stub_->RequestPBA(&context, lbaRequest, &pbaResponse);
 
         if (!status.ok()) {
             KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
 			KETILOG::FATALLOG(LOGTAG,"RPC failed");
         }
 
-        {
-        // std::string test_json;
-        // google::protobuf::util::JsonPrintOptions options;
-        // options.always_print_primitive_fields = true;
-        // options.always_print_enums_as_ints = true;
-        // google::protobuf::util::MessageToJsonString(pbaResponse,&test_json,options);
-        // std::cout << endl << test_json << std::endl << std::endl; 
-        }
-
-        for (const auto entry : pbaResponse.sst_pba_map()) {
+        for (const auto entry : pbaResponse.pba_chunks()) {
             string sst_name = entry.first;
-            LBA2PBAResponse_PBA csd_pba = entry.second;
-            string csd_id = csd_pba.csd_id();
+            PBAResponse_PBA csd_pba = entry.second;
 
             //json 구성
             StringBuffer buffer;
@@ -114,23 +101,7 @@ public:
         }
     }
 
-    DataFileInfo GetDataFileInfo(vector<string> sstList_){
-        SSTList request;
-        ClientContext context;
-        DataFileInfo response;
-
-        request.mutable_sst_list()->Add(sstList_.begin(), sstList_.end());
-        Status status = stub_->GetDataFileInfo(&context, request, &response);
-        
-        if (!status.ok()) {
-            KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
-            KETILOG::FATALLOG(LOGTAG,"RPC failed");
-        }
-
-        return response;    
-    }
-
 private:
     std::unique_ptr<StorageManager::Stub> stub_;
-    inline const static std::string LOGTAG = "Monitoring::Storage Manager Connector";
+    inline const static std::string LOGTAG = "Monitoring::LBA2PBA Manager Connector";
 };

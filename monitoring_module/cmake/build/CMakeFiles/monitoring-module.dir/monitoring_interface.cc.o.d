@@ -418,7 +418,7 @@ CMakeFiles/monitoring-module.dir/monitoring_interface.cc.o: \
  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
  /usr/include/c++/11/bits/fstream.tcc \
- /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/wal_handler.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/wal_connector.h \
  /usr/include/x86_64-linux-gnu/sys/socket.h \
  /usr/include/x86_64-linux-gnu/bits/socket.h \
  /usr/include/x86_64-linux-gnu/bits/socket_type.h \
@@ -520,4 +520,4 @@ CMakeFiles/monitoring-module.dir/monitoring_interface.cc.o: \
  /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/../include/ip_config.h \
  /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/../include/internal_queue.h \
  /usr/include/c++/11/queue /usr/include/c++/11/bits/stl_queue.h \
- /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/storage_manager_connector.h
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/lba2pba_manager_connector.h

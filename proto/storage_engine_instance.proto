@@ -20,19 +20,16 @@ service MergingModule {
 }
 
 service MonitoringModule {
-  rpc GetDataFileInfo (Request) returns (DataFileInfo) {}
-  rpc GetSnippetMetaData (Request) returns (SnippetMetaData) {}
-  rpc SyncMetaDataManager (DBInfo) returns (Response) {}
+  rpc GetSnippetMetaData (MetaDataRequest) returns (SnippetMetaData) {}
 }
 
 service OffloadingModule {
-  rpc Scheduling (Snippet) returns (Response) {}
+  rpc Scheduling (SnippetRequest) returns (Response) {}
   rpc PushCSDMetric (CSDMetricList) returns (Response) {}
 }
 
 service StorageManager {
-  rpc GetDataFileInfo (SSTList) returns (DataFileInfo) {}
-  rpc RequestPBA (LBARequest) returns (PBAResponse) {}
+  rpc RequestPBA (ScanInfo) returns (PBAResponse) {}
   rpc RequestVolumeAllocation (VolumeRequest) returns (AllocatedVolumeInfo) {}
 }
 
@@ -57,21 +54,21 @@ message SnippetRequest {
   }
   SnippetType type = 1;
   Snippet snippet = 2;
-  ScanInfo scanInfo = 3;
-}
-
-message Chunk {
-  int64 offset = 1;
-  int32 length = 2;
+  ScanInfo scan_info = 3;
 }
 
 message ScanInfo {
   message BlockInfo {
     string sst_name = 1;
     repeated string csd_list = 2;
-    repeated Chunk lba_chunks = 3;
+    repeated Chunk lba_list = 3;
   }
   repeated BlockInfo block_info = 1;
+}
+
+message Chunk {
+  int64 offset = 1;
+  int32 length = 2;
 }
 
 message Snippet {
@@ -180,8 +177,6 @@ message Request {
   int32 work_id = 2;
   string db_name = 3;
   string table_name = 4;
-  int32 table_index_number = 5;
-  map<string, string> sst_csd_map = 6;
 }
 
 message Response {
@@ -213,26 +208,10 @@ message QueryStringResult {
   int32 filtered_row_count = 3; 
 }
 
-message DBInfo {
-  message DB {
-    message Table {
-      int32 table_index_number = 1;
-      repeated string sst_list = 2;
-    }
-    map<string, Table> table_list = 1;
-  }
-  map<string, DB> db_list = 1;
-}
-
-message DataFileInfo {
-  message CSD {
-    repeated string csd_id = 1;
-  }
-  map<string,CSD> sst_csd_map = 1;
-}
-
-message SSTList {
-  repeated string sst_list = 1;
+message MetaDataRequest {
+  string db_name = 1;
+  string table_name = 2;
+  ScanInfo scan_info = 3;
 }
 
 message SnippetMetaData {
@@ -254,20 +233,6 @@ message CSDMetricList {
     float score = 8;
   }
   repeated CSDMetric csd_metric_list = 1;
-}
-
-message LBARequest{
-  message LBA {
-    string sst_name = 1;
-    string csd_id = 2;
-    repeated Chunk chunks = 3;
-  }
-  repeated LBA lba_chunks = 1;
-}
-
-message Chunk {
-  int64 offset = 1;
-  int32 length = 2;
 }
 
 message PBAResponse{
