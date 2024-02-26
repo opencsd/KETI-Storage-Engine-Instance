@@ -63,7 +63,7 @@ void SendQueryStatus(const char* message){
 // Logic and data behind the server's behavior.
 class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::Service {
   Status OffloadingQueryInterface(ServerContext* context, ServerReader<SnippetRequest>* stream, QueryStringResult* result) override {
-    KETILOG::WARNLOG("Interface", "Offloading Snippet Request");
+    KETILOG::INFOLOG("Interface", "# receive offload query from query engine");
     
     SnippetRequest snippet_request;
 
@@ -82,11 +82,11 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
       }
 
       if(snippet_request.type() == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET){
-        KETILOG::DEBUGLOG("Interface","# Send Snippet to Offloading Module");
+        KETILOG::DEBUGLOG("Interface","# send snippet to offloading module");
         OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
         offloadingModule.Scheduling(snippet_request);
       }else{
-        KETILOG::DEBUGLOG("Interface","# Send Snippet to Merging Module");
+        KETILOG::DEBUGLOG("Interface","# send snippet to merging module");
         MergingModuleConnector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_MERGING_NODE_PORT, grpc::InsecureChannelCredentials()));
         mergingModule.Aggregation(snippet_request);
       }
@@ -94,15 +94,6 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
 
     MergingModuleConnector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_MERGING_NODE_PORT, grpc::InsecureChannelCredentials()));
     QueryStringResult result_ = mergingModule.GetQueryResult(snippet_request.snippet().query_id(), snippet_request.snippet().work_id(), snippet_request.snippet().table_alias());
-    
-    {
-      std::string test_json;
-      google::protobuf::util::JsonPrintOptions options;
-      options.always_print_primitive_fields = true;
-      options.always_print_enums_as_ints = true;
-      google::protobuf::util::MessageToJsonString(result_,&test_json,options);
-      std::cout << endl << test_json << std::endl << std::endl; 
-    }
 
     result->CopyFrom(result_);
 
@@ -111,6 +102,7 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
 
   Status GenericQueryInterface(ServerContext *context, const GenericQuery *request, Response *response) override {
     //Generic Query 처리 필요 ==> send to myrocks container
+    KETILOG::INFOLOG("Interface", "# receive generic query from query engine");
 
     return Status::OK;
   }
@@ -132,7 +124,7 @@ void RunGRPCServer() {
   builder.RegisterService(&service);
   std::unique_ptr<Server> server(builder.BuildAndStart());
 
-  KETILOG::WARNLOG("Interface", "Interface Server listening on "+server_address);
+  KETILOG::FATALLOG("Interface", "Interface Server listening on "+server_address);
   
   server->Wait();
 }

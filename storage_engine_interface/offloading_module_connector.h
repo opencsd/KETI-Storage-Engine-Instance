@@ -23,6 +23,8 @@ class OffloadingModuleConnector {
 		OffloadingModuleConnector(std::shared_ptr<Channel> channel) : stub_(OffloadingModule::NewStub(channel)) {}
 
 		void Scheduling(SnippetRequest snippet) {
+			KETILOG::DEBUGLOG(LOGTAG, "# send scan snippet");
+
 			Response response;
     		ClientContext context;
 			
@@ -36,6 +38,8 @@ class OffloadingModuleConnector {
 		}
 
 		void PushCSDMetric(CSDMetricList csdMetricList) {
+			KETILOG::DEBUGLOG(LOGTAG, "Push CSD Metric");
+
 			Response response;
     		ClientContext context;
 			
