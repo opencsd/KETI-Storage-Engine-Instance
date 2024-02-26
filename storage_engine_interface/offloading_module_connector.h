@@ -54,5 +54,5 @@ class OffloadingModuleConnector {
 
 	private:
 		std::unique_ptr<OffloadingModule::Stub> stub_;
-		inline const static std::string LOGTAG = "Interface";
+		inline const static std::string LOGTAG = "Interface::Offloading Connector";
 };
