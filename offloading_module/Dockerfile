@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
-# ADD /cmake/build/offloading-container /usr/bin/offloading-container
-COPY /cmake/build/offloading-container /usr/bin/offloading-container
+ADD /cmake/build/offloading-module /usr/bin/offloading-module
+# COPY /cmake/build/offloading-module /usr/bin/offloading-module
 
 COPY shared_library/libboost_thread.so.1.65.1 /usr/lib/x86_64-linux-gnu/
 COPY shared_library/libpthread.so.0 /lib/x86_64-linux-gnu/
@@ -16,4 +16,4 @@ COPY shared_library/libdl.so.2  /lib/x86_64-linux-gnu/libdl.so.2
 COPY shared_library/libssl.so.1.1 /usr/lib/x86_64-linux-gnu/libssl.so.1.1 
 
 EXPOSE 40201 
-ENTRYPOINT ["/usr/bin/offloading-container"]
+ENTRYPOINT ["/usr/bin/offloading-module"]

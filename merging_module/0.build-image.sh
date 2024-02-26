@@ -1,5 +1,5 @@
 registry="ketidevit2"
-image_name="merging-container"
+image_name="merging-module"
 version="v2.0"
 
 (
