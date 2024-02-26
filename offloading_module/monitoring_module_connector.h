@@ -22,6 +22,8 @@ class MonitoringModuleConnector {
 		MonitoringModuleConnector(std::shared_ptr<Channel> channel) : stub_(MonitoringModule::NewStub(channel)) {}
 
 		SnippetMetaData GetSnippetMetaData(string dbname, string tname, ScanInfo scanInfo, map<string,string> sst_csd_map) {
+			KETILOG::DEBUGLOG(LOGTAG,"# get snippet metadata");
+
 			ClientContext context;
 			MetaDataRequest request;
 			SnippetMetaData response;
@@ -48,5 +50,5 @@ class MonitoringModuleConnector {
 
 	private:
 		std::unique_ptr<MonitoringModule::Stub> stub_;
-		inline const static std::string LOGTAG = "Offloading Container::Monitoring Container Interface";
+		inline const static std::string LOGTAG = "Offloading::Monitoring Connector";
 };

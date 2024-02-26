@@ -229,6 +229,8 @@ void Scheduler::serialize(StringBuffer &snippetbuf, Snippet snippet, string csd,
 }
 
 void Scheduler::sendSnippetToCSD(string snippet_json){
+    KETILOG::DEBUGLOG(LOGTAG, "# send snippet to csd ");
+
     int sock = socket(PF_INET, SOCK_STREAM, 0);
 
     struct sockaddr_in serv_addr;

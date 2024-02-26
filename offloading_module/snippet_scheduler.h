@@ -76,7 +76,7 @@ class Scheduler{
     void sendSnippetToCSD(string snippet_json); // CSD 전달
   
   public:
-    inline const static std::string LOGTAG = "Offloading Container::Snippet Scheduler";
+    inline const static std::string LOGTAG = "Offloading::Snippet Scheduler";
 
   private:
     thread SchedulerThread_;

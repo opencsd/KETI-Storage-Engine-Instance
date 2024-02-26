@@ -24,7 +24,7 @@ using namespace std;
 // Logic and data behind the server's behavior.
 class OffloadingModuleServiceImpl final : public OffloadingModule::Service {
   Status Scheduling(ServerContext *context, const SnippetRequest *snippet, Response *response) override {
-    KETILOG::DEBUGLOG("Offloading","# Snippet Scheduling");
+    KETILOG::INFOLOG("Interface", "# receive scan snippet");
 
     {
       // std::string test_json;
@@ -41,6 +41,8 @@ class OffloadingModuleServiceImpl final : public OffloadingModule::Service {
   }
 
   Status PushCSDMetric(ServerContext* context, const CSDMetricList* csdMetricList, Response* response) override {
+    KETILOG::DEBUGLOG("Offloading", "Push CSD Metric");
+
     const auto metric = csdMetricList->csd_metric_list();
     for (const auto entry : metric) {
       CSDStatusManager::CSDInfo csdInfo;
@@ -69,7 +71,7 @@ void RunGRPCServer() {
   builder.RegisterService(&service);
   std::unique_ptr<Server> server(builder.BuildAndStart());
 
-  KETILOG::WARNLOG("Offloading Container", "Snippet Scheduler Server listening on "+server_address);
+  KETILOG::FATALLOG("Offloading", "Offloading Server listening on "+server_address);
   
   server->Wait();
 }
