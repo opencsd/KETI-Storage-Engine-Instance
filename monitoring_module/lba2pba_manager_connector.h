@@ -43,6 +43,8 @@ public:
     StorageManagerConnector(std::shared_ptr<Channel> channel) : stub_(StorageManager::NewStub(channel)) {}
 
     void RequestPBA(ScanInfo lbaRequest, int &total_block_count, map<string,string> &sst_pba_map, CompletionQueue *cq) {
+        KETILOG::DEBUGLOG(LOGTAG, "# request pba");
+
         PBAResponse pbaResponse;
         ClientContext context;
 

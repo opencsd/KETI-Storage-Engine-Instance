@@ -306,11 +306,11 @@ void BufferManager::mergeResult(int qid, int wid){
         DataBuffer_[qid]->scanned_row_count += result.scanned_row_count;
         DataBuffer_[qid]->filtered_row_count += result.filtered_row_count;
         
-        KETILOG::DEBUGLOG(LOGTAG,"# Merging Data{" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} ... (Left Block : " + std::to_string(workBuffer->left_block_count) + ")");
+        KETILOG::DEBUGLOG(LOGTAG,"# save data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} ... (left " + std::to_string(workBuffer->left_block_count) + " blocks)");
 
         if(workBuffer->left_block_count == 0){ //Work Done
-            string msg = "# Merging Data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} Done";
-            KETILOG::DEBUGLOG(LOGTAG,msg);
+            string msg = "# merging data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} done";
+            KETILOG::INFOLOG(LOGTAG,msg);
 
             for(auto it = workBuffer->table_data.begin(); it != workBuffer->table_data.end(); it++){
                 if((*it).second.floatvec.size() != 0){
@@ -372,7 +372,7 @@ TableData BufferManager::getTableData(int qid, int wid, string table_name){
     unique_lock<mutex> lock2(workBuffer->mu);
 
     if(workBuffer->status == NotFinished || workBuffer->status == Initialized){
-        KETILOG::DEBUGLOG(LOGTAG,"# Not Finished " + to_string(qid) + ":" + table_name);
+        KETILOG::DEBUGLOG(LOGTAG,"# not finished " + to_string(qid) + ":" + table_name);
 
         workBuffer->cond.wait(lock2);
         tableData.table_data = workBuffer->table_data;
@@ -381,7 +381,7 @@ TableData BufferManager::getTableData(int qid, int wid, string table_name){
         tableData.scanned_row_count = DataBuffer_[qid]->scanned_row_count;
         tableData.filtered_row_count = DataBuffer_[qid]->filtered_row_count;
 
-        KETILOG::DEBUGLOG(LOGTAG,"# Finished " + to_string(qid) + ":" + table_name);
+        KETILOG::DEBUGLOG(LOGTAG,"# finished " + to_string(qid) + ":" + table_name);
         if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
             cout << "<get table data>" << endl;
             for(auto i : workBuffer->table_data){
@@ -389,7 +389,7 @@ TableData BufferManager::getTableData(int qid, int wid, string table_name){
             }
         }
     }else if(workBuffer->status == WorkDone){
-        KETILOG::DEBUGLOG(LOGTAG,"# Done " + to_string(qid) + ":" + table_name);
+        KETILOG::DEBUGLOG(LOGTAG,"# done " + to_string(qid) + ":" + table_name);
 
         tableData.table_data = workBuffer->table_data;
         tableData.valid = true;
@@ -416,7 +416,7 @@ int BufferManager::saveTableData(Snippet snippet, TableData &table_data_, int of
     int wid = snippet.work_id();
     string table_name = snippet.table_alias();
 
-    string msg = "# Save Table {" + to_string(qid) + "|" + table_name + "}";
+    string msg = "# save table {" + to_string(qid) + "|" + table_name + "}";
     KETILOG::DEBUGLOG(LOGTAG,msg);
 
     initializeBuffer(qid, wid, table_name);

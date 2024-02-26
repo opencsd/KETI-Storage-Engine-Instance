@@ -25,7 +25,7 @@ using StorageEngineInstance::SnippetMetaData;
 
 class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
   Status GetSnippetMetaData(ServerContext *context, const MetaDataRequest *request, SnippetMetaData *response) override {
-    KETILOG::DEBUGLOG("Monitoring", "# called get snippet metadata");
+    KETILOG::INFOLOG("Monitoring", "# get snippet metadata");
     
     string db_name = request->db_name();
     string table_name = request->table_name();
@@ -81,7 +81,7 @@ void RunGRPCServer() {
   builder.RegisterService(&service);
   std::unique_ptr<Server> server(builder.BuildAndStart());
 
-  KETILOG::WARNLOG("Monitoring", "Monitoring Container Server listening on "+server_address);
+  KETILOG::FATALLOG("Monitoring", "Monitoring Server listening on "+server_address);
 
   server->Wait();
 }

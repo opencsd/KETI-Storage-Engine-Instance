@@ -108,6 +108,8 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
   }
 
   Status PushCSDMetric(ServerContext *context, const CSDMetricList *request, Response *response) override {
+    KETILOG::DEBUGLOG("Interface", "Push CSD Metric");
+
     OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
     offloadingModule.PushCSDMetric(*request);
 

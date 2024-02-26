@@ -38,8 +38,6 @@ class OffloadingModuleConnector {
 		}
 
 		void PushCSDMetric(CSDMetricList csdMetricList) {
-			KETILOG::DEBUGLOG(LOGTAG, "Push CSD Metric");
-
 			Response response;
     		ClientContext context;
 			
