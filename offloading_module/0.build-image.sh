@@ -1,5 +1,5 @@
 registry="ketidevit2"
-image_name="offloading-module"
+image_name="offloading-dd"
 version="v2.0"
 
 (
