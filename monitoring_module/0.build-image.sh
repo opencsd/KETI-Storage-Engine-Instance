@@ -1,5 +1,5 @@
 registry="ketidevit2"
-image_name="monitoring-container"
+image_name="monitoring-module"
 version="v2.0"
 
 (

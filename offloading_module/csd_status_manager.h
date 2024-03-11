@@ -64,7 +64,7 @@ private:
 
 /* Variables */
 public:
-    inline const static string LOGTAG = "Offloading Container::CSD Status Manager";
+    inline const static string LOGTAG = "Offloading::CSD Status Manager";
 
 private:
     std::mutex mutex_;

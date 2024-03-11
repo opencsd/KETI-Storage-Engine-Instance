@@ -516,7 +516,7 @@ CMakeFiles/monitoring-module.dir/monitoring_interface.cc.o: /root/workspace/keti
   /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
   /usr/include/c++/11/bits/fstream.tcc \
-  /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/wal_handler.h \
+  /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/wal_connector.h \
   /usr/include/x86_64-linux-gnu/sys/socket.h \
   /usr/include/x86_64-linux-gnu/bits/socket.h \
   /usr/include/x86_64-linux-gnu/bits/socket_type.h \
@@ -642,8 +642,10 @@ CMakeFiles/monitoring-module.dir/monitoring_interface.cc.o: /root/workspace/keti
   /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/include/internal_queue.h \
   /usr/include/c++/11/queue \
   /usr/include/c++/11/bits/stl_queue.h \
-  /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/storage_manager_connector.h
+  /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/lba2pba_manager_connector.h
 
+
+/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/lba2pba_manager_connector.h:
 
 /usr/include/c++/11/queue:
 
@@ -882,8 +884,6 @@ CMakeFiles/monitoring-module.dir/monitoring_interface.cc.o: /root/workspace/keti
 /include/absl/base/policy_checks.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
-
-/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/wal_handler.h:
 
 /usr/include/stdlib.h:
 
@@ -1791,8 +1791,6 @@ storage_engine_instance.pb.h:
 
 /include/google/protobuf/reflection_ops.h:
 
-/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/storage_manager_connector.h:
-
 /include/google/protobuf/descriptor.pb.h:
 
 /include/google/protobuf/map_field_inl.h:
@@ -1868,6 +1866,8 @@ storage_engine_instance.pb.h:
 /usr/include/c++/11/sstream:
 
 /usr/include/c++/11/fstream:
+
+/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/monitoring_module/wal_connector.h:
 
 /usr/include/c++/11/bits/exception_defines.h:
 

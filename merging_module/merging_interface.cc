@@ -121,7 +121,7 @@ void RunGRPCServer() {
   builder.RegisterService(&service);
   std::unique_ptr<Server> server(builder.BuildAndStart());
 
-  KETILOG::WARNLOG("Merging","Merging Module Server Listening on "+server_address);
+  KETILOG::FATALLOG("Merging","Merging Server Listening on "+server_address);
 
   server->Wait();
 }

@@ -2,22 +2,10 @@
 
 void Scheduler::runScheduler(){ 
     while (1){
-        Snippet snippet = Scheduler::PopQueue();
-
-        MonitoringModuleConnector mc(grpc::CreateChannel((string)LOCALHOST+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
-        DataFileInfo dataFileInfo = mc.GetDataFileInfo("tpch_origin"/*need db name in snippet*/,snippet.table_name(0));
-
-        {
-        // std::string test_json;
-        // google::protobuf::util::JsonPrintOptions options;
-        // options.always_print_primitive_fields = true;
-        // options.always_print_enums_as_ints = true;
-        // google::protobuf::util::MessageToJsonString(dataFileInfo,&test_json,options);
-        // std::cout << endl << test_json << std::endl << std::endl; 
-        }
+        SnippetRequest snippet = Scheduler::PopQueue();
 
         //get best csd
-        map<string,string> bestcsd = getBestCSD(dataFileInfo);
+        map<string,string> bestcsd = getBestCSD(snippet.scan_info());
 
         //make adding PBA,WAL and sending snippet to csd thread
         std::thread trd(&Scheduler::scheduling, &Scheduler::GetInstance(), snippet, bestcsd);
@@ -25,30 +13,21 @@ void Scheduler::runScheduler(){
     }
 }
 
-void Scheduler::scheduling(Snippet snippet, map<string,string> bestcsd){
+void Scheduler::scheduling(SnippetRequest snippet, map<string,string> bestcsd){
     //get PBA & WAL
     MonitoringModuleConnector mc(grpc::CreateChannel((string)LOCALHOST+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
-    SnippetMetaData snippetMetaData = mc.GetSnippetMetaData("tpch_origin"/*need db name in snippet*/,snippet.table_name(0), bestcsd);
-
-    {
-    // std::string test_json;
-    // google::protobuf::util::JsonPrintOptions options;
-    // options.always_print_primitive_fields = true;
-    // options.always_print_enums_as_ints = true;
-    // google::protobuf::util::MessageToJsonString(snippetMetaData,&test_json,options);
-    // std::cout << endl << test_json << std::endl << std::endl; 
-    }
+    SnippetMetaData snippetMetaData = mc.GetSnippetMetaData(snippet.snippet().db_name(), snippet.snippet().table_name(0), snippet.scan_info(), bestcsd);
 
     StringBuffer snippetbuf;
     for (const auto entry : snippetMetaData.sst_pba_map()) {
         snippetbuf.Clear();
         string sst = entry.first;
-        serialize(snippetbuf, snippet, bestcsd[entry.first], entry.second, snippetMetaData.table_total_block_count());
+        serialize(snippetbuf, snippet.snippet(), bestcsd[entry.first], entry.second, snippetMetaData.table_total_block_count());
         sendSnippetToCSD(snippetbuf.GetString());
     }
 }
 
-void Scheduler::serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd, string pba, int table_total_block_count) {
+void Scheduler::serialize(StringBuffer &snippetbuf, Snippet snippet, string csd, string pba, int table_total_block_count) {
     Writer<StringBuffer> writer(snippetbuf);
 
     writer.StartObject();
@@ -90,7 +69,7 @@ void Scheduler::serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd
             writer.Int(snippet.table_filter(i).operator_());
 
             if(snippet.table_filter(i).operator_() == 8 || snippet.table_filter(i).operator_() == 9 || snippet.table_filter(i).operator_() == 16){
-                //EXTRA가 DB Connector에서 올땐 RV로 오는데 여기서 EXTRA로 바뀌어서 CSD로 넘어감 -> 통일하는게 좋을듯
+                // **EXTRA가 DB Connector에서 올땐 RV로 오는데 여기서 EXTRA로 바뀌어서 CSD로 넘어감 -> 통일하는게 좋을듯
                 writer.Key("EXTRA");
                 writer.StartArray();
 
@@ -250,6 +229,8 @@ void Scheduler::serialize(StringBuffer &snippetbuf, Snippet &snippet, string csd
 }
 
 void Scheduler::sendSnippetToCSD(string snippet_json){
+    KETILOG::DEBUGLOG(LOGTAG, "# send snippet to csd ");
+
     int sock = socket(PF_INET, SOCK_STREAM, 0);
 
     struct sockaddr_in serv_addr;
@@ -276,21 +257,21 @@ void Scheduler::sendSnippetToCSD(string snippet_json){
     close(sock);
 }
 
-map<string,string> Scheduler::getBestCSD(DataFileInfo dataFileInfo){
+map<string,string> Scheduler::getBestCSD(ScanInfo scanInfo){
     map<string,string> bestCSDList;
 
     switch(SCHEDULING_ALGORITHM){
         case(ROUND_ROBBIN):{
-            bestCSDList = RoundRobbin(dataFileInfo);
+            bestCSDList = RoundRobbin(scanInfo);
             break;
         }case(ALGORITHM_AUTO_SELECT):{
-            bestCSDList = AlgorithmAutoSelection(dataFileInfo);
+            bestCSDList = AlgorithmAutoSelection(scanInfo);
             break;
         }case(FILE_DISTRIBUTION):{
-            bestCSDList = FileDistribution(dataFileInfo);
+            bestCSDList = FileDistribution(scanInfo);
             break;
         }case(CSD_METRIC_SCORE):{
-            bestCSDList = CSDMetricScore(dataFileInfo);
+            bestCSDList = CSDMetricScore(scanInfo);
             break;
         }
     }
@@ -298,29 +279,31 @@ map<string,string> Scheduler::getBestCSD(DataFileInfo dataFileInfo){
     return bestCSDList;
 }
 
-map<string,string> Scheduler::CSDMetricScore(DataFileInfo dataFileInfo){
+map<string,string> Scheduler::CSDMetricScore(ScanInfo scanInfo){
     map<string,string> bestcsd;
 
     return bestcsd;
 }
 
-map<string,string> Scheduler::FileDistribution(DataFileInfo dataFileInfo){
+map<string,string> Scheduler::FileDistribution(ScanInfo scanInfo){
     map<string,string> bestcsd;
 
     return bestcsd;
 }
 
-map<string,string> Scheduler::RoundRobbin(DataFileInfo dataFileInfo){
+map<string,string> Scheduler::RoundRobbin(ScanInfo scanInfo){
     map<string,string> bestcsd;
-    
-    for (const auto& entry : dataFileInfo.sst_csd_map()) {
-        bestcsd[entry.first] = entry.second.csd_id(0);
+
+    for(int i=0; i<scanInfo.block_info_size(); i++){
+        string sst_name = scanInfo.block_info(i).sst_name();
+        string selected_csd = scanInfo.block_info(i).csd_list(0);
+        bestcsd[sst_name] = selected_csd;
     }
 
     return bestcsd;
 }
 
-map<string,string> Scheduler::AlgorithmAutoSelection(DataFileInfo dataFileInfo){
+map<string,string> Scheduler::AlgorithmAutoSelection(ScanInfo scanInfo){
     map<string,string> bestcsd;
 
     return bestcsd;

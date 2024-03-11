@@ -27,6 +27,8 @@ class MergingModuleConnector {
 		MergingModuleConnector(std::shared_ptr<Channel> channel) : stub_(MergingModule::NewStub(channel)) {}
 
 		string Aggregation(SnippetRequest snippet_request) {
+			KETILOG::DEBUGLOG(LOGTAG, "# send aggregation snippet");
+
 			Response response;
     		ClientContext context;
 			
@@ -41,6 +43,8 @@ class MergingModuleConnector {
 		}
 
 		QueryStringResult GetQueryResult(int qid, int wid, string tname) {
+			KETILOG::DEBUGLOG(LOGTAG, "# get query result");
+
 			Request request;
 			request.set_query_id(qid);
 			request.set_work_id(wid);
@@ -119,5 +123,5 @@ class MergingModuleConnector {
 
 	private:
 		std::unique_ptr<MergingModule::Stub> stub_;
-		inline const static std::string LOGTAG = "Interface";
+		inline const static std::string LOGTAG = "Interface::Merging Connector";
 };

@@ -40,6 +40,8 @@ public:
     WALHandler(std::shared_ptr<Channel> channel) : stub_(WALManager::NewStub(channel)) {}
 
     void RequestWAL(WALRequest walRequset, int sst_count, string &wal_deleted_key_json, vector<string> &wal_inserted_row_json, CompletionQueue *cq) {
+        KETILOG::DEBUGLOG(LOGTAG, "# request wal");
+
         WALResponse walResponse;
         ClientContext context;
         Status status;
@@ -57,5 +59,5 @@ public:
 
 private:
     std::unique_ptr<WALManager::Stub> stub_;
-    inline const static std::string LOGTAG = "Monitoring::WAL Handler";
+    inline const static std::string LOGTAG = "Monitoring::WAL Manager Connector";
 };

@@ -10,7 +10,6 @@ package StorageEngineInstance;
 service StorageEngineInterface {
   rpc GenericQueryInterface(GenericQuery) returns (Response) {}
   rpc OffloadingQueryInterface (stream SnippetRequest) returns (QueryStringResult) {}
-  rpc SyncMetaDataManager (DBInfo) returns (Response) {}
   rpc PushCSDMetric (CSDMetricList) returns (Response) {}
 }
 
@@ -21,19 +20,16 @@ service MergingModule {
 }
 
 service MonitoringModule {
-  rpc GetDataFileInfo (Request) returns (DataFileInfo) {}
-  rpc GetSnippetMetaData (Request) returns (SnippetMetaData) {}
-  rpc SyncMetaDataManager (DBInfo) returns (Response) {}
+  rpc GetSnippetMetaData (MetaDataRequest) returns (SnippetMetaData) {}
 }
 
 service OffloadingModule {
-  rpc Scheduling (Snippet) returns (Response) {}
+  rpc Scheduling (SnippetRequest) returns (Response) {}
   rpc PushCSDMetric (CSDMetricList) returns (Response) {}
 }
 
 service StorageManager {
-  rpc GetDataFileInfo (SSTList) returns (DataFileInfo) {}
-  rpc RequestPBA (LBA2PBARequest) returns (LBA2PBAResponse) {}
+  rpc RequestPBA (ScanInfo) returns (PBAResponse) {}
   rpc RequestVolumeAllocation (VolumeRequest) returns (AllocatedVolumeInfo) {}
 }
 
@@ -58,6 +54,21 @@ message SnippetRequest {
   }
   SnippetType type = 1;
   Snippet snippet = 2;
+  ScanInfo scan_info = 3;
+}
+
+message ScanInfo {
+  message BlockInfo {
+    string sst_name = 1;
+    repeated string csd_list = 2;
+    repeated Chunk lba_list = 3;
+  }
+  repeated BlockInfo block_info = 1;
+}
+
+message Chunk {
+  int64 offset = 1;
+  int32 length = 2;
 }
 
 message Snippet {
@@ -148,12 +159,11 @@ message Snippet {
   string table_alias = 11;
   repeated string column_alias = 12;
   repeated Projection column_projection = 13;
-  repeated string column_filtering = 14;
-  repeated string group_by = 15;
-  Order order_by = 16;
-  Limit limit = 17;
-  int32 pk_num = 18;
-  repeated Filter having = 19;
+  repeated string group_by = 14;
+  Order order_by = 15;
+  Limit limit = 16;
+  int32 pk_num = 17;
+  repeated Filter having = 18;
 }
 
 message GenericQuery {
@@ -166,8 +176,6 @@ message Request {
   int32 work_id = 2;
   string db_name = 3;
   string table_name = 4;
-  int32 table_index_number = 5;
-  map<string, string> sst_csd_map = 6;
 }
 
 message Response {
@@ -199,26 +207,10 @@ message QueryStringResult {
   int32 filtered_row_count = 3; 
 }
 
-message DBInfo {
-  message DB {
-    message Table {
-      int32 table_index_number = 1;
-      repeated string sst_list = 2;
-    }
-    map<string, Table> table_list = 1;
-  }
-  map<string, DB> db_list = 1;
-}
-
-message DataFileInfo {
-  message CSD {
-    repeated string csd_id = 1;
-  }
-  map<string,CSD> sst_csd_map = 1;
-}
-
-message SSTList {
-  repeated string sst_list = 1;
+message MetaDataRequest {
+  string db_name = 1;
+  string table_name = 2;
+  ScanInfo scan_info = 3;
 }
 
 message SnippetMetaData {
@@ -242,21 +234,11 @@ message CSDMetricList {
   repeated CSDMetric csd_metric_list = 1;
 }
 
-message LBA2PBARequest {
-  int32 table_index_number = 1;
-  map<string,string> sst_csd_map = 2;
-}
-
-message LBA2PBAResponse {
-  message Chunk {
-    int64 offset = 1;
-    int32 length = 2;
+message PBAResponse{
+  message PBA{
+    repeated Chunk chunks = 1;
   }
-  message PBA {
-    string csd_id = 1;
-    repeated Chunk chunks = 2;
-  }
-  map<string,PBA> sst_pba_map = 1;
+  map<string,PBA> pba_chunks = 1;
 }
 
 message WALRequest {
