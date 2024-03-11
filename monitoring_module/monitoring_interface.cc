@@ -3,8 +3,8 @@
 #include "storage_engine_instance.grpc.pb.h"
 
 #include "table_manager.h"
-#include "wal_connector.h"
-#include "lba2pba_manager_connector.h"
+#include "wal_handler.h"
+#include "lba2pba_handler.h"
 // #include "IndexManager.h"
 
 using google::protobuf::FieldMask;
