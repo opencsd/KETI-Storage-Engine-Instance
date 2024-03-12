@@ -5,7 +5,7 @@
 #include "table_manager.h"
 #include "wal_handler.h"
 #include "lba2pba_handler.h"
-// #include "IndexManager.h"
+// #include "index_manager.h"
 
 using google::protobuf::FieldMask;
 using grpc::Server;

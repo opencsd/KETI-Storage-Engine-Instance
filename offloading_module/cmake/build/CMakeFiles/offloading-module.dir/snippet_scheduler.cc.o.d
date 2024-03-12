@@ -488,6 +488,7 @@ CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o: \
  /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/../include/keti_type.h \
  /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/../include/ip_config.h \
  /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/csd_status_manager.h \
+ /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/snippet_manager.h \
  /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/monitoring_module_connector.h \
  /include/grpcpp/grpcpp.h /include/grpc/grpc.h \
  /include/grpc/support/port_platform.h /include/grpc/byte_buffer.h \

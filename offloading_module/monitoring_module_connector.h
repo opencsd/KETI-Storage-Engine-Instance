@@ -15,7 +15,7 @@ using StorageEngineInstance::MonitoringModule;
 using StorageEngineInstance::MetaDataRequest;
 using StorageEngineInstance::SnippetMetaData;
 using StorageEngineInstance::ScanInfo;
-using StorageEngineInstance::ScanInfo_BlockInfo;
+using StorageEngineInstance::ScanInfo_SSTInfo;
 
 class MonitoringModuleConnector {
 	public:

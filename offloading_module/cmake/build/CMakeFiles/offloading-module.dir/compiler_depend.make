@@ -595,6 +595,7 @@ CMakeFiles/offloading-module.dir/offloading_interface.cc.o: /root/workspace/keti
   /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/include/keti_type.h \
   /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/include/ip_config.h \
   /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/csd_status_manager.h \
+  /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/snippet_manager.h \
   /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/monitoring_module_connector.h \
   /include/grpcpp/grpcpp.h \
   /include/grpc/grpc.h \
@@ -1237,6 +1238,7 @@ CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o: /root/workspace/keti/St
   /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/include/keti_type.h \
   /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/include/ip_config.h \
   /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/csd_status_manager.h \
+  /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/snippet_manager.h \
   /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/monitoring_module_connector.h \
   /include/grpcpp/grpcpp.h \
   /include/grpc/grpc.h \
@@ -1347,6 +1349,8 @@ CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o: /root/workspace/keti/St
 /include/grpcpp/grpcpp.h:
 
 /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/monitoring_module_connector.h:
+
+/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/snippet_manager.h:
 
 /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/csd_status_manager.h:
 
