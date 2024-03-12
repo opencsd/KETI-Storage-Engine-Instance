@@ -1,6 +1,6 @@
 #include "snippet_manager.h"
 
-void SnippetManager::scheduling(SnippetRequest snippet, map<string,string> bestcsd){ 
+void SnippetManager::setupSnippet(SnippetRequest snippet, map<string,string> bestcsd){ 
     //get PBA & WAL
     MonitoringModuleConnector mc(grpc::CreateChannel((string)LOCALHOST+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
     SnippetMetaData snippetMetaData = mc.GetSnippetMetaData(snippet.snippet().db_name(), snippet.snippet().table_name(0), snippet.scan_info(), bestcsd);

@@ -37,8 +37,8 @@ using StorageEngineInstance::ScanInfo;
 
 class SnippetManager{
   public: 
-    static void Scheduling(SnippetRequest snippet, map<string,string> bestcsd){
-      return GetInstance().scheduling(snippet, bestcsd);
+    static void SetupSnippet(SnippetRequest snippet, map<string,string> bestcsd){
+      return GetInstance().setupSnippet(snippet, bestcsd);
     }
 
     static SnippetManager& GetInstance(){
@@ -54,7 +54,7 @@ class SnippetManager{
         return *this;
     }
 
-    void scheduling(SnippetRequest snippet, map<string,string> bestcsd);
+    void setupSnippet(SnippetRequest snippet, map<string,string> bestcsd);
     void serialize(StringBuffer &snippetbuf, Snippet snippet, string csd, string pba, int table_total_block_count); // snippet -> json 구성
     void sendSnippetToCSD(string snippet_json); // CSD 전달
   

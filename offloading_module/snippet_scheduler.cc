@@ -8,7 +8,7 @@ void Scheduler::runScheduler(){
         map<string,string> bestcsd = getBestCSD(snippet.scan_info());
 
         //make adding PBA,WAL and sending snippet to csd thread
-        std::thread trd(&SnippetManager::Scheduling, &SnippetManager::GetInstance(), snippet, bestcsd);
+        std::thread trd(&SnippetManager::SetupSnippet, &SnippetManager::GetInstance(), snippet, bestcsd);
         trd.detach();
     }
 }
