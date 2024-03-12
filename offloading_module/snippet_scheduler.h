@@ -26,7 +26,7 @@
 #include "keti_type.h"
 #include "ip_config.h"
 #include "csd_status_manager.h"
-#include "monitoring_module_connector.h"
+#include "snippet_manager.h"
 
 #define BUFF_SIZE 4096
 
@@ -66,14 +66,11 @@ class Scheduler{
     }
 
     void runScheduler();
-    void scheduling(SnippetRequest snippetToSchedule, map<string,string> bestcsd);
     map<string,string> getBestCSD(ScanInfo scanInfo);
     map<string,string> CSDMetricScore(ScanInfo scanInfo); //CSD 병렬 처리 우선
     map<string,string> FileDistribution(ScanInfo scanInfo); //CSD 순서대로
     map<string,string> RoundRobbin(ScanInfo scanInfo); //CSD 병렬 처리 우선
     map<string,string> AlgorithmAutoSelection(ScanInfo scanInfo); //CSD 순서대로
-    void serialize(StringBuffer &snippetbuf, Snippet snippet, string csd, string pba, int table_total_block_count); // snippet -> json 구성
-    void sendSnippetToCSD(string snippet_json); // CSD 전달
   
   public:
     inline const static std::string LOGTAG = "Offloading::Snippet Scheduler";
