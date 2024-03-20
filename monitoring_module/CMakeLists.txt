@@ -66,7 +66,7 @@ if (UNIX)
 endif (UNIX)
 
 # monitoring-module
-add_executable(monitoring-module "monitoring_interface.cc")
+add_executable(monitoring-module "monitoring_interface.cc" "table_manager.cc")
 target_link_libraries(monitoring-module
   ss_grpc_proto
   ${LINKING_LIBRARIES}

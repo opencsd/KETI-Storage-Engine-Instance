@@ -29,7 +29,7 @@ service OffloadingModule {
 }
 
 service StorageManager {
-  rpc RequestPBA (ScanInfo) returns (PBAResponse) {}
+  rpc RequestPBA (LBARequest) returns (PBAResponse) {}
   rpc RequestVolumeAllocation (VolumeRequest) returns (AllocatedVolumeInfo) {}
 }
 
@@ -238,11 +238,22 @@ message CSDMetricList {
   repeated CSDMetric csd_metric_list = 1;
 }
 
+message LBARequest{
+  message SST{
+    repeated string csd_id = 1;
+    repeated Chunk chunks = 2;
+  }
+  map<string,SST> sst_block_info = 1;
+}
+
 message PBAResponse{
-  message PBA{
+  message PBA {
     repeated Chunk chunks = 1;
   }
-  map<string,PBA> pba_chunks = 1;
+  message SST{
+    map<string, PBA> pba_list = 1;
+  }
+  map<string,SST> sst_block_info = 1;
 }
 
 message WALRequest {

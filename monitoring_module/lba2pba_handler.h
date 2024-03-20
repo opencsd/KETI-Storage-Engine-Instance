@@ -42,14 +42,11 @@ class StorageManagerConnector {
 public:
     StorageManagerConnector(std::shared_ptr<Channel> channel) : stub_(StorageManager::NewStub(channel)) {}
 
-    void RequestPBA(ScanInfo lbaRequest, int &total_block_count, map<string,string> &sst_pba_map, CompletionQueue *cq) {
+    void RequestPBA() {
         KETILOG::DEBUGLOG(LOGTAG, "# request pba");
 
         PBAResponse pbaResponse;
         ClientContext context;
-
-        // std::unique_ptr<ClientAsyncResponseReader<LBA2PBAResponse>> rpc(stub_->AsyncRequestPBA(&context,lba2pbaRequest,&test));        
-        // rpc->Finish(&pbaResponse, &status, (void*)1);
         
         Status status = stub_->RequestPBA(&context, lbaRequest, &pbaResponse);
 

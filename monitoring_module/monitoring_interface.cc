@@ -4,7 +4,6 @@
 #include "table_manager.h"
 #include "wal_handler.h"
 #include "lba2pba_handler.h"
-// #include "index_manager.h"
 
 using grpc::Server;
 using grpc::ServerBuilder;
@@ -31,6 +30,8 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
     int total_block_count = 0;
     map<string,string> sst_pba_map;
 
+    TableManager::GetPBA(request->scan_info(), total_block_count, sst_pba_map);
+
     WALRequest walRequest;
     string wal_deleted_key_json;
     vector<string> wal_inserted_row_json;
@@ -39,32 +40,19 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
     walRequest.set_db_name(db_name);
     walRequest.set_table_name(table_name);
 
-    CompletionQueue *cq;
-
-    StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)LBA2PBA_MANAGER_PORT, grpc::InsecureChannelCredentials()));
-    smc.RequestPBA(request->scan_info(), total_block_count, sst_pba_map, cq); //async로 구현할것!
-
-    // WALHandler wh(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)WAL_MANAGER_PORT, grpc::InsecureChannelCredentials()));
-    // wh.RequestWAL(walRequest, sst_count, wal_deleted_key_json, wal_inserted_row_json, cq); //async
-
-    // cout << "request wal" << endl;
-
-    // void* got_tag;
-    // bool ok = false;
-    // GPR_ASSERT(cq->Next(&got_tag, &ok));
-    // GPR_ASSERT(got_tag == (void*)1);
-    // GPR_ASSERT(ok);
+    WALHandler wh(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)WAL_MANAGER_PORT, grpc::InsecureChannelCredentials()));
+    wh.RequestWAL(walRequest, sst_count, wal_deleted_key_json, wal_inserted_row_json); 
 
     int index = 0;
     for(const auto entry : sst_pba_map){
       string sst_name = entry.first;
       string pba = entry.second;
       response->mutable_sst_pba_map()->insert({sst_name, pba});
-      // response->add_wal_inserted_row_json(wal_inserted_row_json[index]);
+      response->add_wal_inserted_row_json(wal_inserted_row_json[index]);
       index++;
     }
     response->set_table_total_block_count(total_block_count);
-    // response->set_wal_deleted_key_json(wal_deleted_key_json);
+    response->set_wal_deleted_key_json(wal_deleted_key_json);
 
     return Status::OK;
   }
