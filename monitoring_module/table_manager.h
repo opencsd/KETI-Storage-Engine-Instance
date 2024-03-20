@@ -17,20 +17,34 @@ using namespace std;
 
 class TableManager { /* modify as singleton class */
 
-/* Methods */
 public:	
+
 	struct CSD {
 		vector<string> csd_list;
 		vector<bool> is_primary;
 	};
 
+	struct Block {
+
+	};
+
+	struct SST {
+		vector<CSD> csd_list;
+		map<string, Block> block_list; // key: block_index_handle, value:lba,pba
+	};
+
+	struct IndexTable {
+		map<string, string> 
+	};
+
 	struct Table {
 		int table_index_number;
-		vector<string> sst_list;
+		map<string, SST> sst; // key: sst name, value: struct SST
+		map<string, IndexTable> index_table; // key: index column name (ex:), value: IndexTable
 	};
 
 	struct DB {
-		map<string, Table> table;
+		map<string, Table> table; // key: table name, value: struct Table
 	};
 
 	static void DumpTableManager(){
@@ -60,6 +74,11 @@ public:
 	static void SetDBInfo(string db_name, DB db){
 		return GetInstance().setDBInfo(db_name, db);
 	}
+	
+	static string makeKey(int qid, int wid){
+		string key = to_string(qid)+"|"+to_string(wid);
+        return key;
+    }
 
 private:
 	TableManager();
@@ -83,8 +102,8 @@ private:
 			for(const auto table : db.second.table){
 				cout << db_numbering << "-" << table_numbering << ". table_name: " << table.first << endl;
 				cout << db_numbering << "-" << table_numbering << ". sst_list: ";
-				for(int i=0; i<table.second.sst_list.size(); i++){
-					cout << table.second.sst_list[i] << ", ";
+				for(const auto sst : table.second.sst){
+					cout << sst.first << ", ";
 				}
 				cout << endl;
 				table_numbering++;
@@ -106,7 +125,7 @@ private:
 
 	vector<string> getSST(string db_name, string table_name){
 		std::lock_guard<std::mutex> lock(mutex_);
-		return GetInstance().TableManager_[db_name].table[table_name].sst_list;
+		return GetInstance().TableManager_[db_name].table[table_name].sst;
 	}
 
 	int getTableIndexNumber(string db_name, string table_name){
@@ -124,11 +143,10 @@ private:
 		TableManager_[db_name] = db;
 	}
 
-/* Variables */
 public:
     inline const static string LOGTAG = "Monitoring::Table Manager";
 
 private:
     mutex mutex_;
-	unordered_map<string,struct DB> TableManager_;
+	unordered_map<string, DB> TableManager_; // key: db name, value: struct DB
 };

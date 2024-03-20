@@ -1,5 +1,4 @@
 #include <grpcpp/grpcpp.h>
-#include <google/protobuf/util/field_mask_util.h>
 #include "storage_engine_instance.grpc.pb.h"
 
 #include "table_manager.h"
@@ -7,7 +6,6 @@
 #include "lba2pba_handler.h"
 // #include "index_manager.h"
 
-using google::protobuf::FieldMask;
 using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::ServerContext;

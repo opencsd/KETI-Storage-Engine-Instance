@@ -83,7 +83,7 @@ clean: CMakeFiles/offloading-module.dir/clean
 CMakeFiles/ss_grpc_proto.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ss_grpc_proto.dir/build.make CMakeFiles/ss_grpc_proto.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ss_grpc_proto.dir/build.make CMakeFiles/ss_grpc_proto.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles --progress-num=4,5,6,7 "Built target ss_grpc_proto"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles --progress-num=5,6,7,8 "Built target ss_grpc_proto"
 .PHONY : CMakeFiles/ss_grpc_proto.dir/all
 
 # Build rule for subdir invocation for target.
@@ -109,12 +109,12 @@ CMakeFiles/ss_grpc_proto.dir/clean:
 CMakeFiles/offloading-module.dir/all: CMakeFiles/ss_grpc_proto.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles --progress-num=1,2,3 "Built target offloading-module"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles --progress-num=1,2,3,4 "Built target offloading-module"
 .PHONY : CMakeFiles/offloading-module.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/offloading-module.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles 8
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/offloading-module.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles 0
 .PHONY : CMakeFiles/offloading-module.dir/rule

@@ -166,6 +166,30 @@ offloading_interface.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/offloading_interface.cc.s
 .PHONY : offloading_interface.cc.s
 
+snippet_manager.o: snippet_manager.cc.o
+.PHONY : snippet_manager.o
+
+# target to build an object file
+snippet_manager.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/snippet_manager.cc.o
+.PHONY : snippet_manager.cc.o
+
+snippet_manager.i: snippet_manager.cc.i
+.PHONY : snippet_manager.i
+
+# target to preprocess a source file
+snippet_manager.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/snippet_manager.cc.i
+.PHONY : snippet_manager.cc.i
+
+snippet_manager.s: snippet_manager.cc.s
+.PHONY : snippet_manager.s
+
+# target to generate assembly for a file
+snippet_manager.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/snippet_manager.cc.s
+.PHONY : snippet_manager.cc.s
+
 snippet_scheduler.o: snippet_scheduler.cc.o
 .PHONY : snippet_scheduler.o
 
@@ -251,6 +275,9 @@ help:
 	@echo "... offloading_interface.o"
 	@echo "... offloading_interface.i"
 	@echo "... offloading_interface.s"
+	@echo "... snippet_manager.o"
+	@echo "... snippet_manager.i"
+	@echo "... snippet_manager.s"
 	@echo "... snippet_scheduler.o"
 	@echo "... snippet_scheduler.i"
 	@echo "... snippet_scheduler.s"
