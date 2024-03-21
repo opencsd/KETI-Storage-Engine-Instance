@@ -1,6 +1,6 @@
 #include "table_manager.h"
 
-//테이블 스키마 정보 임의로 저장 >> 이후 DB File Monitoring을 통해 데이터 저장 -> 업데이트시 DB Connector Instance로 반영
+// 테이블 매니저 정보 임의 저장
 int TableManager::initTableManager(){
 	KETILOG::DEBUGLOG(LOGTAG, "# Init TableManager");
 
@@ -86,16 +86,150 @@ int TableManager::initTableManager(){
 		m_TableManager.insert({tbl->tablename,*tbl});
 	}
 
-    
+    StorageEngineInstance::LBARequest lba_request;
+
+	for(const auto sst : SSTManager_){
+		string sst_name = sst.first;
+		StorageEngineInstance::LBARequest_SST lba_request_sst;
+		StorageEngineInstance::TableBlock table_block;
+
+		for(const auto csd : sst.second.csd_pba_list){
+			string csd_id = csd.first;
+			lba_request_sst.add_csd_list(csd_id);
+		}
+
+		for(const auto block : sst.second.table_lba_list.table_block_list){
+			int table_index_number = block.first;
+			StorageEngineInstance::ChunkList chunk_list;
+			for(int i=0; i<block.second.block_list.size(); i++){
+				StorageEngineInstance::Chunk chunk;
+				chunk.set_block_handle(block.second.block_list[i].first);
+				chunk.set_offset(block.second.block_list[i].second.offset);
+				chunk.set_length(block.second.block_list[i].second.length);
+				chunk_list.add_chunks()->CopyFrom(chunk);
+			}
+			table_block.mutable_table_block_list()->insert({table_index_number, chunk_list});
+		}
+
+		lba_request_sst.mutable_table_lba_list()->CopyFrom(table_block);
+		lba_request.mutable_sst_list()->insert({sst_name, lba_request_sst});
+	}
+
     StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)LBA2PBA_MANAGER_PORT, grpc::InsecureChannelCredentials()));
-    smc.RequestPBA(); //async로 구현할것!
-
-
-	//인덱스테이블저장
+    smc.RequestPBA(lba_request);
 	
 	return 0;
 }
 
-void TableManager::getPBA(ScanInfo scan_info, int &total_block_count, map<string,string> &sst_pba_map){
+void TableManager::updateSSTPBA(string sst_name){
+	std::lock_guard<std::mutex> lock(mutex_);
 
+	StorageEngineInstance::LBARequest lba_request;
+
+	TableManager::SST sst = SSTManager_[sst_name];
+
+	StorageEngineInstance::LBARequest_SST lba_request_sst;
+	StorageEngineInstance::TableBlock table_block;
+
+	for(const auto csd : sst.csd_pba_list){
+		string csd_id = csd.first;
+		lba_request_sst.add_csd_list(csd_id);
+	}
+
+	for(const auto block : sst.table_lba_list.table_block_list){
+		int table_index_number = block.first;
+		StorageEngineInstance::ChunkList chunk_list;
+		for(int i=0; i<block.second.block_list.size(); i++){
+			StorageEngineInstance::Chunk chunk;
+			chunk.set_block_handle(block.second.block_list[i].first);
+			chunk.set_offset(block.second.block_list[i].second.offset);
+			chunk.set_length(block.second.block_list[i].second.length);
+			chunk_list.add_chunks()->CopyFrom(chunk);
+		}
+		table_block.mutable_table_block_list()->insert({table_index_number, chunk_list});
+	}
+
+	lba_request_sst.mutable_table_lba_list()->CopyFrom(table_block);
+	lba_request.mutable_sst_list()->insert({sst_name, lba_request_sst});
+	
+    StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)LBA2PBA_MANAGER_PORT, grpc::InsecureChannelCredentials()));
+    smc.RequestPBA(lba_request);
 }
+
+
+void TableManager::dumpTableManager(){
+	cout << "-------------------------------------" << endl;
+	cout << "# DB Info" << endl;
+	int db_numbering = 1;
+	for(const auto db : GetInstance().TableManager_){
+		cout << db_numbering << ". db_name: " << db.first << endl;
+		int table_numbering = 1;
+		for(const auto table : db.second.table){
+			cout << db_numbering << "-" << table_numbering << ". table_name: " << table.first << endl;
+			cout << db_numbering << "-" << table_numbering << ". sst_list: ";
+			for(const auto sst : table.second.sst_list){
+				cout << sst << ", ";
+			}
+			cout << endl;
+			table_numbering++;
+		}
+		db_numbering++;
+	}
+	cout << "-------------------------------------" << endl;
+}
+
+void TableManager::requestSSTPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
+	vector<string> sst_list = getTableSSTList(metadata_request.db_name(), metadata_request.table_name());
+	int table_index_number = getTableIndexNumber(metadata_request.db_name(), metadata_request.table_name());
+
+	for(int i=0; i<sst_list.size(); i++){
+		
+	}
+}
+
+void TableManager::updateSSTIndexTable(string sst_name){
+	
+}
+
+// string sst_name = entry.first;
+//             PBAResponse_SST csd_pba = entry.second;
+
+//             //json 구성
+//             StringBuffer buffer;
+//             buffer.Clear();
+//             Writer<StringBuffer> writer(buffer);
+//             writer.StartObject();
+//             writer.Key("blockList");
+//             writer.StartArray();
+//             writer.StartObject();
+//             for(int l=0; l<csd_pba.chunks_size(); l++){
+//                 if(l == 0){
+//                     writer.Key("offset");
+//                     writer.Int64(csd_pba.chunks(l).offset());
+//                     writer.Key("length");
+//                     writer.StartArray();
+//                 }else{
+//                     if(csd_pba.chunks(l-1).offset()+csd_pba.chunks(l-1).length() != csd_pba.chunks(l).offset()){
+//                         writer.EndArray();
+//                         writer.EndObject();
+//                         writer.StartObject();
+//                         writer.Key("offset");
+//                         writer.Int64(csd_pba.chunks(l).offset());
+//                         writer.Key("length");
+//                         writer.StartArray();
+//                     }
+//                 }
+//                 writer.Int(csd_pba.chunks(l).length());
+
+//                 if(l == csd_pba.chunks_size() - 1){
+//                     writer.EndArray();
+//                     writer.EndObject();
+//                 }
+//             }
+//             writer.EndArray();
+//             writer.EndObject();
+
+//             total_block_count += csd_pba.chunks_size();
+//             string pba_string = buffer.GetString();
+//             sst_pba_map[sst_name] = pba_string;
+//         }

@@ -66,13 +66,8 @@ message ScanInfo {
     string lv = 1;
     string rv = 2;
   }
-  repeated SSTInfo block_info = 1;
+  repeated SSTInfo sst_info = 1;
   repeated FilterInfo filter_info = 2;
-}
-
-message Chunk {
-  int64 offset = 1;
-  int32 length = 2;
 }
 
 message Snippet {
@@ -238,22 +233,33 @@ message CSDMetricList {
   repeated CSDMetric csd_metric_list = 1;
 }
 
-message LBARequest{
-  message SST{
-    repeated string csd_id = 1;
-    repeated Chunk chunks = 2;
-  }
-  map<string,SST> sst_block_info = 1;
+message Chunk {
+  string block_handle = 1;
+  int64 offset = 2;
+  int32 length = 3;
 }
 
-message PBAResponse{
-  message PBA {
-    repeated Chunk chunks = 1;
+message ChunkList {
+  repeated Chunk chunks = 1;
+}
+
+message TableBlock {
+  map<int32, ChunkList> table_block_list = 1;
+}
+
+message LBARequest {
+  message SST {
+    repeated string csd_list = 1;
+    TableBlock table_lba_list = 2;
   }
-  message SST{
-    map<string, PBA> pba_list = 1;
+  map<string,SST> sst_list = 1;
+}
+
+message PBAResponse {
+  message SST {
+    map<string, TableBlock> table_pba_list = 1;
   }
-  map<string,SST> sst_block_info = 1;
+  map<string,SST> sst_list = 1;
 }
 
 message WALRequest {

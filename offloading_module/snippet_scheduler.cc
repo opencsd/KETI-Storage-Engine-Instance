@@ -50,9 +50,9 @@ map<string,string> Scheduler::FileDistribution(ScanInfo scanInfo){
 map<string,string> Scheduler::RoundRobbin(ScanInfo scanInfo){
     map<string,string> bestcsd;
 
-    for(int i=0; i<scanInfo.block_info_size(); i++){
-        string sst_name = scanInfo.block_info(i).sst_name();
-        string selected_csd = scanInfo.block_info(i).csd_list(0);
+    for(int i=0; i<scanInfo.sst_info_size(); i++){
+        string sst_name = scanInfo.sst_info(i).sst_name();
+        string selected_csd = scanInfo.sst_info(i).csd_list(0);
         bestcsd[sst_name] = selected_csd;
     }
 
