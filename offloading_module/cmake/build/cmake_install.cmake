@@ -1,4 +1,4 @@
-# Install script for directory: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module
+# Install script for directory: /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

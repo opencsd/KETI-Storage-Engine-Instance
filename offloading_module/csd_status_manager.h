@@ -10,7 +10,7 @@ using namespace std;
 class CSDStatusManager { 
 
 public:
-	struct CSDInfo {
+    struct CSDInfo {
         string csd_ip;
         float cpu_usage;
         float memory_usage;

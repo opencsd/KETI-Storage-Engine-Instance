@@ -53,10 +53,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module
+CMAKE_SOURCE_DIR = /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build
+CMAKE_BINARY_DIR = /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/offloading-module.dir/depend.make
@@ -70,43 +70,59 @@ include CMakeFiles/offloading-module.dir/progress.make
 include CMakeFiles/offloading-module.dir/flags.make
 
 CMakeFiles/offloading-module.dir/offloading_interface.cc.o: CMakeFiles/offloading-module.dir/flags.make
-CMakeFiles/offloading-module.dir/offloading_interface.cc.o: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/offloading_interface.cc
+CMakeFiles/offloading-module.dir/offloading_interface.cc.o: /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/offloading_interface.cc
 CMakeFiles/offloading-module.dir/offloading_interface.cc.o: CMakeFiles/offloading-module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/offloading-module.dir/offloading_interface.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/offloading-module.dir/offloading_interface.cc.o -MF CMakeFiles/offloading-module.dir/offloading_interface.cc.o.d -o CMakeFiles/offloading-module.dir/offloading_interface.cc.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/offloading_interface.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/offloading-module.dir/offloading_interface.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/offloading-module.dir/offloading_interface.cc.o -MF CMakeFiles/offloading-module.dir/offloading_interface.cc.o.d -o CMakeFiles/offloading-module.dir/offloading_interface.cc.o -c /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/offloading_interface.cc
 
 CMakeFiles/offloading-module.dir/offloading_interface.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/offloading-module.dir/offloading_interface.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/offloading_interface.cc > CMakeFiles/offloading-module.dir/offloading_interface.cc.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/offloading_interface.cc > CMakeFiles/offloading-module.dir/offloading_interface.cc.i
 
 CMakeFiles/offloading-module.dir/offloading_interface.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/offloading-module.dir/offloading_interface.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/offloading_interface.cc -o CMakeFiles/offloading-module.dir/offloading_interface.cc.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/offloading_interface.cc -o CMakeFiles/offloading-module.dir/offloading_interface.cc.s
 
 CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o: CMakeFiles/offloading-module.dir/flags.make
-CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/snippet_scheduler.cc
+CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o: /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/snippet_scheduler.cc
 CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o: CMakeFiles/offloading-module.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o -MF CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o.d -o CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/snippet_scheduler.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o -MF CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o.d -o CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o -c /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/snippet_scheduler.cc
 
 CMakeFiles/offloading-module.dir/snippet_scheduler.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/offloading-module.dir/snippet_scheduler.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/snippet_scheduler.cc > CMakeFiles/offloading-module.dir/snippet_scheduler.cc.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/snippet_scheduler.cc > CMakeFiles/offloading-module.dir/snippet_scheduler.cc.i
 
 CMakeFiles/offloading-module.dir/snippet_scheduler.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/offloading-module.dir/snippet_scheduler.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/snippet_scheduler.cc -o CMakeFiles/offloading-module.dir/snippet_scheduler.cc.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/snippet_scheduler.cc -o CMakeFiles/offloading-module.dir/snippet_scheduler.cc.s
+
+CMakeFiles/offloading-module.dir/snippet_manager.cc.o: CMakeFiles/offloading-module.dir/flags.make
+CMakeFiles/offloading-module.dir/snippet_manager.cc.o: /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/snippet_manager.cc
+CMakeFiles/offloading-module.dir/snippet_manager.cc.o: CMakeFiles/offloading-module.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/offloading-module.dir/snippet_manager.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/offloading-module.dir/snippet_manager.cc.o -MF CMakeFiles/offloading-module.dir/snippet_manager.cc.o.d -o CMakeFiles/offloading-module.dir/snippet_manager.cc.o -c /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/snippet_manager.cc
+
+CMakeFiles/offloading-module.dir/snippet_manager.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/offloading-module.dir/snippet_manager.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/snippet_manager.cc > CMakeFiles/offloading-module.dir/snippet_manager.cc.i
+
+CMakeFiles/offloading-module.dir/snippet_manager.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/offloading-module.dir/snippet_manager.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/snippet_manager.cc -o CMakeFiles/offloading-module.dir/snippet_manager.cc.s
 
 # Object files for target offloading-module
 offloading__module_OBJECTS = \
 "CMakeFiles/offloading-module.dir/offloading_interface.cc.o" \
-"CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o"
+"CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o" \
+"CMakeFiles/offloading-module.dir/snippet_manager.cc.o"
 
 # External object files for target offloading-module
 offloading__module_EXTERNAL_OBJECTS =
 
 offloading-module: CMakeFiles/offloading-module.dir/offloading_interface.cc.o
 offloading-module: CMakeFiles/offloading-module.dir/snippet_scheduler.cc.o
+offloading-module: CMakeFiles/offloading-module.dir/snippet_manager.cc.o
 offloading-module: CMakeFiles/offloading-module.dir/build.make
 offloading-module: libss_grpc_proto.a
 offloading-module: /lib/libgrpc++_reflection.a
@@ -166,7 +182,7 @@ offloading-module: /lib/libabsl_time_zone.a
 offloading-module: /lib/libssl.a
 offloading-module: /lib/libcrypto.a
 offloading-module: CMakeFiles/offloading-module.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable offloading-module"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable offloading-module"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/offloading-module.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -178,6 +194,6 @@ CMakeFiles/offloading-module.dir/clean:
 .PHONY : CMakeFiles/offloading-module.dir/clean
 
 CMakeFiles/offloading-module.dir/depend:
-	cd /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles/offloading-module.dir/DependInfo.cmake --color=$(COLOR)
+	cd /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles/offloading-module.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/offloading-module.dir/depend
 

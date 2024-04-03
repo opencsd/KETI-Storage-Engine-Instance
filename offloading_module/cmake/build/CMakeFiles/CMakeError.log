@@ -1,25 +1,25 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
-Change Dir: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-QzKoT4
+Change Dir: /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-PZdh4i
 
-Run Build Command(s):/usr/bin/make -f Makefile cmTC_9b484/fast && /usr/bin/make  -f CMakeFiles/cmTC_9b484.dir/build.make CMakeFiles/cmTC_9b484.dir/build
-make[1]: Entering directory '/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-QzKoT4'
-Building C object CMakeFiles/cmTC_9b484.dir/src.c.o
-/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_9b484.dir/src.c.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-QzKoT4/src.c
-Linking C executable cmTC_9b484
-/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9b484.dir/link.txt --verbose=1
-/usr/bin/cc CMakeFiles/cmTC_9b484.dir/src.c.o -o cmTC_9b484 
-CMakeFiles/cmTC_9b484.dir/src.c.o: In function `main':
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_64125/fast && /usr/bin/make  -f CMakeFiles/cmTC_64125.dir/build.make CMakeFiles/cmTC_64125.dir/build
+make[1]: Entering directory '/root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-PZdh4i'
+Building C object CMakeFiles/cmTC_64125.dir/src.c.o
+/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_64125.dir/src.c.o -c /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-PZdh4i/src.c
+Linking C executable cmTC_64125
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_64125.dir/link.txt --verbose=1
+/usr/bin/cc CMakeFiles/cmTC_64125.dir/src.c.o -o cmTC_64125 
+CMakeFiles/cmTC_64125.dir/src.c.o: In function `main':
 src.c:(.text+0x3e): undefined reference to `pthread_create'
 src.c:(.text+0x4a): undefined reference to `pthread_detach'
 src.c:(.text+0x56): undefined reference to `pthread_cancel'
 src.c:(.text+0x67): undefined reference to `pthread_join'
 src.c:(.text+0x7b): undefined reference to `pthread_atfork'
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_9b484.dir/build.make:98: recipe for target 'cmTC_9b484' failed
-make[1]: *** [cmTC_9b484] Error 1
-make[1]: Leaving directory '/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-QzKoT4'
-Makefile:127: recipe for target 'cmTC_9b484/fast' failed
-make: *** [cmTC_9b484/fast] Error 2
+CMakeFiles/cmTC_64125.dir/build.make:98: recipe for target 'cmTC_64125' failed
+make[1]: *** [cmTC_64125] Error 1
+make[1]: Leaving directory '/root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-PZdh4i'
+Makefile:127: recipe for target 'cmTC_64125/fast' failed
+make: *** [cmTC_64125/fast] Error 2
 
 
 Source file was:
@@ -45,22 +45,22 @@ int main(void)
 
 
 Determining if the function pthread_create exists in the pthreads failed with the following output:
-Change Dir: /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-D4uMbz
+Change Dir: /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-eTLmgK
 
-Run Build Command(s):/usr/bin/make -f Makefile cmTC_b7db6/fast && /usr/bin/make  -f CMakeFiles/cmTC_b7db6.dir/build.make CMakeFiles/cmTC_b7db6.dir/build
-make[1]: Entering directory '/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-D4uMbz'
-Building C object CMakeFiles/cmTC_b7db6.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_b7db6.dir/CheckFunctionExists.c.o -c /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-D4uMbz/CheckFunctionExists.c
-Linking C executable cmTC_b7db6
-/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b7db6.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_b7db6.dir/CheckFunctionExists.c.o -o cmTC_b7db6  -lpthreads 
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_19570/fast && /usr/bin/make  -f CMakeFiles/cmTC_19570.dir/build.make CMakeFiles/cmTC_19570.dir/build
+make[1]: Entering directory '/root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-eTLmgK'
+Building C object CMakeFiles/cmTC_19570.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_19570.dir/CheckFunctionExists.c.o -c /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-eTLmgK/CheckFunctionExists.c
+Linking C executable cmTC_19570
+/usr/local/bin/cmake -E cmake_link_script CMakeFiles/cmTC_19570.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_19570.dir/CheckFunctionExists.c.o -o cmTC_19570  -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_b7db6.dir/build.make:98: recipe for target 'cmTC_b7db6' failed
-make[1]: *** [cmTC_b7db6] Error 1
-make[1]: Leaving directory '/root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-D4uMbz'
-Makefile:127: recipe for target 'cmTC_b7db6/fast' failed
-make: *** [cmTC_b7db6/fast] Error 2
+CMakeFiles/cmTC_19570.dir/build.make:98: recipe for target 'cmTC_19570' failed
+make[1]: *** [cmTC_19570] Error 1
+make[1]: Leaving directory '/root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles/CMakeScratch/TryCompile-eTLmgK'
+Makefile:127: recipe for target 'cmTC_19570/fast' failed
+make: *** [cmTC_19570/fast] Error 2
 
 
 
