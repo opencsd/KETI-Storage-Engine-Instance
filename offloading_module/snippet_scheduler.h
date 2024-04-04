@@ -57,7 +57,7 @@ class Scheduler{
     }
   private:
     Scheduler() {
-      SCHEDULING_ALGORITHM = AUTO_SELECTION;
+      SCHEDULING_ALGORITHM = RANDOM;
       std::thread SchedulerThread_(&Scheduler::runScheduler,this);
       // SchedulerThread_.detach();
       SchedulerThread_.join();
@@ -74,7 +74,7 @@ class Scheduler{
     void runScheduler();
     map<string,string> getBestCSD(ScanInfo* scanInfo);
   
-
+    // string DCS_algorithm(map<string, vector<string>); //DSI에 들어가는 알고리즘 용
     map<string,string> DCS_Algorithm(ScanInfo *scanInfo); //Depends on CSD Status
     map<string,string> DSI_Algorithm(ScanInfo *scanInfo); //Depends on Snippet Information 
     map<string,string> Random(ScanInfo *scanInfo);
