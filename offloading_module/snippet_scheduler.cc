@@ -85,9 +85,9 @@ map<string,string> Scheduler::DCS_Algorithm(ScanInfo *scanInfo){
     //임시 CSD 정보 값 
     
     // CSDStatusManager::CSDInfo csd1 = {"ip1",0,0,0,0,15,50};
-    // CSDStatusManager::CSDInfo csd2 = {"ip2",0,0,0,0,30,60};
-    // CSDStatusManager::CSDInfo csd3 = {"ip3",0,0,0,0,45,80};
-    // CSDStatusManager::CSDInfo csd4 = {"ip4",0,0,0,0,60,20};
+    // CSDStatusManager::CSDInfo csd2 = {"ip2",0,0,0,0,15,50};
+    // CSDStatusManager::CSDInfo csd3 = {"ip3",0,0,0,0,15,50};
+    // CSDStatusManager::CSDInfo csd4 = {"ip4",0,0,0,0,15,50};
 
     // CSDStatusManager::SetCSDInfo("1",csd1);
     // CSDStatusManager::SetCSDInfo("2",csd2);
@@ -135,13 +135,14 @@ map<string,string> Scheduler::DCS_Algorithm(ScanInfo *scanInfo){
 
         for(unordered_map<string,struct CSDStatusManager::CSDInfo>::iterator itr=having_sst_csd_info.begin(); itr !=having_sst_csd_info.end(); ++itr){
             score = itr->second.analysis_score / itr->second.working_block_count;
-            cout << itr->first << "score : " << score <<endl;
+            cout << itr->first << "' score : " << score <<endl;
             if(score < bestScore){
                 bestCSD = itr->first;
                 bestScore = score;
             }
         }
         bestcsd[sst_name] = bestCSD; 
+        csd_info[bestCSD].analysis_score += 10; // 가중치를 준다
         cout << endl;
     }
     cout <<endl;
@@ -164,6 +165,40 @@ map<string,string> Scheduler::DCS_Algorithm(ScanInfo *scanInfo){
 
     return bestcsd;
 }
+string Scheduler::DCS_algorithm(vector<string> dcs_candidate_csd){//DSI용
+    CSDStatusManager::CSDInfo csd1 = {"ip1",0,0,0,0,15,50};
+    CSDStatusManager::CSDInfo csd2 = {"ip2",0,0,0,0,30,60};
+    CSDStatusManager::CSDInfo csd3 = {"ip3",0,0,0,0,45,80};
+    CSDStatusManager::CSDInfo csd4 = {"ip4",0,0,0,0,60,20};
+
+    CSDStatusManager::SetCSDInfo("1",csd1);
+    CSDStatusManager::SetCSDInfo("2",csd2);
+    CSDStatusManager::SetCSDInfo("3",csd3);
+    CSDStatusManager::SetCSDInfo("4",csd4);
+    string bestcsd = "";
+    string csd_id;
+    float bestScore = INT_MAX;
+    float score;
+    unordered_map<string,struct CSDStatusManager::CSDInfo> csd_info = CSDStatusManager::GetCSDInfoAll();
+    unordered_map<string,struct CSDStatusManager::CSDInfo> having_sst_csd_info;
+    for(int i=0;i<dcs_candidate_csd.size();i++){
+        csd_id = dcs_candidate_csd.at(i);
+        having_sst_csd_info[csd_id] = csd_info[csd_id];
+        // cout << "csd id : " << csd_id << " " << endl; 
+    }
+    cout << endl;
+    for(unordered_map<string, struct CSDStatusManager::CSDInfo>::iterator itr=having_sst_csd_info.begin(); itr != having_sst_csd_info.end();++itr){
+        score = itr->second.analysis_score / itr->second.working_block_count;
+        cout << itr->first << "'s score : " << score <<endl;
+        if(score < bestScore){
+            bestcsd = itr->first;
+            bestScore = score;
+        }
+    }
+    
+    return bestcsd;
+} 
+
 map<string,string> Scheduler::DSI_Algorithm(ScanInfo *scanInfo){
     map<string,string> bestcsd;
     map<string, vector<int>> csd_sst_count; // csd가 가지고 있는 sst 전체 파일 수, 0번째는 sst수, 1번째는 스케줄링 횟수  
@@ -177,7 +212,7 @@ map<string,string> Scheduler::DSI_Algorithm(ScanInfo *scanInfo){
     int scheduling_count;
     int best_scheduling_count = INT_MAX;
     vector<string> candidate_csd;
-    map<string, vector<string>> dcs_candidate_csd;
+    vector<string> dcs_candidate_csd;
     //1. csd가 가지고 있는 파일 수 저장
     cout << endl << "Depends on SST Information" << endl;
 
@@ -246,9 +281,12 @@ map<string,string> Scheduler::DSI_Algorithm(ScanInfo *scanInfo){
         else{
             cout << "candidates are many, sst file count compare" << endl;
             bestscore = INT_MAX;
+            cout<< "sst file candidates : " ;
+            dcs_candidate_csd.clear();
             for(int j = 0; j < candidate_csd.size(); j++){
                 cout << candidate_csd.at(j) << " ,";
             }
+            //최소 파일 수 찾기
             for(int j = 0; j < candidate_csd.size(); j++){
                 csd_id = candidate_csd.at(j);
                 score = csd_sst_count[csd_id].at(0);
@@ -257,14 +295,29 @@ map<string,string> Scheduler::DSI_Algorithm(ScanInfo *scanInfo){
                     bestscore = score;
                     bestCSD = csd_id;
                 }
-                //중복도도 같으면 DCS
-                // else if(score == bestscore){
-                //     cout << "DCS compare" << endl;
-                //     dcs_candidate_csd[sst_name].push_back(csd_id);
-                //     bestCSD = 
-                // }
             }
-            cout << "bsetCSD is " << bestCSD<<endl;
+            //최소 파일 수 를 가지고 있는 csd 후보자들 찾기
+            for(int j = 0; j < candidate_csd.size(); j++){
+                csd_id = candidate_csd.at(j);
+                score = csd_sst_count[csd_id].at(0);
+                if(bestscore == score){
+                    dcs_candidate_csd.push_back(csd_id);
+                }
+            }
+            cout << "DCS candidates : " ;
+            for(int j=0; j < dcs_candidate_csd.size(); j++){
+                cout << dcs_candidate_csd.at(j) << ", " ;
+            }
+            if(dcs_candidate_csd.size() == 1){
+                cout << "DCS candidates is 1 " ;
+                bestCSD = dcs_candidate_csd.at(0);
+            }
+            else{
+                bestCSD = DCS_algorithm(dcs_candidate_csd);
+
+            }
+
+            cout << endl <<"bsetCSD is " << bestCSD<<endl;
             bestcsd[sst_name] = bestCSD;
             csd_sst_count[bestCSD].at(1)++;
         }
