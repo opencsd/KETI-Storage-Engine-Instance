@@ -178,58 +178,72 @@ void TableManager::dumpTableManager(){
 	cout << "-------------------------------------" << endl;
 }
 
-void TableManager::requestSSTPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
-	vector<string> sst_list = getTableSSTList(metadata_request.db_name(), metadata_request.table_name());
+map<string,string> TableManager::requestSSTPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
 	int table_index_number = getTableIndexNumber(metadata_request.db_name(), metadata_request.table_name());
 
-	for(int i=0; i<sst_list.size(); i++){
+	for(const auto sst_info : metadata_request.scan_info().sst_info()){
+		string sst_name = sst_info.sst_name();
+		string csd_name = sst_info.csd_list(0);
+
+		TableManager::BlockList block_list = getTablePBAFilteredBlocks(metadata_request.scan_info().filter_info(), table_index_number, sst_name, csd_name);
 		
+		StringBuffer buffer;
+		buffer.Clear();
+		Writer<StringBuffer> writer(buffer);
+		writer.StartObject();
+		writer.Key("blockList");
+		writer.StartArray();
+		writer.StartObject();
+		for(int l=0; l<block_list.block_list.size(); l++){
+			if(l == 0){
+				writer.Key("offset");
+				writer.Int64(block_list.block_list[l].second.offset);
+				writer.Key("length");
+				writer.StartArray();
+			}else{
+				if(block_list.block_list[l-1].second.offset+block_list.block_list[l-1].second.length != block_list.block_list[l].second.offset){
+					writer.EndArray();
+					writer.EndObject();
+					writer.StartObject();
+					writer.Key("offset");
+					writer.Int64(block_list.block_list[l].second.offset);
+					writer.Key("length");
+					writer.StartArray();
+				}
+			}
+			writer.Int(block_list.block_list[l].second.length);
+
+			if(l == block_list.block_list.size() - 1){
+				writer.EndArray();
+				writer.EndObject();
+			}
+		}
+		writer.EndArray();
+		writer.EndObject();
+
+		total_block_count += block_list.block_list.size();
+		string pba_string = buffer.GetString();
+		sst_pba_map[sst_name] = pba_string;
 	}
 }
 
 void TableManager::updateSSTIndexTable(string sst_name){
-	
+	// save index table from sst
 }
 
-// string sst_name = entry.first;
-//             PBAResponse_SST csd_pba = entry.second;
+TableManager::BlockList TableManager::getTablePBAFilteredBlocks(StorageEngineInstance::ScanInfo_BlockFilteringInfo filter_info, int table_index_number, string sst_name, string csd_name){
+	std::lock_guard<std::mutex> lock(mutex_);
 
-//             //json 구성
-//             StringBuffer buffer;
-//             buffer.Clear();
-//             Writer<StringBuffer> writer(buffer);
-//             writer.StartObject();
-//             writer.Key("blockList");
-//             writer.StartArray();
-//             writer.StartObject();
-//             for(int l=0; l<csd_pba.chunks_size(); l++){
-//                 if(l == 0){
-//                     writer.Key("offset");
-//                     writer.Int64(csd_pba.chunks(l).offset());
-//                     writer.Key("length");
-//                     writer.StartArray();
-//                 }else{
-//                     if(csd_pba.chunks(l-1).offset()+csd_pba.chunks(l-1).length() != csd_pba.chunks(l).offset()){
-//                         writer.EndArray();
-//                         writer.EndObject();
-//                         writer.StartObject();
-//                         writer.Key("offset");
-//                         writer.Int64(csd_pba.chunks(l).offset());
-//                         writer.Key("length");
-//                         writer.StartArray();
-//                     }
-//                 }
-//                 writer.Int(csd_pba.chunks(l).length());
+	TableManager::BlockList origin_block_list =  GetInstance().SSTManager_[sst_name].csd_pba_list[csd_name].table_block_list[table_index_number];
 
-//                 if(l == csd_pba.chunks_size() - 1){
-//                     writer.EndArray();
-//                     writer.EndObject();
-//                 }
-//             }
-//             writer.EndArray();
-//             writer.EndObject();
+	if(filter_info.IsInitialized()){
+		TableManager::BlockList filtered_block_list;
+		// block filtering here
+		filtered_block_list = origin_block_list; //temp
 
-//             total_block_count += csd_pba.chunks_size();
-//             string pba_string = buffer.GetString();
-//             sst_pba_map[sst_name] = pba_string;
-//         }
+		return filtered_block_list;
+	}else{
+		return origin_block_list;
+	}
+}
+

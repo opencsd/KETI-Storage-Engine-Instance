@@ -127,9 +127,9 @@ extern ResponseDefaultTypeInternal _Response_default_instance_;
 class ScanInfo;
 struct ScanInfoDefaultTypeInternal;
 extern ScanInfoDefaultTypeInternal _ScanInfo_default_instance_;
-class ScanInfo_FilterInfo;
-struct ScanInfo_FilterInfoDefaultTypeInternal;
-extern ScanInfo_FilterInfoDefaultTypeInternal _ScanInfo_FilterInfo_default_instance_;
+class ScanInfo_BlockFilteringInfo;
+struct ScanInfo_BlockFilteringInfoDefaultTypeInternal;
+extern ScanInfo_BlockFilteringInfoDefaultTypeInternal _ScanInfo_BlockFilteringInfo_default_instance_;
 class ScanInfo_SSTInfo;
 struct ScanInfo_SSTInfoDefaultTypeInternal;
 extern ScanInfo_SSTInfoDefaultTypeInternal _ScanInfo_SSTInfo_default_instance_;
@@ -203,7 +203,7 @@ template<> ::StorageEngineInstance::QueryStringResult* Arena::CreateMaybeMessage
 template<> ::StorageEngineInstance::Request* Arena::CreateMaybeMessage<::StorageEngineInstance::Request>(Arena*);
 template<> ::StorageEngineInstance::Response* Arena::CreateMaybeMessage<::StorageEngineInstance::Response>(Arena*);
 template<> ::StorageEngineInstance::ScanInfo* Arena::CreateMaybeMessage<::StorageEngineInstance::ScanInfo>(Arena*);
-template<> ::StorageEngineInstance::ScanInfo_FilterInfo* Arena::CreateMaybeMessage<::StorageEngineInstance::ScanInfo_FilterInfo>(Arena*);
+template<> ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* Arena::CreateMaybeMessage<::StorageEngineInstance::ScanInfo_BlockFilteringInfo>(Arena*);
 template<> ::StorageEngineInstance::ScanInfo_SSTInfo* Arena::CreateMaybeMessage<::StorageEngineInstance::ScanInfo_SSTInfo>(Arena*);
 template<> ::StorageEngineInstance::Snippet* Arena::CreateMaybeMessage<::StorageEngineInstance::Snippet>(Arena*);
 template<> ::StorageEngineInstance::SnippetMetaData* Arena::CreateMaybeMessage<::StorageEngineInstance::SnippetMetaData>(Arena*);
@@ -832,24 +832,24 @@ class ScanInfo_SSTInfo final :
 };
 // -------------------------------------------------------------------
 
-class ScanInfo_FilterInfo final :
-    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:StorageEngineInstance.ScanInfo.FilterInfo) */ {
+class ScanInfo_BlockFilteringInfo final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:StorageEngineInstance.ScanInfo.BlockFilteringInfo) */ {
  public:
-  inline ScanInfo_FilterInfo() : ScanInfo_FilterInfo(nullptr) {}
-  ~ScanInfo_FilterInfo() override;
-  explicit constexpr ScanInfo_FilterInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+  inline ScanInfo_BlockFilteringInfo() : ScanInfo_BlockFilteringInfo(nullptr) {}
+  ~ScanInfo_BlockFilteringInfo() override;
+  explicit constexpr ScanInfo_BlockFilteringInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
 
-  ScanInfo_FilterInfo(const ScanInfo_FilterInfo& from);
-  ScanInfo_FilterInfo(ScanInfo_FilterInfo&& from) noexcept
-    : ScanInfo_FilterInfo() {
+  ScanInfo_BlockFilteringInfo(const ScanInfo_BlockFilteringInfo& from);
+  ScanInfo_BlockFilteringInfo(ScanInfo_BlockFilteringInfo&& from) noexcept
+    : ScanInfo_BlockFilteringInfo() {
     *this = ::std::move(from);
   }
 
-  inline ScanInfo_FilterInfo& operator=(const ScanInfo_FilterInfo& from) {
+  inline ScanInfo_BlockFilteringInfo& operator=(const ScanInfo_BlockFilteringInfo& from) {
     CopyFrom(from);
     return *this;
   }
-  inline ScanInfo_FilterInfo& operator=(ScanInfo_FilterInfo&& from) noexcept {
+  inline ScanInfo_BlockFilteringInfo& operator=(ScanInfo_BlockFilteringInfo&& from) noexcept {
     if (this == &from) return *this;
     if (GetOwningArena() == from.GetOwningArena()
   #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
@@ -872,20 +872,20 @@ class ScanInfo_FilterInfo final :
   static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
     return default_instance().GetMetadata().reflection;
   }
-  static const ScanInfo_FilterInfo& default_instance() {
+  static const ScanInfo_BlockFilteringInfo& default_instance() {
     return *internal_default_instance();
   }
-  static inline const ScanInfo_FilterInfo* internal_default_instance() {
-    return reinterpret_cast<const ScanInfo_FilterInfo*>(
-               &_ScanInfo_FilterInfo_default_instance_);
+  static inline const ScanInfo_BlockFilteringInfo* internal_default_instance() {
+    return reinterpret_cast<const ScanInfo_BlockFilteringInfo*>(
+               &_ScanInfo_BlockFilteringInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
     2;
 
-  friend void swap(ScanInfo_FilterInfo& a, ScanInfo_FilterInfo& b) {
+  friend void swap(ScanInfo_BlockFilteringInfo& a, ScanInfo_BlockFilteringInfo& b) {
     a.Swap(&b);
   }
-  inline void Swap(ScanInfo_FilterInfo* other) {
+  inline void Swap(ScanInfo_BlockFilteringInfo* other) {
     if (other == this) return;
   #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
     if (GetOwningArena() != nullptr &&
@@ -898,7 +898,7 @@ class ScanInfo_FilterInfo final :
       ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
     }
   }
-  void UnsafeArenaSwap(ScanInfo_FilterInfo* other) {
+  void UnsafeArenaSwap(ScanInfo_BlockFilteringInfo* other) {
     if (other == this) return;
     GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
     InternalSwap(other);
@@ -906,13 +906,13 @@ class ScanInfo_FilterInfo final :
 
   // implements Message ----------------------------------------------
 
-  ScanInfo_FilterInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
-    return CreateMaybeMessage<ScanInfo_FilterInfo>(arena);
+  ScanInfo_BlockFilteringInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ScanInfo_BlockFilteringInfo>(arena);
   }
   using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
-  void CopyFrom(const ScanInfo_FilterInfo& from);
+  void CopyFrom(const ScanInfo_BlockFilteringInfo& from);
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
-  void MergeFrom(const ScanInfo_FilterInfo& from);
+  void MergeFrom(const ScanInfo_BlockFilteringInfo& from);
   private:
   static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
   public:
@@ -929,15 +929,15 @@ class ScanInfo_FilterInfo final :
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const final;
-  void InternalSwap(ScanInfo_FilterInfo* other);
+  void InternalSwap(ScanInfo_BlockFilteringInfo* other);
 
   private:
   friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
   static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
-    return "StorageEngineInstance.ScanInfo.FilterInfo";
+    return "StorageEngineInstance.ScanInfo.BlockFilteringInfo";
   }
   protected:
-  explicit ScanInfo_FilterInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+  explicit ScanInfo_BlockFilteringInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                        bool is_message_owned = false);
   private:
   static void ArenaDtor(void* object);
@@ -985,7 +985,7 @@ class ScanInfo_FilterInfo final :
   std::string* _internal_mutable_rv();
   public:
 
-  // @@protoc_insertion_point(class_scope:StorageEngineInstance.ScanInfo.FilterInfo)
+  // @@protoc_insertion_point(class_scope:StorageEngineInstance.ScanInfo.BlockFilteringInfo)
  private:
   class _Internal;
 
@@ -1119,7 +1119,7 @@ class ScanInfo final :
   // nested types ----------------------------------------------------
 
   typedef ScanInfo_SSTInfo SSTInfo;
-  typedef ScanInfo_FilterInfo FilterInfo;
+  typedef ScanInfo_BlockFilteringInfo BlockFilteringInfo;
 
   // accessors -------------------------------------------------------
 
@@ -1145,23 +1145,23 @@ class ScanInfo final :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::ScanInfo_SSTInfo >&
       sst_info() const;
 
-  // repeated .StorageEngineInstance.ScanInfo.FilterInfo filter_info = 2;
-  int filter_info_size() const;
+  // .StorageEngineInstance.ScanInfo.BlockFilteringInfo filter_info = 2;
+  bool has_filter_info() const;
   private:
-  int _internal_filter_info_size() const;
+  bool _internal_has_filter_info() const;
   public:
   void clear_filter_info();
-  ::StorageEngineInstance::ScanInfo_FilterInfo* mutable_filter_info(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::ScanInfo_FilterInfo >*
-      mutable_filter_info();
+  const ::StorageEngineInstance::ScanInfo_BlockFilteringInfo& filter_info() const;
+  PROTOBUF_NODISCARD ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* release_filter_info();
+  ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* mutable_filter_info();
+  void set_allocated_filter_info(::StorageEngineInstance::ScanInfo_BlockFilteringInfo* filter_info);
   private:
-  const ::StorageEngineInstance::ScanInfo_FilterInfo& _internal_filter_info(int index) const;
-  ::StorageEngineInstance::ScanInfo_FilterInfo* _internal_add_filter_info();
+  const ::StorageEngineInstance::ScanInfo_BlockFilteringInfo& _internal_filter_info() const;
+  ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* _internal_mutable_filter_info();
   public:
-  const ::StorageEngineInstance::ScanInfo_FilterInfo& filter_info(int index) const;
-  ::StorageEngineInstance::ScanInfo_FilterInfo* add_filter_info();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::ScanInfo_FilterInfo >&
-      filter_info() const;
+  void unsafe_arena_set_allocated_filter_info(
+      ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* filter_info);
+  ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* unsafe_arena_release_filter_info();
 
   // @@protoc_insertion_point(class_scope:StorageEngineInstance.ScanInfo)
  private:
@@ -1171,7 +1171,7 @@ class ScanInfo final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::ScanInfo_SSTInfo > sst_info_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::ScanInfo_FilterInfo > filter_info_;
+  ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* filter_info_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_storage_5fengine_5finstance_2eproto;
 };
@@ -7400,44 +7400,44 @@ ScanInfo_SSTInfo::mutable_csd_list() {
 
 // -------------------------------------------------------------------
 
-// ScanInfo_FilterInfo
+// ScanInfo_BlockFilteringInfo
 
 // string lv = 1;
-inline void ScanInfo_FilterInfo::clear_lv() {
+inline void ScanInfo_BlockFilteringInfo::clear_lv() {
   lv_.ClearToEmpty();
 }
-inline const std::string& ScanInfo_FilterInfo::lv() const {
-  // @@protoc_insertion_point(field_get:StorageEngineInstance.ScanInfo.FilterInfo.lv)
+inline const std::string& ScanInfo_BlockFilteringInfo::lv() const {
+  // @@protoc_insertion_point(field_get:StorageEngineInstance.ScanInfo.BlockFilteringInfo.lv)
   return _internal_lv();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void ScanInfo_FilterInfo::set_lv(ArgT0&& arg0, ArgT... args) {
+void ScanInfo_BlockFilteringInfo::set_lv(ArgT0&& arg0, ArgT... args) {
  
  lv_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:StorageEngineInstance.ScanInfo.FilterInfo.lv)
+  // @@protoc_insertion_point(field_set:StorageEngineInstance.ScanInfo.BlockFilteringInfo.lv)
 }
-inline std::string* ScanInfo_FilterInfo::mutable_lv() {
+inline std::string* ScanInfo_BlockFilteringInfo::mutable_lv() {
   std::string* _s = _internal_mutable_lv();
-  // @@protoc_insertion_point(field_mutable:StorageEngineInstance.ScanInfo.FilterInfo.lv)
+  // @@protoc_insertion_point(field_mutable:StorageEngineInstance.ScanInfo.BlockFilteringInfo.lv)
   return _s;
 }
-inline const std::string& ScanInfo_FilterInfo::_internal_lv() const {
+inline const std::string& ScanInfo_BlockFilteringInfo::_internal_lv() const {
   return lv_.Get();
 }
-inline void ScanInfo_FilterInfo::_internal_set_lv(const std::string& value) {
+inline void ScanInfo_BlockFilteringInfo::_internal_set_lv(const std::string& value) {
   
   lv_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* ScanInfo_FilterInfo::_internal_mutable_lv() {
+inline std::string* ScanInfo_BlockFilteringInfo::_internal_mutable_lv() {
   
   return lv_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline std::string* ScanInfo_FilterInfo::release_lv() {
-  // @@protoc_insertion_point(field_release:StorageEngineInstance.ScanInfo.FilterInfo.lv)
+inline std::string* ScanInfo_BlockFilteringInfo::release_lv() {
+  // @@protoc_insertion_point(field_release:StorageEngineInstance.ScanInfo.BlockFilteringInfo.lv)
   return lv_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void ScanInfo_FilterInfo::set_allocated_lv(std::string* lv) {
+inline void ScanInfo_BlockFilteringInfo::set_allocated_lv(std::string* lv) {
   if (lv != nullptr) {
     
   } else {
@@ -7450,45 +7450,45 @@ inline void ScanInfo_FilterInfo::set_allocated_lv(std::string* lv) {
     lv_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.ScanInfo.FilterInfo.lv)
+  // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.ScanInfo.BlockFilteringInfo.lv)
 }
 
 // string rv = 2;
-inline void ScanInfo_FilterInfo::clear_rv() {
+inline void ScanInfo_BlockFilteringInfo::clear_rv() {
   rv_.ClearToEmpty();
 }
-inline const std::string& ScanInfo_FilterInfo::rv() const {
-  // @@protoc_insertion_point(field_get:StorageEngineInstance.ScanInfo.FilterInfo.rv)
+inline const std::string& ScanInfo_BlockFilteringInfo::rv() const {
+  // @@protoc_insertion_point(field_get:StorageEngineInstance.ScanInfo.BlockFilteringInfo.rv)
   return _internal_rv();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void ScanInfo_FilterInfo::set_rv(ArgT0&& arg0, ArgT... args) {
+void ScanInfo_BlockFilteringInfo::set_rv(ArgT0&& arg0, ArgT... args) {
  
  rv_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:StorageEngineInstance.ScanInfo.FilterInfo.rv)
+  // @@protoc_insertion_point(field_set:StorageEngineInstance.ScanInfo.BlockFilteringInfo.rv)
 }
-inline std::string* ScanInfo_FilterInfo::mutable_rv() {
+inline std::string* ScanInfo_BlockFilteringInfo::mutable_rv() {
   std::string* _s = _internal_mutable_rv();
-  // @@protoc_insertion_point(field_mutable:StorageEngineInstance.ScanInfo.FilterInfo.rv)
+  // @@protoc_insertion_point(field_mutable:StorageEngineInstance.ScanInfo.BlockFilteringInfo.rv)
   return _s;
 }
-inline const std::string& ScanInfo_FilterInfo::_internal_rv() const {
+inline const std::string& ScanInfo_BlockFilteringInfo::_internal_rv() const {
   return rv_.Get();
 }
-inline void ScanInfo_FilterInfo::_internal_set_rv(const std::string& value) {
+inline void ScanInfo_BlockFilteringInfo::_internal_set_rv(const std::string& value) {
   
   rv_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
 }
-inline std::string* ScanInfo_FilterInfo::_internal_mutable_rv() {
+inline std::string* ScanInfo_BlockFilteringInfo::_internal_mutable_rv() {
   
   return rv_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
 }
-inline std::string* ScanInfo_FilterInfo::release_rv() {
-  // @@protoc_insertion_point(field_release:StorageEngineInstance.ScanInfo.FilterInfo.rv)
+inline std::string* ScanInfo_BlockFilteringInfo::release_rv() {
+  // @@protoc_insertion_point(field_release:StorageEngineInstance.ScanInfo.BlockFilteringInfo.rv)
   return rv_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
 }
-inline void ScanInfo_FilterInfo::set_allocated_rv(std::string* rv) {
+inline void ScanInfo_BlockFilteringInfo::set_allocated_rv(std::string* rv) {
   if (rv != nullptr) {
     
   } else {
@@ -7501,7 +7501,7 @@ inline void ScanInfo_FilterInfo::set_allocated_rv(std::string* rv) {
     rv_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.ScanInfo.FilterInfo.rv)
+  // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.ScanInfo.BlockFilteringInfo.rv)
 }
 
 // -------------------------------------------------------------------
@@ -7548,44 +7548,94 @@ ScanInfo::sst_info() const {
   return sst_info_;
 }
 
-// repeated .StorageEngineInstance.ScanInfo.FilterInfo filter_info = 2;
-inline int ScanInfo::_internal_filter_info_size() const {
-  return filter_info_.size();
+// .StorageEngineInstance.ScanInfo.BlockFilteringInfo filter_info = 2;
+inline bool ScanInfo::_internal_has_filter_info() const {
+  return this != internal_default_instance() && filter_info_ != nullptr;
 }
-inline int ScanInfo::filter_info_size() const {
-  return _internal_filter_info_size();
+inline bool ScanInfo::has_filter_info() const {
+  return _internal_has_filter_info();
 }
 inline void ScanInfo::clear_filter_info() {
-  filter_info_.Clear();
+  if (GetArenaForAllocation() == nullptr && filter_info_ != nullptr) {
+    delete filter_info_;
+  }
+  filter_info_ = nullptr;
 }
-inline ::StorageEngineInstance::ScanInfo_FilterInfo* ScanInfo::mutable_filter_info(int index) {
-  // @@protoc_insertion_point(field_mutable:StorageEngineInstance.ScanInfo.filter_info)
-  return filter_info_.Mutable(index);
+inline const ::StorageEngineInstance::ScanInfo_BlockFilteringInfo& ScanInfo::_internal_filter_info() const {
+  const ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* p = filter_info_;
+  return p != nullptr ? *p : reinterpret_cast<const ::StorageEngineInstance::ScanInfo_BlockFilteringInfo&>(
+      ::StorageEngineInstance::_ScanInfo_BlockFilteringInfo_default_instance_);
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::ScanInfo_FilterInfo >*
-ScanInfo::mutable_filter_info() {
-  // @@protoc_insertion_point(field_mutable_list:StorageEngineInstance.ScanInfo.filter_info)
-  return &filter_info_;
-}
-inline const ::StorageEngineInstance::ScanInfo_FilterInfo& ScanInfo::_internal_filter_info(int index) const {
-  return filter_info_.Get(index);
-}
-inline const ::StorageEngineInstance::ScanInfo_FilterInfo& ScanInfo::filter_info(int index) const {
+inline const ::StorageEngineInstance::ScanInfo_BlockFilteringInfo& ScanInfo::filter_info() const {
   // @@protoc_insertion_point(field_get:StorageEngineInstance.ScanInfo.filter_info)
-  return _internal_filter_info(index);
+  return _internal_filter_info();
 }
-inline ::StorageEngineInstance::ScanInfo_FilterInfo* ScanInfo::_internal_add_filter_info() {
-  return filter_info_.Add();
+inline void ScanInfo::unsafe_arena_set_allocated_filter_info(
+    ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* filter_info) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(filter_info_);
+  }
+  filter_info_ = filter_info;
+  if (filter_info) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:StorageEngineInstance.ScanInfo.filter_info)
 }
-inline ::StorageEngineInstance::ScanInfo_FilterInfo* ScanInfo::add_filter_info() {
-  ::StorageEngineInstance::ScanInfo_FilterInfo* _add = _internal_add_filter_info();
-  // @@protoc_insertion_point(field_add:StorageEngineInstance.ScanInfo.filter_info)
-  return _add;
+inline ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* ScanInfo::release_filter_info() {
+  
+  ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* temp = filter_info_;
+  filter_info_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::StorageEngineInstance::ScanInfo_FilterInfo >&
-ScanInfo::filter_info() const {
-  // @@protoc_insertion_point(field_list:StorageEngineInstance.ScanInfo.filter_info)
+inline ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* ScanInfo::unsafe_arena_release_filter_info() {
+  // @@protoc_insertion_point(field_release:StorageEngineInstance.ScanInfo.filter_info)
+  
+  ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* temp = filter_info_;
+  filter_info_ = nullptr;
+  return temp;
+}
+inline ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* ScanInfo::_internal_mutable_filter_info() {
+  
+  if (filter_info_ == nullptr) {
+    auto* p = CreateMaybeMessage<::StorageEngineInstance::ScanInfo_BlockFilteringInfo>(GetArenaForAllocation());
+    filter_info_ = p;
+  }
   return filter_info_;
+}
+inline ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* ScanInfo::mutable_filter_info() {
+  ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* _msg = _internal_mutable_filter_info();
+  // @@protoc_insertion_point(field_mutable:StorageEngineInstance.ScanInfo.filter_info)
+  return _msg;
+}
+inline void ScanInfo::set_allocated_filter_info(::StorageEngineInstance::ScanInfo_BlockFilteringInfo* filter_info) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete filter_info_;
+  }
+  if (filter_info) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper<::StorageEngineInstance::ScanInfo_BlockFilteringInfo>::GetOwningArena(filter_info);
+    if (message_arena != submessage_arena) {
+      filter_info = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, filter_info, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  filter_info_ = filter_info;
+  // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.ScanInfo.filter_info)
 }
 
 // -------------------------------------------------------------------

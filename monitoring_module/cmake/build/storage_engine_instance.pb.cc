@@ -45,23 +45,23 @@ struct ScanInfo_SSTInfoDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ScanInfo_SSTInfoDefaultTypeInternal _ScanInfo_SSTInfo_default_instance_;
-constexpr ScanInfo_FilterInfo::ScanInfo_FilterInfo(
+constexpr ScanInfo_BlockFilteringInfo::ScanInfo_BlockFilteringInfo(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : lv_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
   , rv_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
-struct ScanInfo_FilterInfoDefaultTypeInternal {
-  constexpr ScanInfo_FilterInfoDefaultTypeInternal()
+struct ScanInfo_BlockFilteringInfoDefaultTypeInternal {
+  constexpr ScanInfo_BlockFilteringInfoDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~ScanInfo_FilterInfoDefaultTypeInternal() {}
+  ~ScanInfo_BlockFilteringInfoDefaultTypeInternal() {}
   union {
-    ScanInfo_FilterInfo _instance;
+    ScanInfo_BlockFilteringInfo _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ScanInfo_FilterInfoDefaultTypeInternal _ScanInfo_FilterInfo_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ScanInfo_BlockFilteringInfoDefaultTypeInternal _ScanInfo_BlockFilteringInfo_default_instance_;
 constexpr ScanInfo::ScanInfo(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : block_info_()
-  , filter_info_(){}
+  : sst_info_()
+  , filter_info_(nullptr){}
 struct ScanInfoDefaultTypeInternal {
   constexpr ScanInfoDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -358,7 +358,8 @@ struct CSDMetricListDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT CSDMetricListDefaultTypeInternal _CSDMetricList_default_instance_;
 constexpr Chunk::Chunk(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : offset_(int64_t{0})
+  : block_handle_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , offset_(int64_t{0})
   , length_(0){}
 struct ChunkDefaultTypeInternal {
   constexpr ChunkDefaultTypeInternal()
@@ -381,21 +382,33 @@ struct ChunkListDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ChunkListDefaultTypeInternal _ChunkList_default_instance_;
-constexpr LBARequest_SST_TableLbaListEntry_DoNotUse::LBARequest_SST_TableLbaListEntry_DoNotUse(
+constexpr TableBlock_TableBlockListEntry_DoNotUse::TableBlock_TableBlockListEntry_DoNotUse(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
-struct LBARequest_SST_TableLbaListEntry_DoNotUseDefaultTypeInternal {
-  constexpr LBARequest_SST_TableLbaListEntry_DoNotUseDefaultTypeInternal()
+struct TableBlock_TableBlockListEntry_DoNotUseDefaultTypeInternal {
+  constexpr TableBlock_TableBlockListEntry_DoNotUseDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~LBARequest_SST_TableLbaListEntry_DoNotUseDefaultTypeInternal() {}
+  ~TableBlock_TableBlockListEntry_DoNotUseDefaultTypeInternal() {}
   union {
-    LBARequest_SST_TableLbaListEntry_DoNotUse _instance;
+    TableBlock_TableBlockListEntry_DoNotUse _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT LBARequest_SST_TableLbaListEntry_DoNotUseDefaultTypeInternal _LBARequest_SST_TableLbaListEntry_DoNotUse_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT TableBlock_TableBlockListEntry_DoNotUseDefaultTypeInternal _TableBlock_TableBlockListEntry_DoNotUse_default_instance_;
+constexpr TableBlock::TableBlock(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : table_block_list_(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}){}
+struct TableBlockDefaultTypeInternal {
+  constexpr TableBlockDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~TableBlockDefaultTypeInternal() {}
+  union {
+    TableBlock _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT TableBlockDefaultTypeInternal _TableBlock_default_instance_;
 constexpr LBARequest_SST::LBARequest_SST(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
   : csd_list_()
-  , table_lba_list_(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}){}
+  , table_lba_list_(nullptr){}
 struct LBARequest_SSTDefaultTypeInternal {
   constexpr LBARequest_SSTDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -405,20 +418,20 @@ struct LBARequest_SSTDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT LBARequest_SSTDefaultTypeInternal _LBARequest_SST_default_instance_;
-constexpr LBARequest_SstBlockInfoEntry_DoNotUse::LBARequest_SstBlockInfoEntry_DoNotUse(
+constexpr LBARequest_SstListEntry_DoNotUse::LBARequest_SstListEntry_DoNotUse(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
-struct LBARequest_SstBlockInfoEntry_DoNotUseDefaultTypeInternal {
-  constexpr LBARequest_SstBlockInfoEntry_DoNotUseDefaultTypeInternal()
+struct LBARequest_SstListEntry_DoNotUseDefaultTypeInternal {
+  constexpr LBARequest_SstListEntry_DoNotUseDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~LBARequest_SstBlockInfoEntry_DoNotUseDefaultTypeInternal() {}
+  ~LBARequest_SstListEntry_DoNotUseDefaultTypeInternal() {}
   union {
-    LBARequest_SstBlockInfoEntry_DoNotUse _instance;
+    LBARequest_SstListEntry_DoNotUse _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT LBARequest_SstBlockInfoEntry_DoNotUseDefaultTypeInternal _LBARequest_SstBlockInfoEntry_DoNotUse_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT LBARequest_SstListEntry_DoNotUseDefaultTypeInternal _LBARequest_SstListEntry_DoNotUse_default_instance_;
 constexpr LBARequest::LBARequest(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : sst_block_info_(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}){}
+  : sst_list_(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}){}
 struct LBARequestDefaultTypeInternal {
   constexpr LBARequestDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -428,43 +441,20 @@ struct LBARequestDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT LBARequestDefaultTypeInternal _LBARequest_default_instance_;
-constexpr PBAResponse_CSD_TablePbaListEntry_DoNotUse::PBAResponse_CSD_TablePbaListEntry_DoNotUse(
+constexpr PBAResponse_SST_TablePbaListEntry_DoNotUse::PBAResponse_SST_TablePbaListEntry_DoNotUse(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
-struct PBAResponse_CSD_TablePbaListEntry_DoNotUseDefaultTypeInternal {
-  constexpr PBAResponse_CSD_TablePbaListEntry_DoNotUseDefaultTypeInternal()
+struct PBAResponse_SST_TablePbaListEntry_DoNotUseDefaultTypeInternal {
+  constexpr PBAResponse_SST_TablePbaListEntry_DoNotUseDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~PBAResponse_CSD_TablePbaListEntry_DoNotUseDefaultTypeInternal() {}
+  ~PBAResponse_SST_TablePbaListEntry_DoNotUseDefaultTypeInternal() {}
   union {
-    PBAResponse_CSD_TablePbaListEntry_DoNotUse _instance;
+    PBAResponse_SST_TablePbaListEntry_DoNotUse _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PBAResponse_CSD_TablePbaListEntry_DoNotUseDefaultTypeInternal _PBAResponse_CSD_TablePbaListEntry_DoNotUse_default_instance_;
-constexpr PBAResponse_CSD::PBAResponse_CSD(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : table_pba_list_(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}){}
-struct PBAResponse_CSDDefaultTypeInternal {
-  constexpr PBAResponse_CSDDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~PBAResponse_CSDDefaultTypeInternal() {}
-  union {
-    PBAResponse_CSD _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PBAResponse_CSDDefaultTypeInternal _PBAResponse_CSD_default_instance_;
-constexpr PBAResponse_SST_CsdPbaListEntry_DoNotUse::PBAResponse_SST_CsdPbaListEntry_DoNotUse(
-  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
-struct PBAResponse_SST_CsdPbaListEntry_DoNotUseDefaultTypeInternal {
-  constexpr PBAResponse_SST_CsdPbaListEntry_DoNotUseDefaultTypeInternal()
-    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~PBAResponse_SST_CsdPbaListEntry_DoNotUseDefaultTypeInternal() {}
-  union {
-    PBAResponse_SST_CsdPbaListEntry_DoNotUse _instance;
-  };
-};
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PBAResponse_SST_CsdPbaListEntry_DoNotUseDefaultTypeInternal _PBAResponse_SST_CsdPbaListEntry_DoNotUse_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PBAResponse_SST_TablePbaListEntry_DoNotUseDefaultTypeInternal _PBAResponse_SST_TablePbaListEntry_DoNotUse_default_instance_;
 constexpr PBAResponse_SST::PBAResponse_SST(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : csd_pba_list_(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}){}
+  : table_pba_list_(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}){}
 struct PBAResponse_SSTDefaultTypeInternal {
   constexpr PBAResponse_SSTDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -474,20 +464,20 @@ struct PBAResponse_SSTDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PBAResponse_SSTDefaultTypeInternal _PBAResponse_SST_default_instance_;
-constexpr PBAResponse_SstBlockInfoEntry_DoNotUse::PBAResponse_SstBlockInfoEntry_DoNotUse(
+constexpr PBAResponse_SstListEntry_DoNotUse::PBAResponse_SstListEntry_DoNotUse(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
-struct PBAResponse_SstBlockInfoEntry_DoNotUseDefaultTypeInternal {
-  constexpr PBAResponse_SstBlockInfoEntry_DoNotUseDefaultTypeInternal()
+struct PBAResponse_SstListEntry_DoNotUseDefaultTypeInternal {
+  constexpr PBAResponse_SstListEntry_DoNotUseDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
-  ~PBAResponse_SstBlockInfoEntry_DoNotUseDefaultTypeInternal() {}
+  ~PBAResponse_SstListEntry_DoNotUseDefaultTypeInternal() {}
   union {
-    PBAResponse_SstBlockInfoEntry_DoNotUse _instance;
+    PBAResponse_SstListEntry_DoNotUse _instance;
   };
 };
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PBAResponse_SstBlockInfoEntry_DoNotUseDefaultTypeInternal _PBAResponse_SstBlockInfoEntry_DoNotUse_default_instance_;
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PBAResponse_SstListEntry_DoNotUseDefaultTypeInternal _PBAResponse_SstListEntry_DoNotUse_default_instance_;
 constexpr PBAResponse::PBAResponse(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : sst_block_info_(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}){}
+  : sst_list_(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}){}
 struct PBAResponseDefaultTypeInternal {
   constexpr PBAResponseDefaultTypeInternal()
     : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
@@ -575,7 +565,7 @@ struct AllocatedVolumeInfoDefaultTypeInternal {
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AllocatedVolumeInfoDefaultTypeInternal _AllocatedVolumeInfo_default_instance_;
 }  // namespace StorageEngineInstance
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_storage_5fengine_5finstance_2eproto[41];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_storage_5fengine_5finstance_2eproto[40];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_storage_5fengine_5finstance_2eproto[6];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_storage_5fengine_5finstance_2eproto = nullptr;
 
@@ -598,20 +588,20 @@ const uint32_t TableStruct_storage_5fengine_5finstance_2eproto::offsets[] PROTOB
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo_SSTInfo, sst_name_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo_SSTInfo, csd_list_),
   ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo_FilterInfo, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo_BlockFilteringInfo, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo_FilterInfo, lv_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo_FilterInfo, rv_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo_BlockFilteringInfo, lv_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo_BlockFilteringInfo, rv_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo, block_info_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo, sst_info_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo, filter_info_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::Snippet_Filter_FilterValue, _internal_metadata_),
@@ -807,6 +797,7 @@ const uint32_t TableStruct_storage_5fengine_5finstance_2eproto::offsets[] PROTOB
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::Chunk, block_handle_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::Chunk, offset_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::Chunk, length_),
   ~0u,  // no _has_bits_
@@ -816,16 +807,23 @@ const uint32_t TableStruct_storage_5fengine_5finstance_2eproto::offsets[] PROTOB
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ChunkList, chunks_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SST_TableLbaListEntry_DoNotUse, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SST_TableLbaListEntry_DoNotUse, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TableBlock_TableBlockListEntry_DoNotUse, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TableBlock_TableBlockListEntry_DoNotUse, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SST_TableLbaListEntry_DoNotUse, key_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SST_TableLbaListEntry_DoNotUse, value_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TableBlock_TableBlockListEntry_DoNotUse, key_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TableBlock_TableBlockListEntry_DoNotUse, value_),
   0,
   1,
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TableBlock, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TableBlock, table_block_list_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SST, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -834,14 +832,14 @@ const uint32_t TableStruct_storage_5fengine_5finstance_2eproto::offsets[] PROTOB
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SST, csd_list_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SST, table_lba_list_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SstBlockInfoEntry_DoNotUse, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SstBlockInfoEntry_DoNotUse, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SstListEntry_DoNotUse, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SstListEntry_DoNotUse, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SstBlockInfoEntry_DoNotUse, key_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SstBlockInfoEntry_DoNotUse, value_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SstListEntry_DoNotUse, key_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest_SstListEntry_DoNotUse, value_),
   0,
   1,
   ~0u,  // no _has_bits_
@@ -850,32 +848,15 @@ const uint32_t TableStruct_storage_5fengine_5finstance_2eproto::offsets[] PROTOB
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest, sst_block_info_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_CSD_TablePbaListEntry_DoNotUse, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_CSD_TablePbaListEntry_DoNotUse, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::LBARequest, sst_list_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SST_TablePbaListEntry_DoNotUse, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SST_TablePbaListEntry_DoNotUse, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_CSD_TablePbaListEntry_DoNotUse, key_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_CSD_TablePbaListEntry_DoNotUse, value_),
-  0,
-  1,
-  ~0u,  // no _has_bits_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_CSD, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_CSD, table_pba_list_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SST_CsdPbaListEntry_DoNotUse, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SST_CsdPbaListEntry_DoNotUse, _internal_metadata_),
-  ~0u,  // no _extensions_
-  ~0u,  // no _oneof_case_
-  ~0u,  // no _weak_field_map_
-  ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SST_CsdPbaListEntry_DoNotUse, key_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SST_CsdPbaListEntry_DoNotUse, value_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SST_TablePbaListEntry_DoNotUse, key_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SST_TablePbaListEntry_DoNotUse, value_),
   0,
   1,
   ~0u,  // no _has_bits_
@@ -884,15 +865,15 @@ const uint32_t TableStruct_storage_5fengine_5finstance_2eproto::offsets[] PROTOB
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SST, csd_pba_list_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SstBlockInfoEntry_DoNotUse, _has_bits_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SstBlockInfoEntry_DoNotUse, _internal_metadata_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SST, table_pba_list_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SstListEntry_DoNotUse, _has_bits_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SstListEntry_DoNotUse, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SstBlockInfoEntry_DoNotUse, key_),
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SstBlockInfoEntry_DoNotUse, value_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SstListEntry_DoNotUse, key_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse_SstListEntry_DoNotUse, value_),
   0,
   1,
   ~0u,  // no _has_bits_
@@ -901,7 +882,7 @@ const uint32_t TableStruct_storage_5fengine_5finstance_2eproto::offsets[] PROTOB
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse, sst_block_info_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::PBAResponse, sst_list_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::WALRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -957,7 +938,7 @@ const uint32_t TableStruct_storage_5fengine_5finstance_2eproto::offsets[] PROTOB
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::StorageEngineInstance::SnippetRequest)},
   { 9, -1, -1, sizeof(::StorageEngineInstance::ScanInfo_SSTInfo)},
-  { 17, -1, -1, sizeof(::StorageEngineInstance::ScanInfo_FilterInfo)},
+  { 17, -1, -1, sizeof(::StorageEngineInstance::ScanInfo_BlockFilteringInfo)},
   { 25, -1, -1, sizeof(::StorageEngineInstance::ScanInfo)},
   { 33, -1, -1, sizeof(::StorageEngineInstance::Snippet_Filter_FilterValue)},
   { 41, -1, -1, sizeof(::StorageEngineInstance::Snippet_Filter)},
@@ -979,29 +960,28 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 200, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList_CSDMetric)},
   { 214, -1, -1, sizeof(::StorageEngineInstance::CSDMetricList)},
   { 221, -1, -1, sizeof(::StorageEngineInstance::Chunk)},
-  { 229, -1, -1, sizeof(::StorageEngineInstance::ChunkList)},
-  { 236, 244, -1, sizeof(::StorageEngineInstance::LBARequest_SST_TableLbaListEntry_DoNotUse)},
-  { 246, -1, -1, sizeof(::StorageEngineInstance::LBARequest_SST)},
-  { 254, 262, -1, sizeof(::StorageEngineInstance::LBARequest_SstBlockInfoEntry_DoNotUse)},
-  { 264, -1, -1, sizeof(::StorageEngineInstance::LBARequest)},
-  { 271, 279, -1, sizeof(::StorageEngineInstance::PBAResponse_CSD_TablePbaListEntry_DoNotUse)},
-  { 281, -1, -1, sizeof(::StorageEngineInstance::PBAResponse_CSD)},
-  { 288, 296, -1, sizeof(::StorageEngineInstance::PBAResponse_SST_CsdPbaListEntry_DoNotUse)},
-  { 298, -1, -1, sizeof(::StorageEngineInstance::PBAResponse_SST)},
-  { 305, 313, -1, sizeof(::StorageEngineInstance::PBAResponse_SstBlockInfoEntry_DoNotUse)},
-  { 315, -1, -1, sizeof(::StorageEngineInstance::PBAResponse)},
-  { 322, -1, -1, sizeof(::StorageEngineInstance::WALRequest)},
-  { 330, -1, -1, sizeof(::StorageEngineInstance::WALResponse)},
-  { 339, -1, -1, sizeof(::StorageEngineInstance::VolumeRequest)},
-  { 347, -1, -1, sizeof(::StorageEngineInstance::AllocatedVolumeInfo_Allocation)},
-  { 356, 364, -1, sizeof(::StorageEngineInstance::AllocatedVolumeInfo_CsdAllocationMapEntry_DoNotUse)},
-  { 366, -1, -1, sizeof(::StorageEngineInstance::AllocatedVolumeInfo)},
+  { 230, -1, -1, sizeof(::StorageEngineInstance::ChunkList)},
+  { 237, 245, -1, sizeof(::StorageEngineInstance::TableBlock_TableBlockListEntry_DoNotUse)},
+  { 247, -1, -1, sizeof(::StorageEngineInstance::TableBlock)},
+  { 254, -1, -1, sizeof(::StorageEngineInstance::LBARequest_SST)},
+  { 262, 270, -1, sizeof(::StorageEngineInstance::LBARequest_SstListEntry_DoNotUse)},
+  { 272, -1, -1, sizeof(::StorageEngineInstance::LBARequest)},
+  { 279, 287, -1, sizeof(::StorageEngineInstance::PBAResponse_SST_TablePbaListEntry_DoNotUse)},
+  { 289, -1, -1, sizeof(::StorageEngineInstance::PBAResponse_SST)},
+  { 296, 304, -1, sizeof(::StorageEngineInstance::PBAResponse_SstListEntry_DoNotUse)},
+  { 306, -1, -1, sizeof(::StorageEngineInstance::PBAResponse)},
+  { 313, -1, -1, sizeof(::StorageEngineInstance::WALRequest)},
+  { 321, -1, -1, sizeof(::StorageEngineInstance::WALResponse)},
+  { 330, -1, -1, sizeof(::StorageEngineInstance::VolumeRequest)},
+  { 338, -1, -1, sizeof(::StorageEngineInstance::AllocatedVolumeInfo_Allocation)},
+  { 347, 355, -1, sizeof(::StorageEngineInstance::AllocatedVolumeInfo_CsdAllocationMapEntry_DoNotUse)},
+  { 357, -1, -1, sizeof(::StorageEngineInstance::AllocatedVolumeInfo)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_SnippetRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_ScanInfo_SSTInfo_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_ScanInfo_FilterInfo_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_ScanInfo_BlockFilteringInfo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_ScanInfo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_Snippet_Filter_FilterValue_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_Snippet_Filter_default_instance_),
@@ -1024,15 +1004,14 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_CSDMetricList_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_Chunk_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_ChunkList_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_LBARequest_SST_TableLbaListEntry_DoNotUse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_TableBlock_TableBlockListEntry_DoNotUse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_TableBlock_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_LBARequest_SST_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_LBARequest_SstBlockInfoEntry_DoNotUse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_LBARequest_SstListEntry_DoNotUse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_LBARequest_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_PBAResponse_CSD_TablePbaListEntry_DoNotUse_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_PBAResponse_CSD_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_PBAResponse_SST_CsdPbaListEntry_DoNotUse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_PBAResponse_SST_TablePbaListEntry_DoNotUse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_PBAResponse_SST_default_instance_),
-  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_PBAResponse_SstBlockInfoEntry_DoNotUse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_PBAResponse_SstListEntry_DoNotUse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_PBAResponse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_WALRequest_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_WALResponse_default_instance_),
@@ -1057,169 +1036,167 @@ const char descriptor_table_protodef_storage_5fengine_5finstance_2eproto[] PROTO
   "\rUNION_SNIPPET\020\007\022\016\n\nIN_SNIPPET\020\010\022!\n\035DEPE"
   "NDENCY_INNER_JOIN_SNIPPET\020\t\022\034\n\030DEPENDENC"
   "Y_EXIST_SNIPPET\020\n\022\031\n\025DEPENDENCY_IN_SNIPP"
-  "ET\020\013\"\335\001\n\010ScanInfo\022;\n\nblock_info\030\001 \003(\0132\'."
-  "StorageEngineInstance.ScanInfo.SSTInfo\022\?"
-  "\n\013filter_info\030\002 \003(\0132*.StorageEngineInsta"
-  "nce.ScanInfo.FilterInfo\032-\n\007SSTInfo\022\020\n\010ss"
-  "t_name\030\001 \001(\t\022\020\n\010csd_list\030\002 \003(\t\032$\n\nFilter"
-  "Info\022\n\n\002lv\030\001 \001(\t\022\n\n\002rv\030\002 \001(\t\"\215\017\n\007Snippet"
-  "\022\017\n\007db_name\030\001 \001(\t\022\020\n\010query_ID\030\002 \001(\005\022\017\n\007w"
-  "ork_ID\030\003 \001(\005\022\022\n\ntable_name\030\004 \003(\t\022\021\n\ttabl"
-  "e_col\030\005 \003(\t\022;\n\014table_filter\030\006 \003(\0132%.Stor"
-  "ageEngineInstance.Snippet.Filter\022=\n\ndepe"
-  "ndency\030\007 \001(\0132).StorageEngineInstance.Sni"
-  "ppet.Dependency\022\024\n\014table_offset\030\010 \003(\005\022\024\n"
-  "\014table_offlen\030\t \003(\005\022\026\n\016table_datatype\030\n "
-  "\003(\005\022\023\n\013table_alias\030\013 \001(\t\022\024\n\014column_alias"
-  "\030\014 \003(\t\022D\n\021column_projection\030\r \003(\0132).Stor"
-  "ageEngineInstance.Snippet.Projection\022\020\n\010"
-  "group_by\030\016 \003(\t\0226\n\010order_by\030\017 \001(\0132$.Stora"
-  "geEngineInstance.Snippet.Order\0223\n\005limit\030"
-  "\020 \001(\0132$.StorageEngineInstance.Snippet.Li"
-  "mit\022\016\n\006pk_num\030\021 \001(\005\0225\n\006having\030\022 \003(\0132%.St"
-  "orageEngineInstance.Snippet.Filter\032\241\004\n\006F"
-  "ilter\022=\n\002LV\030\001 \001(\01321.StorageEngineInstanc"
-  "e.Snippet.Filter.FilterValue\022@\n\010Operator"
-  "\030\002 \001(\0162..StorageEngineInstance.Snippet.F"
-  "ilter.OperType\022=\n\002RV\030\003 \001(\01321.StorageEngi"
-  "neInstance.Snippet.Filter.FilterValue\032T\n"
-  "\013FilterValue\0226\n\004type\030\001 \003(\0162(.StorageEngi"
-  "neInstance.Snippet.ValueType\022\r\n\005value\030\002 "
-  "\003(\t\"\200\002\n\010OperType\022\020\n\014KETI_DEFAULT\020\000\022\013\n\007KE"
-  "TI_GE\020\001\022\013\n\007KETI_LE\020\002\022\013\n\007KETI_GT\020\003\022\013\n\007KET"
-  "I_LT\020\004\022\013\n\007KETI_ET\020\005\022\013\n\007KETI_NE\020\006\022\r\n\tKETI"
-  "_LIKE\020\007\022\020\n\014KETI_BETWEEN\020\010\022\013\n\007KETI_IN\020\t\022\013"
-  "\n\007KETI_IS\020\n\022\016\n\nKETI_ISNOT\020\013\022\014\n\010KETI_NOT\020"
-  "\014\022\014\n\010KETI_AND\020\r\022\013\n\007KETI_OR\020\016\022\014\n\010KETI_ALL"
-  "\020\017\022\022\n\016KETI_SUBSTRING\020\020\032\234\002\n\nProjection\022I\n"
-  "\013select_type\030\001 \001(\01624.StorageEngineInstan"
-  "ce.Snippet.Projection.SelectType\022\r\n\005valu"
-  "e\030\002 \003(\t\022<\n\nvalue_type\030\003 \003(\0162(.StorageEng"
-  "ineInstance.Snippet.ValueType\"v\n\nSelectT"
-  "ype\022\016\n\nCOLUMNNAME\020\000\022\007\n\003SUM\020\001\022\007\n\003AVG\020\002\022\t\n"
-  "\005COUNT\020\003\022\r\n\tCOUNTSTAR\020\004\022\021\n\rCOUNTDISTINCT"
-  "\020\005\022\007\n\003TOP\020\006\022\007\n\003MIN\020\007\022\007\n\003MAX\020\010\032\211\001\n\005Order\022"
-  "F\n\tascending\030\001 \003(\01623.StorageEngineInstan"
-  "ce.Snippet.Order.OrderDirection\022\023\n\013colum"
-  "n_name\030\002 \003(\t\"#\n\016OrderDirection\022\007\n\003ASC\020\000\022"
-  "\010\n\004DESC\020\001\032\230\001\n\nDependency\022H\n\025dependency_p"
-  "rojection\030\001 \003(\0132).StorageEngineInstance."
-  "Snippet.Projection\022@\n\021dependency_filter\030"
-  "\002 \003(\0132%.StorageEngineInstance.Snippet.Fi"
-  "lter\032\'\n\005Limit\022\016\n\006offset\030\001 \001(\005\022\016\n\006length\030"
-  "\002 \001(\005\"\234\001\n\tValueType\022\010\n\004INT8\020\000\022\t\n\005INT16\020\001"
-  "\022\t\n\005INT32\020\002\022\t\n\005INT64\020\003\022\013\n\007FLOAT32\020\004\022\013\n\007F"
-  "LOAT64\020\005\022\013\n\007NUMERIC\020\006\022\010\n\004DATE\020\007\022\r\n\tTIMES"
-  "TAMP\020\010\022\n\n\006STRING\020\t\022\n\n\006COLUMN\020\n\022\014\n\010OPERAT"
-  "OR\020\013\".\n\014GenericQuery\022\017\n\007db_name\030\001 \001(\t\022\r\n"
-  "\005query\030\002 \001(\t\"Q\n\007Request\022\020\n\010query_id\030\001 \001("
-  "\005\022\017\n\007work_id\030\002 \001(\005\022\017\n\007db_name\030\003 \001(\t\022\022\n\nt"
-  "able_name\030\004 \001(\t\"\031\n\010Response\022\r\n\005value\030\001 \001"
-  "(\t\"\324\003\n\013QueryResult\022I\n\014query_result\030\001 \003(\013"
-  "23.StorageEngineInstance.QueryResult.Que"
-  "ryResultEntry\022\021\n\trow_count\030\002 \001(\005\022\031\n\021scan"
-  "ned_row_count\030\003 \001(\005\022\032\n\022filtered_row_coun"
-  "t\030\004 \001(\005\032\320\001\n\006Column\022C\n\010col_type\030\002 \001(\01621.S"
-  "torageEngineInstance.QueryResult.Column."
-  "ColType\022\022\n\nstring_col\030\003 \003(\t\022\017\n\007int_col\030\004"
-  " \003(\005\022\022\n\ndouble_col\030\005 \003(\001\"H\n\007ColType\022\016\n\nT"
-  "YPE_EMPTY\020\000\022\017\n\013TYPE_STRING\020\001\022\014\n\010TYPE_INT"
-  "\020\002\022\016\n\nTYPE_FLOAT\020\003\032]\n\020QueryResultEntry\022\013"
-  "\n\003key\030\001 \001(\t\0228\n\005value\030\002 \001(\0132).StorageEngi"
-  "neInstance.QueryResult.Column:\0028\001\"`\n\021Que"
-  "ryStringResult\022\024\n\014query_result\030\001 \001(\t\022\031\n\021"
-  "scanned_row_count\030\002 \001(\005\022\032\n\022filtered_row_"
-  "count\030\003 \001(\005\"j\n\017MetaDataRequest\022\017\n\007db_nam"
-  "e\030\001 \001(\t\022\022\n\ntable_name\030\002 \001(\t\0222\n\tscan_info"
-  "\030\003 \001(\0132\037.StorageEngineInstance.ScanInfo\""
-  "\355\001\n\017SnippetMetaData\022J\n\013sst_pba_map\030\001 \003(\013"
-  "25.StorageEngineInstance.SnippetMetaData"
-  ".SstPbaMapEntry\022\037\n\027table_total_block_cou"
-  "nt\030\002 \001(\005\022\034\n\024wal_deleted_key_json\030\003 \001(\t\022\035"
-  "\n\025wal_inserted_row_json\030\004 \003(\t\0320\n\016SstPbaM"
-  "apEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\""
-  "\370\001\n\rCSDMetricList\022G\n\017csd_metric_list\030\001 \003"
-  "(\0132..StorageEngineInstance.CSDMetricList"
-  ".CSDMetric\032\235\001\n\tCSDMetric\022\n\n\002id\030\001 \001(\t\022\n\n\002"
-  "ip\030\002 \001(\t\022\021\n\tcpu_usage\030\003 \001(\002\022\024\n\014memory_us"
-  "age\030\004 \001(\002\022\022\n\ndisk_usage\030\005 \001(\002\022\017\n\007network"
-  "\030\006 \001(\002\022\033\n\023working_block_count\030\007 \001(\005\022\r\n\005s"
-  "core\030\010 \001(\002\"\'\n\005Chunk\022\016\n\006offset\030\001 \001(\003\022\016\n\006l"
-  "ength\030\002 \001(\005\"9\n\tChunkList\022,\n\006chunks\030\001 \003(\013"
-  "2\034.StorageEngineInstance.Chunk\"\367\002\n\nLBARe"
-  "quest\022K\n\016sst_block_info\030\001 \003(\01323.StorageE"
-  "ngineInstance.LBARequest.SstBlockInfoEnt"
-  "ry\032\277\001\n\003SST\022\020\n\010csd_list\030\001 \003(\t\022O\n\016table_lb"
-  "a_list\030\002 \003(\01327.StorageEngineInstance.LBA"
-  "Request.SST.TableLbaListEntry\032U\n\021TableLb"
-  "aListEntry\022\013\n\003key\030\001 \001(\005\022/\n\005value\030\002 \001(\0132 "
-  ".StorageEngineInstance.ChunkList:\0028\001\032Z\n\021"
-  "SstBlockInfoEntry\022\013\n\003key\030\001 \001(\t\0224\n\005value\030"
-  "\002 \001(\0132%.StorageEngineInstance.LBARequest"
-  ".SST:\0028\001\"\232\004\n\013PBAResponse\022L\n\016sst_block_in"
-  "fo\030\001 \003(\01324.StorageEngineInstance.PBAResp"
-  "onse.SstBlockInfoEntry\032\256\001\n\003CSD\022P\n\016table_"
-  "pba_list\030\002 \003(\01328.StorageEngineInstance.P"
-  "BAResponse.CSD.TablePbaListEntry\032U\n\021Tabl"
-  "ePbaListEntry\022\013\n\003key\030\001 \001(\005\022/\n\005value\030\002 \001("
-  "\0132 .StorageEngineInstance.ChunkList:\0028\001\032"
-  "\256\001\n\003SST\022L\n\014csd_pba_list\030\001 \003(\01326.StorageE"
-  "ngineInstance.PBAResponse.SST.CsdPbaList"
-  "Entry\032Y\n\017CsdPbaListEntry\022\013\n\003key\030\001 \001(\t\0225\n"
-  "\005value\030\002 \001(\0132&.StorageEngineInstance.PBA"
-  "Response.CSD:\0028\001\032[\n\021SstBlockInfoEntry\022\013\n"
-  "\003key\030\001 \001(\t\0225\n\005value\030\002 \001(\0132&.StorageEngin"
-  "eInstance.PBAResponse.SST:\0028\001\"1\n\nWALRequ"
-  "est\022\017\n\007db_name\030\001 \001(\t\022\022\n\ntable_name\030\002 \001(\t"
-  "\"P\n\013WALResponse\022\023\n\013deleted_key\030\001 \003(\t\022\024\n\014"
-  "inserted_key\030\002 \003(\t\022\026\n\016inserted_value\030\003 \003"
-  "(\t\"4\n\rVolumeRequest\022\020\n\010capacity\030\001 \001(\002\022\021\n"
-  "\tusing_csd\030\002 \001(\005\"\253\002\n\023AllocatedVolumeInfo"
-  "\022\\\n\022csd_allocation_map\030\001 \003(\0132@.StorageEn"
-  "gineInstance.AllocatedVolumeInfo.CsdAllo"
-  "cationMapEntry\032F\n\nAllocation\022\016\n\006csd_id\030\001"
-  " \001(\t\022\020\n\010capacity\030\002 \001(\t\022\026\n\016partition_name"
-  "\030\003 \001(\t\032n\n\025CsdAllocationMapEntry\022\013\n\003key\030\001"
-  " \001(\t\022D\n\005value\030\002 \001(\01325.StorageEngineInsta"
-  "nce.AllocatedVolumeInfo.Allocation:\0028\0012\304"
-  "\002\n\026StorageEngineInterface\022_\n\025GenericQuer"
-  "yInterface\022#.StorageEngineInstance.Gener"
-  "icQuery\032\037.StorageEngineInstance.Response"
-  "\"\000\022o\n\030OffloadingQueryInterface\022%.Storage"
-  "EngineInstance.SnippetRequest\032(.StorageE"
-  "ngineInstance.QueryStringResult\"\000(\001\022X\n\rP"
-  "ushCSDMetric\022$.StorageEngineInstance.CSD"
-  "MetricList\032\037.StorageEngineInstance.Respo"
-  "nse\"\0002\217\002\n\rMergingModule\022W\n\013Aggregation\022%"
-  ".StorageEngineInstance.SnippetRequest\032\037."
-  "StorageEngineInstance.Response\"\000\022M\n\010EndQ"
-  "uery\022\036.StorageEngineInstance.Request\032\037.S"
-  "torageEngineInstance.Response\"\000\022V\n\016GetQu"
-  "eryResult\022\036.StorageEngineInstance.Reques"
-  "t\032\".StorageEngineInstance.QueryResult\"\0002"
-  "z\n\020MonitoringModule\022f\n\022GetSnippetMetaDat"
-  "a\022&.StorageEngineInstance.MetaDataReques"
-  "t\032&.StorageEngineInstance.SnippetMetaDat"
-  "a\"\0002\304\001\n\020OffloadingModule\022V\n\nScheduling\022%"
-  ".StorageEngineInstance.SnippetRequest\032\037."
-  "StorageEngineInstance.Response\"\000\022X\n\rPush"
-  "CSDMetric\022$.StorageEngineInstance.CSDMet"
-  "ricList\032\037.StorageEngineInstance.Response"
-  "\"\0002\326\001\n\016StorageManager\022U\n\nRequestPBA\022!.St"
-  "orageEngineInstance.LBARequest\032\".Storage"
-  "EngineInstance.PBAResponse\"\000\022m\n\027RequestV"
-  "olumeAllocation\022$.StorageEngineInstance."
-  "VolumeRequest\032*.StorageEngineInstance.Al"
-  "locatedVolumeInfo\"\0002c\n\nWALManager\022U\n\nReq"
-  "uestWAL\022!.StorageEngineInstance.WALReque"
-  "st\032\".StorageEngineInstance.WALResponse\"\000"
-  "B6\n\026io.grpc.snippet_sampleB\024snippet_samp"
-  "le_ProtoP\001\242\002\003SSPb\006proto3"
+  "ET\020\013\"\353\001\n\010ScanInfo\0229\n\010sst_info\030\001 \003(\0132\'.St"
+  "orageEngineInstance.ScanInfo.SSTInfo\022G\n\013"
+  "filter_info\030\002 \001(\01322.StorageEngineInstanc"
+  "e.ScanInfo.BlockFilteringInfo\032-\n\007SSTInfo"
+  "\022\020\n\010sst_name\030\001 \001(\t\022\020\n\010csd_list\030\002 \003(\t\032,\n\022"
+  "BlockFilteringInfo\022\n\n\002lv\030\001 \001(\t\022\n\n\002rv\030\002 \001"
+  "(\t\"\215\017\n\007Snippet\022\017\n\007db_name\030\001 \001(\t\022\020\n\010query"
+  "_ID\030\002 \001(\005\022\017\n\007work_ID\030\003 \001(\005\022\022\n\ntable_name"
+  "\030\004 \003(\t\022\021\n\ttable_col\030\005 \003(\t\022;\n\014table_filte"
+  "r\030\006 \003(\0132%.StorageEngineInstance.Snippet."
+  "Filter\022=\n\ndependency\030\007 \001(\0132).StorageEngi"
+  "neInstance.Snippet.Dependency\022\024\n\014table_o"
+  "ffset\030\010 \003(\005\022\024\n\014table_offlen\030\t \003(\005\022\026\n\016tab"
+  "le_datatype\030\n \003(\005\022\023\n\013table_alias\030\013 \001(\t\022\024"
+  "\n\014column_alias\030\014 \003(\t\022D\n\021column_projectio"
+  "n\030\r \003(\0132).StorageEngineInstance.Snippet."
+  "Projection\022\020\n\010group_by\030\016 \003(\t\0226\n\010order_by"
+  "\030\017 \001(\0132$.StorageEngineInstance.Snippet.O"
+  "rder\0223\n\005limit\030\020 \001(\0132$.StorageEngineInsta"
+  "nce.Snippet.Limit\022\016\n\006pk_num\030\021 \001(\005\0225\n\006hav"
+  "ing\030\022 \003(\0132%.StorageEngineInstance.Snippe"
+  "t.Filter\032\241\004\n\006Filter\022=\n\002LV\030\001 \001(\01321.Storag"
+  "eEngineInstance.Snippet.Filter.FilterVal"
+  "ue\022@\n\010Operator\030\002 \001(\0162..StorageEngineInst"
+  "ance.Snippet.Filter.OperType\022=\n\002RV\030\003 \001(\013"
+  "21.StorageEngineInstance.Snippet.Filter."
+  "FilterValue\032T\n\013FilterValue\0226\n\004type\030\001 \003(\016"
+  "2(.StorageEngineInstance.Snippet.ValueTy"
+  "pe\022\r\n\005value\030\002 \003(\t\"\200\002\n\010OperType\022\020\n\014KETI_D"
+  "EFAULT\020\000\022\013\n\007KETI_GE\020\001\022\013\n\007KETI_LE\020\002\022\013\n\007KE"
+  "TI_GT\020\003\022\013\n\007KETI_LT\020\004\022\013\n\007KETI_ET\020\005\022\013\n\007KET"
+  "I_NE\020\006\022\r\n\tKETI_LIKE\020\007\022\020\n\014KETI_BETWEEN\020\010\022"
+  "\013\n\007KETI_IN\020\t\022\013\n\007KETI_IS\020\n\022\016\n\nKETI_ISNOT\020"
+  "\013\022\014\n\010KETI_NOT\020\014\022\014\n\010KETI_AND\020\r\022\013\n\007KETI_OR"
+  "\020\016\022\014\n\010KETI_ALL\020\017\022\022\n\016KETI_SUBSTRING\020\020\032\234\002\n"
+  "\nProjection\022I\n\013select_type\030\001 \001(\01624.Stora"
+  "geEngineInstance.Snippet.Projection.Sele"
+  "ctType\022\r\n\005value\030\002 \003(\t\022<\n\nvalue_type\030\003 \003("
+  "\0162(.StorageEngineInstance.Snippet.ValueT"
+  "ype\"v\n\nSelectType\022\016\n\nCOLUMNNAME\020\000\022\007\n\003SUM"
+  "\020\001\022\007\n\003AVG\020\002\022\t\n\005COUNT\020\003\022\r\n\tCOUNTSTAR\020\004\022\021\n"
+  "\rCOUNTDISTINCT\020\005\022\007\n\003TOP\020\006\022\007\n\003MIN\020\007\022\007\n\003MA"
+  "X\020\010\032\211\001\n\005Order\022F\n\tascending\030\001 \003(\01623.Stora"
+  "geEngineInstance.Snippet.Order.OrderDire"
+  "ction\022\023\n\013column_name\030\002 \003(\t\"#\n\016OrderDirec"
+  "tion\022\007\n\003ASC\020\000\022\010\n\004DESC\020\001\032\230\001\n\nDependency\022H"
+  "\n\025dependency_projection\030\001 \003(\0132).StorageE"
+  "ngineInstance.Snippet.Projection\022@\n\021depe"
+  "ndency_filter\030\002 \003(\0132%.StorageEngineInsta"
+  "nce.Snippet.Filter\032\'\n\005Limit\022\016\n\006offset\030\001 "
+  "\001(\005\022\016\n\006length\030\002 \001(\005\"\234\001\n\tValueType\022\010\n\004INT"
+  "8\020\000\022\t\n\005INT16\020\001\022\t\n\005INT32\020\002\022\t\n\005INT64\020\003\022\013\n\007"
+  "FLOAT32\020\004\022\013\n\007FLOAT64\020\005\022\013\n\007NUMERIC\020\006\022\010\n\004D"
+  "ATE\020\007\022\r\n\tTIMESTAMP\020\010\022\n\n\006STRING\020\t\022\n\n\006COLU"
+  "MN\020\n\022\014\n\010OPERATOR\020\013\".\n\014GenericQuery\022\017\n\007db"
+  "_name\030\001 \001(\t\022\r\n\005query\030\002 \001(\t\"Q\n\007Request\022\020\n"
+  "\010query_id\030\001 \001(\005\022\017\n\007work_id\030\002 \001(\005\022\017\n\007db_n"
+  "ame\030\003 \001(\t\022\022\n\ntable_name\030\004 \001(\t\"\031\n\010Respons"
+  "e\022\r\n\005value\030\001 \001(\t\"\324\003\n\013QueryResult\022I\n\014quer"
+  "y_result\030\001 \003(\01323.StorageEngineInstance.Q"
+  "ueryResult.QueryResultEntry\022\021\n\trow_count"
+  "\030\002 \001(\005\022\031\n\021scanned_row_count\030\003 \001(\005\022\032\n\022fil"
+  "tered_row_count\030\004 \001(\005\032\320\001\n\006Column\022C\n\010col_"
+  "type\030\002 \001(\01621.StorageEngineInstance.Query"
+  "Result.Column.ColType\022\022\n\nstring_col\030\003 \003("
+  "\t\022\017\n\007int_col\030\004 \003(\005\022\022\n\ndouble_col\030\005 \003(\001\"H"
+  "\n\007ColType\022\016\n\nTYPE_EMPTY\020\000\022\017\n\013TYPE_STRING"
+  "\020\001\022\014\n\010TYPE_INT\020\002\022\016\n\nTYPE_FLOAT\020\003\032]\n\020Quer"
+  "yResultEntry\022\013\n\003key\030\001 \001(\t\0228\n\005value\030\002 \001(\013"
+  "2).StorageEngineInstance.QueryResult.Col"
+  "umn:\0028\001\"`\n\021QueryStringResult\022\024\n\014query_re"
+  "sult\030\001 \001(\t\022\031\n\021scanned_row_count\030\002 \001(\005\022\032\n"
+  "\022filtered_row_count\030\003 \001(\005\"j\n\017MetaDataReq"
+  "uest\022\017\n\007db_name\030\001 \001(\t\022\022\n\ntable_name\030\002 \001("
+  "\t\0222\n\tscan_info\030\003 \001(\0132\037.StorageEngineInst"
+  "ance.ScanInfo\"\355\001\n\017SnippetMetaData\022J\n\013sst"
+  "_pba_map\030\001 \003(\01325.StorageEngineInstance.S"
+  "nippetMetaData.SstPbaMapEntry\022\037\n\027table_t"
+  "otal_block_count\030\002 \001(\005\022\034\n\024wal_deleted_ke"
+  "y_json\030\003 \001(\t\022\035\n\025wal_inserted_row_json\030\004 "
+  "\003(\t\0320\n\016SstPbaMapEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005va"
+  "lue\030\002 \001(\t:\0028\001\"\370\001\n\rCSDMetricList\022G\n\017csd_m"
+  "etric_list\030\001 \003(\0132..StorageEngineInstance"
+  ".CSDMetricList.CSDMetric\032\235\001\n\tCSDMetric\022\n"
+  "\n\002id\030\001 \001(\t\022\n\n\002ip\030\002 \001(\t\022\021\n\tcpu_usage\030\003 \001("
+  "\002\022\024\n\014memory_usage\030\004 \001(\002\022\022\n\ndisk_usage\030\005 "
+  "\001(\002\022\017\n\007network\030\006 \001(\002\022\033\n\023working_block_co"
+  "unt\030\007 \001(\005\022\r\n\005score\030\010 \001(\002\"=\n\005Chunk\022\024\n\014blo"
+  "ck_handle\030\001 \001(\t\022\016\n\006offset\030\002 \001(\003\022\016\n\006lengt"
+  "h\030\003 \001(\005\"9\n\tChunkList\022,\n\006chunks\030\001 \003(\0132\034.S"
+  "torageEngineInstance.Chunk\"\266\001\n\nTableBloc"
+  "k\022O\n\020table_block_list\030\001 \003(\01325.StorageEng"
+  "ineInstance.TableBlock.TableBlockListEnt"
+  "ry\032W\n\023TableBlockListEntry\022\013\n\003key\030\001 \001(\005\022/"
+  "\n\005value\030\002 \001(\0132 .StorageEngineInstance.Ch"
+  "unkList:\0028\001\"\371\001\n\nLBARequest\022@\n\010sst_list\030\001"
+  " \003(\0132..StorageEngineInstance.LBARequest."
+  "SstListEntry\032R\n\003SST\022\020\n\010csd_list\030\001 \003(\t\0229\n"
+  "\016table_lba_list\030\002 \001(\0132!.StorageEngineIns"
+  "tance.TableBlock\032U\n\014SstListEntry\022\013\n\003key\030"
+  "\001 \001(\t\0224\n\005value\030\002 \001(\0132%.StorageEngineInst"
+  "ance.LBARequest.SST:\0028\001\"\332\002\n\013PBAResponse\022"
+  "A\n\010sst_list\030\001 \003(\0132/.StorageEngineInstanc"
+  "e.PBAResponse.SstListEntry\032\257\001\n\003SST\022P\n\016ta"
+  "ble_pba_list\030\001 \003(\01328.StorageEngineInstan"
+  "ce.PBAResponse.SST.TablePbaListEntry\032V\n\021"
+  "TablePbaListEntry\022\013\n\003key\030\001 \001(\t\0220\n\005value\030"
+  "\002 \001(\0132!.StorageEngineInstance.TableBlock"
+  ":\0028\001\032V\n\014SstListEntry\022\013\n\003key\030\001 \001(\t\0225\n\005val"
+  "ue\030\002 \001(\0132&.StorageEngineInstance.PBAResp"
+  "onse.SST:\0028\001\"1\n\nWALRequest\022\017\n\007db_name\030\001 "
+  "\001(\t\022\022\n\ntable_name\030\002 \001(\t\"P\n\013WALResponse\022\023"
+  "\n\013deleted_key\030\001 \003(\t\022\024\n\014inserted_key\030\002 \003("
+  "\t\022\026\n\016inserted_value\030\003 \003(\t\"4\n\rVolumeReque"
+  "st\022\020\n\010capacity\030\001 \001(\002\022\021\n\tusing_csd\030\002 \001(\005\""
+  "\253\002\n\023AllocatedVolumeInfo\022\\\n\022csd_allocatio"
+  "n_map\030\001 \003(\0132@.StorageEngineInstance.Allo"
+  "catedVolumeInfo.CsdAllocationMapEntry\032F\n"
+  "\nAllocation\022\016\n\006csd_id\030\001 \001(\t\022\020\n\010capacity\030"
+  "\002 \001(\t\022\026\n\016partition_name\030\003 \001(\t\032n\n\025CsdAllo"
+  "cationMapEntry\022\013\n\003key\030\001 \001(\t\022D\n\005value\030\002 \001"
+  "(\01325.StorageEngineInstance.AllocatedVolu"
+  "meInfo.Allocation:\0028\0012\304\002\n\026StorageEngineI"
+  "nterface\022_\n\025GenericQueryInterface\022#.Stor"
+  "ageEngineInstance.GenericQuery\032\037.Storage"
+  "EngineInstance.Response\"\000\022o\n\030OffloadingQ"
+  "ueryInterface\022%.StorageEngineInstance.Sn"
+  "ippetRequest\032(.StorageEngineInstance.Que"
+  "ryStringResult\"\000(\001\022X\n\rPushCSDMetric\022$.St"
+  "orageEngineInstance.CSDMetricList\032\037.Stor"
+  "ageEngineInstance.Response\"\0002\217\002\n\rMerging"
+  "Module\022W\n\013Aggregation\022%.StorageEngineIns"
+  "tance.SnippetRequest\032\037.StorageEngineInst"
+  "ance.Response\"\000\022M\n\010EndQuery\022\036.StorageEng"
+  "ineInstance.Request\032\037.StorageEngineInsta"
+  "nce.Response\"\000\022V\n\016GetQueryResult\022\036.Stora"
+  "geEngineInstance.Request\032\".StorageEngine"
+  "Instance.QueryResult\"\0002z\n\020MonitoringModu"
+  "le\022f\n\022GetSnippetMetaData\022&.StorageEngine"
+  "Instance.MetaDataRequest\032&.StorageEngine"
+  "Instance.SnippetMetaData\"\0002\304\001\n\020Offloadin"
+  "gModule\022V\n\nScheduling\022%.StorageEngineIns"
+  "tance.SnippetRequest\032\037.StorageEngineInst"
+  "ance.Response\"\000\022X\n\rPushCSDMetric\022$.Stora"
+  "geEngineInstance.CSDMetricList\032\037.Storage"
+  "EngineInstance.Response\"\0002\326\001\n\016StorageMan"
+  "ager\022U\n\nRequestPBA\022!.StorageEngineInstan"
+  "ce.LBARequest\032\".StorageEngineInstance.PB"
+  "AResponse\"\000\022m\n\027RequestVolumeAllocation\022$"
+  ".StorageEngineInstance.VolumeRequest\032*.S"
+  "torageEngineInstance.AllocatedVolumeInfo"
+  "\"\0002c\n\nWALManager\022U\n\nRequestWAL\022!.Storage"
+  "EngineInstance.WALRequest\032\".StorageEngin"
+  "eInstance.WALResponse\"\000B6\n\026io.grpc.snipp"
+  "et_sampleB\024snippet_sample_ProtoP\001\242\002\003SSPb"
+  "\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_storage_5fengine_5finstance_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_storage_5fengine_5finstance_2eproto = {
-  false, false, 6864, descriptor_table_protodef_storage_5fengine_5finstance_2eproto, "storage_engine_instance.proto", 
-  &descriptor_table_storage_5fengine_5finstance_2eproto_once, nullptr, 0, 41,
+  false, false, 6767, descriptor_table_protodef_storage_5fengine_5finstance_2eproto, "storage_engine_instance.proto", 
+  &descriptor_table_storage_5fengine_5finstance_2eproto_once, nullptr, 0, 40,
   schemas, file_default_instances, TableStruct_storage_5fengine_5finstance_2eproto::offsets,
   file_level_metadata_storage_5fengine_5finstance_2eproto, file_level_enum_descriptors_storage_5fengine_5finstance_2eproto, file_level_service_descriptors_storage_5fengine_5finstance_2eproto,
 };
@@ -1959,20 +1936,20 @@ void ScanInfo_SSTInfo::InternalSwap(ScanInfo_SSTInfo* other) {
 
 // ===================================================================
 
-class ScanInfo_FilterInfo::_Internal {
+class ScanInfo_BlockFilteringInfo::_Internal {
  public:
 };
 
-ScanInfo_FilterInfo::ScanInfo_FilterInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+ScanInfo_BlockFilteringInfo::ScanInfo_BlockFilteringInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
   }
-  // @@protoc_insertion_point(arena_constructor:StorageEngineInstance.ScanInfo.FilterInfo)
+  // @@protoc_insertion_point(arena_constructor:StorageEngineInstance.ScanInfo.BlockFilteringInfo)
 }
-ScanInfo_FilterInfo::ScanInfo_FilterInfo(const ScanInfo_FilterInfo& from)
+ScanInfo_BlockFilteringInfo::ScanInfo_BlockFilteringInfo(const ScanInfo_BlockFilteringInfo& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   lv_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
@@ -1991,10 +1968,10 @@ ScanInfo_FilterInfo::ScanInfo_FilterInfo(const ScanInfo_FilterInfo& from)
     rv_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_rv(), 
       GetArenaForAllocation());
   }
-  // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.ScanInfo.FilterInfo)
+  // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.ScanInfo.BlockFilteringInfo)
 }
 
-inline void ScanInfo_FilterInfo::SharedCtor() {
+inline void ScanInfo_BlockFilteringInfo::SharedCtor() {
 lv_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
   lv_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
@@ -2005,31 +1982,31 @@ rv_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyIn
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
-ScanInfo_FilterInfo::~ScanInfo_FilterInfo() {
-  // @@protoc_insertion_point(destructor:StorageEngineInstance.ScanInfo.FilterInfo)
+ScanInfo_BlockFilteringInfo::~ScanInfo_BlockFilteringInfo() {
+  // @@protoc_insertion_point(destructor:StorageEngineInstance.ScanInfo.BlockFilteringInfo)
   if (GetArenaForAllocation() != nullptr) return;
   SharedDtor();
   _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-inline void ScanInfo_FilterInfo::SharedDtor() {
+inline void ScanInfo_BlockFilteringInfo::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   lv_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   rv_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
-void ScanInfo_FilterInfo::ArenaDtor(void* object) {
-  ScanInfo_FilterInfo* _this = reinterpret_cast< ScanInfo_FilterInfo* >(object);
+void ScanInfo_BlockFilteringInfo::ArenaDtor(void* object) {
+  ScanInfo_BlockFilteringInfo* _this = reinterpret_cast< ScanInfo_BlockFilteringInfo* >(object);
   (void)_this;
 }
-void ScanInfo_FilterInfo::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+void ScanInfo_BlockFilteringInfo::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 }
-void ScanInfo_FilterInfo::SetCachedSize(int size) const {
+void ScanInfo_BlockFilteringInfo::SetCachedSize(int size) const {
   _cached_size_.Set(size);
 }
 
-void ScanInfo_FilterInfo::Clear() {
-// @@protoc_insertion_point(message_clear_start:StorageEngineInstance.ScanInfo.FilterInfo)
+void ScanInfo_BlockFilteringInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:StorageEngineInstance.ScanInfo.BlockFilteringInfo)
   uint32_t cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -2039,7 +2016,7 @@ void ScanInfo_FilterInfo::Clear() {
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
-const char* ScanInfo_FilterInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+const char* ScanInfo_BlockFilteringInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
   while (!ctx->Done(&ptr)) {
     uint32_t tag;
@@ -2050,7 +2027,7 @@ const char* ScanInfo_FilterInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAME
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           auto str = _internal_mutable_lv();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.ScanInfo.FilterInfo.lv"));
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.ScanInfo.BlockFilteringInfo.lv"));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -2060,7 +2037,7 @@ const char* ScanInfo_FilterInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAME
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           auto str = _internal_mutable_rv();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.ScanInfo.FilterInfo.rv"));
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.ScanInfo.BlockFilteringInfo.rv"));
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -2088,9 +2065,9 @@ failure:
 #undef CHK_
 }
 
-uint8_t* ScanInfo_FilterInfo::_InternalSerialize(
+uint8_t* ScanInfo_BlockFilteringInfo::_InternalSerialize(
     uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:StorageEngineInstance.ScanInfo.FilterInfo)
+  // @@protoc_insertion_point(serialize_to_array_start:StorageEngineInstance.ScanInfo.BlockFilteringInfo)
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -2099,7 +2076,7 @@ uint8_t* ScanInfo_FilterInfo::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_lv().data(), static_cast<int>(this->_internal_lv().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "StorageEngineInstance.ScanInfo.FilterInfo.lv");
+      "StorageEngineInstance.ScanInfo.BlockFilteringInfo.lv");
     target = stream->WriteStringMaybeAliased(
         1, this->_internal_lv(), target);
   }
@@ -2109,7 +2086,7 @@ uint8_t* ScanInfo_FilterInfo::_InternalSerialize(
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_rv().data(), static_cast<int>(this->_internal_rv().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "StorageEngineInstance.ScanInfo.FilterInfo.rv");
+      "StorageEngineInstance.ScanInfo.BlockFilteringInfo.rv");
     target = stream->WriteStringMaybeAliased(
         2, this->_internal_rv(), target);
   }
@@ -2118,12 +2095,12 @@ uint8_t* ScanInfo_FilterInfo::_InternalSerialize(
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:StorageEngineInstance.ScanInfo.FilterInfo)
+  // @@protoc_insertion_point(serialize_to_array_end:StorageEngineInstance.ScanInfo.BlockFilteringInfo)
   return target;
 }
 
-size_t ScanInfo_FilterInfo::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:StorageEngineInstance.ScanInfo.FilterInfo)
+size_t ScanInfo_BlockFilteringInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:StorageEngineInstance.ScanInfo.BlockFilteringInfo)
   size_t total_size = 0;
 
   uint32_t cached_has_bits = 0;
@@ -2147,21 +2124,21 @@ size_t ScanInfo_FilterInfo::ByteSizeLong() const {
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
 }
 
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ScanInfo_FilterInfo::_class_data_ = {
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ScanInfo_BlockFilteringInfo::_class_data_ = {
     ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
-    ScanInfo_FilterInfo::MergeImpl
+    ScanInfo_BlockFilteringInfo::MergeImpl
 };
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ScanInfo_FilterInfo::GetClassData() const { return &_class_data_; }
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ScanInfo_BlockFilteringInfo::GetClassData() const { return &_class_data_; }
 
-void ScanInfo_FilterInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+void ScanInfo_BlockFilteringInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
                       const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<ScanInfo_FilterInfo *>(to)->MergeFrom(
-      static_cast<const ScanInfo_FilterInfo &>(from));
+  static_cast<ScanInfo_BlockFilteringInfo *>(to)->MergeFrom(
+      static_cast<const ScanInfo_BlockFilteringInfo &>(from));
 }
 
 
-void ScanInfo_FilterInfo::MergeFrom(const ScanInfo_FilterInfo& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:StorageEngineInstance.ScanInfo.FilterInfo)
+void ScanInfo_BlockFilteringInfo::MergeFrom(const ScanInfo_BlockFilteringInfo& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:StorageEngineInstance.ScanInfo.BlockFilteringInfo)
   GOOGLE_DCHECK_NE(&from, this);
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
@@ -2175,18 +2152,18 @@ void ScanInfo_FilterInfo::MergeFrom(const ScanInfo_FilterInfo& from) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
-void ScanInfo_FilterInfo::CopyFrom(const ScanInfo_FilterInfo& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:StorageEngineInstance.ScanInfo.FilterInfo)
+void ScanInfo_BlockFilteringInfo::CopyFrom(const ScanInfo_BlockFilteringInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:StorageEngineInstance.ScanInfo.BlockFilteringInfo)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool ScanInfo_FilterInfo::IsInitialized() const {
+bool ScanInfo_BlockFilteringInfo::IsInitialized() const {
   return true;
 }
 
-void ScanInfo_FilterInfo::InternalSwap(ScanInfo_FilterInfo* other) {
+void ScanInfo_BlockFilteringInfo::InternalSwap(ScanInfo_BlockFilteringInfo* other) {
   using std::swap;
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
@@ -2203,7 +2180,7 @@ void ScanInfo_FilterInfo::InternalSwap(ScanInfo_FilterInfo* other) {
   );
 }
 
-::PROTOBUF_NAMESPACE_ID::Metadata ScanInfo_FilterInfo::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata ScanInfo_BlockFilteringInfo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
       file_level_metadata_storage_5fengine_5finstance_2eproto[2]);
@@ -2213,13 +2190,17 @@ void ScanInfo_FilterInfo::InternalSwap(ScanInfo_FilterInfo* other) {
 
 class ScanInfo::_Internal {
  public:
+  static const ::StorageEngineInstance::ScanInfo_BlockFilteringInfo& filter_info(const ScanInfo* msg);
 };
 
+const ::StorageEngineInstance::ScanInfo_BlockFilteringInfo&
+ScanInfo::_Internal::filter_info(const ScanInfo* msg) {
+  return *msg->filter_info_;
+}
 ScanInfo::ScanInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
-  block_info_(arena),
-  filter_info_(arena) {
+  sst_info_(arena) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
@@ -2228,13 +2209,18 @@ ScanInfo::ScanInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 }
 ScanInfo::ScanInfo(const ScanInfo& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
-      block_info_(from.block_info_),
-      filter_info_(from.filter_info_) {
+      sst_info_(from.sst_info_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  if (from._internal_has_filter_info()) {
+    filter_info_ = new ::StorageEngineInstance::ScanInfo_BlockFilteringInfo(*from.filter_info_);
+  } else {
+    filter_info_ = nullptr;
+  }
   // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.ScanInfo)
 }
 
 inline void ScanInfo::SharedCtor() {
+filter_info_ = nullptr;
 }
 
 ScanInfo::~ScanInfo() {
@@ -2246,6 +2232,7 @@ ScanInfo::~ScanInfo() {
 
 inline void ScanInfo::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete filter_info_;
 }
 
 void ScanInfo::ArenaDtor(void* object) {
@@ -2264,8 +2251,11 @@ void ScanInfo::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  block_info_.Clear();
-  filter_info_.Clear();
+  sst_info_.Clear();
+  if (GetArenaForAllocation() == nullptr && filter_info_ != nullptr) {
+    delete filter_info_;
+  }
+  filter_info_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2275,29 +2265,24 @@ const char* ScanInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // repeated .StorageEngineInstance.ScanInfo.SSTInfo block_info = 1;
+      // repeated .StorageEngineInstance.ScanInfo.SSTInfo sst_info = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_block_info(), ptr);
+            ptr = ctx->ParseMessage(_internal_add_sst_info(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
         } else
           goto handle_unusual;
         continue;
-      // repeated .StorageEngineInstance.ScanInfo.FilterInfo filter_info = 2;
+      // .StorageEngineInstance.ScanInfo.BlockFilteringInfo filter_info = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_filter_info(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+          ptr = ctx->ParseMessage(_internal_mutable_filter_info(), ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -2330,20 +2315,20 @@ uint8_t* ScanInfo::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .StorageEngineInstance.ScanInfo.SSTInfo block_info = 1;
+  // repeated .StorageEngineInstance.ScanInfo.SSTInfo sst_info = 1;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_block_info_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->_internal_sst_info_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(1, this->_internal_block_info(i), target, stream);
+      InternalWriteMessage(1, this->_internal_sst_info(i), target, stream);
   }
 
-  // repeated .StorageEngineInstance.ScanInfo.FilterInfo filter_info = 2;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_filter_info_size()); i < n; i++) {
+  // .StorageEngineInstance.ScanInfo.BlockFilteringInfo filter_info = 2;
+  if (this->_internal_has_filter_info()) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(2, this->_internal_filter_info(i), target, stream);
+      InternalWriteMessage(
+        2, _Internal::filter_info(this), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2362,18 +2347,18 @@ size_t ScanInfo::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .StorageEngineInstance.ScanInfo.SSTInfo block_info = 1;
-  total_size += 1UL * this->_internal_block_info_size();
-  for (const auto& msg : this->block_info_) {
+  // repeated .StorageEngineInstance.ScanInfo.SSTInfo sst_info = 1;
+  total_size += 1UL * this->_internal_sst_info_size();
+  for (const auto& msg : this->sst_info_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
-  // repeated .StorageEngineInstance.ScanInfo.FilterInfo filter_info = 2;
-  total_size += 1UL * this->_internal_filter_info_size();
-  for (const auto& msg : this->filter_info_) {
-    total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  // .StorageEngineInstance.ScanInfo.BlockFilteringInfo filter_info = 2;
+  if (this->_internal_has_filter_info()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *filter_info_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -2398,8 +2383,10 @@ void ScanInfo::MergeFrom(const ScanInfo& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  block_info_.MergeFrom(from.block_info_);
-  filter_info_.MergeFrom(from.filter_info_);
+  sst_info_.MergeFrom(from.sst_info_);
+  if (from._internal_has_filter_info()) {
+    _internal_mutable_filter_info()->::StorageEngineInstance::ScanInfo_BlockFilteringInfo::MergeFrom(from._internal_filter_info());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -2417,8 +2404,8 @@ bool ScanInfo::IsInitialized() const {
 void ScanInfo::InternalSwap(ScanInfo* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  block_info_.InternalSwap(&other->block_info_);
-  filter_info_.InternalSwap(&other->filter_info_);
+  sst_info_.InternalSwap(&other->sst_info_);
+  swap(filter_info_, other->filter_info_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ScanInfo::GetMetadata() const {
@@ -7648,6 +7635,14 @@ Chunk::Chunk(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 Chunk::Chunk(const Chunk& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  block_handle_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    block_handle_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_block_handle().empty()) {
+    block_handle_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_block_handle(), 
+      GetArenaForAllocation());
+  }
   ::memcpy(&offset_, &from.offset_,
     static_cast<size_t>(reinterpret_cast<char*>(&length_) -
     reinterpret_cast<char*>(&offset_)) + sizeof(length_));
@@ -7655,6 +7650,10 @@ Chunk::Chunk(const Chunk& from)
 }
 
 inline void Chunk::SharedCtor() {
+block_handle_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  block_handle_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
     reinterpret_cast<char*>(&offset_) - reinterpret_cast<char*>(this)),
     0, static_cast<size_t>(reinterpret_cast<char*>(&length_) -
@@ -7670,6 +7669,7 @@ Chunk::~Chunk() {
 
 inline void Chunk::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  block_handle_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void Chunk::ArenaDtor(void* object) {
@@ -7688,6 +7688,7 @@ void Chunk::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  block_handle_.ClearToEmpty();
   ::memset(&offset_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&length_) -
       reinterpret_cast<char*>(&offset_)) + sizeof(length_));
@@ -7700,17 +7701,27 @@ const char* Chunk::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::inte
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // int64 offset = 1;
+      // string block_handle = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_block_handle();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.Chunk.block_handle"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int64 offset = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
           offset_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // int32 length = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+      // int32 length = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           length_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
         } else
@@ -7745,16 +7756,26 @@ uint8_t* Chunk::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // int64 offset = 1;
-  if (this->_internal_offset() != 0) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(1, this->_internal_offset(), target);
+  // string block_handle = 1;
+  if (!this->_internal_block_handle().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_block_handle().data(), static_cast<int>(this->_internal_block_handle().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "StorageEngineInstance.Chunk.block_handle");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_block_handle(), target);
   }
 
-  // int32 length = 2;
+  // int64 offset = 2;
+  if (this->_internal_offset() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(2, this->_internal_offset(), target);
+  }
+
+  // int32 length = 3;
   if (this->_internal_length() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_length(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_length(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -7773,12 +7794,19 @@ size_t Chunk::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // int64 offset = 1;
+  // string block_handle = 1;
+  if (!this->_internal_block_handle().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_block_handle());
+  }
+
+  // int64 offset = 2;
   if (this->_internal_offset() != 0) {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64SizePlusOne(this->_internal_offset());
   }
 
-  // int32 length = 2;
+  // int32 length = 3;
   if (this->_internal_length() != 0) {
     total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_length());
   }
@@ -7805,6 +7833,9 @@ void Chunk::MergeFrom(const Chunk& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (!from._internal_block_handle().empty()) {
+    _internal_set_block_handle(from._internal_block_handle());
+  }
   if (from._internal_offset() != 0) {
     _internal_set_offset(from._internal_offset());
   }
@@ -7827,7 +7858,14 @@ bool Chunk::IsInitialized() const {
 
 void Chunk::InternalSwap(Chunk* other) {
   using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &block_handle_, lhs_arena,
+      &other->block_handle_, rhs_arena
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(Chunk, length_)
       + sizeof(Chunk::length_)
@@ -8029,13 +8067,13 @@ void ChunkList::InternalSwap(ChunkList* other) {
 
 // ===================================================================
 
-LBARequest_SST_TableLbaListEntry_DoNotUse::LBARequest_SST_TableLbaListEntry_DoNotUse() {}
-LBARequest_SST_TableLbaListEntry_DoNotUse::LBARequest_SST_TableLbaListEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+TableBlock_TableBlockListEntry_DoNotUse::TableBlock_TableBlockListEntry_DoNotUse() {}
+TableBlock_TableBlockListEntry_DoNotUse::TableBlock_TableBlockListEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
     : SuperType(arena) {}
-void LBARequest_SST_TableLbaListEntry_DoNotUse::MergeFrom(const LBARequest_SST_TableLbaListEntry_DoNotUse& other) {
+void TableBlock_TableBlockListEntry_DoNotUse::MergeFrom(const TableBlock_TableBlockListEntry_DoNotUse& other) {
   MergeFromInternal(other);
 }
-::PROTOBUF_NAMESPACE_ID::Metadata LBARequest_SST_TableLbaListEntry_DoNotUse::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata TableBlock_TableBlockListEntry_DoNotUse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
       file_level_metadata_storage_5fengine_5finstance_2eproto[25]);
@@ -8043,15 +8081,233 @@ void LBARequest_SST_TableLbaListEntry_DoNotUse::MergeFrom(const LBARequest_SST_T
 
 // ===================================================================
 
-class LBARequest_SST::_Internal {
+class TableBlock::_Internal {
  public:
 };
 
+TableBlock::TableBlock(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
+  table_block_list_(arena) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:StorageEngineInstance.TableBlock)
+}
+TableBlock::TableBlock(const TableBlock& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  table_block_list_.MergeFrom(from.table_block_list_);
+  // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.TableBlock)
+}
+
+inline void TableBlock::SharedCtor() {
+}
+
+TableBlock::~TableBlock() {
+  // @@protoc_insertion_point(destructor:StorageEngineInstance.TableBlock)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void TableBlock::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void TableBlock::ArenaDtor(void* object) {
+  TableBlock* _this = reinterpret_cast< TableBlock* >(object);
+  (void)_this;
+  _this->table_block_list_. ~MapField();
+}
+inline void TableBlock::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena) {
+  if (arena != nullptr) {
+    arena->OwnCustomDestructor(this, &TableBlock::ArenaDtor);
+  }
+}
+void TableBlock::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void TableBlock::Clear() {
+// @@protoc_insertion_point(message_clear_start:StorageEngineInstance.TableBlock)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  table_block_list_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* TableBlock::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // map<int32, .StorageEngineInstance.ChunkList> table_block_list = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(&table_block_list_, ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* TableBlock::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:StorageEngineInstance.TableBlock)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // map<int32, .StorageEngineInstance.ChunkList> table_block_list = 1;
+  if (!this->_internal_table_block_list().empty()) {
+    typedef ::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::const_pointer
+        ConstPtr;
+    typedef ::PROTOBUF_NAMESPACE_ID::internal::SortItem< int32_t, ConstPtr > SortItem;
+    typedef ::PROTOBUF_NAMESPACE_ID::internal::CompareByFirstField<SortItem> Less;
+
+    if (stream->IsSerializationDeterministic() &&
+        this->_internal_table_block_list().size() > 1) {
+      ::std::unique_ptr<SortItem[]> items(
+          new SortItem[this->_internal_table_block_list().size()]);
+      typedef ::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::size_type size_type;
+      size_type n = 0;
+      for (::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::const_iterator
+          it = this->_internal_table_block_list().begin();
+          it != this->_internal_table_block_list().end(); ++it, ++n) {
+        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
+      }
+      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
+      for (size_type i = 0; i < n; i++) {
+        target = TableBlock_TableBlockListEntry_DoNotUse::Funcs::InternalSerialize(1, items[static_cast<ptrdiff_t>(i)].second->first, items[static_cast<ptrdiff_t>(i)].second->second, target, stream);
+      }
+    } else {
+      for (::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::const_iterator
+          it = this->_internal_table_block_list().begin();
+          it != this->_internal_table_block_list().end(); ++it) {
+        target = TableBlock_TableBlockListEntry_DoNotUse::Funcs::InternalSerialize(1, it->first, it->second, target, stream);
+      }
+    }
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:StorageEngineInstance.TableBlock)
+  return target;
+}
+
+size_t TableBlock::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:StorageEngineInstance.TableBlock)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // map<int32, .StorageEngineInstance.ChunkList> table_block_list = 1;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_table_block_list_size());
+  for (::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::const_iterator
+      it = this->_internal_table_block_list().begin();
+      it != this->_internal_table_block_list().end(); ++it) {
+    total_size += TableBlock_TableBlockListEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TableBlock::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    TableBlock::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TableBlock::GetClassData() const { return &_class_data_; }
+
+void TableBlock::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<TableBlock *>(to)->MergeFrom(
+      static_cast<const TableBlock &>(from));
+}
+
+
+void TableBlock::MergeFrom(const TableBlock& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:StorageEngineInstance.TableBlock)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  table_block_list_.MergeFrom(from.table_block_list_);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void TableBlock::CopyFrom(const TableBlock& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:StorageEngineInstance.TableBlock)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TableBlock::IsInitialized() const {
+  return true;
+}
+
+void TableBlock::InternalSwap(TableBlock* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  table_block_list_.InternalSwap(&other->table_block_list_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata TableBlock::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
+      file_level_metadata_storage_5fengine_5finstance_2eproto[26]);
+}
+
+// ===================================================================
+
+class LBARequest_SST::_Internal {
+ public:
+  static const ::StorageEngineInstance::TableBlock& table_lba_list(const LBARequest_SST* msg);
+};
+
+const ::StorageEngineInstance::TableBlock&
+LBARequest_SST::_Internal::table_lba_list(const LBARequest_SST* msg) {
+  return *msg->table_lba_list_;
+}
 LBARequest_SST::LBARequest_SST(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
-  csd_list_(arena),
-  table_lba_list_(arena) {
+  csd_list_(arena) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
@@ -8062,11 +8318,16 @@ LBARequest_SST::LBARequest_SST(const LBARequest_SST& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       csd_list_(from.csd_list_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  table_lba_list_.MergeFrom(from.table_lba_list_);
+  if (from._internal_has_table_lba_list()) {
+    table_lba_list_ = new ::StorageEngineInstance::TableBlock(*from.table_lba_list_);
+  } else {
+    table_lba_list_ = nullptr;
+  }
   // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.LBARequest.SST)
 }
 
 inline void LBARequest_SST::SharedCtor() {
+table_lba_list_ = nullptr;
 }
 
 LBARequest_SST::~LBARequest_SST() {
@@ -8078,17 +8339,14 @@ LBARequest_SST::~LBARequest_SST() {
 
 inline void LBARequest_SST::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  if (this != internal_default_instance()) delete table_lba_list_;
 }
 
 void LBARequest_SST::ArenaDtor(void* object) {
   LBARequest_SST* _this = reinterpret_cast< LBARequest_SST* >(object);
   (void)_this;
-  _this->table_lba_list_. ~MapField();
 }
-inline void LBARequest_SST::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena) {
-  if (arena != nullptr) {
-    arena->OwnCustomDestructor(this, &LBARequest_SST::ArenaDtor);
-  }
+void LBARequest_SST::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
 }
 void LBARequest_SST::SetCachedSize(int size) const {
   _cached_size_.Set(size);
@@ -8101,7 +8359,10 @@ void LBARequest_SST::Clear() {
   (void) cached_has_bits;
 
   csd_list_.Clear();
-  table_lba_list_.Clear();
+  if (GetArenaForAllocation() == nullptr && table_lba_list_ != nullptr) {
+    delete table_lba_list_;
+  }
+  table_lba_list_ = nullptr;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -8126,16 +8387,11 @@ const char* LBARequest_SST::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE
         } else
           goto handle_unusual;
         continue;
-      // map<int32, .StorageEngineInstance.ChunkList> table_lba_list = 2;
+      // .StorageEngineInstance.TableBlock table_lba_list = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(&table_lba_list_, ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
+          ptr = ctx->ParseMessage(_internal_mutable_table_lba_list(), ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -8178,35 +8434,12 @@ uint8_t* LBARequest_SST::_InternalSerialize(
     target = stream->WriteString(1, s, target);
   }
 
-  // map<int32, .StorageEngineInstance.ChunkList> table_lba_list = 2;
-  if (!this->_internal_table_lba_list().empty()) {
-    typedef ::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::const_pointer
-        ConstPtr;
-    typedef ::PROTOBUF_NAMESPACE_ID::internal::SortItem< int32_t, ConstPtr > SortItem;
-    typedef ::PROTOBUF_NAMESPACE_ID::internal::CompareByFirstField<SortItem> Less;
-
-    if (stream->IsSerializationDeterministic() &&
-        this->_internal_table_lba_list().size() > 1) {
-      ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->_internal_table_lba_list().size()]);
-      typedef ::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::size_type size_type;
-      size_type n = 0;
-      for (::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::const_iterator
-          it = this->_internal_table_lba_list().begin();
-          it != this->_internal_table_lba_list().end(); ++it, ++n) {
-        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
-      }
-      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
-      for (size_type i = 0; i < n; i++) {
-        target = LBARequest_SST_TableLbaListEntry_DoNotUse::Funcs::InternalSerialize(2, items[static_cast<ptrdiff_t>(i)].second->first, items[static_cast<ptrdiff_t>(i)].second->second, target, stream);
-      }
-    } else {
-      for (::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::const_iterator
-          it = this->_internal_table_lba_list().begin();
-          it != this->_internal_table_lba_list().end(); ++it) {
-        target = LBARequest_SST_TableLbaListEntry_DoNotUse::Funcs::InternalSerialize(2, it->first, it->second, target, stream);
-      }
-    }
+  // .StorageEngineInstance.TableBlock table_lba_list = 2;
+  if (this->_internal_has_table_lba_list()) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        2, _Internal::table_lba_list(this), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -8233,13 +8466,11 @@ size_t LBARequest_SST::ByteSizeLong() const {
       csd_list_.Get(i));
   }
 
-  // map<int32, .StorageEngineInstance.ChunkList> table_lba_list = 2;
-  total_size += 1 *
-      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_table_lba_list_size());
-  for (::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::const_iterator
-      it = this->_internal_table_lba_list().begin();
-      it != this->_internal_table_lba_list().end(); ++it) {
-    total_size += LBARequest_SST_TableLbaListEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
+  // .StorageEngineInstance.TableBlock table_lba_list = 2;
+  if (this->_internal_has_table_lba_list()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *table_lba_list_);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -8265,7 +8496,9 @@ void LBARequest_SST::MergeFrom(const LBARequest_SST& from) {
   (void) cached_has_bits;
 
   csd_list_.MergeFrom(from.csd_list_);
-  table_lba_list_.MergeFrom(from.table_lba_list_);
+  if (from._internal_has_table_lba_list()) {
+    _internal_mutable_table_lba_list()->::StorageEngineInstance::TableBlock::MergeFrom(from._internal_table_lba_list());
+  }
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -8284,27 +8517,27 @@ void LBARequest_SST::InternalSwap(LBARequest_SST* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   csd_list_.InternalSwap(&other->csd_list_);
-  table_lba_list_.InternalSwap(&other->table_lba_list_);
+  swap(table_lba_list_, other->table_lba_list_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata LBARequest_SST::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
-      file_level_metadata_storage_5fengine_5finstance_2eproto[26]);
+      file_level_metadata_storage_5fengine_5finstance_2eproto[27]);
 }
 
 // ===================================================================
 
-LBARequest_SstBlockInfoEntry_DoNotUse::LBARequest_SstBlockInfoEntry_DoNotUse() {}
-LBARequest_SstBlockInfoEntry_DoNotUse::LBARequest_SstBlockInfoEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+LBARequest_SstListEntry_DoNotUse::LBARequest_SstListEntry_DoNotUse() {}
+LBARequest_SstListEntry_DoNotUse::LBARequest_SstListEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
     : SuperType(arena) {}
-void LBARequest_SstBlockInfoEntry_DoNotUse::MergeFrom(const LBARequest_SstBlockInfoEntry_DoNotUse& other) {
+void LBARequest_SstListEntry_DoNotUse::MergeFrom(const LBARequest_SstListEntry_DoNotUse& other) {
   MergeFromInternal(other);
 }
-::PROTOBUF_NAMESPACE_ID::Metadata LBARequest_SstBlockInfoEntry_DoNotUse::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata LBARequest_SstListEntry_DoNotUse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
-      file_level_metadata_storage_5fengine_5finstance_2eproto[27]);
+      file_level_metadata_storage_5fengine_5finstance_2eproto[28]);
 }
 
 // ===================================================================
@@ -8316,7 +8549,7 @@ class LBARequest::_Internal {
 LBARequest::LBARequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
-  sst_block_info_(arena) {
+  sst_list_(arena) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
@@ -8326,7 +8559,7 @@ LBARequest::LBARequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 LBARequest::LBARequest(const LBARequest& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  sst_block_info_.MergeFrom(from.sst_block_info_);
+  sst_list_.MergeFrom(from.sst_list_);
   // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.LBARequest)
 }
 
@@ -8347,7 +8580,7 @@ inline void LBARequest::SharedDtor() {
 void LBARequest::ArenaDtor(void* object) {
   LBARequest* _this = reinterpret_cast< LBARequest* >(object);
   (void)_this;
-  _this->sst_block_info_. ~MapField();
+  _this->sst_list_. ~MapField();
 }
 inline void LBARequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena) {
   if (arena != nullptr) {
@@ -8364,7 +8597,7 @@ void LBARequest::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  sst_block_info_.Clear();
+  sst_list_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -8374,13 +8607,13 @@ const char* LBARequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID:
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // map<string, .StorageEngineInstance.LBARequest.SST> sst_block_info = 1;
+      // map<string, .StorageEngineInstance.LBARequest.SST> sst_list = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ctx->ParseMessage(&sst_block_info_, ptr);
+            ptr = ctx->ParseMessage(&sst_list_, ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
@@ -8416,8 +8649,8 @@ uint8_t* LBARequest::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // map<string, .StorageEngineInstance.LBARequest.SST> sst_block_info = 1;
-  if (!this->_internal_sst_block_info().empty()) {
+  // map<string, .StorageEngineInstance.LBARequest.SST> sst_list = 1;
+  if (!this->_internal_sst_list().empty()) {
     typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::LBARequest_SST >::const_pointer
         ConstPtr;
     typedef ConstPtr SortItem;
@@ -8428,31 +8661,31 @@ uint8_t* LBARequest::_InternalSerialize(
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
           p->first.data(), static_cast<int>(p->first.length()),
           ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-          "StorageEngineInstance.LBARequest.SstBlockInfoEntry.key");
+          "StorageEngineInstance.LBARequest.SstListEntry.key");
       }
     };
 
     if (stream->IsSerializationDeterministic() &&
-        this->_internal_sst_block_info().size() > 1) {
+        this->_internal_sst_list().size() > 1) {
       ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->_internal_sst_block_info().size()]);
+          new SortItem[this->_internal_sst_list().size()]);
       typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::LBARequest_SST >::size_type size_type;
       size_type n = 0;
       for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::LBARequest_SST >::const_iterator
-          it = this->_internal_sst_block_info().begin();
-          it != this->_internal_sst_block_info().end(); ++it, ++n) {
+          it = this->_internal_sst_list().begin();
+          it != this->_internal_sst_list().end(); ++it, ++n) {
         items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
       }
       ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
       for (size_type i = 0; i < n; i++) {
-        target = LBARequest_SstBlockInfoEntry_DoNotUse::Funcs::InternalSerialize(1, items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second, target, stream);
+        target = LBARequest_SstListEntry_DoNotUse::Funcs::InternalSerialize(1, items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second, target, stream);
         Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
       }
     } else {
       for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::LBARequest_SST >::const_iterator
-          it = this->_internal_sst_block_info().begin();
-          it != this->_internal_sst_block_info().end(); ++it) {
-        target = LBARequest_SstBlockInfoEntry_DoNotUse::Funcs::InternalSerialize(1, it->first, it->second, target, stream);
+          it = this->_internal_sst_list().begin();
+          it != this->_internal_sst_list().end(); ++it) {
+        target = LBARequest_SstListEntry_DoNotUse::Funcs::InternalSerialize(1, it->first, it->second, target, stream);
         Utf8Check::Check(&(*it));
       }
     }
@@ -8474,13 +8707,13 @@ size_t LBARequest::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // map<string, .StorageEngineInstance.LBARequest.SST> sst_block_info = 1;
+  // map<string, .StorageEngineInstance.LBARequest.SST> sst_list = 1;
   total_size += 1 *
-      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_sst_block_info_size());
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_sst_list_size());
   for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::LBARequest_SST >::const_iterator
-      it = this->_internal_sst_block_info().begin();
-      it != this->_internal_sst_block_info().end(); ++it) {
-    total_size += LBARequest_SstBlockInfoEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
+      it = this->_internal_sst_list().begin();
+      it != this->_internal_sst_list().end(); ++it) {
+    total_size += LBARequest_SstListEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -8505,7 +8738,7 @@ void LBARequest::MergeFrom(const LBARequest& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  sst_block_info_.MergeFrom(from.sst_block_info_);
+  sst_list_.MergeFrom(from.sst_list_);
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -8523,24 +8756,10 @@ bool LBARequest::IsInitialized() const {
 void LBARequest::InternalSwap(LBARequest* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  sst_block_info_.InternalSwap(&other->sst_block_info_);
+  sst_list_.InternalSwap(&other->sst_list_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata LBARequest::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
-      &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
-      file_level_metadata_storage_5fengine_5finstance_2eproto[28]);
-}
-
-// ===================================================================
-
-PBAResponse_CSD_TablePbaListEntry_DoNotUse::PBAResponse_CSD_TablePbaListEntry_DoNotUse() {}
-PBAResponse_CSD_TablePbaListEntry_DoNotUse::PBAResponse_CSD_TablePbaListEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-    : SuperType(arena) {}
-void PBAResponse_CSD_TablePbaListEntry_DoNotUse::MergeFrom(const PBAResponse_CSD_TablePbaListEntry_DoNotUse& other) {
-  MergeFromInternal(other);
-}
-::PROTOBUF_NAMESPACE_ID::Metadata PBAResponse_CSD_TablePbaListEntry_DoNotUse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
       file_level_metadata_storage_5fengine_5finstance_2eproto[29]);
@@ -8548,230 +8767,16 @@ void PBAResponse_CSD_TablePbaListEntry_DoNotUse::MergeFrom(const PBAResponse_CSD
 
 // ===================================================================
 
-class PBAResponse_CSD::_Internal {
- public:
-};
-
-PBAResponse_CSD::PBAResponse_CSD(::PROTOBUF_NAMESPACE_ID::Arena* arena,
-                         bool is_message_owned)
-  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
-  table_pba_list_(arena) {
-  SharedCtor();
-  if (!is_message_owned) {
-    RegisterArenaDtor(arena);
-  }
-  // @@protoc_insertion_point(arena_constructor:StorageEngineInstance.PBAResponse.CSD)
+PBAResponse_SST_TablePbaListEntry_DoNotUse::PBAResponse_SST_TablePbaListEntry_DoNotUse() {}
+PBAResponse_SST_TablePbaListEntry_DoNotUse::PBAResponse_SST_TablePbaListEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+    : SuperType(arena) {}
+void PBAResponse_SST_TablePbaListEntry_DoNotUse::MergeFrom(const PBAResponse_SST_TablePbaListEntry_DoNotUse& other) {
+  MergeFromInternal(other);
 }
-PBAResponse_CSD::PBAResponse_CSD(const PBAResponse_CSD& from)
-  : ::PROTOBUF_NAMESPACE_ID::Message() {
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  table_pba_list_.MergeFrom(from.table_pba_list_);
-  // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.PBAResponse.CSD)
-}
-
-inline void PBAResponse_CSD::SharedCtor() {
-}
-
-PBAResponse_CSD::~PBAResponse_CSD() {
-  // @@protoc_insertion_point(destructor:StorageEngineInstance.PBAResponse.CSD)
-  if (GetArenaForAllocation() != nullptr) return;
-  SharedDtor();
-  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-inline void PBAResponse_CSD::SharedDtor() {
-  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
-}
-
-void PBAResponse_CSD::ArenaDtor(void* object) {
-  PBAResponse_CSD* _this = reinterpret_cast< PBAResponse_CSD* >(object);
-  (void)_this;
-  _this->table_pba_list_. ~MapField();
-}
-inline void PBAResponse_CSD::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena) {
-  if (arena != nullptr) {
-    arena->OwnCustomDestructor(this, &PBAResponse_CSD::ArenaDtor);
-  }
-}
-void PBAResponse_CSD::SetCachedSize(int size) const {
-  _cached_size_.Set(size);
-}
-
-void PBAResponse_CSD::Clear() {
-// @@protoc_insertion_point(message_clear_start:StorageEngineInstance.PBAResponse.CSD)
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  table_pba_list_.Clear();
-  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
-}
-
-const char* PBAResponse_CSD::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
-#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
-  while (!ctx->Done(&ptr)) {
-    uint32_t tag;
-    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
-    switch (tag >> 3) {
-      // map<int32, .StorageEngineInstance.ChunkList> table_pba_list = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(&table_pba_list_, ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<18>(ptr));
-        } else
-          goto handle_unusual;
-        continue;
-      default:
-        goto handle_unusual;
-    }  // switch
-  handle_unusual:
-    if ((tag == 0) || ((tag & 7) == 4)) {
-      CHK_(ptr);
-      ctx->SetLastTag(tag);
-      goto message_done;
-    }
-    ptr = UnknownFieldParse(
-        tag,
-        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
-        ptr, ctx);
-    CHK_(ptr != nullptr);
-  }  // while
-message_done:
-  return ptr;
-failure:
-  ptr = nullptr;
-  goto message_done;
-#undef CHK_
-}
-
-uint8_t* PBAResponse_CSD::_InternalSerialize(
-    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
-  // @@protoc_insertion_point(serialize_to_array_start:StorageEngineInstance.PBAResponse.CSD)
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  // map<int32, .StorageEngineInstance.ChunkList> table_pba_list = 2;
-  if (!this->_internal_table_pba_list().empty()) {
-    typedef ::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::const_pointer
-        ConstPtr;
-    typedef ::PROTOBUF_NAMESPACE_ID::internal::SortItem< int32_t, ConstPtr > SortItem;
-    typedef ::PROTOBUF_NAMESPACE_ID::internal::CompareByFirstField<SortItem> Less;
-
-    if (stream->IsSerializationDeterministic() &&
-        this->_internal_table_pba_list().size() > 1) {
-      ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->_internal_table_pba_list().size()]);
-      typedef ::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::size_type size_type;
-      size_type n = 0;
-      for (::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::const_iterator
-          it = this->_internal_table_pba_list().begin();
-          it != this->_internal_table_pba_list().end(); ++it, ++n) {
-        items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
-      }
-      ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
-      for (size_type i = 0; i < n; i++) {
-        target = PBAResponse_CSD_TablePbaListEntry_DoNotUse::Funcs::InternalSerialize(2, items[static_cast<ptrdiff_t>(i)].second->first, items[static_cast<ptrdiff_t>(i)].second->second, target, stream);
-      }
-    } else {
-      for (::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::const_iterator
-          it = this->_internal_table_pba_list().begin();
-          it != this->_internal_table_pba_list().end(); ++it) {
-        target = PBAResponse_CSD_TablePbaListEntry_DoNotUse::Funcs::InternalSerialize(2, it->first, it->second, target, stream);
-      }
-    }
-  }
-
-  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
-        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
-  }
-  // @@protoc_insertion_point(serialize_to_array_end:StorageEngineInstance.PBAResponse.CSD)
-  return target;
-}
-
-size_t PBAResponse_CSD::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:StorageEngineInstance.PBAResponse.CSD)
-  size_t total_size = 0;
-
-  uint32_t cached_has_bits = 0;
-  // Prevent compiler warnings about cached_has_bits being unused
-  (void) cached_has_bits;
-
-  // map<int32, .StorageEngineInstance.ChunkList> table_pba_list = 2;
-  total_size += 1 *
-      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_table_pba_list_size());
-  for (::PROTOBUF_NAMESPACE_ID::Map< int32_t, ::StorageEngineInstance::ChunkList >::const_iterator
-      it = this->_internal_table_pba_list().begin();
-      it != this->_internal_table_pba_list().end(); ++it) {
-    total_size += PBAResponse_CSD_TablePbaListEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
-  }
-
-  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
-}
-
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData PBAResponse_CSD::_class_data_ = {
-    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
-    PBAResponse_CSD::MergeImpl
-};
-const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*PBAResponse_CSD::GetClassData() const { return &_class_data_; }
-
-void PBAResponse_CSD::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
-                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
-  static_cast<PBAResponse_CSD *>(to)->MergeFrom(
-      static_cast<const PBAResponse_CSD &>(from));
-}
-
-
-void PBAResponse_CSD::MergeFrom(const PBAResponse_CSD& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:StorageEngineInstance.PBAResponse.CSD)
-  GOOGLE_DCHECK_NE(&from, this);
-  uint32_t cached_has_bits = 0;
-  (void) cached_has_bits;
-
-  table_pba_list_.MergeFrom(from.table_pba_list_);
-  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-}
-
-void PBAResponse_CSD::CopyFrom(const PBAResponse_CSD& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:StorageEngineInstance.PBAResponse.CSD)
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool PBAResponse_CSD::IsInitialized() const {
-  return true;
-}
-
-void PBAResponse_CSD::InternalSwap(PBAResponse_CSD* other) {
-  using std::swap;
-  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  table_pba_list_.InternalSwap(&other->table_pba_list_);
-}
-
-::PROTOBUF_NAMESPACE_ID::Metadata PBAResponse_CSD::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata PBAResponse_SST_TablePbaListEntry_DoNotUse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
       file_level_metadata_storage_5fengine_5finstance_2eproto[30]);
-}
-
-// ===================================================================
-
-PBAResponse_SST_CsdPbaListEntry_DoNotUse::PBAResponse_SST_CsdPbaListEntry_DoNotUse() {}
-PBAResponse_SST_CsdPbaListEntry_DoNotUse::PBAResponse_SST_CsdPbaListEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
-    : SuperType(arena) {}
-void PBAResponse_SST_CsdPbaListEntry_DoNotUse::MergeFrom(const PBAResponse_SST_CsdPbaListEntry_DoNotUse& other) {
-  MergeFromInternal(other);
-}
-::PROTOBUF_NAMESPACE_ID::Metadata PBAResponse_SST_CsdPbaListEntry_DoNotUse::GetMetadata() const {
-  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
-      &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
-      file_level_metadata_storage_5fengine_5finstance_2eproto[31]);
 }
 
 // ===================================================================
@@ -8783,7 +8788,7 @@ class PBAResponse_SST::_Internal {
 PBAResponse_SST::PBAResponse_SST(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
-  csd_pba_list_(arena) {
+  table_pba_list_(arena) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
@@ -8793,7 +8798,7 @@ PBAResponse_SST::PBAResponse_SST(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 PBAResponse_SST::PBAResponse_SST(const PBAResponse_SST& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  csd_pba_list_.MergeFrom(from.csd_pba_list_);
+  table_pba_list_.MergeFrom(from.table_pba_list_);
   // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.PBAResponse.SST)
 }
 
@@ -8814,7 +8819,7 @@ inline void PBAResponse_SST::SharedDtor() {
 void PBAResponse_SST::ArenaDtor(void* object) {
   PBAResponse_SST* _this = reinterpret_cast< PBAResponse_SST* >(object);
   (void)_this;
-  _this->csd_pba_list_. ~MapField();
+  _this->table_pba_list_. ~MapField();
 }
 inline void PBAResponse_SST::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena) {
   if (arena != nullptr) {
@@ -8831,7 +8836,7 @@ void PBAResponse_SST::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  csd_pba_list_.Clear();
+  table_pba_list_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -8841,13 +8846,13 @@ const char* PBAResponse_SST::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPAC
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // map<string, .StorageEngineInstance.PBAResponse.CSD> csd_pba_list = 1;
+      // map<string, .StorageEngineInstance.TableBlock> table_pba_list = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ctx->ParseMessage(&csd_pba_list_, ptr);
+            ptr = ctx->ParseMessage(&table_pba_list_, ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
@@ -8883,9 +8888,9 @@ uint8_t* PBAResponse_SST::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // map<string, .StorageEngineInstance.PBAResponse.CSD> csd_pba_list = 1;
-  if (!this->_internal_csd_pba_list().empty()) {
-    typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::PBAResponse_CSD >::const_pointer
+  // map<string, .StorageEngineInstance.TableBlock> table_pba_list = 1;
+  if (!this->_internal_table_pba_list().empty()) {
+    typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::TableBlock >::const_pointer
         ConstPtr;
     typedef ConstPtr SortItem;
     typedef ::PROTOBUF_NAMESPACE_ID::internal::CompareByDerefFirst<SortItem> Less;
@@ -8895,31 +8900,31 @@ uint8_t* PBAResponse_SST::_InternalSerialize(
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
           p->first.data(), static_cast<int>(p->first.length()),
           ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-          "StorageEngineInstance.PBAResponse.SST.CsdPbaListEntry.key");
+          "StorageEngineInstance.PBAResponse.SST.TablePbaListEntry.key");
       }
     };
 
     if (stream->IsSerializationDeterministic() &&
-        this->_internal_csd_pba_list().size() > 1) {
+        this->_internal_table_pba_list().size() > 1) {
       ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->_internal_csd_pba_list().size()]);
-      typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::PBAResponse_CSD >::size_type size_type;
+          new SortItem[this->_internal_table_pba_list().size()]);
+      typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::TableBlock >::size_type size_type;
       size_type n = 0;
-      for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::PBAResponse_CSD >::const_iterator
-          it = this->_internal_csd_pba_list().begin();
-          it != this->_internal_csd_pba_list().end(); ++it, ++n) {
+      for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::TableBlock >::const_iterator
+          it = this->_internal_table_pba_list().begin();
+          it != this->_internal_table_pba_list().end(); ++it, ++n) {
         items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
       }
       ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
       for (size_type i = 0; i < n; i++) {
-        target = PBAResponse_SST_CsdPbaListEntry_DoNotUse::Funcs::InternalSerialize(1, items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second, target, stream);
+        target = PBAResponse_SST_TablePbaListEntry_DoNotUse::Funcs::InternalSerialize(1, items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second, target, stream);
         Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
       }
     } else {
-      for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::PBAResponse_CSD >::const_iterator
-          it = this->_internal_csd_pba_list().begin();
-          it != this->_internal_csd_pba_list().end(); ++it) {
-        target = PBAResponse_SST_CsdPbaListEntry_DoNotUse::Funcs::InternalSerialize(1, it->first, it->second, target, stream);
+      for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::TableBlock >::const_iterator
+          it = this->_internal_table_pba_list().begin();
+          it != this->_internal_table_pba_list().end(); ++it) {
+        target = PBAResponse_SST_TablePbaListEntry_DoNotUse::Funcs::InternalSerialize(1, it->first, it->second, target, stream);
         Utf8Check::Check(&(*it));
       }
     }
@@ -8941,13 +8946,13 @@ size_t PBAResponse_SST::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // map<string, .StorageEngineInstance.PBAResponse.CSD> csd_pba_list = 1;
+  // map<string, .StorageEngineInstance.TableBlock> table_pba_list = 1;
   total_size += 1 *
-      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_csd_pba_list_size());
-  for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::PBAResponse_CSD >::const_iterator
-      it = this->_internal_csd_pba_list().begin();
-      it != this->_internal_csd_pba_list().end(); ++it) {
-    total_size += PBAResponse_SST_CsdPbaListEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_table_pba_list_size());
+  for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::TableBlock >::const_iterator
+      it = this->_internal_table_pba_list().begin();
+      it != this->_internal_table_pba_list().end(); ++it) {
+    total_size += PBAResponse_SST_TablePbaListEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -8972,7 +8977,7 @@ void PBAResponse_SST::MergeFrom(const PBAResponse_SST& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  csd_pba_list_.MergeFrom(from.csd_pba_list_);
+  table_pba_list_.MergeFrom(from.table_pba_list_);
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -8990,27 +8995,27 @@ bool PBAResponse_SST::IsInitialized() const {
 void PBAResponse_SST::InternalSwap(PBAResponse_SST* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  csd_pba_list_.InternalSwap(&other->csd_pba_list_);
+  table_pba_list_.InternalSwap(&other->table_pba_list_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata PBAResponse_SST::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
-      file_level_metadata_storage_5fengine_5finstance_2eproto[32]);
+      file_level_metadata_storage_5fengine_5finstance_2eproto[31]);
 }
 
 // ===================================================================
 
-PBAResponse_SstBlockInfoEntry_DoNotUse::PBAResponse_SstBlockInfoEntry_DoNotUse() {}
-PBAResponse_SstBlockInfoEntry_DoNotUse::PBAResponse_SstBlockInfoEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+PBAResponse_SstListEntry_DoNotUse::PBAResponse_SstListEntry_DoNotUse() {}
+PBAResponse_SstListEntry_DoNotUse::PBAResponse_SstListEntry_DoNotUse(::PROTOBUF_NAMESPACE_ID::Arena* arena)
     : SuperType(arena) {}
-void PBAResponse_SstBlockInfoEntry_DoNotUse::MergeFrom(const PBAResponse_SstBlockInfoEntry_DoNotUse& other) {
+void PBAResponse_SstListEntry_DoNotUse::MergeFrom(const PBAResponse_SstListEntry_DoNotUse& other) {
   MergeFromInternal(other);
 }
-::PROTOBUF_NAMESPACE_ID::Metadata PBAResponse_SstBlockInfoEntry_DoNotUse::GetMetadata() const {
+::PROTOBUF_NAMESPACE_ID::Metadata PBAResponse_SstListEntry_DoNotUse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
-      file_level_metadata_storage_5fengine_5finstance_2eproto[33]);
+      file_level_metadata_storage_5fengine_5finstance_2eproto[32]);
 }
 
 // ===================================================================
@@ -9022,7 +9027,7 @@ class PBAResponse::_Internal {
 PBAResponse::PBAResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
-  sst_block_info_(arena) {
+  sst_list_(arena) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
@@ -9032,7 +9037,7 @@ PBAResponse::PBAResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 PBAResponse::PBAResponse(const PBAResponse& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  sst_block_info_.MergeFrom(from.sst_block_info_);
+  sst_list_.MergeFrom(from.sst_list_);
   // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.PBAResponse)
 }
 
@@ -9053,7 +9058,7 @@ inline void PBAResponse::SharedDtor() {
 void PBAResponse::ArenaDtor(void* object) {
   PBAResponse* _this = reinterpret_cast< PBAResponse* >(object);
   (void)_this;
-  _this->sst_block_info_. ~MapField();
+  _this->sst_list_. ~MapField();
 }
 inline void PBAResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena) {
   if (arena != nullptr) {
@@ -9070,7 +9075,7 @@ void PBAResponse::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  sst_block_info_.Clear();
+  sst_list_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -9080,13 +9085,13 @@ const char* PBAResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // map<string, .StorageEngineInstance.PBAResponse.SST> sst_block_info = 1;
+      // map<string, .StorageEngineInstance.PBAResponse.SST> sst_list = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ctx->ParseMessage(&sst_block_info_, ptr);
+            ptr = ctx->ParseMessage(&sst_list_, ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
@@ -9122,8 +9127,8 @@ uint8_t* PBAResponse::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // map<string, .StorageEngineInstance.PBAResponse.SST> sst_block_info = 1;
-  if (!this->_internal_sst_block_info().empty()) {
+  // map<string, .StorageEngineInstance.PBAResponse.SST> sst_list = 1;
+  if (!this->_internal_sst_list().empty()) {
     typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::PBAResponse_SST >::const_pointer
         ConstPtr;
     typedef ConstPtr SortItem;
@@ -9134,31 +9139,31 @@ uint8_t* PBAResponse::_InternalSerialize(
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
           p->first.data(), static_cast<int>(p->first.length()),
           ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-          "StorageEngineInstance.PBAResponse.SstBlockInfoEntry.key");
+          "StorageEngineInstance.PBAResponse.SstListEntry.key");
       }
     };
 
     if (stream->IsSerializationDeterministic() &&
-        this->_internal_sst_block_info().size() > 1) {
+        this->_internal_sst_list().size() > 1) {
       ::std::unique_ptr<SortItem[]> items(
-          new SortItem[this->_internal_sst_block_info().size()]);
+          new SortItem[this->_internal_sst_list().size()]);
       typedef ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::PBAResponse_SST >::size_type size_type;
       size_type n = 0;
       for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::PBAResponse_SST >::const_iterator
-          it = this->_internal_sst_block_info().begin();
-          it != this->_internal_sst_block_info().end(); ++it, ++n) {
+          it = this->_internal_sst_list().begin();
+          it != this->_internal_sst_list().end(); ++it, ++n) {
         items[static_cast<ptrdiff_t>(n)] = SortItem(&*it);
       }
       ::std::sort(&items[0], &items[static_cast<ptrdiff_t>(n)], Less());
       for (size_type i = 0; i < n; i++) {
-        target = PBAResponse_SstBlockInfoEntry_DoNotUse::Funcs::InternalSerialize(1, items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second, target, stream);
+        target = PBAResponse_SstListEntry_DoNotUse::Funcs::InternalSerialize(1, items[static_cast<ptrdiff_t>(i)]->first, items[static_cast<ptrdiff_t>(i)]->second, target, stream);
         Utf8Check::Check(&(*items[static_cast<ptrdiff_t>(i)]));
       }
     } else {
       for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::PBAResponse_SST >::const_iterator
-          it = this->_internal_sst_block_info().begin();
-          it != this->_internal_sst_block_info().end(); ++it) {
-        target = PBAResponse_SstBlockInfoEntry_DoNotUse::Funcs::InternalSerialize(1, it->first, it->second, target, stream);
+          it = this->_internal_sst_list().begin();
+          it != this->_internal_sst_list().end(); ++it) {
+        target = PBAResponse_SstListEntry_DoNotUse::Funcs::InternalSerialize(1, it->first, it->second, target, stream);
         Utf8Check::Check(&(*it));
       }
     }
@@ -9180,13 +9185,13 @@ size_t PBAResponse::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // map<string, .StorageEngineInstance.PBAResponse.SST> sst_block_info = 1;
+  // map<string, .StorageEngineInstance.PBAResponse.SST> sst_list = 1;
   total_size += 1 *
-      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_sst_block_info_size());
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(this->_internal_sst_list_size());
   for (::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::PBAResponse_SST >::const_iterator
-      it = this->_internal_sst_block_info().begin();
-      it != this->_internal_sst_block_info().end(); ++it) {
-    total_size += PBAResponse_SstBlockInfoEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
+      it = this->_internal_sst_list().begin();
+      it != this->_internal_sst_list().end(); ++it) {
+    total_size += PBAResponse_SstListEntry_DoNotUse::Funcs::ByteSizeLong(it->first, it->second);
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
@@ -9211,7 +9216,7 @@ void PBAResponse::MergeFrom(const PBAResponse& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  sst_block_info_.MergeFrom(from.sst_block_info_);
+  sst_list_.MergeFrom(from.sst_list_);
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -9229,13 +9234,13 @@ bool PBAResponse::IsInitialized() const {
 void PBAResponse::InternalSwap(PBAResponse* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  sst_block_info_.InternalSwap(&other->sst_block_info_);
+  sst_list_.InternalSwap(&other->sst_list_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata PBAResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
-      file_level_metadata_storage_5fengine_5finstance_2eproto[34]);
+      file_level_metadata_storage_5fengine_5finstance_2eproto[33]);
 }
 
 // ===================================================================
@@ -9487,7 +9492,7 @@ void WALRequest::InternalSwap(WALRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata WALRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
-      file_level_metadata_storage_5fengine_5finstance_2eproto[35]);
+      file_level_metadata_storage_5fengine_5finstance_2eproto[34]);
 }
 
 // ===================================================================
@@ -9753,7 +9758,7 @@ void WALResponse::InternalSwap(WALResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata WALResponse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
-      file_level_metadata_storage_5fengine_5finstance_2eproto[36]);
+      file_level_metadata_storage_5fengine_5finstance_2eproto[35]);
 }
 
 // ===================================================================
@@ -9977,7 +9982,7 @@ void VolumeRequest::InternalSwap(VolumeRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata VolumeRequest::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
-      file_level_metadata_storage_5fengine_5finstance_2eproto[37]);
+      file_level_metadata_storage_5fengine_5finstance_2eproto[36]);
 }
 
 // ===================================================================
@@ -10278,7 +10283,7 @@ void AllocatedVolumeInfo_Allocation::InternalSwap(AllocatedVolumeInfo_Allocation
 ::PROTOBUF_NAMESPACE_ID::Metadata AllocatedVolumeInfo_Allocation::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
-      file_level_metadata_storage_5fengine_5finstance_2eproto[38]);
+      file_level_metadata_storage_5fengine_5finstance_2eproto[37]);
 }
 
 // ===================================================================
@@ -10292,7 +10297,7 @@ void AllocatedVolumeInfo_CsdAllocationMapEntry_DoNotUse::MergeFrom(const Allocat
 ::PROTOBUF_NAMESPACE_ID::Metadata AllocatedVolumeInfo_CsdAllocationMapEntry_DoNotUse::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
-      file_level_metadata_storage_5fengine_5finstance_2eproto[39]);
+      file_level_metadata_storage_5fengine_5finstance_2eproto[38]);
 }
 
 // ===================================================================
@@ -10517,7 +10522,7 @@ void AllocatedVolumeInfo::InternalSwap(AllocatedVolumeInfo* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata AllocatedVolumeInfo::GetMetadata() const {
   return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
       &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
-      file_level_metadata_storage_5fengine_5finstance_2eproto[40]);
+      file_level_metadata_storage_5fengine_5finstance_2eproto[39]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
@@ -10529,8 +10534,8 @@ template<> PROTOBUF_NOINLINE ::StorageEngineInstance::SnippetRequest* Arena::Cre
 template<> PROTOBUF_NOINLINE ::StorageEngineInstance::ScanInfo_SSTInfo* Arena::CreateMaybeMessage< ::StorageEngineInstance::ScanInfo_SSTInfo >(Arena* arena) {
   return Arena::CreateMessageInternal< ::StorageEngineInstance::ScanInfo_SSTInfo >(arena);
 }
-template<> PROTOBUF_NOINLINE ::StorageEngineInstance::ScanInfo_FilterInfo* Arena::CreateMaybeMessage< ::StorageEngineInstance::ScanInfo_FilterInfo >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::StorageEngineInstance::ScanInfo_FilterInfo >(arena);
+template<> PROTOBUF_NOINLINE ::StorageEngineInstance::ScanInfo_BlockFilteringInfo* Arena::CreateMaybeMessage< ::StorageEngineInstance::ScanInfo_BlockFilteringInfo >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::StorageEngineInstance::ScanInfo_BlockFilteringInfo >(arena);
 }
 template<> PROTOBUF_NOINLINE ::StorageEngineInstance::ScanInfo* Arena::CreateMaybeMessage< ::StorageEngineInstance::ScanInfo >(Arena* arena) {
   return Arena::CreateMessageInternal< ::StorageEngineInstance::ScanInfo >(arena);
@@ -10598,32 +10603,29 @@ template<> PROTOBUF_NOINLINE ::StorageEngineInstance::Chunk* Arena::CreateMaybeM
 template<> PROTOBUF_NOINLINE ::StorageEngineInstance::ChunkList* Arena::CreateMaybeMessage< ::StorageEngineInstance::ChunkList >(Arena* arena) {
   return Arena::CreateMessageInternal< ::StorageEngineInstance::ChunkList >(arena);
 }
-template<> PROTOBUF_NOINLINE ::StorageEngineInstance::LBARequest_SST_TableLbaListEntry_DoNotUse* Arena::CreateMaybeMessage< ::StorageEngineInstance::LBARequest_SST_TableLbaListEntry_DoNotUse >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::StorageEngineInstance::LBARequest_SST_TableLbaListEntry_DoNotUse >(arena);
+template<> PROTOBUF_NOINLINE ::StorageEngineInstance::TableBlock_TableBlockListEntry_DoNotUse* Arena::CreateMaybeMessage< ::StorageEngineInstance::TableBlock_TableBlockListEntry_DoNotUse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::StorageEngineInstance::TableBlock_TableBlockListEntry_DoNotUse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::StorageEngineInstance::TableBlock* Arena::CreateMaybeMessage< ::StorageEngineInstance::TableBlock >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::StorageEngineInstance::TableBlock >(arena);
 }
 template<> PROTOBUF_NOINLINE ::StorageEngineInstance::LBARequest_SST* Arena::CreateMaybeMessage< ::StorageEngineInstance::LBARequest_SST >(Arena* arena) {
   return Arena::CreateMessageInternal< ::StorageEngineInstance::LBARequest_SST >(arena);
 }
-template<> PROTOBUF_NOINLINE ::StorageEngineInstance::LBARequest_SstBlockInfoEntry_DoNotUse* Arena::CreateMaybeMessage< ::StorageEngineInstance::LBARequest_SstBlockInfoEntry_DoNotUse >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::StorageEngineInstance::LBARequest_SstBlockInfoEntry_DoNotUse >(arena);
+template<> PROTOBUF_NOINLINE ::StorageEngineInstance::LBARequest_SstListEntry_DoNotUse* Arena::CreateMaybeMessage< ::StorageEngineInstance::LBARequest_SstListEntry_DoNotUse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::StorageEngineInstance::LBARequest_SstListEntry_DoNotUse >(arena);
 }
 template<> PROTOBUF_NOINLINE ::StorageEngineInstance::LBARequest* Arena::CreateMaybeMessage< ::StorageEngineInstance::LBARequest >(Arena* arena) {
   return Arena::CreateMessageInternal< ::StorageEngineInstance::LBARequest >(arena);
 }
-template<> PROTOBUF_NOINLINE ::StorageEngineInstance::PBAResponse_CSD_TablePbaListEntry_DoNotUse* Arena::CreateMaybeMessage< ::StorageEngineInstance::PBAResponse_CSD_TablePbaListEntry_DoNotUse >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::StorageEngineInstance::PBAResponse_CSD_TablePbaListEntry_DoNotUse >(arena);
-}
-template<> PROTOBUF_NOINLINE ::StorageEngineInstance::PBAResponse_CSD* Arena::CreateMaybeMessage< ::StorageEngineInstance::PBAResponse_CSD >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::StorageEngineInstance::PBAResponse_CSD >(arena);
-}
-template<> PROTOBUF_NOINLINE ::StorageEngineInstance::PBAResponse_SST_CsdPbaListEntry_DoNotUse* Arena::CreateMaybeMessage< ::StorageEngineInstance::PBAResponse_SST_CsdPbaListEntry_DoNotUse >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::StorageEngineInstance::PBAResponse_SST_CsdPbaListEntry_DoNotUse >(arena);
+template<> PROTOBUF_NOINLINE ::StorageEngineInstance::PBAResponse_SST_TablePbaListEntry_DoNotUse* Arena::CreateMaybeMessage< ::StorageEngineInstance::PBAResponse_SST_TablePbaListEntry_DoNotUse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::StorageEngineInstance::PBAResponse_SST_TablePbaListEntry_DoNotUse >(arena);
 }
 template<> PROTOBUF_NOINLINE ::StorageEngineInstance::PBAResponse_SST* Arena::CreateMaybeMessage< ::StorageEngineInstance::PBAResponse_SST >(Arena* arena) {
   return Arena::CreateMessageInternal< ::StorageEngineInstance::PBAResponse_SST >(arena);
 }
-template<> PROTOBUF_NOINLINE ::StorageEngineInstance::PBAResponse_SstBlockInfoEntry_DoNotUse* Arena::CreateMaybeMessage< ::StorageEngineInstance::PBAResponse_SstBlockInfoEntry_DoNotUse >(Arena* arena) {
-  return Arena::CreateMessageInternal< ::StorageEngineInstance::PBAResponse_SstBlockInfoEntry_DoNotUse >(arena);
+template<> PROTOBUF_NOINLINE ::StorageEngineInstance::PBAResponse_SstListEntry_DoNotUse* Arena::CreateMaybeMessage< ::StorageEngineInstance::PBAResponse_SstListEntry_DoNotUse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::StorageEngineInstance::PBAResponse_SstListEntry_DoNotUse >(arena);
 }
 template<> PROTOBUF_NOINLINE ::StorageEngineInstance::PBAResponse* Arena::CreateMaybeMessage< ::StorageEngineInstance::PBAResponse >(Arena* arena) {
   return Arena::CreateMessageInternal< ::StorageEngineInstance::PBAResponse >(arena);

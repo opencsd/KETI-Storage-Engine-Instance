@@ -94,6 +94,10 @@ public:
 		return GetInstance().getTableIndexNumber(db_name, table_name);
 	}
 
+	static BlockList GetTablePBAFilteredBlocks(StorageEngineInstance::ScanInfo_BlockFilteringInfo filter_info, int table_index_number, string sst_name, string csd_name){
+		return GetInstance().getTablePBAFilteredBlocks(filter_info, table_index_number, sst_name, csd_name);
+	}
+
 	static void SetTableInfo(string db_name, string table_name, Table table){
 		return GetInstance().setTableInfo(db_name, table_name, table);
 	}
@@ -111,11 +115,19 @@ public:
         return key;
     }
 
+	static string convertInt2Byte(int integer_data){
+		char byte_data[4];
+        memcpy(byte_data, &integer_data, sizeof(int));
+		string byte_string(byte_data);
+		
+		return byte_data;
+    }
+
 	static void UpdateSSTPBA(string sst_name){
 		return GetInstance().updateSSTPBA(sst_name);
 	}
 
-	static void RequestSSTPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
+	static map<string,string> RequestSSTPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
 		return GetInstance().requestSSTPBA(metadata_request, total_block_count, sst_pba_map);
 	}
 
@@ -169,8 +181,9 @@ private:
 	int initTableManager();
 	void dumpTableManager();
 	void updateSSTPBA(string sst_name);
-	void requestSSTPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map);
+	map<string,string> requestSSTPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map);
 	void updateSSTIndexTable(string sst_name);
+	BlockList getTablePBAFilteredBlocks(StorageEngineInstance::ScanInfo_BlockFilteringInfo filter_info, int table_index_number, string sst_name, string csd_name);
 
     mutex mutex_;
 	unordered_map<string, DB> TableManager_; // key: db name, value: struct DB
