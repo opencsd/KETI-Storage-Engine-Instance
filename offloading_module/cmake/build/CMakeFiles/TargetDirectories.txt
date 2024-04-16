@@ -1,4 +1,0 @@
-/root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles/ss_grpc_proto.dir
-/root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles/offloading-module.dir
-/root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles/edit_cache.dir
-/root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles/rebuild_cache.dir
