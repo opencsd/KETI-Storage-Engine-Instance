@@ -13,6 +13,9 @@
 #include <condition_variable>
 #include <queue>
 #include <thread>
+#include <climits>
+#include <stdlib.h>
+#include <time.h>
 
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
@@ -36,6 +39,7 @@ using namespace rapidjson;
 using StorageEngineInstance::Snippet;
 using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::ScanInfo;
+using StorageEngineInstance::ScanInfo_SSTInfo;
 
 class Scheduler{
   public: 
@@ -47,12 +51,17 @@ class Scheduler{
       SnippetRequest scheduling_target = GetInstance().SnippetQueue_.wait_and_pop();
       return scheduling_target;
     }
-
+    static Scheduler& GetInstance(){
+        static Scheduler scheduler;
+        return scheduler;
+    }
   private:
     Scheduler() {
-      SCHEDULING_ALGORITHM = ROUND_ROBBIN;
+      SCHEDULING_ALGORITHM = DCS;
       std::thread SchedulerThread_(&Scheduler::runScheduler,this);
-      SchedulerThread_.detach();
+      // SchedulerThread_.detach();
+      SchedulerThread_.join();
+
     };
     Scheduler(const Scheduler&);
     ~Scheduler() {};
@@ -60,19 +69,20 @@ class Scheduler{
         return *this;
     }
 
-    static Scheduler& GetInstance(){
-        static Scheduler scheduler;
-        return scheduler;
-    }
+
 
     void runScheduler();
-    map<string,string> getBestCSD(ScanInfo scanInfo);
-    map<string,string> CSDMetricScore(ScanInfo scanInfo); //CSD 병렬 처리 우선
-    map<string,string> FileDistribution(ScanInfo scanInfo); //CSD 순서대로
-    map<string,string> RoundRobbin(ScanInfo scanInfo); //CSD 병렬 처리 우선
-    map<string,string> AlgorithmAutoSelection(ScanInfo scanInfo); //CSD 순서대로
+    map<string,string> getBestCSD(ScanInfo* scanInfo);
+  
+    string DCS_algorithm(vector<string> dcs_candidate_csd); //DSI용
+    map<string,string> DCS_Algorithm(ScanInfo *scanInfo); //Depends on CSD Status
+    map<string,string> DSI_Algorithm(ScanInfo *scanInfo); //Depends on Snippet Information 
+    map<string,string> Random(ScanInfo *scanInfo);
+    map<string,string> Auto_Selection(ScanInfo *scanInfo);
+
   
   public:
+
     inline const static std::string LOGTAG = "Offloading::Snippet Scheduler";
 
   private:

@@ -1,7 +1,7 @@
 CMakeFiles/ss_grpc_proto.dir/storage_engine_instance.grpc.pb.cc.o: \
- /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/storage_engine_instance.grpc.pb.cc \
+ /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/storage_engine_instance.grpc.pb.cc \
  /usr/include/stdc-predef.h \
- /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/storage_engine_instance.pb.h \
+ /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/storage_engine_instance.pb.h \
  /usr/include/c++/11/limits \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
@@ -245,7 +245,7 @@ CMakeFiles/ss_grpc_proto.dir/storage_engine_instance.grpc.pb.cc.o: \
  /include/google/protobuf/reflection_ops.h \
  /include/google/protobuf/map_field_inl.h \
  /include/google/protobuf/map_field.h \
- /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/storage_engine_instance.grpc.pb.h \
+ /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/storage_engine_instance.grpc.pb.h \
  /include/grpcpp/impl/codegen/async_generic_service.h \
  /include/grpc/impl/codegen/port_platform.h /usr/include/linux/version.h \
  /include/grpcpp/impl/codegen/async_stream.h \

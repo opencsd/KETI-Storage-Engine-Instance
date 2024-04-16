@@ -57,10 +57,10 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module
+CMAKE_SOURCE_DIR = /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build
+CMAKE_BINARY_DIR = /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/keti/Storage-Engine-Instance/storage-engine-instance/offloading_module/cmake/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /root/workspace/dhj/KETI-Storage-Engine-Instance/offloading_module/cmake/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -165,6 +165,30 @@ offloading_interface.s: offloading_interface.cc.s
 offloading_interface.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/offloading_interface.cc.s
 .PHONY : offloading_interface.cc.s
+
+snippet_manager.o: snippet_manager.cc.o
+.PHONY : snippet_manager.o
+
+# target to build an object file
+snippet_manager.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/snippet_manager.cc.o
+.PHONY : snippet_manager.cc.o
+
+snippet_manager.i: snippet_manager.cc.i
+.PHONY : snippet_manager.i
+
+# target to preprocess a source file
+snippet_manager.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/snippet_manager.cc.i
+.PHONY : snippet_manager.cc.i
+
+snippet_manager.s: snippet_manager.cc.s
+.PHONY : snippet_manager.s
+
+# target to generate assembly for a file
+snippet_manager.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/offloading-module.dir/build.make CMakeFiles/offloading-module.dir/snippet_manager.cc.s
+.PHONY : snippet_manager.cc.s
 
 snippet_scheduler.o: snippet_scheduler.cc.o
 .PHONY : snippet_scheduler.o
@@ -251,6 +275,9 @@ help:
 	@echo "... offloading_interface.o"
 	@echo "... offloading_interface.i"
 	@echo "... offloading_interface.s"
+	@echo "... snippet_manager.o"
+	@echo "... snippet_manager.i"
+	@echo "... snippet_manager.s"
 	@echo "... snippet_scheduler.o"
 	@echo "... snippet_scheduler.i"
 	@echo "... snippet_scheduler.s"
