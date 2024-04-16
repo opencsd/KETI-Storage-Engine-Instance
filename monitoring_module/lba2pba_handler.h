@@ -30,10 +30,6 @@ using grpc::ClientAsyncResponseReader;
 using grpc::CompletionQueue;
 
 using StorageEngineInstance::StorageManager;
-using StorageEngineInstance::ScanInfo;
-using StorageEngineInstance::PBAResponse;
-using StorageEngineInstance::PBAResponse_PBA;
-using StorageEngineInstance::Chunk;
 
 #define BUFF_SIZE 4096
 
@@ -42,14 +38,11 @@ class StorageManagerConnector {
 public:
     StorageManagerConnector(std::shared_ptr<Channel> channel) : stub_(StorageManager::NewStub(channel)) {}
 
-    void RequestPBA(ScanInfo lbaRequest, int &total_block_count, map<string,string> &sst_pba_map, CompletionQueue *cq) {
+    void RequestPBA(StorageEngineInstance::LBARequest lbaRequest) {
         KETILOG::DEBUGLOG(LOGTAG, "# request pba");
 
-        PBAResponse pbaResponse;
+        StorageEngineInstance::PBAResponse pbaResponse;
         ClientContext context;
-
-        // std::unique_ptr<ClientAsyncResponseReader<LBA2PBAResponse>> rpc(stub_->AsyncRequestPBA(&context,lba2pbaRequest,&test));        
-        // rpc->Finish(&pbaResponse, &status, (void*)1);
         
         Status status = stub_->RequestPBA(&context, lbaRequest, &pbaResponse);
 
@@ -58,49 +51,35 @@ public:
 			KETILOG::FATALLOG(LOGTAG,"RPC failed");
         }
 
-        for (const auto entry : pbaResponse.pba_chunks()) {
-            string sst_name = entry.first;
-            PBAResponse_PBA csd_pba = entry.second;
+        for (const auto res_sst : pbaResponse.sst_list()) {
+            string sst_name = res_sst.first;
+            map<string, TableManager::TableBlock> csd_pba_list;
 
-            //json 구성
-            StringBuffer buffer;
-            buffer.Clear();
-            Writer<StringBuffer> writer(buffer);
-            writer.StartObject();
-            writer.Key("blockList");
-            writer.StartArray();
-            writer.StartObject();
-            for(int l=0; l<csd_pba.chunks_size(); l++){
-                if(l == 0){
-                    writer.Key("offset");
-                    writer.Int64(csd_pba.chunks(l).offset());
-                    writer.Key("length");
-                    writer.StartArray();
-                }else{
-                    if(csd_pba.chunks(l-1).offset()+csd_pba.chunks(l-1).length() != csd_pba.chunks(l).offset()){
-                        writer.EndArray();
-                        writer.EndObject();
-                        writer.StartObject();
-                        writer.Key("offset");
-                        writer.Int64(csd_pba.chunks(l).offset());
-                        writer.Key("length");
-                        writer.StartArray();
+            for(const auto res_csd : res_sst.second.table_pba_list()){
+                string csd_name = res_csd.first;
+                TableManager::TableBlock table_block;
+
+                for(const auto res_pba : res_csd.second.table_block_list()){
+                    int table_index_number = res_pba.first;
+                    TableManager::BlockList block_list;
+
+                    for(const auto res_chunk : res_pba.second.chunks()){
+                        TableManager::Block block;
+                        string block_handle = res_chunk.block_handle();
+                        block.offset = res_chunk.offset();
+                        block.length = res_chunk.length();
+                        block_list.block_list.push_back({block_handle, block});
                     }
+                    
+                    table_block.table_block_list.insert({table_index_number,block_list});
                 }
-                writer.Int(csd_pba.chunks(l).length());
 
-                if(l == csd_pba.chunks_size() - 1){
-                    writer.EndArray();
-                    writer.EndObject();
-                }
+                csd_pba_list.insert({csd_name, table_block});
             }
-            writer.EndArray();
-            writer.EndObject();
 
-            total_block_count += csd_pba.chunks_size();
-            string pba_string = buffer.GetString();
-            sst_pba_map[sst_name] = pba_string;
+            TableManager::SetSSTPBAInfo(sst_name, csd_pba_list);
         }
+            
     }
 
 private:

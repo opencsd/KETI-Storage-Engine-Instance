@@ -13,25 +13,66 @@
 #include <string>
 #include <map>
 
+#include "rapidjson/document.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/prettywriter.h" 
+
+#include <grpcpp/grpcpp.h>
+#include "storage_engine_instance.grpc.pb.h"
+
+#include "keti_log.h"
+#include "ip_config.h"
+#include "lba2pba_handler.h"
+
 using namespace std;
+using namespace rapidjson;
 
 class TableManager { /* modify as singleton class */
 
-/* Methods */
 public:	
-	struct CSD {
-		vector<string> csd_list;
-		vector<bool> is_primary;
+	struct Block {
+		off64_t offset;
+		off64_t length;
+	};
+
+	struct BlockList {
+		// Use list to save sequentially
+		vector<pair<string, Block>> block_list; // key: block index handle, value: block chunk
+	};
+
+	struct TableBlock {
+		map<int, BlockList> table_block_list;
+	};
+
+	struct SST {
+		map<string, TableBlock> csd_pba_list;// key: csd id, value: csd
+		TableBlock table_lba_list;// key: table_index_number, value: table lba
+	};
+	
+	struct IndexTable {
+		string sst_name;
+		string table_index_number;
+		map<string, string> index_table; //key: index, value: primary key 
+		/*
+			HEX 000002D18000000380000280: 
+			...
+			ex) 000002D1 80000003 80000280 = (4byte table_index_number + (4byte index + 4byte primary key))
+		*/
 	};
 
 	struct Table {
 		int table_index_number;
 		vector<string> sst_list;
+		vector<string> index_sst_list;
+		map<string, IndexTable> index_tables; // key: index column name, value: IndexTable
 	};
 
 	struct DB {
-		map<string, Table> table;
+		map<string, Table> table; // key: table name, value: struct Table
 	};
+
+	inline const static string LOGTAG = "Monitoring::Table Manager";
 
 	static void DumpTableManager(){
 		return GetInstance().dumpTableManager();
@@ -45,12 +86,16 @@ public:
 		return GetInstance().checkExistTable(db_name, table_name);
 	}
 
-	static vector<string> GetSST(string db_name, string table_name){
-		return GetInstance().getSST(db_name, table_name);
+	static vector<string> GetTableSSTList(string db_name, string table_name){
+		return GetInstance().getTableSSTList(db_name, table_name);
 	}
 
 	static int GetTableIndexNumber(string db_name, string table_name){
 		return GetInstance().getTableIndexNumber(db_name, table_name);
+	}
+
+	static BlockList GetTablePBAFilteredBlocks(StorageEngineInstance::ScanInfo_BlockFilteringInfo filter_info, int table_index_number, string sst_name, string csd_name){
+		return GetInstance().getTablePBAFilteredBlocks(filter_info, table_index_number, sst_name, csd_name);
 	}
 
 	static void SetTableInfo(string db_name, string table_name, Table table){
@@ -59,6 +104,31 @@ public:
 
 	static void SetDBInfo(string db_name, DB db){
 		return GetInstance().setDBInfo(db_name, db);
+	}
+
+	static void SetSSTPBAInfo(string sst_name, map<string, TableBlock> csd_pba_list){
+		return GetInstance().setSSTPBAInfo(sst_name, csd_pba_list);
+	}
+
+	static string makeKey(int qid, int wid){
+		string key = to_string(qid)+"|"+to_string(wid); // (ex:"s_suppkey","l_orderkey|l_partkey")
+        return key;
+    }
+
+	static string convertInt2Byte(int integer_data){
+		char byte_data[4];
+        memcpy(byte_data, &integer_data, sizeof(int));
+		string byte_string(byte_data);
+		
+		return byte_data;
+    }
+
+	static void UpdateSSTPBA(string sst_name){
+		return GetInstance().updateSSTPBA(sst_name);
+	}
+
+	static map<string,string> RequestSSTPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
+		return GetInstance().requestSSTPBA(metadata_request, total_block_count, sst_pba_map);
 	}
 
 private:
@@ -73,27 +143,6 @@ private:
         return _instance;
     }
 
-	void dumpTableManager(){
-		cout << "-------------------------------------" << endl;
-		cout << "# DB Info" << endl;
-		int db_numbering = 1;
-		for(const auto db : GetInstance().TableManager_){
-			cout << db_numbering << ". db_name: " << db.first << endl;
-			int table_numbering = 1;
-			for(const auto table : db.second.table){
-				cout << db_numbering << "-" << table_numbering << ". table_name: " << table.first << endl;
-				cout << db_numbering << "-" << table_numbering << ". sst_list: ";
-				for(int i=0; i<table.second.sst_list.size(); i++){
-					cout << table.second.sst_list[i] << ", ";
-				}
-				cout << endl;
-				table_numbering++;
-			}
-			db_numbering++;
-		}
-		cout << "-------------------------------------" << endl;
-	}
-
 	bool checkExistDB(string db_name){
 		std::lock_guard<std::mutex> lock(mutex_);
 		return GetInstance().TableManager_.find(db_name) != GetInstance().TableManager_.end();
@@ -104,7 +153,7 @@ private:
 		return GetInstance().TableManager_[db_name].table.find(table_name) != GetInstance().TableManager_[db_name].table.end();
 	}
 
-	vector<string> getSST(string db_name, string table_name){
+	vector<string> getTableSSTList(string db_name, string table_name){
 		std::lock_guard<std::mutex> lock(mutex_);
 		return GetInstance().TableManager_[db_name].table[table_name].sst_list;
 	}
@@ -124,11 +173,19 @@ private:
 		TableManager_[db_name] = db;
 	}
 
-/* Variables */
-public:
-    inline const static string LOGTAG = "Monitoring::Table Manager";
+	void setSSTPBAInfo(string sst_name, map<string, TableBlock> csd_pba_list){
+		std::lock_guard<std::mutex> lock(mutex_);
+		SSTManager_[sst_name].csd_pba_list = csd_pba_list;
+	}
 
-private:
+	int initTableManager();
+	void dumpTableManager();
+	void updateSSTPBA(string sst_name);
+	map<string,string> requestSSTPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map);
+	void updateSSTIndexTable(string sst_name);
+	BlockList getTablePBAFilteredBlocks(StorageEngineInstance::ScanInfo_BlockFilteringInfo filter_info, int table_index_number, string sst_name, string csd_name);
+
     mutex mutex_;
-	unordered_map<string,struct DB> TableManager_;
+	unordered_map<string, DB> TableManager_; // key: db name, value: struct DB
+	unordered_map<string, SST> SSTManager_; //key: sst name, value: struct SST
 };

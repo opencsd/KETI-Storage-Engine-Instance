@@ -484,23 +484,23 @@ StorageManager::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& cha
   , rpcmethod_RequestVolumeAllocation_(StorageManager_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
-::grpc::Status StorageManager::Stub::RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo& request, ::StorageEngineInstance::PBAResponse* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::ScanInfo, ::StorageEngineInstance::PBAResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_RequestPBA_, context, request, response);
+::grpc::Status StorageManager::Stub::RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::LBARequest& request, ::StorageEngineInstance::PBAResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::LBARequest, ::StorageEngineInstance::PBAResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_RequestPBA_, context, request, response);
 }
 
-void StorageManager::Stub::async::RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo* request, ::StorageEngineInstance::PBAResponse* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::ScanInfo, ::StorageEngineInstance::PBAResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_RequestPBA_, context, request, response, std::move(f));
+void StorageManager::Stub::async::RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::LBARequest* request, ::StorageEngineInstance::PBAResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::LBARequest, ::StorageEngineInstance::PBAResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_RequestPBA_, context, request, response, std::move(f));
 }
 
-void StorageManager::Stub::async::RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo* request, ::StorageEngineInstance::PBAResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+void StorageManager::Stub::async::RequestPBA(::grpc::ClientContext* context, const ::StorageEngineInstance::LBARequest* request, ::StorageEngineInstance::PBAResponse* response, ::grpc::ClientUnaryReactor* reactor) {
   ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_RequestPBA_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::PBAResponse>* StorageManager::Stub::PrepareAsyncRequestPBARaw(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::PBAResponse, ::StorageEngineInstance::ScanInfo, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_RequestPBA_, context, request);
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::PBAResponse>* StorageManager::Stub::PrepareAsyncRequestPBARaw(::grpc::ClientContext* context, const ::StorageEngineInstance::LBARequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::PBAResponse, ::StorageEngineInstance::LBARequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_RequestPBA_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::PBAResponse>* StorageManager::Stub::AsyncRequestPBARaw(::grpc::ClientContext* context, const ::StorageEngineInstance::ScanInfo& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::PBAResponse>* StorageManager::Stub::AsyncRequestPBARaw(::grpc::ClientContext* context, const ::StorageEngineInstance::LBARequest& request, ::grpc::CompletionQueue* cq) {
   auto* result =
     this->PrepareAsyncRequestPBARaw(context, request, cq);
   result->StartCall();
@@ -534,10 +534,10 @@ StorageManager::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       StorageManager_method_names[0],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< StorageManager::Service, ::StorageEngineInstance::ScanInfo, ::StorageEngineInstance::PBAResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< StorageManager::Service, ::StorageEngineInstance::LBARequest, ::StorageEngineInstance::PBAResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](StorageManager::Service* service,
              ::grpc::ServerContext* ctx,
-             const ::StorageEngineInstance::ScanInfo* req,
+             const ::StorageEngineInstance::LBARequest* req,
              ::StorageEngineInstance::PBAResponse* resp) {
                return service->RequestPBA(ctx, req, resp);
              }, this)));
@@ -556,7 +556,7 @@ StorageManager::Service::Service() {
 StorageManager::Service::~Service() {
 }
 
-::grpc::Status StorageManager::Service::RequestPBA(::grpc::ServerContext* context, const ::StorageEngineInstance::ScanInfo* request, ::StorageEngineInstance::PBAResponse* response) {
+::grpc::Status StorageManager::Service::RequestPBA(::grpc::ServerContext* context, const ::StorageEngineInstance::LBARequest* request, ::StorageEngineInstance::PBAResponse* response) {
   (void) context;
   (void) request;
   (void) response;

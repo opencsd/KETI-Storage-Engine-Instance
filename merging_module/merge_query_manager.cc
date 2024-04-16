@@ -245,7 +245,7 @@ void MergeQueryManager::RunSnippetWork(){
             }else if(i.second.type == TYPE_EMPTY){
                 cout << i.first << "|" << "empty row" << "|" << i.second.type << endl;
             }else{
-            cout << "target table row else ?" << endl;
+                cout << "target table row else ?" << endl;
             }
         }
     }
