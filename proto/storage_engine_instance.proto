@@ -66,8 +66,13 @@ message ScanInfo {
     string lv = 1;
     string rv = 2;
   }
-  repeated SSTInfo sst_info = 1;
-  BlockFilteringInfo filter_info = 2;
+  repeated SSTInfo sst_csd_map_info = 1;
+  repeated FilterInfo filter_info = 2;
+}
+
+message Chunk {
+  int64 offset = 1;
+  int32 length = 2;
 }
 
 message Snippet {

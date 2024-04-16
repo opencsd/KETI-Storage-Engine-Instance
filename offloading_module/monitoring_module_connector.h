@@ -32,10 +32,10 @@ class MonitoringModuleConnector {
 			request.set_table_name(tname);
 			request.mutable_scan_info()->CopyFrom(scanInfo);
 
-			for(int i=0; i<request.scan_info().sst_info_size(); i++){
-				string sst_name = request.scan_info().sst_info(i).sst_name();
-				request.mutable_scan_info()->mutable_sst_info(i)->clear_csd_list();
-				request.mutable_scan_info()->mutable_sst_info(i)->add_csd_list(sst_csd_map[sst_name]);
+			for(int i=0; i<request.scan_info().sst_csd_map_info_size(); i++){
+				string sst_name = request.scan_info().sst_csd_map_info(i).sst_name();
+				request.mutable_scan_info()->mutable_sst_csd_map_info(i)->clear_csd_list();
+				request.mutable_scan_info()->mutable_sst_csd_map_info(i)->add_csd_list(sst_csd_map[sst_name]);
 			}
 			
 			Status status = stub_->GetSnippetMetaData(&context, request, &response);

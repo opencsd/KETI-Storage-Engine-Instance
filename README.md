@@ -1,4 +1,4 @@
-## Introduction of OpenCSD KETI-Storage-Engine-Isnstance
+## Introduction of OpenCSD KETI-Storage-Engine-Instance
 -------------
 
 KEIT-Storage-Engine-Instance for KETI-OpenCSD Platform

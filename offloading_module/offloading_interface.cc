@@ -23,6 +23,7 @@ using namespace std;
 
 // Logic and data behind the server's behavior.
 class OffloadingModuleServiceImpl final : public OffloadingModule::Service {
+  public:
   Status Scheduling(ServerContext *context, const SnippetRequest *snippet, Response *response) override {
     KETILOG::INFOLOG("Interface", "# receive scan snippet");
 
@@ -60,6 +61,7 @@ class OffloadingModuleServiceImpl final : public OffloadingModule::Service {
 
     return Status::OK;
   }
+
 };
 
 void RunGRPCServer() {
@@ -78,6 +80,7 @@ void RunGRPCServer() {
 
 
 int main(int argc, char** argv) {
+  Scheduler& scheduler = Scheduler::GetInstance();
   if (argc >= 2) {
       KETILOG::SetLogLevel(stoi(argv[1]));
   }else if (getenv("LOG_LEVEL") != NULL){
@@ -103,13 +106,14 @@ int main(int argc, char** argv) {
       KETILOG::SetDefaultLogLevel();
   }
 
-  std::thread grpc_thread(RunGRPCServer);
+  // std::thread grpc_thread(RunGRPCServer);
 
-  httplib::Server server;
-  server.Get("/log-level", KETILOG::HandleSetLogLevel);
-  server.listen("0.0.0.0", 40206);
+  // httplib::Server server;
+  // server.Get("/log-level", KETILOG::HandleSetLogLevel);
+  // server.listen("0.0.0.0", 40206);
   
-  grpc_thread.join();
+  // grpc_thread.join();
 
+  
   return 0;
 }

@@ -82,10 +82,10 @@ typedef enum vector_type{ //저장된 컬럼의 타입을 나타냄(BM,MQM에서
 }KETI_VECTOR_TYPE;
 
 typedef enum scheduling_type{ //스케줄링을 수행하는 알고리즘 선택
-    ROUND_ROBBIN = 0,
-    ALGORITHM_AUTO_SELECT = 1,
-    FILE_DISTRIBUTION = 2,
-    CSD_METRIC_SCORE = 3
+    DCS = 0,
+    DSI = 1,
+    RANDOM = 2,
+    AUTO_SELECTION = 3
 }KETI_SCHEDULING_TYPE;
 
 #endif
