@@ -92,6 +92,10 @@ public:
 		return GetInstance().checkExistTable(db_name, table_name);
 	}
 
+	SST GetSST(string sst_name){
+		return GetInstance().getSST(sst_name);
+	}
+
 	static vector<string> GetTableSSTList(string db_name, string table_name){
 		return GetInstance().getTableSSTList(db_name, table_name);
 	}
@@ -177,6 +181,11 @@ private:
 	bool checkExistTable(string db_name, string table_name){
 		std::lock_guard<std::mutex> lock(mutex_);
 		return GetInstance().TableManager_[db_name].table.find(table_name) != GetInstance().TableManager_[db_name].table.end();
+	}
+
+	SST getSST(string sst_name){
+		std::lock_guard<std::mutex> lock(mutex_);
+		return GetInstance().SSTManager_[sst_name];
 	}
 
 	vector<string> getTableSSTList(string db_name, string table_name){

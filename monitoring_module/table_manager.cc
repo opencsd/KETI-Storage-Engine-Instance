@@ -87,7 +87,9 @@ void TableManager::initTableManager(){
 				if(blockObject.HasMember("blockHandle")){
 					block_handle = blockObject["blockHandle"].GetString();
 				}else{
-					block_handle = to_string(temp_block_handle);
+					std::stringstream ss;
+					ss << std::setw(5) << std::setfill('0') << temp_block_handle;
+					block_handle = ss.str();
 					temp_block_handle++;
 				}
 
@@ -110,21 +112,19 @@ void TableManager::initTableManager(){
 		string sst_name = sst.first;
 		updateSSTPBA(sst_name);
 	}
-	
+
 	return;
 }
 
 void TableManager::updateSSTPBA(string sst_name){
-	std::lock_guard<std::mutex> lock(mutex_);
-
 	StorageEngineInstance::LBARequest lba_request;
 
-	TableManager::SST sst = SSTManager_[sst_name];
+	TableManager::SST sst = TableManager::GetSST(sst_name);
 
 	StorageEngineInstance::LBARequest_SST lba_request_sst;
 	StorageEngineInstance::TableBlock table_lba_block;
 	
-	for(int i=0; sst.csd_list.size(); i++){
+	for(int i=0; i<sst.csd_list.size(); i++){
 		lba_request_sst.add_csd_list(sst.csd_list[i]);
 	}
 
@@ -143,6 +143,7 @@ void TableManager::updateSSTPBA(string sst_name){
 	}
 
 	lba_request_sst.mutable_table_lba_block()->CopyFrom(table_lba_block);
+	lba_request.mutable_sst_list()->insert({sst_name, lba_request_sst});
 	
     StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)LBA2PBA_MANAGER_PORT, grpc::InsecureChannelCredentials()));
     StorageEngineInstance::PBAResponse pbaResponse = smc.RequestPBA(lba_request);
@@ -167,7 +168,8 @@ void TableManager::updateSSTPBA(string sst_name){
 					index++;
 					offset_pair.insert({lba_offset, pba_offset});
 				}
-
+				
+				lba_pba_map.offset_pair = offset_pair;
 				TableManager::SetSSTPBAInfo(sst_name, table_index_number, csd_id, lba_pba_map);
 			}
 		}
@@ -186,25 +188,39 @@ void TableManager::dumpTableManager(){
 			cout << db_numbering << "-" << table_numbering << ". table_name: " << table.first << endl;
 			cout << db_numbering << "-" << table_numbering << ". sst_list: ";
 			for(const auto sst : table.second.sst_list){
-				cout << sst << ", ";
+				cout << sst << " ";
+				cout << "(" << GetInstance().SSTManager_[sst].csd_list[0] << "),";
 			}
 			cout << endl;
-			table_numbering++;
+			table_numbering++;  
 		}
 		db_numbering++;
+	}
+
+	cout << "# SST Info" << endl;
+	int sst_numbering = 1;
+	for(const auto sst : GetInstance().SSTManager_){
+		cout << sst_numbering << ". sst_name: " << sst.first << endl;
+		for(const auto table_block_list : sst.second.table_block_list){
+			cout << "- table index number: " << table_block_list.first << endl;
+			for(const auto csd_pba : table_block_list.second.csd_pba_map){
+				cout << "- csd id: " << csd_pba.first << endl;
+				cout << "- block size: " << csd_pba.second.offset_pair.size() << endl;
+			}
+		}
 	}
 	cout << "-------------------------------------" << endl;
 }
 
 void TableManager::requestTablePBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
-	int table_index_number = getTableIndexNumber(metadata_request.db_name(), metadata_request.table_name());
+	int table_index_number = getTableIndexNumber(/*metadata_request.db_name()*/"tpch_origin", metadata_request.table_name());
 
-	for(const auto sst_info : metadata_request.scan_info().sst_csd_map_info()){
-		string sst_name = sst_info.sst_name();
-		string csd_name = sst_info.csd_list(0);
+	for(const auto sst_csd_map : metadata_request.scan_info().sst_csd_map()){
+		string sst_name = sst_csd_map.sst_name();
+		string csd_name = sst_csd_map.csd_list(0);
 
 		vector<TableManager::Chunk> block_list = getSSTFilteredPBABlocks(metadata_request.scan_info().filter_info(), sst_name, csd_name, table_index_number);
-		
+
 		StringBuffer buffer;
 		buffer.Clear();
 		Writer<StringBuffer> writer(buffer);
@@ -250,14 +266,12 @@ void TableManager::updateSSTIndexTable(string sst_name){
 }
 
 vector<TableManager::Chunk> TableManager::getSSTFilteredPBABlocks(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string sst_name, string csd_name, int table_index_number){
-	std::lock_guard<std::mutex> lock(mutex_);
-
 	vector<TableManager::Chunk> return_chunks;
 
 	map<off64_t, off64_t> origin_lba_pba_map =  TableManager::GetTableCSDPBAList(sst_name, table_index_number, csd_name);
 	map<string, TableManager::Chunk> origin_lba_list = TableManager::GetSSTTableLBAList(sst_name, table_index_number);
 
-	if(filter_info.IsInitialized()){
+	if(filter_info.lv() != ""){
 		// block filtering here
 	}else{
 		for(auto lba : origin_lba_list){
