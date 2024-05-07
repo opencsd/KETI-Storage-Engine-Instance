@@ -42,7 +42,6 @@ public:
 
         WALResponse walResponse;
         ClientContext context;
-        Status status;
 
         Status status = stub_->RequestWAL(&context, walRequset, &walResponse);
 

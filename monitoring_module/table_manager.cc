@@ -1,12 +1,12 @@
 #include "table_manager.h"
 
-// 테이블 매니저 정보 임의 저장
-int TableManager::initTableManager(){
+// 테이블 매니저 정보 임시 하드코딩 데이터 저장
+void TableManager::initTableManager(){
 	KETILOG::DEBUGLOG(LOGTAG, "# Init TableManager");
 
-	//read TableManager.json
+	// Init TableManager_ Data
 	string json = "";
-	std::ifstream openFile("../table_manager_data/TableManager_tpch_origin.json");
+	std::ifstream openFile("../table_manager_data/table_manager.init.json");
 	if(openFile.is_open() ){
 		std::string line;
 		while(getline(openFile, line)){
@@ -15,145 +15,165 @@ int TableManager::initTableManager(){
 		openFile.close();
 	}
 	
-	//parse json	
 	Document document;
 	document.Parse(json.c_str());
 
-	Value &TableList = document["Table List"];
-	
-	for(int i=0;i<TableList.Size();i++){
-		Value &TableObject = TableList[i];
-		auto tbl = new Table();
+	Value &dbList = document["dbList"];
+	for(int i=0;i<dbList.Size();i++){
+		Value &dbObject = dbList[i];
 
-		Value &tablenameObject = TableObject["tablename"];
-		tbl->tablename = tablenameObject.GetString();
+		TableManager::DB db;
+		string db_name = dbObject["dbName"].GetString();
 
-		// tbl.tablesize = TableObject["Size"].GetInt();
+		Value &tableList = dbObject["tableList"];
+		for(int j=0;j<tableList.Size();j++){
+			Value &tableObject = tableList[j];
 
-		// if(TableObject.HasMember("PK")){
-		// 	for(int i = 0; i < TableObject["PK"].Size(); i++){
-		// 		tbl.PK.push_back(TableObject["PK"][i].GetString());
-		// 	}
-		// }
-		// if(TableObject.HasMember("Index")){
-		// 	for(int i = 0; i < TableObject["Index"].Size(); i++){
-		// 		vector<string> index;
-		// 		for(int j = 0; j < TableObject["Index"][i].Size(); j++){
-		// 			index.push_back(TableObject["Index"][i][j].GetString());
-		// 		}
-		// 		tbl.IndexList.push_back(index);
-		// 	}
-		// }
-		
-		Value &SchemaObject = TableObject["Schema"];
-		for(int j=0;j<SchemaObject.Size();j++){
-			Value &ColumnObject = SchemaObject[j];
-			auto Column = new ColumnSchema;
+			string table_name = tableObject["tableName"].GetString();
 
-			Column->column_name = ColumnObject["column_name"].GetString();
-			Column->type = ColumnObject["type"].GetInt();
-			Column->length = ColumnObject["length"].GetInt();
-			Column->offset = ColumnObject["offset"].GetInt();
+			TableManager::Table table;
+			table.table_index_number = tableObject["tableIndexNumber"].GetInt64();
 
-			tbl->Schema.push_back(*Column);
-		}
-
-		Value &SSTList = TableObject["SST List"];
-		for(int j=0;j<SSTList.Size();j++){
-			Value &SSTObject = SSTList[j];
-			auto SstFile = new SSTFile;
-
-			SstFile->filename = SSTObject["filename"].GetString();
-
-			Value &BlockList = SSTObject["Block List"];
-			
-			for(int k=0;k<BlockList.Size();k++){
-				Value &BlockHandleObject = BlockList[k];
-				struct DataBlockHandle DataBlockHandle;
-
-				// if(BlockHandleObject.HasMember("IndexBlockHandle")){
-				// 	DataBlockHandle.IndexBlockHandle = BlockHandleObject["IndexBlockHandle"].GetString();
-				// }
-
-				DataBlockHandle.Offset = BlockHandleObject["Offset"].GetInt();
-				DataBlockHandle.Length = BlockHandleObject["Length"].GetInt();
-
-				SstFile->BlockList.push_back(DataBlockHandle);
+			Value &sstList = tableObject["sstList"];
+			for(int l=0; l<sstList.Size(); l++){
+				table.sst_list.push_back(sstList[l].GetString());
 			}
 
-			tbl->SSTList.push_back(*SstFile);
+			db.table[table_name] = table;
 		}
-		m_TableManager.insert({tbl->tablename,*tbl});
+
+		TableManager::SetDBInfo(db_name, db);
 	}
 
-    StorageEngineInstance::LBARequest lba_request;
+	// Init SSTManager_ Data
+	json = "";
+	std::ifstream openFile2("../table_manager_data/sst_manager.init.json");
+	if(openFile2.is_open() ){
+		std::string line;
+		while(getline(openFile2, line)){
+			json += line;
+		}
+		openFile2.close();
+	}
+	
+	document.Parse(json.c_str());
 
+	Value &sstList = document["sstList"];
+	for(int i=0;i<sstList.Size();i++){
+		Value &sstObject = sstList[i];
+		
+		TableManager::SST sst;
+		string sst_name = sstObject["sstName"].GetString();
+
+		Value &tableBlockList = sstObject["tableBlockList"];
+		for(int j=0;j<tableBlockList.Size();j++){
+			Value &tableBlockObject = tableBlockList[j];
+
+			TableManager::TableBlock tableBlock;
+
+			int table_index_number = tableBlockObject["tableIndexNumber"].GetInt64();
+
+			int temp_block_handle = 0;
+
+			Value &blockList = tableBlockObject["blockList"];
+			for(int l=0; l<blockList.Size(); l++){
+				string block_handle;
+				Value &blockObject = blockList[l];
+
+				TableManager::Chunk chunk;
+				chunk.offset = blockObject["offset"].GetInt64();
+				chunk.length = blockObject["length"].GetInt64();
+
+				if(blockObject.HasMember("blockHandle")){
+					block_handle = blockObject["blockHandle"].GetString();
+				}else{
+					std::stringstream ss;
+					ss << std::setw(5) << std::setfill('0') << temp_block_handle;
+					block_handle = ss.str();
+					temp_block_handle++;
+				}
+
+				tableBlock.lba_block_list[block_handle] = chunk;
+			}
+
+			sst.table_block_list[table_index_number] = tableBlock;
+		}
+
+		Value &csdList = sstObject["csdList"];
+		for(int j=0;j<csdList.Size();j++){
+			sst.csd_list.push_back(csdList[j].GetString());
+		}
+
+		TableManager::SetSSTInfo(sst_name, sst);
+	}
+
+	// Get PBA Data
 	for(const auto sst : SSTManager_){
 		string sst_name = sst.first;
-		StorageEngineInstance::LBARequest_SST lba_request_sst;
-		StorageEngineInstance::TableBlock table_block;
-
-		for(const auto csd : sst.second.csd_pba_list){
-			string csd_id = csd.first;
-			lba_request_sst.add_csd_list(csd_id);
-		}
-
-		for(const auto block : sst.second.table_lba_list.table_block_list){
-			int table_index_number = block.first;
-			StorageEngineInstance::ChunkList chunk_list;
-			for(int i=0; i<block.second.block_list.size(); i++){
-				StorageEngineInstance::Chunk chunk;
-				chunk.set_block_handle(block.second.block_list[i].first);
-				chunk.set_offset(block.second.block_list[i].second.offset);
-				chunk.set_length(block.second.block_list[i].second.length);
-				chunk_list.add_chunks()->CopyFrom(chunk);
-			}
-			table_block.mutable_table_block_list()->insert({table_index_number, chunk_list});
-		}
-
-		lba_request_sst.mutable_table_lba_list()->CopyFrom(table_block);
-		lba_request.mutable_sst_list()->insert({sst_name, lba_request_sst});
+		updateSSTPBA(sst_name);
 	}
 
-    StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)LBA2PBA_MANAGER_PORT, grpc::InsecureChannelCredentials()));
-    smc.RequestPBA(lba_request);
-	
-	return 0;
+	return;
 }
 
 void TableManager::updateSSTPBA(string sst_name){
-	std::lock_guard<std::mutex> lock(mutex_);
-
 	StorageEngineInstance::LBARequest lba_request;
 
-	TableManager::SST sst = SSTManager_[sst_name];
+	TableManager::SST sst = TableManager::GetSST(sst_name);
 
 	StorageEngineInstance::LBARequest_SST lba_request_sst;
-	StorageEngineInstance::TableBlock table_block;
-
-	for(const auto csd : sst.csd_pba_list){
-		string csd_id = csd.first;
-		lba_request_sst.add_csd_list(csd_id);
+	StorageEngineInstance::TableBlock table_lba_block;
+	
+	for(int i=0; i<sst.csd_list.size(); i++){
+		lba_request_sst.add_csd_list(sst.csd_list[i]);
 	}
 
-	for(const auto block : sst.table_lba_list.table_block_list){
-		int table_index_number = block.first;
-		StorageEngineInstance::ChunkList chunk_list;
-		for(int i=0; i<block.second.block_list.size(); i++){
+	for(const auto table_block : sst.table_block_list){
+		int table_index_number = table_block.first;
+		StorageEngineInstance::Chunks chunks;
+		
+		for(const auto lba_block : table_block.second.lba_block_list){
 			StorageEngineInstance::Chunk chunk;
-			chunk.set_block_handle(block.second.block_list[i].first);
-			chunk.set_offset(block.second.block_list[i].second.offset);
-			chunk.set_length(block.second.block_list[i].second.length);
-			chunk_list.add_chunks()->CopyFrom(chunk);
+			chunk.set_offset(lba_block.second.offset);
+			chunk.set_length(lba_block.second.length);
+			chunks.add_chunks()->CopyFrom(chunk);
 		}
-		table_block.mutable_table_block_list()->insert({table_index_number, chunk_list});
+
+		table_lba_block.mutable_table_block_chunks()->insert({table_index_number, chunks});
 	}
 
-	lba_request_sst.mutable_table_lba_list()->CopyFrom(table_block);
+	lba_request_sst.mutable_table_lba_block()->CopyFrom(table_lba_block);
 	lba_request.mutable_sst_list()->insert({sst_name, lba_request_sst});
 	
     StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)LBA2PBA_MANAGER_PORT, grpc::InsecureChannelCredentials()));
-    smc.RequestPBA(lba_request);
+    StorageEngineInstance::PBAResponse pbaResponse = smc.RequestPBA(lba_request);
+
+	for (const auto res_sst : pbaResponse.sst_list()) {
+		string sst_name = res_sst.first;
+
+		for(const auto table_block : res_sst.second.table_pba_block()){
+			string csd_id = table_block.first;
+			
+			for(const auto chunks : table_block.second.table_block_chunks()){
+				int table_index_number = chunks.first;
+				TableManager::LBAPBAMap lba_pba_map;
+				map<off64_t, off64_t> offset_pair;
+
+				map<string, TableManager::Chunk> lba_block_list = TableManager::GetSSTTableLBAList(sst_name, table_index_number);
+				
+				int index = 0;
+				for(const auto lba_block : lba_block_list){
+					off64_t lba_offset = lba_block.second.offset;
+					off64_t pba_offset = chunks.second.chunks(index).offset();
+					index++;
+					offset_pair.insert({lba_offset, pba_offset});
+				}
+				
+				lba_pba_map.offset_pair = offset_pair;
+				TableManager::SetSSTPBAInfo(sst_name, table_index_number, csd_id, lba_pba_map);
+			}
+		}
+	}
 }
 
 
@@ -168,25 +188,39 @@ void TableManager::dumpTableManager(){
 			cout << db_numbering << "-" << table_numbering << ". table_name: " << table.first << endl;
 			cout << db_numbering << "-" << table_numbering << ". sst_list: ";
 			for(const auto sst : table.second.sst_list){
-				cout << sst << ", ";
+				cout << sst << " ";
+				cout << "(" << GetInstance().SSTManager_[sst].csd_list[0] << "),";
 			}
 			cout << endl;
-			table_numbering++;
+			table_numbering++;  
 		}
 		db_numbering++;
+	}
+
+	cout << "# SST Info" << endl;
+	int sst_numbering = 1;
+	for(const auto sst : GetInstance().SSTManager_){
+		cout << sst_numbering << ". sst_name: " << sst.first << endl;
+		for(const auto table_block_list : sst.second.table_block_list){
+			cout << "- table index number: " << table_block_list.first << endl;
+			for(const auto csd_pba : table_block_list.second.csd_pba_map){
+				cout << "- csd id: " << csd_pba.first << endl;
+				cout << "- block size: " << csd_pba.second.offset_pair.size() << endl;
+			}
+		}
 	}
 	cout << "-------------------------------------" << endl;
 }
 
-map<string,string> TableManager::requestSSTPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
-	int table_index_number = getTableIndexNumber(metadata_request.db_name(), metadata_request.table_name());
+void TableManager::requestTablePBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
+	int table_index_number = getTableIndexNumber(/*metadata_request.db_name()*/"tpch_origin", metadata_request.table_name());
 
-	for(const auto sst_info : metadata_request.scan_info().sst_info()){
-		string sst_name = sst_info.sst_name();
-		string csd_name = sst_info.csd_list(0);
+	for(const auto sst_csd_map : metadata_request.scan_info().sst_csd_map()){
+		string sst_name = sst_csd_map.sst_name();
+		string csd_name = sst_csd_map.csd_list(0);
 
-		TableManager::BlockList block_list = getTablePBAFilteredBlocks(metadata_request.scan_info().filter_info(), table_index_number, sst_name, csd_name);
-		
+		vector<TableManager::Chunk> block_list = getSSTFilteredPBABlocks(metadata_request.scan_info().filter_info(), sst_name, csd_name, table_index_number);
+
 		StringBuffer buffer;
 		buffer.Clear();
 		Writer<StringBuffer> writer(buffer);
@@ -194,26 +228,26 @@ map<string,string> TableManager::requestSSTPBA(StorageEngineInstance::MetaDataRe
 		writer.Key("blockList");
 		writer.StartArray();
 		writer.StartObject();
-		for(int l=0; l<block_list.block_list.size(); l++){
+		for(int l=0; l<block_list.size(); l++){
 			if(l == 0){
 				writer.Key("offset");
-				writer.Int64(block_list.block_list[l].second.offset);
+				writer.Int64(block_list[l].offset);
 				writer.Key("length");
 				writer.StartArray();
 			}else{
-				if(block_list.block_list[l-1].second.offset+block_list.block_list[l-1].second.length != block_list.block_list[l].second.offset){
+				if(block_list[l-1].offset+block_list[l-1].length != block_list[l].offset){
 					writer.EndArray();
 					writer.EndObject();
 					writer.StartObject();
 					writer.Key("offset");
-					writer.Int64(block_list.block_list[l].second.offset);
+					writer.Int64(block_list[l].offset);
 					writer.Key("length");
 					writer.StartArray();
 				}
 			}
-			writer.Int(block_list.block_list[l].second.length);
+			writer.Int(block_list[l].length);
 
-			if(l == block_list.block_list.size() - 1){
+			if(l == block_list.size() - 1){
 				writer.EndArray();
 				writer.EndObject();
 			}
@@ -221,7 +255,7 @@ map<string,string> TableManager::requestSSTPBA(StorageEngineInstance::MetaDataRe
 		writer.EndArray();
 		writer.EndObject();
 
-		total_block_count += block_list.block_list.size();
+		total_block_count += block_list.size();
 		string pba_string = buffer.GetString();
 		sst_pba_map[sst_name] = pba_string;
 	}
@@ -231,19 +265,27 @@ void TableManager::updateSSTIndexTable(string sst_name){
 	// save index table from sst
 }
 
-TableManager::BlockList TableManager::getTablePBAFilteredBlocks(StorageEngineInstance::ScanInfo_BlockFilteringInfo filter_info, int table_index_number, string sst_name, string csd_name){
-	std::lock_guard<std::mutex> lock(mutex_);
+vector<TableManager::Chunk> TableManager::getSSTFilteredPBABlocks(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string sst_name, string csd_name, int table_index_number){
+	vector<TableManager::Chunk> return_chunks;
 
-	TableManager::BlockList origin_block_list =  GetInstance().SSTManager_[sst_name].csd_pba_list[csd_name].table_block_list[table_index_number];
+	map<off64_t, off64_t> origin_lba_pba_map =  TableManager::GetTableCSDPBAList(sst_name, table_index_number, csd_name);
+	map<string, TableManager::Chunk> origin_lba_list = TableManager::GetSSTTableLBAList(sst_name, table_index_number);
 
-	if(filter_info.IsInitialized()){
-		TableManager::BlockList filtered_block_list;
+	if(filter_info.lv() != ""){
 		// block filtering here
-		filtered_block_list = origin_block_list; //temp
-
-		return filtered_block_list;
 	}else{
-		return origin_block_list;
+		for(auto lba : origin_lba_list){
+			TableManager::Chunk chunk;
+			chunk.offset = origin_lba_pba_map[lba.second.offset];
+			chunk.length = lba.second.length;
+			return_chunks.push_back(chunk);
+		}
 	}
+
+	return return_chunks; 
+}
+
+vector<string> TableManager::seekIndexTable(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string db_name, string table_name){
+	
 }
 

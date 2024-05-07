@@ -18,41 +18,39 @@ using StorageEngineInstance::Request;
 using StorageEngineInstance::Response;
 using StorageEngineInstance::WALRequest;
 using StorageEngineInstance::MetaDataRequest;
+using StorageEngineInstance::ScanInfo_BlockFilterInfo;
 using StorageEngineInstance::SnippetMetaData;
 
 class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
   Status GetSnippetMetaData(ServerContext *context, const MetaDataRequest *request, SnippetMetaData *response) override {
     KETILOG::INFOLOG("Monitoring", "# get snippet metadata");
-    
-    string db_name = request->db_name();
-    string table_name = request->table_name();
 
     int total_block_count = 0;
     map<string,string> sst_pba_map;
 
-    TableManager::GetPBA(request->scan_info(), total_block_count, sst_pba_map);
+    TableManager::RequestTablePBA(*request, total_block_count, sst_pba_map);
 
     WALRequest walRequest;
     string wal_deleted_key_json;
     vector<string> wal_inserted_row_json;
-    int sst_count = request->scan_info().block_info_size();
+    int sst_count = request->scan_info().sst_csd_map_size();
     
-    walRequest.set_db_name(db_name);
-    walRequest.set_table_name(table_name);
+    walRequest.set_db_name(request->db_name());
+    walRequest.set_table_name(request->table_name());
 
-    WALHandler wh(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)WAL_MANAGER_PORT, grpc::InsecureChannelCredentials()));
-    wh.RequestWAL(walRequest, sst_count, wal_deleted_key_json, wal_inserted_row_json); 
+    // WALHandler wh(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)WAL_MANAGER_PORT, grpc::InsecureChannelCredentials()));
+    // wh.RequestWAL(walRequest, sst_count, wal_deleted_key_json, wal_inserted_row_json); 
 
     int index = 0;
     for(const auto entry : sst_pba_map){
       string sst_name = entry.first;
       string pba = entry.second;
       response->mutable_sst_pba_map()->insert({sst_name, pba});
-      response->add_wal_inserted_row_json(wal_inserted_row_json[index]);
+      // response->add_wal_inserted_row_json(wal_inserted_row_json[index]);
       index++;
     }
     response->set_table_total_block_count(total_block_count);
-    response->set_wal_deleted_key_json(wal_deleted_key_json);
+    // response->set_wal_deleted_key_json(wal_deleted_key_json);
 
     return Status::OK;
   }
@@ -97,6 +95,8 @@ int main(int argc, char** argv) {
   }else{
       KETILOG::SetDefaultLogLevel();
   }
+
+  TableManager::InitTableManager();
 
   std::thread grpc_thread(RunGRPCServer);
 

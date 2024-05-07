@@ -31,27 +31,28 @@ using namespace rapidjson;
 class TableManager { /* modify as singleton class */
 
 public:	
-	struct Block {
+	struct Chunk {
 		off64_t offset;
 		off64_t length;
 	};
 
-	struct BlockList {
-		// Use list to save sequentially
-		vector<pair<string, Block>> block_list; // key: block index handle, value: block chunk
+	struct LBAPBAMap {
+		map<off64_t, off64_t> offset_pair; // first: lba offset, second: pba offset
 	};
 
 	struct TableBlock {
-		map<int, BlockList> table_block_list;
+		map<string, Chunk> lba_block_list; // first: block handle, second: lba chunk
+		map<string, LBAPBAMap> csd_pba_map;// key: csd id, value: lba pba map
 	};
 
 	struct SST {
-		map<string, TableBlock> csd_pba_list;// key: csd id, value: csd
-		TableBlock table_lba_list;// key: table_index_number, value: table lba
+		vector<string> csd_list;
+		map<int, TableBlock> table_block_list;// key: table index number, value: block chunks
 	};
 	
 	struct IndexTable {
 		string sst_name;
+
 		string table_index_number;
 		map<string, string> index_table; //key: index, value: primary key 
 		/*
@@ -63,8 +64,9 @@ public:
 
 	struct Table {
 		int table_index_number;
-		vector<string> sst_list;
-		vector<string> index_sst_list;
+		int index_table_index_number;
+		vector<string> sst_list; // table sst list
+		vector<string> index_sst_list; // index table sst list
 		map<string, IndexTable> index_tables; // key: index column name, value: IndexTable
 	};
 
@@ -73,6 +75,10 @@ public:
 	};
 
 	inline const static string LOGTAG = "Monitoring::Table Manager";
+
+	static void InitTableManager(){
+		return GetInstance().initTableManager();
+	}
 
 	static void DumpTableManager(){
 		return GetInstance().dumpTableManager();
@@ -86,32 +92,52 @@ public:
 		return GetInstance().checkExistTable(db_name, table_name);
 	}
 
+	SST GetSST(string sst_name){
+		return GetInstance().getSST(sst_name);
+	}
+
 	static vector<string> GetTableSSTList(string db_name, string table_name){
 		return GetInstance().getTableSSTList(db_name, table_name);
+	}
+
+	static map<string, Chunk> GetSSTTableLBAList(string sst_name, int table_index_number){
+		return GetInstance().getSSTTableLBAList(sst_name, table_index_number);
+	}
+
+	static map<off64_t, off64_t> GetTableCSDPBAList(string sst_name, int table_index_number, string csd_name){
+		return GetInstance().getTableCSDPBAList(sst_name, table_index_number, csd_name);
 	}
 
 	static int GetTableIndexNumber(string db_name, string table_name){
 		return GetInstance().getTableIndexNumber(db_name, table_name);
 	}
 
-	static BlockList GetTablePBAFilteredBlocks(StorageEngineInstance::ScanInfo_BlockFilteringInfo filter_info, int table_index_number, string sst_name, string csd_name){
-		return GetInstance().getTablePBAFilteredBlocks(filter_info, table_index_number, sst_name, csd_name);
+	static vector<Chunk> GetSSTFilteredPBABlocks(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string sst_name, string csd_name, int table_index_number){
+		return GetInstance().getSSTFilteredPBABlocks(filter_info, sst_name, csd_name, table_index_number);
 	}
 
 	static void SetTableInfo(string db_name, string table_name, Table table){
 		return GetInstance().setTableInfo(db_name, table_name, table);
 	}
 
+	static void SetSSTInfo(string sst_name, SST sst){
+		return GetInstance().setSSTInfo(sst_name, sst);
+	}
+
 	static void SetDBInfo(string db_name, DB db){
 		return GetInstance().setDBInfo(db_name, db);
 	}
 
-	static void SetSSTPBAInfo(string sst_name, map<string, TableBlock> csd_pba_list){
-		return GetInstance().setSSTPBAInfo(sst_name, csd_pba_list);
+	static void SetSSTPBAInfo(string sst_name, int table_index_number, string csd_id, LBAPBAMap lba_pba_map){
+		return GetInstance().setSSTPBAInfo(sst_name, table_index_number, csd_id, lba_pba_map);
+	}
+
+	static void SetSSTTableBlockInfo(string sst_name, map<int, TableBlock> table_block_list){
+		return GetInstance().setSSTTableBlockInfo(sst_name, table_block_list);
 	}
 
 	static string makeKey(int qid, int wid){
-		string key = to_string(qid)+"|"+to_string(wid); // (ex:"s_suppkey","l_orderkey|l_partkey")
+		string key = to_string(qid)+"|"+to_string(wid);
         return key;
     }
 
@@ -127,12 +153,16 @@ public:
 		return GetInstance().updateSSTPBA(sst_name);
 	}
 
-	static map<string,string> RequestSSTPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
-		return GetInstance().requestSSTPBA(metadata_request, total_block_count, sst_pba_map);
+	static void RequestTablePBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
+		return GetInstance().requestTablePBA(metadata_request, total_block_count, sst_pba_map);
+	}
+
+	static vector<string> SeekIndexTable(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string db_name, string table_name){
+		return GetInstance().seekIndexTable(filter_info, db_name, table_name);
 	}
 
 private:
-	TableManager();
+	TableManager(){};
     TableManager(const TableManager&);
     TableManager& operator=(const TableManager&){
         return *this;
@@ -153,9 +183,23 @@ private:
 		return GetInstance().TableManager_[db_name].table.find(table_name) != GetInstance().TableManager_[db_name].table.end();
 	}
 
+	SST getSST(string sst_name){
+		std::lock_guard<std::mutex> lock(mutex_);
+		return GetInstance().SSTManager_[sst_name];
+	}
+
 	vector<string> getTableSSTList(string db_name, string table_name){
 		std::lock_guard<std::mutex> lock(mutex_);
 		return GetInstance().TableManager_[db_name].table[table_name].sst_list;
+	}
+
+	map<string, Chunk> getSSTTableLBAList(string sst_name, int table_index_number){
+		std::lock_guard<std::mutex> lock(mutex_);
+		return GetInstance().SSTManager_[sst_name].table_block_list[table_index_number].lba_block_list;
+	}
+
+	map<off64_t, off64_t> getTableCSDPBAList(string sst_name, int table_index_number, string csd_name){
+		return GetInstance().SSTManager_[sst_name].table_block_list[table_index_number].csd_pba_map[csd_name].offset_pair;
 	}
 
 	int getTableIndexNumber(string db_name, string table_name){
@@ -168,23 +212,32 @@ private:
 		TableManager_[db_name].table[table_name] = table;
 	}
 
+	void setSSTInfo(string sst_name, SST sst){
+		std::lock_guard<std::mutex> lock(mutex_);
+		SSTManager_[sst_name] = sst;
+	}
+
 	void setDBInfo(string db_name, DB db){
 		std::lock_guard<std::mutex> lock(mutex_);
 		TableManager_[db_name] = db;
 	}
 
-	void setSSTPBAInfo(string sst_name, map<string, TableBlock> csd_pba_list){
-		std::lock_guard<std::mutex> lock(mutex_);
-		SSTManager_[sst_name].csd_pba_list = csd_pba_list;
+	void setSSTPBAInfo(string sst_name, int table_index_number, string csd_id, LBAPBAMap lba_pba_map){
+		SSTManager_[sst_name].table_block_list[table_index_number].csd_pba_map[csd_id] = lba_pba_map;
 	}
 
-	int initTableManager();
+	void setSSTTableBlockInfo(string sst_name, map<int, TableBlock> table_block_list){
+		std::lock_guard<std::mutex> lock(mutex_);
+		SSTManager_[sst_name].table_block_list = table_block_list;
+	}
+
+	void initTableManager();
 	void dumpTableManager();
 	void updateSSTPBA(string sst_name);
-	map<string,string> requestSSTPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map);
 	void updateSSTIndexTable(string sst_name);
-	BlockList getTablePBAFilteredBlocks(StorageEngineInstance::ScanInfo_BlockFilteringInfo filter_info, int table_index_number, string sst_name, string csd_name);
-
+	void requestTablePBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map);
+	vector<Chunk> getSSTFilteredPBABlocks(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string sst_name, string csd_name, int table_index_number);
+	vector<string> seekIndexTable(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string db_name, string table_name);
     mutex mutex_;
 	unordered_map<string, DB> TableManager_; // key: db name, value: struct DB
 	unordered_map<string, SST> SSTManager_; //key: sst name, value: struct SST

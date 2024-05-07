@@ -3,7 +3,7 @@
 void SnippetManager::setupSnippet(SnippetRequest snippet, map<string,string> bestcsd){ 
     //get PBA & WAL
     MonitoringModuleConnector mc(grpc::CreateChannel((string)LOCALHOST+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
-    SnippetMetaData snippetMetaData = mc.GetSnippetMetaData(snippet.snippet().db_name(), snippet.snippet().table_name(0), snippet.scan_info(), bestcsd);
+    SnippetMetaData snippetMetaData = mc.GetSnippetMetaData(/*snippet.snippet().db_name()*/"tpch_origin", snippet.snippet().table_name(0), snippet.scan_info(), bestcsd);
 
     StringBuffer snippetbuf;
     for (const auto entry : snippetMetaData.sst_pba_map()) {
@@ -231,9 +231,9 @@ void SnippetManager::sendSnippetToCSD(string snippet_json){
     serv_addr.sin_addr.s_addr = inet_addr(STORAGE_CLUSTER_MASTER_IP);
     serv_addr.sin_port = htons(port);
 
-    {
-    // cout << endl << snippet_json.c_str() << endl << endl;
-    }
+    // {
+    //     cout << endl << snippet_json.c_str() << endl << endl;
+    // }
 
     connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 
