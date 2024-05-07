@@ -73,6 +73,8 @@ void RunGRPCServer() {
   builder.RegisterService(&service);
   std::unique_ptr<Server> server(builder.BuildAndStart());
 
+  sleep(1);
+
   KETILOG::FATALLOG("Offloading", "Offloading Server listening on "+server_address);
   
   server->Wait();
@@ -106,14 +108,13 @@ int main(int argc, char** argv) {
       KETILOG::SetDefaultLogLevel();
   }
 
-  // std::thread grpc_thread(RunGRPCServer);
+  std::thread grpc_thread(RunGRPCServer);
 
-  // httplib::Server server;
-  // server.Get("/log-level", KETILOG::HandleSetLogLevel);
-  // server.listen("0.0.0.0", 40206);
+  httplib::Server server;
+  server.Get("/log-level", KETILOG::HandleSetLogLevel);
+  server.listen("0.0.0.0", 40206);
   
-  // grpc_thread.join();
-
+  grpc_thread.join();
   
   return 0;
 }

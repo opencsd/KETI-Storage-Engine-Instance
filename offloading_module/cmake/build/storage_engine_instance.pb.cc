@@ -60,7 +60,7 @@ struct ScanInfo_BlockFilterInfoDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT ScanInfo_BlockFilterInfoDefaultTypeInternal _ScanInfo_BlockFilterInfo_default_instance_;
 constexpr ScanInfo::ScanInfo(
   ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
-  : sst_csd_map_info_()
+  : sst_csd_map_()
   , filter_info_(nullptr){}
 struct ScanInfoDefaultTypeInternal {
   constexpr ScanInfoDefaultTypeInternal()
@@ -600,7 +600,7 @@ const uint32_t TableStruct_storage_5fengine_5finstance_2eproto::offsets[] PROTOB
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
-  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo, sst_csd_map_info_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo, sst_csd_map_),
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::ScanInfo, filter_info_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::Snippet_Filter_FilterValue, _internal_metadata_),
@@ -1034,165 +1034,165 @@ const char descriptor_table_protodef_storage_5fengine_5finstance_2eproto[] PROTO
   "\rUNION_SNIPPET\020\007\022\016\n\nIN_SNIPPET\020\010\022!\n\035DEPE"
   "NDENCY_INNER_JOIN_SNIPPET\020\t\022\034\n\030DEPENDENC"
   "Y_EXIST_SNIPPET\020\n\022\031\n\025DEPENDENCY_IN_SNIPP"
-  "ET\020\013\"\355\001\n\010ScanInfo\022A\n\020sst_csd_map_info\030\001 "
-  "\003(\0132\'.StorageEngineInstance.ScanInfo.SST"
-  "Info\022D\n\013filter_info\030\002 \001(\0132/.StorageEngin"
-  "eInstance.ScanInfo.BlockFilterInfo\032-\n\007SS"
-  "TInfo\022\020\n\010sst_name\030\001 \001(\t\022\020\n\010csd_list\030\002 \003("
-  "\t\032)\n\017BlockFilterInfo\022\n\n\002lv\030\001 \001(\t\022\n\n\002rv\030\002"
-  " \001(\t\"\215\017\n\007Snippet\022\017\n\007db_name\030\001 \001(\t\022\020\n\010que"
-  "ry_ID\030\002 \001(\005\022\017\n\007work_ID\030\003 \001(\005\022\022\n\ntable_na"
-  "me\030\004 \003(\t\022\021\n\ttable_col\030\005 \003(\t\022;\n\014table_fil"
-  "ter\030\006 \003(\0132%.StorageEngineInstance.Snippe"
-  "t.Filter\022=\n\ndependency\030\007 \001(\0132).StorageEn"
-  "gineInstance.Snippet.Dependency\022\024\n\014table"
-  "_offset\030\010 \003(\005\022\024\n\014table_offlen\030\t \003(\005\022\026\n\016t"
-  "able_datatype\030\n \003(\005\022\023\n\013table_alias\030\013 \001(\t"
-  "\022\024\n\014column_alias\030\014 \003(\t\022D\n\021column_project"
-  "ion\030\r \003(\0132).StorageEngineInstance.Snippe"
-  "t.Projection\022\020\n\010group_by\030\016 \003(\t\0226\n\010order_"
-  "by\030\017 \001(\0132$.StorageEngineInstance.Snippet"
-  ".Order\0223\n\005limit\030\020 \001(\0132$.StorageEngineIns"
-  "tance.Snippet.Limit\022\016\n\006pk_num\030\021 \001(\005\0225\n\006h"
-  "aving\030\022 \003(\0132%.StorageEngineInstance.Snip"
-  "pet.Filter\032\241\004\n\006Filter\022=\n\002LV\030\001 \001(\01321.Stor"
-  "ageEngineInstance.Snippet.Filter.FilterV"
-  "alue\022@\n\010Operator\030\002 \001(\0162..StorageEngineIn"
-  "stance.Snippet.Filter.OperType\022=\n\002RV\030\003 \001"
-  "(\01321.StorageEngineInstance.Snippet.Filte"
-  "r.FilterValue\032T\n\013FilterValue\0226\n\004type\030\001 \003"
-  "(\0162(.StorageEngineInstance.Snippet.Value"
-  "Type\022\r\n\005value\030\002 \003(\t\"\200\002\n\010OperType\022\020\n\014KETI"
-  "_DEFAULT\020\000\022\013\n\007KETI_GE\020\001\022\013\n\007KETI_LE\020\002\022\013\n\007"
-  "KETI_GT\020\003\022\013\n\007KETI_LT\020\004\022\013\n\007KETI_ET\020\005\022\013\n\007K"
-  "ETI_NE\020\006\022\r\n\tKETI_LIKE\020\007\022\020\n\014KETI_BETWEEN\020"
-  "\010\022\013\n\007KETI_IN\020\t\022\013\n\007KETI_IS\020\n\022\016\n\nKETI_ISNO"
-  "T\020\013\022\014\n\010KETI_NOT\020\014\022\014\n\010KETI_AND\020\r\022\013\n\007KETI_"
-  "OR\020\016\022\014\n\010KETI_ALL\020\017\022\022\n\016KETI_SUBSTRING\020\020\032\234"
-  "\002\n\nProjection\022I\n\013select_type\030\001 \001(\01624.Sto"
-  "rageEngineInstance.Snippet.Projection.Se"
-  "lectType\022\r\n\005value\030\002 \003(\t\022<\n\nvalue_type\030\003 "
-  "\003(\0162(.StorageEngineInstance.Snippet.Valu"
-  "eType\"v\n\nSelectType\022\016\n\nCOLUMNNAME\020\000\022\007\n\003S"
-  "UM\020\001\022\007\n\003AVG\020\002\022\t\n\005COUNT\020\003\022\r\n\tCOUNTSTAR\020\004\022"
-  "\021\n\rCOUNTDISTINCT\020\005\022\007\n\003TOP\020\006\022\007\n\003MIN\020\007\022\007\n\003"
-  "MAX\020\010\032\211\001\n\005Order\022F\n\tascending\030\001 \003(\01623.Sto"
-  "rageEngineInstance.Snippet.Order.OrderDi"
-  "rection\022\023\n\013column_name\030\002 \003(\t\"#\n\016OrderDir"
-  "ection\022\007\n\003ASC\020\000\022\010\n\004DESC\020\001\032\230\001\n\nDependency"
-  "\022H\n\025dependency_projection\030\001 \003(\0132).Storag"
-  "eEngineInstance.Snippet.Projection\022@\n\021de"
-  "pendency_filter\030\002 \003(\0132%.StorageEngineIns"
-  "tance.Snippet.Filter\032\'\n\005Limit\022\016\n\006offset\030"
-  "\001 \001(\005\022\016\n\006length\030\002 \001(\005\"\234\001\n\tValueType\022\010\n\004I"
-  "NT8\020\000\022\t\n\005INT16\020\001\022\t\n\005INT32\020\002\022\t\n\005INT64\020\003\022\013"
-  "\n\007FLOAT32\020\004\022\013\n\007FLOAT64\020\005\022\013\n\007NUMERIC\020\006\022\010\n"
-  "\004DATE\020\007\022\r\n\tTIMESTAMP\020\010\022\n\n\006STRING\020\t\022\n\n\006CO"
-  "LUMN\020\n\022\014\n\010OPERATOR\020\013\".\n\014GenericQuery\022\017\n\007"
-  "db_name\030\001 \001(\t\022\r\n\005query\030\002 \001(\t\"Q\n\007Request\022"
-  "\020\n\010query_id\030\001 \001(\005\022\017\n\007work_id\030\002 \001(\005\022\017\n\007db"
-  "_name\030\003 \001(\t\022\022\n\ntable_name\030\004 \001(\t\"\031\n\010Respo"
-  "nse\022\r\n\005value\030\001 \001(\t\"\324\003\n\013QueryResult\022I\n\014qu"
-  "ery_result\030\001 \003(\01323.StorageEngineInstance"
-  ".QueryResult.QueryResultEntry\022\021\n\trow_cou"
-  "nt\030\002 \001(\005\022\031\n\021scanned_row_count\030\003 \001(\005\022\032\n\022f"
-  "iltered_row_count\030\004 \001(\005\032\320\001\n\006Column\022C\n\010co"
-  "l_type\030\002 \001(\01621.StorageEngineInstance.Que"
-  "ryResult.Column.ColType\022\022\n\nstring_col\030\003 "
-  "\003(\t\022\017\n\007int_col\030\004 \003(\005\022\022\n\ndouble_col\030\005 \003(\001"
-  "\"H\n\007ColType\022\016\n\nTYPE_EMPTY\020\000\022\017\n\013TYPE_STRI"
-  "NG\020\001\022\014\n\010TYPE_INT\020\002\022\016\n\nTYPE_FLOAT\020\003\032]\n\020Qu"
-  "eryResultEntry\022\013\n\003key\030\001 \001(\t\0228\n\005value\030\002 \001"
-  "(\0132).StorageEngineInstance.QueryResult.C"
-  "olumn:\0028\001\"`\n\021QueryStringResult\022\024\n\014query_"
-  "result\030\001 \001(\t\022\031\n\021scanned_row_count\030\002 \001(\005\022"
-  "\032\n\022filtered_row_count\030\003 \001(\005\"j\n\017MetaDataR"
-  "equest\022\017\n\007db_name\030\001 \001(\t\022\022\n\ntable_name\030\002 "
-  "\001(\t\0222\n\tscan_info\030\003 \001(\0132\037.StorageEngineIn"
-  "stance.ScanInfo\"\355\001\n\017SnippetMetaData\022J\n\013s"
-  "st_pba_map\030\001 \003(\01325.StorageEngineInstance"
-  ".SnippetMetaData.SstPbaMapEntry\022\037\n\027table"
-  "_total_block_count\030\002 \001(\005\022\034\n\024wal_deleted_"
-  "key_json\030\003 \001(\t\022\035\n\025wal_inserted_row_json\030"
-  "\004 \003(\t\0320\n\016SstPbaMapEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005"
-  "value\030\002 \001(\t:\0028\001\"\370\001\n\rCSDMetricList\022G\n\017csd"
-  "_metric_list\030\001 \003(\0132..StorageEngineInstan"
-  "ce.CSDMetricList.CSDMetric\032\235\001\n\tCSDMetric"
-  "\022\n\n\002id\030\001 \001(\t\022\n\n\002ip\030\002 \001(\t\022\021\n\tcpu_usage\030\003 "
-  "\001(\002\022\024\n\014memory_usage\030\004 \001(\002\022\022\n\ndisk_usage\030"
-  "\005 \001(\002\022\017\n\007network\030\006 \001(\002\022\033\n\023working_block_"
-  "count\030\007 \001(\005\022\r\n\005score\030\010 \001(\002\"\'\n\005Chunk\022\016\n\006o"
-  "ffset\030\001 \001(\003\022\016\n\006length\030\002 \001(\005\"6\n\006Chunks\022,\n"
-  "\006chunks\030\001 \003(\0132\034.StorageEngineInstance.Ch"
-  "unk\"\271\001\n\nTableBlock\022S\n\022table_block_chunks"
-  "\030\002 \003(\01327.StorageEngineInstance.TableBloc"
-  "k.TableBlockChunksEntry\032V\n\025TableBlockChu"
-  "nksEntry\022\013\n\003key\030\001 \001(\005\022,\n\005value\030\002 \001(\0132\035.S"
-  "torageEngineInstance.Chunks:\0028\001\"\372\001\n\nLBAR"
-  "equest\022@\n\010sst_list\030\001 \003(\0132..StorageEngine"
-  "Instance.LBARequest.SstListEntry\032S\n\003SST\022"
-  "\020\n\010csd_list\030\001 \003(\t\022:\n\017table_lba_block\030\002 \001"
-  "(\0132!.StorageEngineInstance.TableBlock\032U\n"
-  "\014SstListEntry\022\013\n\003key\030\001 \001(\t\0224\n\005value\030\002 \001("
-  "\0132%.StorageEngineInstance.LBARequest.SST"
-  ":\0028\001\"\335\002\n\013PBAResponse\022A\n\010sst_list\030\001 \003(\0132/"
-  ".StorageEngineInstance.PBAResponse.SstLi"
-  "stEntry\032\262\001\n\003SST\022R\n\017table_pba_block\030\001 \003(\013"
-  "29.StorageEngineInstance.PBAResponse.SST"
-  ".TablePbaBlockEntry\032W\n\022TablePbaBlockEntr"
-  "y\022\013\n\003key\030\001 \001(\t\0220\n\005value\030\002 \001(\0132!.StorageE"
-  "ngineInstance.TableBlock:\0028\001\032V\n\014SstListE"
-  "ntry\022\013\n\003key\030\001 \001(\t\0225\n\005value\030\002 \001(\0132&.Stora"
-  "geEngineInstance.PBAResponse.SST:\0028\001\"1\n\n"
-  "WALRequest\022\017\n\007db_name\030\001 \001(\t\022\022\n\ntable_nam"
-  "e\030\002 \001(\t\"P\n\013WALResponse\022\023\n\013deleted_key\030\001 "
-  "\003(\t\022\024\n\014inserted_key\030\002 \003(\t\022\026\n\016inserted_va"
-  "lue\030\003 \003(\t\"4\n\rVolumeRequest\022\020\n\010capacity\030\001"
-  " \001(\002\022\021\n\tusing_csd\030\002 \001(\005\"\253\002\n\023AllocatedVol"
-  "umeInfo\022\\\n\022csd_allocation_map\030\001 \003(\0132@.St"
-  "orageEngineInstance.AllocatedVolumeInfo."
-  "CsdAllocationMapEntry\032F\n\nAllocation\022\016\n\006c"
-  "sd_id\030\001 \001(\t\022\020\n\010capacity\030\002 \001(\t\022\026\n\016partiti"
-  "on_name\030\003 \001(\t\032n\n\025CsdAllocationMapEntry\022\013"
-  "\n\003key\030\001 \001(\t\022D\n\005value\030\002 \001(\01325.StorageEngi"
-  "neInstance.AllocatedVolumeInfo.Allocatio"
-  "n:\0028\0012\304\002\n\026StorageEngineInterface\022_\n\025Gene"
-  "ricQueryInterface\022#.StorageEngineInstanc"
-  "e.GenericQuery\032\037.StorageEngineInstance.R"
-  "esponse\"\000\022o\n\030OffloadingQueryInterface\022%."
-  "StorageEngineInstance.SnippetRequest\032(.S"
-  "torageEngineInstance.QueryStringResult\"\000"
-  "(\001\022X\n\rPushCSDMetric\022$.StorageEngineInsta"
-  "nce.CSDMetricList\032\037.StorageEngineInstanc"
-  "e.Response\"\0002\217\002\n\rMergingModule\022W\n\013Aggreg"
-  "ation\022%.StorageEngineInstance.SnippetReq"
-  "uest\032\037.StorageEngineInstance.Response\"\000\022"
-  "M\n\010EndQuery\022\036.StorageEngineInstance.Requ"
-  "est\032\037.StorageEngineInstance.Response\"\000\022V"
-  "\n\016GetQueryResult\022\036.StorageEngineInstance"
-  ".Request\032\".StorageEngineInstance.QueryRe"
-  "sult\"\0002z\n\020MonitoringModule\022f\n\022GetSnippet"
-  "MetaData\022&.StorageEngineInstance.MetaDat"
-  "aRequest\032&.StorageEngineInstance.Snippet"
-  "MetaData\"\0002\304\001\n\020OffloadingModule\022V\n\nSched"
-  "uling\022%.StorageEngineInstance.SnippetReq"
-  "uest\032\037.StorageEngineInstance.Response\"\000\022"
-  "X\n\rPushCSDMetric\022$.StorageEngineInstance"
-  ".CSDMetricList\032\037.StorageEngineInstance.R"
-  "esponse\"\0002\326\001\n\016StorageManager\022U\n\nRequestP"
-  "BA\022!.StorageEngineInstance.LBARequest\032\"."
-  "StorageEngineInstance.PBAResponse\"\000\022m\n\027R"
-  "equestVolumeAllocation\022$.StorageEngineIn"
-  "stance.VolumeRequest\032*.StorageEngineInst"
-  "ance.AllocatedVolumeInfo\"\0002c\n\nWALManager"
-  "\022U\n\nRequestWAL\022!.StorageEngineInstance.W"
-  "ALRequest\032\".StorageEngineInstance.WALRes"
-  "ponse\"\000B6\n\026io.grpc.snippet_sampleB\024snipp"
-  "et_sample_ProtoP\001\242\002\003SSPb\006proto3"
+  "ET\020\013\"\350\001\n\010ScanInfo\022<\n\013sst_csd_map\030\001 \003(\0132\'"
+  ".StorageEngineInstance.ScanInfo.SSTInfo\022"
+  "D\n\013filter_info\030\002 \001(\0132/.StorageEngineInst"
+  "ance.ScanInfo.BlockFilterInfo\032-\n\007SSTInfo"
+  "\022\020\n\010sst_name\030\001 \001(\t\022\020\n\010csd_list\030\002 \003(\t\032)\n\017"
+  "BlockFilterInfo\022\n\n\002lv\030\001 \001(\t\022\n\n\002rv\030\002 \001(\t\""
+  "\215\017\n\007Snippet\022\017\n\007db_name\030\001 \001(\t\022\020\n\010query_ID"
+  "\030\002 \001(\005\022\017\n\007work_ID\030\003 \001(\005\022\022\n\ntable_name\030\004 "
+  "\003(\t\022\021\n\ttable_col\030\005 \003(\t\022;\n\014table_filter\030\006"
+  " \003(\0132%.StorageEngineInstance.Snippet.Fil"
+  "ter\022=\n\ndependency\030\007 \001(\0132).StorageEngineI"
+  "nstance.Snippet.Dependency\022\024\n\014table_offs"
+  "et\030\010 \003(\005\022\024\n\014table_offlen\030\t \003(\005\022\026\n\016table_"
+  "datatype\030\n \003(\005\022\023\n\013table_alias\030\013 \001(\t\022\024\n\014c"
+  "olumn_alias\030\014 \003(\t\022D\n\021column_projection\030\r"
+  " \003(\0132).StorageEngineInstance.Snippet.Pro"
+  "jection\022\020\n\010group_by\030\016 \003(\t\0226\n\010order_by\030\017 "
+  "\001(\0132$.StorageEngineInstance.Snippet.Orde"
+  "r\0223\n\005limit\030\020 \001(\0132$.StorageEngineInstance"
+  ".Snippet.Limit\022\016\n\006pk_num\030\021 \001(\005\0225\n\006having"
+  "\030\022 \003(\0132%.StorageEngineInstance.Snippet.F"
+  "ilter\032\241\004\n\006Filter\022=\n\002LV\030\001 \001(\01321.StorageEn"
+  "gineInstance.Snippet.Filter.FilterValue\022"
+  "@\n\010Operator\030\002 \001(\0162..StorageEngineInstanc"
+  "e.Snippet.Filter.OperType\022=\n\002RV\030\003 \001(\01321."
+  "StorageEngineInstance.Snippet.Filter.Fil"
+  "terValue\032T\n\013FilterValue\0226\n\004type\030\001 \003(\0162(."
+  "StorageEngineInstance.Snippet.ValueType\022"
+  "\r\n\005value\030\002 \003(\t\"\200\002\n\010OperType\022\020\n\014KETI_DEFA"
+  "ULT\020\000\022\013\n\007KETI_GE\020\001\022\013\n\007KETI_LE\020\002\022\013\n\007KETI_"
+  "GT\020\003\022\013\n\007KETI_LT\020\004\022\013\n\007KETI_ET\020\005\022\013\n\007KETI_N"
+  "E\020\006\022\r\n\tKETI_LIKE\020\007\022\020\n\014KETI_BETWEEN\020\010\022\013\n\007"
+  "KETI_IN\020\t\022\013\n\007KETI_IS\020\n\022\016\n\nKETI_ISNOT\020\013\022\014"
+  "\n\010KETI_NOT\020\014\022\014\n\010KETI_AND\020\r\022\013\n\007KETI_OR\020\016\022"
+  "\014\n\010KETI_ALL\020\017\022\022\n\016KETI_SUBSTRING\020\020\032\234\002\n\nPr"
+  "ojection\022I\n\013select_type\030\001 \001(\01624.StorageE"
+  "ngineInstance.Snippet.Projection.SelectT"
+  "ype\022\r\n\005value\030\002 \003(\t\022<\n\nvalue_type\030\003 \003(\0162("
+  ".StorageEngineInstance.Snippet.ValueType"
+  "\"v\n\nSelectType\022\016\n\nCOLUMNNAME\020\000\022\007\n\003SUM\020\001\022"
+  "\007\n\003AVG\020\002\022\t\n\005COUNT\020\003\022\r\n\tCOUNTSTAR\020\004\022\021\n\rCO"
+  "UNTDISTINCT\020\005\022\007\n\003TOP\020\006\022\007\n\003MIN\020\007\022\007\n\003MAX\020\010"
+  "\032\211\001\n\005Order\022F\n\tascending\030\001 \003(\01623.StorageE"
+  "ngineInstance.Snippet.Order.OrderDirecti"
+  "on\022\023\n\013column_name\030\002 \003(\t\"#\n\016OrderDirectio"
+  "n\022\007\n\003ASC\020\000\022\010\n\004DESC\020\001\032\230\001\n\nDependency\022H\n\025d"
+  "ependency_projection\030\001 \003(\0132).StorageEngi"
+  "neInstance.Snippet.Projection\022@\n\021depende"
+  "ncy_filter\030\002 \003(\0132%.StorageEngineInstance"
+  ".Snippet.Filter\032\'\n\005Limit\022\016\n\006offset\030\001 \001(\005"
+  "\022\016\n\006length\030\002 \001(\005\"\234\001\n\tValueType\022\010\n\004INT8\020\000"
+  "\022\t\n\005INT16\020\001\022\t\n\005INT32\020\002\022\t\n\005INT64\020\003\022\013\n\007FLO"
+  "AT32\020\004\022\013\n\007FLOAT64\020\005\022\013\n\007NUMERIC\020\006\022\010\n\004DATE"
+  "\020\007\022\r\n\tTIMESTAMP\020\010\022\n\n\006STRING\020\t\022\n\n\006COLUMN\020"
+  "\n\022\014\n\010OPERATOR\020\013\".\n\014GenericQuery\022\017\n\007db_na"
+  "me\030\001 \001(\t\022\r\n\005query\030\002 \001(\t\"Q\n\007Request\022\020\n\010qu"
+  "ery_id\030\001 \001(\005\022\017\n\007work_id\030\002 \001(\005\022\017\n\007db_name"
+  "\030\003 \001(\t\022\022\n\ntable_name\030\004 \001(\t\"\031\n\010Response\022\r"
+  "\n\005value\030\001 \001(\t\"\324\003\n\013QueryResult\022I\n\014query_r"
+  "esult\030\001 \003(\01323.StorageEngineInstance.Quer"
+  "yResult.QueryResultEntry\022\021\n\trow_count\030\002 "
+  "\001(\005\022\031\n\021scanned_row_count\030\003 \001(\005\022\032\n\022filter"
+  "ed_row_count\030\004 \001(\005\032\320\001\n\006Column\022C\n\010col_typ"
+  "e\030\002 \001(\01621.StorageEngineInstance.QueryRes"
+  "ult.Column.ColType\022\022\n\nstring_col\030\003 \003(\t\022\017"
+  "\n\007int_col\030\004 \003(\005\022\022\n\ndouble_col\030\005 \003(\001\"H\n\007C"
+  "olType\022\016\n\nTYPE_EMPTY\020\000\022\017\n\013TYPE_STRING\020\001\022"
+  "\014\n\010TYPE_INT\020\002\022\016\n\nTYPE_FLOAT\020\003\032]\n\020QueryRe"
+  "sultEntry\022\013\n\003key\030\001 \001(\t\0228\n\005value\030\002 \001(\0132)."
+  "StorageEngineInstance.QueryResult.Column"
+  ":\0028\001\"`\n\021QueryStringResult\022\024\n\014query_resul"
+  "t\030\001 \001(\t\022\031\n\021scanned_row_count\030\002 \001(\005\022\032\n\022fi"
+  "ltered_row_count\030\003 \001(\005\"j\n\017MetaDataReques"
+  "t\022\017\n\007db_name\030\001 \001(\t\022\022\n\ntable_name\030\002 \001(\t\0222"
+  "\n\tscan_info\030\003 \001(\0132\037.StorageEngineInstanc"
+  "e.ScanInfo\"\355\001\n\017SnippetMetaData\022J\n\013sst_pb"
+  "a_map\030\001 \003(\01325.StorageEngineInstance.Snip"
+  "petMetaData.SstPbaMapEntry\022\037\n\027table_tota"
+  "l_block_count\030\002 \001(\005\022\034\n\024wal_deleted_key_j"
+  "son\030\003 \001(\t\022\035\n\025wal_inserted_row_json\030\004 \003(\t"
+  "\0320\n\016SstPbaMapEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value"
+  "\030\002 \001(\t:\0028\001\"\370\001\n\rCSDMetricList\022G\n\017csd_metr"
+  "ic_list\030\001 \003(\0132..StorageEngineInstance.CS"
+  "DMetricList.CSDMetric\032\235\001\n\tCSDMetric\022\n\n\002i"
+  "d\030\001 \001(\t\022\n\n\002ip\030\002 \001(\t\022\021\n\tcpu_usage\030\003 \001(\002\022\024"
+  "\n\014memory_usage\030\004 \001(\002\022\022\n\ndisk_usage\030\005 \001(\002"
+  "\022\017\n\007network\030\006 \001(\002\022\033\n\023working_block_count"
+  "\030\007 \001(\005\022\r\n\005score\030\010 \001(\002\"\'\n\005Chunk\022\016\n\006offset"
+  "\030\001 \001(\003\022\016\n\006length\030\002 \001(\005\"6\n\006Chunks\022,\n\006chun"
+  "ks\030\001 \003(\0132\034.StorageEngineInstance.Chunk\"\271"
+  "\001\n\nTableBlock\022S\n\022table_block_chunks\030\002 \003("
+  "\01327.StorageEngineInstance.TableBlock.Tab"
+  "leBlockChunksEntry\032V\n\025TableBlockChunksEn"
+  "try\022\013\n\003key\030\001 \001(\005\022,\n\005value\030\002 \001(\0132\035.Storag"
+  "eEngineInstance.Chunks:\0028\001\"\372\001\n\nLBAReques"
+  "t\022@\n\010sst_list\030\001 \003(\0132..StorageEngineInsta"
+  "nce.LBARequest.SstListEntry\032S\n\003SST\022\020\n\010cs"
+  "d_list\030\001 \003(\t\022:\n\017table_lba_block\030\002 \001(\0132!."
+  "StorageEngineInstance.TableBlock\032U\n\014SstL"
+  "istEntry\022\013\n\003key\030\001 \001(\t\0224\n\005value\030\002 \001(\0132%.S"
+  "torageEngineInstance.LBARequest.SST:\0028\001\""
+  "\335\002\n\013PBAResponse\022A\n\010sst_list\030\001 \003(\0132/.Stor"
+  "ageEngineInstance.PBAResponse.SstListEnt"
+  "ry\032\262\001\n\003SST\022R\n\017table_pba_block\030\001 \003(\01329.St"
+  "orageEngineInstance.PBAResponse.SST.Tabl"
+  "ePbaBlockEntry\032W\n\022TablePbaBlockEntry\022\013\n\003"
+  "key\030\001 \001(\t\0220\n\005value\030\002 \001(\0132!.StorageEngine"
+  "Instance.TableBlock:\0028\001\032V\n\014SstListEntry\022"
+  "\013\n\003key\030\001 \001(\t\0225\n\005value\030\002 \001(\0132&.StorageEng"
+  "ineInstance.PBAResponse.SST:\0028\001\"1\n\nWALRe"
+  "quest\022\017\n\007db_name\030\001 \001(\t\022\022\n\ntable_name\030\002 \001"
+  "(\t\"P\n\013WALResponse\022\023\n\013deleted_key\030\001 \003(\t\022\024"
+  "\n\014inserted_key\030\002 \003(\t\022\026\n\016inserted_value\030\003"
+  " \003(\t\"4\n\rVolumeRequest\022\020\n\010capacity\030\001 \001(\002\022"
+  "\021\n\tusing_csd\030\002 \001(\005\"\253\002\n\023AllocatedVolumeIn"
+  "fo\022\\\n\022csd_allocation_map\030\001 \003(\0132@.Storage"
+  "EngineInstance.AllocatedVolumeInfo.CsdAl"
+  "locationMapEntry\032F\n\nAllocation\022\016\n\006csd_id"
+  "\030\001 \001(\t\022\020\n\010capacity\030\002 \001(\t\022\026\n\016partition_na"
+  "me\030\003 \001(\t\032n\n\025CsdAllocationMapEntry\022\013\n\003key"
+  "\030\001 \001(\t\022D\n\005value\030\002 \001(\01325.StorageEngineIns"
+  "tance.AllocatedVolumeInfo.Allocation:\0028\001"
+  "2\304\002\n\026StorageEngineInterface\022_\n\025GenericQu"
+  "eryInterface\022#.StorageEngineInstance.Gen"
+  "ericQuery\032\037.StorageEngineInstance.Respon"
+  "se\"\000\022o\n\030OffloadingQueryInterface\022%.Stora"
+  "geEngineInstance.SnippetRequest\032(.Storag"
+  "eEngineInstance.QueryStringResult\"\000(\001\022X\n"
+  "\rPushCSDMetric\022$.StorageEngineInstance.C"
+  "SDMetricList\032\037.StorageEngineInstance.Res"
+  "ponse\"\0002\217\002\n\rMergingModule\022W\n\013Aggregation"
+  "\022%.StorageEngineInstance.SnippetRequest\032"
+  "\037.StorageEngineInstance.Response\"\000\022M\n\010En"
+  "dQuery\022\036.StorageEngineInstance.Request\032\037"
+  ".StorageEngineInstance.Response\"\000\022V\n\016Get"
+  "QueryResult\022\036.StorageEngineInstance.Requ"
+  "est\032\".StorageEngineInstance.QueryResult\""
+  "\0002z\n\020MonitoringModule\022f\n\022GetSnippetMetaD"
+  "ata\022&.StorageEngineInstance.MetaDataRequ"
+  "est\032&.StorageEngineInstance.SnippetMetaD"
+  "ata\"\0002\304\001\n\020OffloadingModule\022V\n\nScheduling"
+  "\022%.StorageEngineInstance.SnippetRequest\032"
+  "\037.StorageEngineInstance.Response\"\000\022X\n\rPu"
+  "shCSDMetric\022$.StorageEngineInstance.CSDM"
+  "etricList\032\037.StorageEngineInstance.Respon"
+  "se\"\0002\326\001\n\016StorageManager\022U\n\nRequestPBA\022!."
+  "StorageEngineInstance.LBARequest\032\".Stora"
+  "geEngineInstance.PBAResponse\"\000\022m\n\027Reques"
+  "tVolumeAllocation\022$.StorageEngineInstanc"
+  "e.VolumeRequest\032*.StorageEngineInstance."
+  "AllocatedVolumeInfo\"\0002c\n\nWALManager\022U\n\nR"
+  "equestWAL\022!.StorageEngineInstance.WALReq"
+  "uest\032\".StorageEngineInstance.WALResponse"
+  "\"\000B6\n\026io.grpc.snippet_sampleB\024snippet_sa"
+  "mple_ProtoP\001\242\002\003SSPb\006proto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_storage_5fengine_5finstance_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_storage_5fengine_5finstance_2eproto = {
-  false, false, 6751, descriptor_table_protodef_storage_5fengine_5finstance_2eproto, "storage_engine_instance.proto", 
+  false, false, 6746, descriptor_table_protodef_storage_5fengine_5finstance_2eproto, "storage_engine_instance.proto", 
   &descriptor_table_storage_5fengine_5finstance_2eproto_once, nullptr, 0, 40,
   schemas, file_default_instances, TableStruct_storage_5fengine_5finstance_2eproto::offsets,
   file_level_metadata_storage_5fengine_5finstance_2eproto, file_level_enum_descriptors_storage_5fengine_5finstance_2eproto, file_level_service_descriptors_storage_5fengine_5finstance_2eproto,
@@ -2197,7 +2197,7 @@ ScanInfo::_Internal::filter_info(const ScanInfo* msg) {
 ScanInfo::ScanInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
                          bool is_message_owned)
   : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
-  sst_csd_map_info_(arena) {
+  sst_csd_map_(arena) {
   SharedCtor();
   if (!is_message_owned) {
     RegisterArenaDtor(arena);
@@ -2206,7 +2206,7 @@ ScanInfo::ScanInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
 }
 ScanInfo::ScanInfo(const ScanInfo& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
-      sst_csd_map_info_(from.sst_csd_map_info_) {
+      sst_csd_map_(from.sst_csd_map_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
   if (from._internal_has_filter_info()) {
     filter_info_ = new ::StorageEngineInstance::ScanInfo_BlockFilterInfo(*from.filter_info_);
@@ -2248,7 +2248,7 @@ void ScanInfo::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  sst_csd_map_info_.Clear();
+  sst_csd_map_.Clear();
   if (GetArenaForAllocation() == nullptr && filter_info_ != nullptr) {
     delete filter_info_;
   }
@@ -2262,13 +2262,13 @@ const char* ScanInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
     uint32_t tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // repeated .StorageEngineInstance.ScanInfo.SSTInfo sst_csd_map_info = 1;
+      // repeated .StorageEngineInstance.ScanInfo.SSTInfo sst_csd_map = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
           ptr -= 1;
           do {
             ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_sst_csd_map_info(), ptr);
+            ptr = ctx->ParseMessage(_internal_add_sst_csd_map(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
@@ -2312,12 +2312,12 @@ uint8_t* ScanInfo::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated .StorageEngineInstance.ScanInfo.SSTInfo sst_csd_map_info = 1;
+  // repeated .StorageEngineInstance.ScanInfo.SSTInfo sst_csd_map = 1;
   for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_sst_csd_map_info_size()); i < n; i++) {
+      n = static_cast<unsigned int>(this->_internal_sst_csd_map_size()); i < n; i++) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(1, this->_internal_sst_csd_map_info(i), target, stream);
+      InternalWriteMessage(1, this->_internal_sst_csd_map(i), target, stream);
   }
 
   // .StorageEngineInstance.ScanInfo.BlockFilterInfo filter_info = 2;
@@ -2344,9 +2344,9 @@ size_t ScanInfo::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated .StorageEngineInstance.ScanInfo.SSTInfo sst_csd_map_info = 1;
-  total_size += 1UL * this->_internal_sst_csd_map_info_size();
-  for (const auto& msg : this->sst_csd_map_info_) {
+  // repeated .StorageEngineInstance.ScanInfo.SSTInfo sst_csd_map = 1;
+  total_size += 1UL * this->_internal_sst_csd_map_size();
+  for (const auto& msg : this->sst_csd_map_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
@@ -2380,7 +2380,7 @@ void ScanInfo::MergeFrom(const ScanInfo& from) {
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  sst_csd_map_info_.MergeFrom(from.sst_csd_map_info_);
+  sst_csd_map_.MergeFrom(from.sst_csd_map_);
   if (from._internal_has_filter_info()) {
     _internal_mutable_filter_info()->::StorageEngineInstance::ScanInfo_BlockFilterInfo::MergeFrom(from._internal_filter_info());
   }
@@ -2401,7 +2401,7 @@ bool ScanInfo::IsInitialized() const {
 void ScanInfo::InternalSwap(ScanInfo* other) {
   using std::swap;
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
-  sst_csd_map_info_.InternalSwap(&other->sst_csd_map_info_);
+  sst_csd_map_.InternalSwap(&other->sst_csd_map_);
   swap(filter_info_, other->filter_info_);
 }
 

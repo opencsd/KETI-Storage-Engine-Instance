@@ -59,9 +59,7 @@ class Scheduler{
     Scheduler() {
       SCHEDULING_ALGORITHM = DCS;
       std::thread SchedulerThread_(&Scheduler::runScheduler,this);
-      // SchedulerThread_.detach();
-      SchedulerThread_.join();
-
+      SchedulerThread_.detach();
     };
     Scheduler(const Scheduler&);
     ~Scheduler() {};

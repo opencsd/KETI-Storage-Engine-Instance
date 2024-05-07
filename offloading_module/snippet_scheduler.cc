@@ -1,21 +1,18 @@
 #include "snippet_scheduler.h"
 
-//한 스니펫에서 테이블 1개를 스캔
-
 void Scheduler::runScheduler(){ 
     while (1){
         SnippetRequest snippet = Scheduler::PopQueue();
 
         ScanInfo* scan_info = snippet.mutable_scan_info();
 
-        int size = scan_info->sst_csd_map_info_size();
+        int size = scan_info->sst_csd_map_size();
         map<string,string> bestcsd;
         bestcsd = Scheduler::getBestCSD(scan_info);
                 
         // make adding PBA,WAL and sending snippet to csd thread
         std::thread trd(&SnippetManager::SetupSnippet, snippet, bestcsd);
         trd.detach();
-
     }
 }
 
@@ -50,24 +47,24 @@ map<string,string> Scheduler::DCS_Algorithm(ScanInfo *scanInfo){
     //sst 파일을 가지고 있는 csd info, key : csd id, value: csd 정보
     unordered_map<string,struct CSDStatusManager::CSDInfo> having_sst_csd_info;
     //1. Table하나에 존재하는 SST 파일 횟수만큼 
-    int sst_csd_map_info_size = scanInfo->sst_csd_map_info_size();
+    int sst_csd_map_size = scanInfo->sst_csd_map_size();
     int csd_list_size;
     float bestScore;
     float score;
     string bestCSD;
     
     KETILOG::DEBUGLOG("Offloading", "Depends on CSD Status");
-    for(int i=0; i < sst_csd_map_info_size; i++){
+    for(int i=0; i < sst_csd_map_size; i++){
         //2. sst 파일을 가지고 있는 csd만 저장
-        int csd_count = scanInfo->sst_csd_map_info(i).csd_list_size();
+        int csd_count = scanInfo->sst_csd_map(i).csd_list_size();
         bestScore = INT_MAX;
         having_sst_csd_info.clear();
         //csd가 1개면 스케줄링 할 필요 없으니까 pass
         if(csd_count == 1){
             KETILOG::DEBUGLOG("Offloading", "sst-csd count : 1");
 
-            sst_name = scanInfo->sst_csd_map_info(i).sst_name();
-            csd_id = scanInfo->sst_csd_map_info(i).csd_list(0);
+            sst_name = scanInfo->sst_csd_map(i).sst_name();
+            csd_id = scanInfo->sst_csd_map(i).csd_list(0);
             KETILOG::DEBUGLOG("Offloading", "sst name " + sst_name + ", id : " + csd_id);
             bestcsd[sst_name] = csd_id;
             continue;
@@ -76,11 +73,11 @@ map<string,string> Scheduler::DCS_Algorithm(ScanInfo *scanInfo){
         //DCS스케줄링
         KETILOG::DEBUGLOG("Offloading", "sst-csd count : n");
 
-        csd_list_size = scanInfo->sst_csd_map_info(i).csd_list_size();
+        csd_list_size = scanInfo->sst_csd_map(i).csd_list_size();
         for(int j=0;j<csd_list_size; j++){
             //sst파일을 가지고 있는 csd 메트릭 정보
-            sst_name = scanInfo->sst_csd_map_info(i).sst_name();
-            csd_id = scanInfo->sst_csd_map_info(i).csd_list(j);
+            sst_name = scanInfo->sst_csd_map(i).sst_name();
+            csd_id = scanInfo->sst_csd_map(i).csd_list(j);
             having_sst_csd_info[csd_id] = csd_info[csd_id];
             KETILOG::DEBUGLOG("Offloading", "Metric Information for " + csd_id + " with " + sst_name);
         }
@@ -151,7 +148,7 @@ string Scheduler::DCS_algorithm(vector<string> dcs_candidate_csd){//DSI용
 map<string,string> Scheduler::DSI_Algorithm(ScanInfo *scanInfo){
     map<string,string> bestcsd;
     map<string, vector<int>> csd_sst_count; // csd가 가지고 있는 sst 전체 파일 수, 0번째는 sst수, 1번째는 스케줄링 횟수  
-    int sst_csd_map_info_size = scanInfo->sst_csd_map_info_size();
+    int sst_csd_map_size = scanInfo->sst_csd_map_size();
     int csd_list_size ;
     string sst_name;
     string csd_id;
@@ -164,13 +161,13 @@ map<string,string> Scheduler::DSI_Algorithm(ScanInfo *scanInfo){
     vector<string> dcs_candidate_csd;
     //1. csd가 가지고 있는 파일 수 저장
     KETILOG::DEBUGLOG("Offloading", "Depends on SST Information");
-    for(int i = 0;i<sst_csd_map_info_size;i++){
-        sst_name = scanInfo->sst_csd_map_info(i).sst_name();
-        csd_list_size = scanInfo->sst_csd_map_info(i).csd_list_size();
+    for(int i = 0;i<sst_csd_map_size;i++){
+        sst_name = scanInfo->sst_csd_map(i).sst_name();
+        csd_list_size = scanInfo->sst_csd_map(i).csd_list_size();
         
         for(int j=0; j < csd_list_size; j++){
             
-            csd_id = scanInfo->sst_csd_map_info(i).csd_list(j);
+            csd_id = scanInfo->sst_csd_map(i).csd_list(j);
 
             for(int k=0; k < 2; k++){
                 csd_sst_count[csd_id].push_back(0);
@@ -184,16 +181,16 @@ map<string,string> Scheduler::DSI_Algorithm(ScanInfo *scanInfo){
         KETILOG::DEBUGLOG("Offloading", itr->first + " - sst file count : " + std::to_string(itr->second.at(0)));
     }
     //2. DSI 스케줄링
-    for(int i=0; i<sst_csd_map_info_size;i++){
+    for(int i=0; i<sst_csd_map_size;i++){
 
-        sst_name = scanInfo->sst_csd_map_info(i).sst_name();
-        csd_list_size = scanInfo->sst_csd_map_info(i).csd_list_size();
+        sst_name = scanInfo->sst_csd_map(i).sst_name();
+        csd_list_size = scanInfo->sst_csd_map(i).csd_list_size();
         candidate_csd.clear();
 
         if(csd_list_size == 1){
             KETILOG::DEBUGLOG("Offloading", "sst-csd count : 1 ");
 
-            csd_id = scanInfo->sst_csd_map_info(i).csd_list(0);
+            csd_id = scanInfo->sst_csd_map(i).csd_list(0);
             KETILOG::DEBUGLOG("Offloading", "sst name " + sst_name + ", id : " + csd_id);
             bestcsd[sst_name] = csd_id;
             continue;
@@ -201,9 +198,9 @@ map<string,string> Scheduler::DSI_Algorithm(ScanInfo *scanInfo){
         //1. 최소 스케줄링 수 찾기
         best_scheduling_count = INT_MAX;
         for(int j=0; j < csd_list_size; j++){
-            csd_id = scanInfo->sst_csd_map_info(i).csd_list(j);
+            csd_id = scanInfo->sst_csd_map(i).csd_list(j);
             scheduling_count = csd_sst_count[csd_id].at(1);
-            sst_name = scanInfo->sst_csd_map_info(i).sst_name();
+            sst_name = scanInfo->sst_csd_map(i).sst_name();
             KETILOG::DEBUGLOG("Offloading", csd_id + "'s scheduling count : " + std::to_string(scheduling_count));
             if(scheduling_count < best_scheduling_count){
                 best_scheduling_count = scheduling_count;
@@ -213,7 +210,7 @@ map<string,string> Scheduler::DSI_Algorithm(ScanInfo *scanInfo){
 
         // 2. 최소 스케줄링 수를 가지고 있는 candidate_csd vector 생성
         for(int j=0; j < csd_list_size; j++){
-            csd_id = scanInfo->sst_csd_map_info(i).csd_list(j);
+            csd_id = scanInfo->sst_csd_map(i).csd_list(j);
             scheduling_count = csd_sst_count[csd_id].at(1);
             if(best_scheduling_count == scheduling_count){
                 candidate_csd.push_back(csd_id);
@@ -280,27 +277,27 @@ map<string,string> Scheduler::Random(ScanInfo *scanInfo){
     string sst_name;
     srand(time(NULL));
     int random_num ;
-    int sst_csd_map_info_size = scanInfo->sst_csd_map_info_size();
+    int sst_csd_map_size = scanInfo->sst_csd_map_size();
     vector<string> csd_list;
     KETILOG::DEBUGLOG("Offloading", " Random " );
-    for(int i=0;i<sst_csd_map_info_size;i++){
+    for(int i=0;i<sst_csd_map_size;i++){
         csd_list.clear();
-        int csd_count = scanInfo->sst_csd_map_info(i).csd_list_size();
+        int csd_count = scanInfo->sst_csd_map(i).csd_list_size();
         if(csd_count == 1){
             KETILOG::DEBUGLOG("Offloading", "sst-csd count : 1 ");
-            sst_name = scanInfo->sst_csd_map_info(i).sst_name();
-            csd_id = scanInfo->sst_csd_map_info(i).csd_list(0);
+            sst_name = scanInfo->sst_csd_map(i).sst_name();
+            csd_id = scanInfo->sst_csd_map(i).csd_list(0);
             KETILOG::DEBUGLOG("Offloading", "sst name : " + sst_name + ", id : " + csd_id);
             bestcsd[sst_name] = csd_id;
             continue;
         }
         for(int j = 0; j<csd_count; j++){
-            csd_list.push_back(scanInfo->sst_csd_map_info(i).csd_list(j));
+            csd_list.push_back(scanInfo->sst_csd_map(i).csd_list(j));
             KETILOG::DEBUGLOG("Offloading", "csd_list(" + std::to_string(j) + ") is " + csd_list.at(j));
         }
         random_num = rand() % csd_count ;
         KETILOG::DEBUGLOG("Offloading", "random number is " + random_num);
-        sst_name = scanInfo->sst_csd_map_info(i).sst_name();
+        sst_name = scanInfo->sst_csd_map(i).sst_name();
         csd_id = csd_list.at(random_num);
         bestcsd[sst_name] = csd_id;
     }
@@ -314,19 +311,19 @@ map<string,string> Scheduler::Auto_Selection(ScanInfo *scanInfo){
     map<string,string> bestcsd;
     float total_csd_num;
     float total_sst_num = 0;
-    int sst_csd_map_info_size = scanInfo->sst_csd_map_info_size();
+    int sst_csd_map_size = scanInfo->sst_csd_map_size();
     int csd_list_size;
     string sst_name;
     string csd_id;
     KETILOG::DEBUGLOG("Offloading", "Auto" );
     //1. csd가 가지고 있는 파일 수 저장
-    for(int i = 0;i<sst_csd_map_info_size;i++){
-        sst_name = scanInfo->sst_csd_map_info(i).sst_name();
-        csd_list_size = scanInfo->sst_csd_map_info(i).csd_list_size();
+    for(int i = 0;i<sst_csd_map_size;i++){
+        sst_name = scanInfo->sst_csd_map(i).sst_name();
+        csd_list_size = scanInfo->sst_csd_map(i).csd_list_size();
         
         for(int j=0; j < csd_list_size; j++){
             
-            csd_id = scanInfo->sst_csd_map_info(i).csd_list(j);
+            csd_id = scanInfo->sst_csd_map(i).csd_list(j);
 
             for(int k=0; k < 2; k++){
                 csd_sst_count[csd_id].push_back(0);
