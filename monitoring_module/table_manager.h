@@ -51,7 +51,7 @@ public:
 	};
 	
 	struct IndexTable {
-		string sst_name;
+		vector<string> sst_list;
 
 		string table_index_number;
 		map<string, string> index_table; //key: index, value: primary key 
@@ -153,7 +153,7 @@ public:
 		return GetInstance().updateSSTPBA(sst_name);
 	}
 
-	static void RequestTablePBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
+	static void RequestTablePBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,StorageEngineInstance::SnippetMetaData_PBAInfo> &sst_pba_map){
 		return GetInstance().requestTablePBA(metadata_request, total_block_count, sst_pba_map);
 	}
 
@@ -235,7 +235,7 @@ private:
 	void dumpTableManager();
 	void updateSSTPBA(string sst_name);
 	void updateSSTIndexTable(string sst_name);
-	void requestTablePBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map);
+	void requestTablePBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,StorageEngineInstance::SnippetMetaData_PBAInfo> &sst_pba_map);
 	vector<Chunk> getSSTFilteredPBABlocks(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string sst_name, string csd_name, int table_index_number);
 	vector<string> seekIndexTable(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string db_name, string table_name);
     mutex mutex_;

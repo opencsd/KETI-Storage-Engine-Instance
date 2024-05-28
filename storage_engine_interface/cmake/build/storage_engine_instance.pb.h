@@ -50,7 +50,7 @@ struct TableStruct_storage_5fengine_5finstance_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[40]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[41]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -139,6 +139,9 @@ extern SnippetDefaultTypeInternal _Snippet_default_instance_;
 class SnippetMetaData;
 struct SnippetMetaDataDefaultTypeInternal;
 extern SnippetMetaDataDefaultTypeInternal _SnippetMetaData_default_instance_;
+class SnippetMetaData_PBAInfo;
+struct SnippetMetaData_PBAInfoDefaultTypeInternal;
+extern SnippetMetaData_PBAInfoDefaultTypeInternal _SnippetMetaData_PBAInfo_default_instance_;
 class SnippetMetaData_SstPbaMapEntry_DoNotUse;
 struct SnippetMetaData_SstPbaMapEntry_DoNotUseDefaultTypeInternal;
 extern SnippetMetaData_SstPbaMapEntry_DoNotUseDefaultTypeInternal _SnippetMetaData_SstPbaMapEntry_DoNotUse_default_instance_;
@@ -207,6 +210,7 @@ template<> ::StorageEngineInstance::ScanInfo_BlockFilterInfo* Arena::CreateMaybe
 template<> ::StorageEngineInstance::ScanInfo_SSTInfo* Arena::CreateMaybeMessage<::StorageEngineInstance::ScanInfo_SSTInfo>(Arena*);
 template<> ::StorageEngineInstance::Snippet* Arena::CreateMaybeMessage<::StorageEngineInstance::Snippet>(Arena*);
 template<> ::StorageEngineInstance::SnippetMetaData* Arena::CreateMaybeMessage<::StorageEngineInstance::SnippetMetaData>(Arena*);
+template<> ::StorageEngineInstance::SnippetMetaData_PBAInfo* Arena::CreateMaybeMessage<::StorageEngineInstance::SnippetMetaData_PBAInfo>(Arena*);
 template<> ::StorageEngineInstance::SnippetMetaData_SstPbaMapEntry_DoNotUse* Arena::CreateMaybeMessage<::StorageEngineInstance::SnippetMetaData_SstPbaMapEntry_DoNotUse>(Arena*);
 template<> ::StorageEngineInstance::SnippetRequest* Arena::CreateMaybeMessage<::StorageEngineInstance::SnippetRequest>(Arena*);
 template<> ::StorageEngineInstance::Snippet_Dependency* Arena::CreateMaybeMessage<::StorageEngineInstance::Snippet_Dependency>(Arena*);
@@ -4280,15 +4284,177 @@ class MetaDataRequest final :
 };
 // -------------------------------------------------------------------
 
+class SnippetMetaData_PBAInfo final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:StorageEngineInstance.SnippetMetaData.PBAInfo) */ {
+ public:
+  inline SnippetMetaData_PBAInfo() : SnippetMetaData_PBAInfo(nullptr) {}
+  ~SnippetMetaData_PBAInfo() override;
+  explicit constexpr SnippetMetaData_PBAInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  SnippetMetaData_PBAInfo(const SnippetMetaData_PBAInfo& from);
+  SnippetMetaData_PBAInfo(SnippetMetaData_PBAInfo&& from) noexcept
+    : SnippetMetaData_PBAInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline SnippetMetaData_PBAInfo& operator=(const SnippetMetaData_PBAInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline SnippetMetaData_PBAInfo& operator=(SnippetMetaData_PBAInfo&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const SnippetMetaData_PBAInfo& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const SnippetMetaData_PBAInfo* internal_default_instance() {
+    return reinterpret_cast<const SnippetMetaData_PBAInfo*>(
+               &_SnippetMetaData_PBAInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    19;
+
+  friend void swap(SnippetMetaData_PBAInfo& a, SnippetMetaData_PBAInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(SnippetMetaData_PBAInfo* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(SnippetMetaData_PBAInfo* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  SnippetMetaData_PBAInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<SnippetMetaData_PBAInfo>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const SnippetMetaData_PBAInfo& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom(const SnippetMetaData_PBAInfo& from);
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to, const ::PROTOBUF_NAMESPACE_ID::Message& from);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(SnippetMetaData_PBAInfo* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "StorageEngineInstance.SnippetMetaData.PBAInfo";
+  }
+  protected:
+  explicit SnippetMetaData_PBAInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPbaStringFieldNumber = 1,
+    kBlockCountFieldNumber = 2,
+  };
+  // string pba_string = 1;
+  void clear_pba_string();
+  const std::string& pba_string() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_pba_string(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_pba_string();
+  PROTOBUF_NODISCARD std::string* release_pba_string();
+  void set_allocated_pba_string(std::string* pba_string);
+  private:
+  const std::string& _internal_pba_string() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_pba_string(const std::string& value);
+  std::string* _internal_mutable_pba_string();
+  public:
+
+  // int32 block_count = 2;
+  void clear_block_count();
+  int32_t block_count() const;
+  void set_block_count(int32_t value);
+  private:
+  int32_t _internal_block_count() const;
+  void _internal_set_block_count(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:StorageEngineInstance.SnippetMetaData.PBAInfo)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr pba_string_;
+  int32_t block_count_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_storage_5fengine_5finstance_2eproto;
+};
+// -------------------------------------------------------------------
+
 class SnippetMetaData_SstPbaMapEntry_DoNotUse : public ::PROTOBUF_NAMESPACE_ID::internal::MapEntry<SnippetMetaData_SstPbaMapEntry_DoNotUse, 
-    std::string, std::string,
+    std::string, ::StorageEngineInstance::SnippetMetaData_PBAInfo,
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING> {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_MESSAGE> {
 public:
   typedef ::PROTOBUF_NAMESPACE_ID::internal::MapEntry<SnippetMetaData_SstPbaMapEntry_DoNotUse, 
-    std::string, std::string,
+    std::string, ::StorageEngineInstance::SnippetMetaData_PBAInfo,
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING> SuperType;
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_MESSAGE> SuperType;
   SnippetMetaData_SstPbaMapEntry_DoNotUse();
   explicit constexpr SnippetMetaData_SstPbaMapEntry_DoNotUse(
       ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
@@ -4298,9 +4464,7 @@ public:
   static bool ValidateKey(std::string* s) {
     return ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(s->data(), static_cast<int>(s->size()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE, "StorageEngineInstance.SnippetMetaData.SstPbaMapEntry.key");
  }
-  static bool ValidateValue(std::string* s) {
-    return ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(s->data(), static_cast<int>(s->size()), ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::PARSE, "StorageEngineInstance.SnippetMetaData.SstPbaMapEntry.value");
- }
+  static bool ValidateValue(void*) { return true; }
   using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
   ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
 };
@@ -4355,7 +4519,7 @@ class SnippetMetaData final :
                &_SnippetMetaData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    21;
 
   friend void swap(SnippetMetaData& a, SnippetMetaData& b) {
     a.Swap(&b);
@@ -4426,6 +4590,7 @@ class SnippetMetaData final :
 
   // nested types ----------------------------------------------------
 
+  typedef SnippetMetaData_PBAInfo PBAInfo;
 
   // accessors -------------------------------------------------------
 
@@ -4435,21 +4600,21 @@ class SnippetMetaData final :
     kWalDeletedKeyJsonFieldNumber = 3,
     kTableTotalBlockCountFieldNumber = 2,
   };
-  // map<string, string> sst_pba_map = 1;
+  // map<string, .StorageEngineInstance.SnippetMetaData.PBAInfo> sst_pba_map = 1;
   int sst_pba_map_size() const;
   private:
   int _internal_sst_pba_map_size() const;
   public:
   void clear_sst_pba_map();
   private:
-  const ::PROTOBUF_NAMESPACE_ID::Map< std::string, std::string >&
+  const ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::SnippetMetaData_PBAInfo >&
       _internal_sst_pba_map() const;
-  ::PROTOBUF_NAMESPACE_ID::Map< std::string, std::string >*
+  ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::SnippetMetaData_PBAInfo >*
       _internal_mutable_sst_pba_map();
   public:
-  const ::PROTOBUF_NAMESPACE_ID::Map< std::string, std::string >&
+  const ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::SnippetMetaData_PBAInfo >&
       sst_pba_map() const;
-  ::PROTOBUF_NAMESPACE_ID::Map< std::string, std::string >*
+  ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::SnippetMetaData_PBAInfo >*
       mutable_sst_pba_map();
 
   // repeated string wal_inserted_row_json = 4;
@@ -4508,9 +4673,9 @@ class SnippetMetaData final :
   typedef void DestructorSkippable_;
   ::PROTOBUF_NAMESPACE_ID::internal::MapField<
       SnippetMetaData_SstPbaMapEntry_DoNotUse,
-      std::string, std::string,
+      std::string, ::StorageEngineInstance::SnippetMetaData_PBAInfo,
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING,
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_STRING> sst_pba_map_;
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::TYPE_MESSAGE> sst_pba_map_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> wal_inserted_row_json_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr wal_deleted_key_json_;
   int32_t table_total_block_count_;
@@ -4567,7 +4732,7 @@ class CSDMetricList_CSDMetric final :
                &_CSDMetricList_CSDMetric_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    22;
 
   friend void swap(CSDMetricList_CSDMetric& a, CSDMetricList_CSDMetric& b) {
     a.Swap(&b);
@@ -4800,7 +4965,7 @@ class CSDMetricList final :
                &_CSDMetricList_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    23;
 
   friend void swap(CSDMetricList& a, CSDMetricList& b) {
     a.Swap(&b);
@@ -4957,7 +5122,7 @@ class Chunk final :
                &_Chunk_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    24;
 
   friend void swap(Chunk& a, Chunk& b) {
     a.Swap(&b);
@@ -5114,7 +5279,7 @@ class Chunks final :
                &_Chunks_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    25;
 
   friend void swap(Chunks& a, Chunks& b) {
     a.Swap(&b);
@@ -5292,7 +5457,7 @@ class TableBlock final :
                &_TableBlock_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    27;
 
   friend void swap(TableBlock& a, TableBlock& b) {
     a.Swap(&b);
@@ -5451,7 +5616,7 @@ class LBARequest_SST final :
                &_LBARequest_SST_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    28;
 
   friend void swap(LBARequest_SST& a, LBARequest_SST& b) {
     a.Swap(&b);
@@ -5657,7 +5822,7 @@ class LBARequest final :
                &_LBARequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    30;
 
   friend void swap(LBARequest& a, LBARequest& b) {
     a.Swap(&b);
@@ -5842,7 +6007,7 @@ class PBAResponse_SST final :
                &_PBAResponse_SST_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    32;
 
   friend void swap(PBAResponse_SST& a, PBAResponse_SST& b) {
     a.Swap(&b);
@@ -6026,7 +6191,7 @@ class PBAResponse final :
                &_PBAResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    33;
+    34;
 
   friend void swap(PBAResponse& a, PBAResponse& b) {
     a.Swap(&b);
@@ -6186,7 +6351,7 @@ class WALRequest final :
                &_WALRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    34;
+    35;
 
   friend void swap(WALRequest& a, WALRequest& b) {
     a.Swap(&b);
@@ -6353,7 +6518,7 @@ class WALResponse final :
                &_WALResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    35;
+    36;
 
   friend void swap(WALResponse& a, WALResponse& b) {
     a.Swap(&b);
@@ -6566,7 +6731,7 @@ class VolumeRequest final :
                &_VolumeRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    36;
+    37;
 
   friend void swap(VolumeRequest& a, VolumeRequest& b) {
     a.Swap(&b);
@@ -6723,7 +6888,7 @@ class AllocatedVolumeInfo_Allocation final :
                &_AllocatedVolumeInfo_Allocation_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    37;
+    38;
 
   friend void swap(AllocatedVolumeInfo_Allocation& a, AllocatedVolumeInfo_Allocation& b) {
     a.Swap(&b);
@@ -6931,7 +7096,7 @@ class AllocatedVolumeInfo final :
                &_AllocatedVolumeInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    39;
+    40;
 
   friend void swap(AllocatedVolumeInfo& a, AllocatedVolumeInfo& b) {
     a.Swap(&b);
@@ -10225,11 +10390,86 @@ inline void MetaDataRequest::set_allocated_scan_info(::StorageEngineInstance::Sc
 
 // -------------------------------------------------------------------
 
+// SnippetMetaData_PBAInfo
+
+// string pba_string = 1;
+inline void SnippetMetaData_PBAInfo::clear_pba_string() {
+  pba_string_.ClearToEmpty();
+}
+inline const std::string& SnippetMetaData_PBAInfo::pba_string() const {
+  // @@protoc_insertion_point(field_get:StorageEngineInstance.SnippetMetaData.PBAInfo.pba_string)
+  return _internal_pba_string();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void SnippetMetaData_PBAInfo::set_pba_string(ArgT0&& arg0, ArgT... args) {
+ 
+ pba_string_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:StorageEngineInstance.SnippetMetaData.PBAInfo.pba_string)
+}
+inline std::string* SnippetMetaData_PBAInfo::mutable_pba_string() {
+  std::string* _s = _internal_mutable_pba_string();
+  // @@protoc_insertion_point(field_mutable:StorageEngineInstance.SnippetMetaData.PBAInfo.pba_string)
+  return _s;
+}
+inline const std::string& SnippetMetaData_PBAInfo::_internal_pba_string() const {
+  return pba_string_.Get();
+}
+inline void SnippetMetaData_PBAInfo::_internal_set_pba_string(const std::string& value) {
+  
+  pba_string_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, value, GetArenaForAllocation());
+}
+inline std::string* SnippetMetaData_PBAInfo::_internal_mutable_pba_string() {
+  
+  return pba_string_.Mutable(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, GetArenaForAllocation());
+}
+inline std::string* SnippetMetaData_PBAInfo::release_pba_string() {
+  // @@protoc_insertion_point(field_release:StorageEngineInstance.SnippetMetaData.PBAInfo.pba_string)
+  return pba_string_.Release(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArenaForAllocation());
+}
+inline void SnippetMetaData_PBAInfo::set_allocated_pba_string(std::string* pba_string) {
+  if (pba_string != nullptr) {
+    
+  } else {
+    
+  }
+  pba_string_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), pba_string,
+      GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (pba_string_.IsDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited())) {
+    pba_string_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:StorageEngineInstance.SnippetMetaData.PBAInfo.pba_string)
+}
+
+// int32 block_count = 2;
+inline void SnippetMetaData_PBAInfo::clear_block_count() {
+  block_count_ = 0;
+}
+inline int32_t SnippetMetaData_PBAInfo::_internal_block_count() const {
+  return block_count_;
+}
+inline int32_t SnippetMetaData_PBAInfo::block_count() const {
+  // @@protoc_insertion_point(field_get:StorageEngineInstance.SnippetMetaData.PBAInfo.block_count)
+  return _internal_block_count();
+}
+inline void SnippetMetaData_PBAInfo::_internal_set_block_count(int32_t value) {
+  
+  block_count_ = value;
+}
+inline void SnippetMetaData_PBAInfo::set_block_count(int32_t value) {
+  _internal_set_block_count(value);
+  // @@protoc_insertion_point(field_set:StorageEngineInstance.SnippetMetaData.PBAInfo.block_count)
+}
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // SnippetMetaData
 
-// map<string, string> sst_pba_map = 1;
+// map<string, .StorageEngineInstance.SnippetMetaData.PBAInfo> sst_pba_map = 1;
 inline int SnippetMetaData::_internal_sst_pba_map_size() const {
   return sst_pba_map_.size();
 }
@@ -10239,20 +10479,20 @@ inline int SnippetMetaData::sst_pba_map_size() const {
 inline void SnippetMetaData::clear_sst_pba_map() {
   sst_pba_map_.Clear();
 }
-inline const ::PROTOBUF_NAMESPACE_ID::Map< std::string, std::string >&
+inline const ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::SnippetMetaData_PBAInfo >&
 SnippetMetaData::_internal_sst_pba_map() const {
   return sst_pba_map_.GetMap();
 }
-inline const ::PROTOBUF_NAMESPACE_ID::Map< std::string, std::string >&
+inline const ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::SnippetMetaData_PBAInfo >&
 SnippetMetaData::sst_pba_map() const {
   // @@protoc_insertion_point(field_map:StorageEngineInstance.SnippetMetaData.sst_pba_map)
   return _internal_sst_pba_map();
 }
-inline ::PROTOBUF_NAMESPACE_ID::Map< std::string, std::string >*
+inline ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::SnippetMetaData_PBAInfo >*
 SnippetMetaData::_internal_mutable_sst_pba_map() {
   return sst_pba_map_.MutableMap();
 }
-inline ::PROTOBUF_NAMESPACE_ID::Map< std::string, std::string >*
+inline ::PROTOBUF_NAMESPACE_ID::Map< std::string, ::StorageEngineInstance::SnippetMetaData_PBAInfo >*
 SnippetMetaData::mutable_sst_pba_map() {
   // @@protoc_insertion_point(field_mutable_map:StorageEngineInstance.SnippetMetaData.sst_pba_map)
   return _internal_mutable_sst_pba_map();
@@ -11645,6 +11885,8 @@ AllocatedVolumeInfo::mutable_csd_allocation_map() {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

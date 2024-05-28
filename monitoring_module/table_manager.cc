@@ -212,7 +212,7 @@ void TableManager::dumpTableManager(){
 	cout << "-------------------------------------" << endl;
 }
 
-void TableManager::requestTablePBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
+void TableManager::requestTablePBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,StorageEngineInstance::SnippetMetaData_PBAInfo> &sst_pba_map){
 	int table_index_number = getTableIndexNumber(/*metadata_request.db_name()*/"tpch_origin", metadata_request.table_name());
 
 	for(const auto sst_csd_map : metadata_request.scan_info().sst_csd_map()){
@@ -255,9 +255,14 @@ void TableManager::requestTablePBA(StorageEngineInstance::MetaDataRequest metada
 		writer.EndArray();
 		writer.EndObject();
 
-		total_block_count += block_list.size();
+		int sst_block_count = block_list.size();
+		total_block_count += sst_block_count;
 		string pba_string = buffer.GetString();
-		sst_pba_map[sst_name] = pba_string;
+
+		StorageEngineInstance::SnippetMetaData_PBAInfo pba_info;
+		pba_info.set_block_count(sst_block_count);
+		pba_info.set_pba_string(pba_string);
+		sst_pba_map[sst_name] = pba_info;
 	}
 }
 
