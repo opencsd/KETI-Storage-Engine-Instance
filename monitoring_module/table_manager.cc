@@ -86,7 +86,7 @@ void TableManager::initTableManager(){
 
 				if(blockObject.HasMember("blockHandle")){
 					block_handle = blockObject["blockHandle"].GetString();
-				}else{
+				}else{ //temp
 					std::stringstream ss;
 					ss << std::setw(5) << std::setfill('0') << temp_block_handle;
 					block_handle = ss.str();
@@ -107,11 +107,11 @@ void TableManager::initTableManager(){
 		TableManager::SetSSTInfo(sst_name, sst);
 	}
 
-	// Get PBA Data
-	for(const auto sst : SSTManager_){
-		string sst_name = sst.first;
-		updateSSTPBA(sst_name);
-	}
+	// // Get PBA Data
+	// for(const auto sst : SSTManager_){
+	// 	string sst_name = sst.first;
+	// 	updateSSTPBA(sst_name);
+	// }
 
 	return;
 }
@@ -212,14 +212,14 @@ void TableManager::dumpTableManager(){
 	cout << "-------------------------------------" << endl;
 }
 
-void TableManager::requestTablePBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,string> &sst_pba_map){
+void TableManager::requestTablePBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,StorageEngineInstance::SnippetMetaData_PBAInfo> &sst_pba_map){
 	int table_index_number = getTableIndexNumber(/*metadata_request.db_name()*/"tpch_origin", metadata_request.table_name());
 
 	for(const auto sst_csd_map : metadata_request.scan_info().sst_csd_map()){
 		string sst_name = sst_csd_map.sst_name();
 		string csd_name = sst_csd_map.csd_list(0);
 
-		vector<TableManager::Chunk> block_list = getSSTFilteredPBABlocks(metadata_request.scan_info().filter_info(), sst_name, csd_name, table_index_number);
+		vector<TableManager::Chunk> block_list = getSSTPBABlocks(sst_name, csd_name, table_index_number);
 
 		StringBuffer buffer;
 		buffer.Clear();
@@ -255,9 +255,14 @@ void TableManager::requestTablePBA(StorageEngineInstance::MetaDataRequest metada
 		writer.EndArray();
 		writer.EndObject();
 
-		total_block_count += block_list.size();
+		int sst_block_count = block_list.size();
+		total_block_count += sst_block_count;
 		string pba_string = buffer.GetString();
-		sst_pba_map[sst_name] = pba_string;
+
+		StorageEngineInstance::SnippetMetaData_PBAInfo pba_info;
+		pba_info.set_block_count(sst_block_count);
+		pba_info.set_pba_string(pba_string);
+		sst_pba_map[sst_name] = pba_info;
 	}
 }
 
@@ -265,27 +270,118 @@ void TableManager::updateSSTIndexTable(string sst_name){
 	// save index table from sst
 }
 
-vector<TableManager::Chunk> TableManager::getSSTFilteredPBABlocks(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string sst_name, string csd_name, int table_index_number){
+vector<TableManager::Chunk> TableManager::getSSTPBABlocks(string sst_name, string csd_name, int table_index_number){
 	vector<TableManager::Chunk> return_chunks;
 
 	map<off64_t, off64_t> origin_lba_pba_map =  TableManager::GetTableCSDPBAList(sst_name, table_index_number, csd_name);
 	map<string, TableManager::Chunk> origin_lba_list = TableManager::GetSSTTableLBAList(sst_name, table_index_number);
 
-	if(filter_info.lv() != ""){
-		// block filtering here
-	}else{
-		for(auto lba : origin_lba_list){
-			TableManager::Chunk chunk;
-			chunk.offset = origin_lba_pba_map[lba.second.offset];
-			chunk.length = lba.second.length;
-			return_chunks.push_back(chunk);
-		}
+	for(auto lba : origin_lba_list){
+		TableManager::Chunk chunk;
+		chunk.offset = origin_lba_pba_map[lba.second.offset];
+		chunk.length = lba.second.length;
+		return_chunks.push_back(chunk);
 	}
-
+	
 	return return_chunks; 
 }
 
-vector<string> TableManager::seekIndexTable(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string db_name, string table_name){
+vector<string> TableManager::seekIndexTable(string db_name, string table_name){
 	
 }
 
+void TableManager::tempRequestFilteredPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,StorageEngineInstance::SnippetMetaData_PBAInfo> &sst_pba_map){
+	int table_index_number = getTableIndexNumber(metadata_request.db_name(), metadata_request.table_name());
+
+	StorageEngineInstance::LBARequest lba_request;
+
+	for(int i=0; i<metadata_request.scan_info().sst_csd_map_size(); i++){
+		StorageEngineInstance::LBARequest_SST lba_request_sst;
+		StorageEngineInstance::TableBlock table_lba_block;
+
+		string sst_name = metadata_request.scan_info().sst_csd_map(i).sst_name();
+		string csd = metadata_request.scan_info().sst_csd_map(i).csd_list(0);
+
+		lba_request_sst.add_csd_list(csd);
+
+		for(int j=0; j<metadata_request.scan_info().block_info_size(); j++){
+			if(metadata_request.scan_info().block_info(j).sst_name() == sst_name){
+				StorageEngineInstance::Chunks chunks;
+				chunks.mutable_chunks()->CopyFrom(metadata_request.scan_info().block_info(j).chunks());
+				table_lba_block.mutable_table_block_chunks()->insert({table_index_number, chunks});
+			}
+		}
+
+		lba_request_sst.mutable_table_lba_block()->CopyFrom(table_lba_block);
+		lba_request.mutable_sst_list()->insert({sst_name, lba_request_sst});
+	}
+	
+    StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)LBA2PBA_MANAGER_PORT, grpc::InsecureChannelCredentials()));
+    StorageEngineInstance::PBAResponse pbaResponse = smc.RequestPBA(lba_request);
+
+	// // Check Recv Snippet
+	{
+		std::string test_json;
+		google::protobuf::util::JsonPrintOptions options;
+		options.always_print_primitive_fields = true;
+		options.always_print_enums_as_ints = true;
+		google::protobuf::util::MessageToJsonString(pbaResponse,&test_json,options);
+		std::cout << endl << test_json << std::endl << std::endl; 
+	}
+
+	for (const auto res_sst : pbaResponse.sst_list()) {
+		string sst_name = res_sst.first;
+
+		for(const auto table_block : res_sst.second.table_pba_block()){
+			string csd_id = table_block.first;
+			
+			for(const auto table_chunks : table_block.second.table_block_chunks()){
+				int table_index_number = table_chunks.first;
+
+				StringBuffer buffer;
+				buffer.Clear();
+				Writer<StringBuffer> writer(buffer);
+				writer.StartObject();
+				writer.Key("blockList");
+				writer.StartArray();
+				writer.StartObject();
+
+				for(int l=0; l<table_chunks.second.chunks_size(); l++){
+					if(l == 0){
+						writer.Key("offset");
+						writer.Int64(table_chunks.second.chunks(l).offset());
+						writer.Key("length");
+						writer.StartArray();
+					}else{
+						if(table_chunks.second.chunks(l-1).offset()+table_chunks.second.chunks(l-1).length() != table_chunks.second.chunks(l).offset()){
+							writer.EndArray();
+							writer.EndObject();
+							writer.StartObject();
+							writer.Key("offset");
+							writer.Int64(table_chunks.second.chunks(l).offset());
+							writer.Key("length");
+							writer.StartArray();
+						}
+					}
+					writer.Int(table_chunks.second.chunks(l).length());
+
+					if(l == table_chunks.second.chunks_size() - 1){
+						writer.EndArray();
+						writer.EndObject();
+					}
+				}
+				writer.EndArray();
+				writer.EndObject();
+
+				int sst_block_count = table_chunks.second.chunks_size();
+				total_block_count += sst_block_count;
+				string pba_string = buffer.GetString();
+
+				StorageEngineInstance::SnippetMetaData_PBAInfo pba_info;
+				pba_info.set_block_count(sst_block_count);
+				pba_info.set_pba_string(pba_string);
+				sst_pba_map[sst_name] = pba_info;
+			}
+		}
+	}
+}

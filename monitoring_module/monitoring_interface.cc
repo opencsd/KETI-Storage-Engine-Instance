@@ -18,17 +18,19 @@ using StorageEngineInstance::Request;
 using StorageEngineInstance::Response;
 using StorageEngineInstance::WALRequest;
 using StorageEngineInstance::MetaDataRequest;
-using StorageEngineInstance::ScanInfo_BlockFilterInfo;
 using StorageEngineInstance::SnippetMetaData;
+using StorageEngineInstance::SnippetMetaData_PBAInfo;
 
 class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
   Status GetSnippetMetaData(ServerContext *context, const MetaDataRequest *request, SnippetMetaData *response) override {
     KETILOG::INFOLOG("Monitoring", "# get snippet metadata");
 
     int total_block_count = 0;
-    map<string,string> sst_pba_map;
+    map<string,SnippetMetaData_PBAInfo> sst_pba_map;
 
     TableManager::RequestTablePBA(*request, total_block_count, sst_pba_map);
+
+    // TableManager::TempRequestFilteredPBA(*request, total_block_count, sst_pba_map);
 
     WALRequest walRequest;
     string wal_deleted_key_json;
@@ -43,9 +45,7 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
 
     int index = 0;
     for(const auto entry : sst_pba_map){
-      string sst_name = entry.first;
-      string pba = entry.second;
-      response->mutable_sst_pba_map()->insert({sst_name, pba});
+      response->mutable_sst_pba_map()->insert({entry.first, entry.second});
       // response->add_wal_inserted_row_json(wal_inserted_row_json[index]);
       index++;
     }

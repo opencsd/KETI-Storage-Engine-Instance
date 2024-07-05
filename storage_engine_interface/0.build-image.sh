@@ -1,5 +1,5 @@
 registry="ketidevit2"
-image_name="storage-engine-interfaces"
+image_name="storage-engine-interface"
 version="v2.0"
 
 (

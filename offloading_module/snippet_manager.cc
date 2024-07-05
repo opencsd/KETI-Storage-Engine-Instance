@@ -5,16 +5,29 @@ void SnippetManager::setupSnippet(SnippetRequest snippet, map<string,string> bes
     MonitoringModuleConnector mc(grpc::CreateChannel((string)LOCALHOST+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
     SnippetMetaData snippetMetaData = mc.GetSnippetMetaData(/*snippet.snippet().db_name()*/"tpch_origin", snippet.snippet().table_name(0), snippet.scan_info(), bestcsd);
 
+    map<string, int> csd_block_count_map;
+    for (const auto entry : snippetMetaData.sst_pba_map()) {
+        string sst_name = entry.first;
+        string csd_name = bestcsd[sst_name];
+        if(csd_block_count_map.find(csd_name) != csd_block_count_map.end()){
+            csd_block_count_map[csd_name] += entry.second.block_count();
+        }else{
+            csd_block_count_map[csd_name] = entry.second.block_count();
+        }
+    }
+
     StringBuffer snippetbuf;
     for (const auto entry : snippetMetaData.sst_pba_map()) {
         snippetbuf.Clear();
-        string sst = entry.first;
-        serialize(snippetbuf, snippet.snippet(), bestcsd[entry.first], entry.second, snippetMetaData.table_total_block_count());
+        string sst_name = entry.first;
+        string best_csd = bestcsd[sst_name];
+        int csd_block_count = csd_block_count_map[best_csd];
+        serialize(snippetbuf, snippet.snippet(), best_csd, entry.second.pba_string(), csd_block_count, snippetMetaData.table_total_block_count());
         sendSnippetToCSD(snippetbuf.GetString());
     }
 }
 
-void SnippetManager::serialize(StringBuffer &snippetbuf, Snippet snippet, string csd, string pba, int table_total_block_count) {
+void SnippetManager::serialize(StringBuffer &snippetbuf, Snippet snippet, string csd, string pba, int csd_block_count, int table_total_block_count) {
     Writer<StringBuffer> writer(snippetbuf);
 
     writer.StartObject();
@@ -195,6 +208,9 @@ void SnippetManager::serialize(StringBuffer &snippetbuf, Snippet snippet, string
 
     writer.Key("tableTotalBlockCount");
     writer.Int(table_total_block_count);
+
+    writer.Key("csdTotalBlockCount");
+    writer.Int(csd_block_count);
     
     writer.Key("tableAlias");
     writer.String(snippet.table_alias().c_str());
@@ -231,9 +247,9 @@ void SnippetManager::sendSnippetToCSD(string snippet_json){
     serv_addr.sin_addr.s_addr = inet_addr(STORAGE_CLUSTER_MASTER_IP);
     serv_addr.sin_port = htons(port);
 
-    // {
-    //     cout << endl << snippet_json.c_str() << endl << endl;
-    // }
+    {
+        // cout << endl << snippet_json.c_str() << endl << endl;
+    }
 
     connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 

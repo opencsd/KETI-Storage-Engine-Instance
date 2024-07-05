@@ -73,14 +73,14 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
     }
 
     while (stream->Read(&snippet_request)) {      
-      {
-        std::string test_json;
-        google::protobuf::util::JsonPrintOptions options;
-        options.always_print_primitive_fields = true;
-        options.always_print_enums_as_ints = true;
-        google::protobuf::util::MessageToJsonString(snippet_request,&test_json,options);
-        std::cout << endl << test_json << std::endl << std::endl; 
-      }
+      // {
+      //   std::string test_json;
+      //   google::protobuf::util::JsonPrintOptions options;
+      //   options.always_print_primitive_fields = true;
+      //   options.always_print_enums_as_ints = true;
+      //   google::protobuf::util::MessageToJsonString(snippet_request,&test_json,options);
+      //   std::cout << endl << test_json << std::endl << std::endl; 
+      // }
 
       if(snippet_request.type() == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET){
         KETILOG::DEBUGLOG("Interface","# send snippet to offloading module");
