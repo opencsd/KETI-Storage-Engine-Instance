@@ -112,8 +112,8 @@ public:
 		return GetInstance().getTableIndexNumber(db_name, table_name);
 	}
 
-	static vector<Chunk> GetSSTFilteredPBABlocks(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string sst_name, string csd_name, int table_index_number){
-		return GetInstance().getSSTFilteredPBABlocks(filter_info, sst_name, csd_name, table_index_number);
+	static vector<Chunk> GetSSTPBABlocks(string sst_name, string csd_name, int table_index_number){
+		return GetInstance().GetSSTPBABlocks(sst_name, csd_name, table_index_number);
 	}
 
 	static void SetTableInfo(string db_name, string table_name, Table table){
@@ -157,8 +157,12 @@ public:
 		return GetInstance().requestTablePBA(metadata_request, total_block_count, sst_pba_map);
 	}
 
-	static vector<string> SeekIndexTable(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string db_name, string table_name){
-		return GetInstance().seekIndexTable(filter_info, db_name, table_name);
+	static void TempRequestFilteredPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,StorageEngineInstance::SnippetMetaData_PBAInfo> &sst_pba_map){
+		return GetInstance().tempRequestFilteredPBA(metadata_request, total_block_count, sst_pba_map);
+	}
+
+	static vector<string> SeekIndexTable(string db_name, string table_name){
+		return GetInstance().seekIndexTable(db_name, table_name);
 	}
 
 private:
@@ -236,8 +240,9 @@ private:
 	void updateSSTPBA(string sst_name);
 	void updateSSTIndexTable(string sst_name);
 	void requestTablePBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,StorageEngineInstance::SnippetMetaData_PBAInfo> &sst_pba_map);
-	vector<Chunk> getSSTFilteredPBABlocks(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string sst_name, string csd_name, int table_index_number);
-	vector<string> seekIndexTable(StorageEngineInstance::ScanInfo_BlockFilterInfo filter_info, string db_name, string table_name);
+	void tempRequestFilteredPBA(StorageEngineInstance::MetaDataRequest metadata_request, int &total_block_count, map<string,StorageEngineInstance::SnippetMetaData_PBAInfo> &sst_pba_map);
+	vector<Chunk> getSSTPBABlocks(string sst_name, string csd_name, int table_index_number);
+	vector<string> seekIndexTable(string db_name, string table_name);
     mutex mutex_;
 	unordered_map<string, DB> TableManager_; // key: db name, value: struct DB
 	unordered_map<string, SST> SSTManager_; //key: sst name, value: struct SST

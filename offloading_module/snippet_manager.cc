@@ -247,9 +247,9 @@ void SnippetManager::sendSnippetToCSD(string snippet_json){
     serv_addr.sin_addr.s_addr = inet_addr(STORAGE_CLUSTER_MASTER_IP);
     serv_addr.sin_port = htons(port);
 
-    // {
-    //     cout << endl << snippet_json.c_str() << endl << endl;
-    // }
+    {
+        // cout << endl << snippet_json.c_str() << endl << endl;
+    }
 
     connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 

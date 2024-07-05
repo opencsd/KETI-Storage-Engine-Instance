@@ -18,7 +18,6 @@ using StorageEngineInstance::Request;
 using StorageEngineInstance::Response;
 using StorageEngineInstance::WALRequest;
 using StorageEngineInstance::MetaDataRequest;
-using StorageEngineInstance::ScanInfo_BlockFilterInfo;
 using StorageEngineInstance::SnippetMetaData;
 using StorageEngineInstance::SnippetMetaData_PBAInfo;
 
@@ -30,6 +29,8 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
     map<string,SnippetMetaData_PBAInfo> sst_pba_map;
 
     TableManager::RequestTablePBA(*request, total_block_count, sst_pba_map);
+
+    // TableManager::TempRequestFilteredPBA(*request, total_block_count, sst_pba_map);
 
     WALRequest walRequest;
     string wal_deleted_key_json;
