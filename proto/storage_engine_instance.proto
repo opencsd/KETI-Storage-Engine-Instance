@@ -11,6 +11,8 @@ service StorageEngineInterface {
   rpc GenericQueryInterface(GenericQuery) returns (Response) {}
   rpc OffloadingQueryInterface (stream SnippetRequest) returns (QueryStringResult) {}
   rpc PushCSDMetric (CSDMetricList) returns (Response) {}
+  rpc keti_send_snippet(TmaxRequest) returns (TmaxResponse) {}
+  rpc keti_get_csd_status(Empty) returns (CSDMetricList) {}
 }
 
 service MergingModule {
@@ -26,6 +28,8 @@ service MonitoringModule {
 service OffloadingModule {
   rpc Scheduling (SnippetRequest) returns (Response) {}
   rpc PushCSDMetric (CSDMetricList) returns (Response) {}
+  rpc t_snippet_scheduling (TmaxRequest) returns (Response) {}
+  rpc t_get_csd_status(Empty) returns (CSDMetricList) {}
 }
 
 service StorageManager {
@@ -289,3 +293,24 @@ message AllocatedVolumeInfo {
   }
   map<string,Allocation> csd_allocation_map = 1;
 }
+
+
+message TmaxRequest {
+  message Chunk {
+    int64 offset = 1;
+    int32 length = 2;
+  }
+  int32 query_id = 1;
+  int32 work_id = 2;
+  repeated Chunk chunks = 3;
+  string file_name = 4;
+  string csd_name = 5;
+  string table_filter = 6;
+  string column_projection = 7;
+}
+
+message TmaxResponse {
+  string result = 1;
+}
+
+message Empty {}
