@@ -15,6 +15,9 @@ using StorageEngineInstance::OffloadingModule;
 using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::Response; 
 using StorageEngineInstance::CSDMetricList; 
+using StorageEngineInstance::TmaxRequest; 
+using StorageEngineInstance::TmaxResponse; 
+using StorageEngineInstance::Empty; 
 
 using namespace std;
 
@@ -48,6 +51,39 @@ class OffloadingModuleConnector {
 				KETILOG::FATALLOG(LOGTAG,"RPC failed");
 			}
 			return;
+		}
+
+		void t_send_snippet(TmaxRequest tRequest){
+			Response response;
+    		ClientContext context;
+
+			KETILOG::DEBUGLOG(LOGTAG, "<T> send parsed snippet to scheduling");
+			
+			Status status = stub_->t_snippet_scheduling(&context, tRequest, &response);
+
+	  		if (!status.ok()) {
+				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
+				KETILOG::FATALLOG(LOGTAG,"RPC failed");
+			}
+
+			return;
+		}
+
+		CSDMetricList t_get_csd_status(){
+			CSDMetricList response;
+    		ClientContext context;
+			Empty empty;
+
+			KETILOG::DEBUGLOG(LOGTAG, "<T> send parsed snippet to scheduling");
+			
+			Status status = stub_->t_get_csd_status(&context, empty, &response);
+
+	  		if (!status.ok()) {
+				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
+				KETILOG::FATALLOG(LOGTAG,"RPC failed");
+			}
+
+			return response;
 		}
 
 	private:

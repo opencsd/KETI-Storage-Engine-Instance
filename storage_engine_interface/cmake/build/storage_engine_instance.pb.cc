@@ -576,8 +576,62 @@ struct AllocatedVolumeInfoDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT AllocatedVolumeInfoDefaultTypeInternal _AllocatedVolumeInfo_default_instance_;
+constexpr TmaxRequest_Chunk::TmaxRequest_Chunk(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : offset_(int64_t{0})
+  , length_(0){}
+struct TmaxRequest_ChunkDefaultTypeInternal {
+  constexpr TmaxRequest_ChunkDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~TmaxRequest_ChunkDefaultTypeInternal() {}
+  union {
+    TmaxRequest_Chunk _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT TmaxRequest_ChunkDefaultTypeInternal _TmaxRequest_Chunk_default_instance_;
+constexpr TmaxRequest::TmaxRequest(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : chunks_()
+  , file_name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , csd_name_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , table_filter_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , column_projection_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string)
+  , query_id_(0)
+  , work_id_(0){}
+struct TmaxRequestDefaultTypeInternal {
+  constexpr TmaxRequestDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~TmaxRequestDefaultTypeInternal() {}
+  union {
+    TmaxRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT TmaxRequestDefaultTypeInternal _TmaxRequest_default_instance_;
+constexpr TmaxResponse::TmaxResponse(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized)
+  : result_(&::PROTOBUF_NAMESPACE_ID::internal::fixed_address_empty_string){}
+struct TmaxResponseDefaultTypeInternal {
+  constexpr TmaxResponseDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~TmaxResponseDefaultTypeInternal() {}
+  union {
+    TmaxResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT TmaxResponseDefaultTypeInternal _TmaxResponse_default_instance_;
+constexpr Empty::Empty(
+  ::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized){}
+struct EmptyDefaultTypeInternal {
+  constexpr EmptyDefaultTypeInternal()
+    : _instance(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized{}) {}
+  ~EmptyDefaultTypeInternal() {}
+  union {
+    Empty _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT EmptyDefaultTypeInternal _Empty_default_instance_;
 }  // namespace StorageEngineInstance
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_storage_5fengine_5finstance_2eproto[41];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_storage_5fengine_5finstance_2eproto[45];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_storage_5fengine_5finstance_2eproto[6];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_storage_5fengine_5finstance_2eproto = nullptr;
 
@@ -953,6 +1007,40 @@ const uint32_t TableStruct_storage_5fengine_5finstance_2eproto::offsets[] PROTOB
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::AllocatedVolumeInfo, csd_allocation_map_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TmaxRequest_Chunk, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TmaxRequest_Chunk, offset_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TmaxRequest_Chunk, length_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TmaxRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TmaxRequest, query_id_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TmaxRequest, work_id_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TmaxRequest, chunks_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TmaxRequest, file_name_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TmaxRequest, csd_name_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TmaxRequest, table_filter_),
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TmaxRequest, column_projection_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TmaxResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::TmaxResponse, result_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::StorageEngineInstance::Empty, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::StorageEngineInstance::SnippetRequest)},
@@ -996,6 +1084,10 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 345, -1, -1, sizeof(::StorageEngineInstance::AllocatedVolumeInfo_Allocation)},
   { 354, 362, -1, sizeof(::StorageEngineInstance::AllocatedVolumeInfo_CsdAllocationMapEntry_DoNotUse)},
   { 364, -1, -1, sizeof(::StorageEngineInstance::AllocatedVolumeInfo)},
+  { 371, -1, -1, sizeof(::StorageEngineInstance::TmaxRequest_Chunk)},
+  { 379, -1, -1, sizeof(::StorageEngineInstance::TmaxRequest)},
+  { 392, -1, -1, sizeof(::StorageEngineInstance::TmaxResponse)},
+  { 399, -1, -1, sizeof(::StorageEngineInstance::Empty)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -1040,6 +1132,10 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_AllocatedVolumeInfo_Allocation_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_AllocatedVolumeInfo_CsdAllocationMapEntry_DoNotUse_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_AllocatedVolumeInfo_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_TmaxRequest_Chunk_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_TmaxRequest_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_TmaxResponse_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::StorageEngineInstance::_Empty_default_instance_),
 };
 
 const char descriptor_table_protodef_storage_5fengine_5finstance_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -1182,44 +1278,61 @@ const char descriptor_table_protodef_storage_5fengine_5finstance_2eproto[] PROTO
   "tion_name\030\003 \001(\t\032n\n\025CsdAllocationMapEntry"
   "\022\013\n\003key\030\001 \001(\t\022D\n\005value\030\002 \001(\01325.StorageEn"
   "gineInstance.AllocatedVolumeInfo.Allocat"
-  "ion:\0028\0012\304\002\n\026StorageEngineInterface\022_\n\025Ge"
-  "nericQueryInterface\022#.StorageEngineInsta"
-  "nce.GenericQuery\032\037.StorageEngineInstance"
-  ".Response\"\000\022o\n\030OffloadingQueryInterface\022"
-  "%.StorageEngineInstance.SnippetRequest\032("
-  ".StorageEngineInstance.QueryStringResult"
-  "\"\000(\001\022X\n\rPushCSDMetric\022$.StorageEngineIns"
-  "tance.CSDMetricList\032\037.StorageEngineInsta"
-  "nce.Response\"\0002\217\002\n\rMergingModule\022W\n\013Aggr"
-  "egation\022%.StorageEngineInstance.SnippetR"
-  "equest\032\037.StorageEngineInstance.Response\""
-  "\000\022M\n\010EndQuery\022\036.StorageEngineInstance.Re"
-  "quest\032\037.StorageEngineInstance.Response\"\000"
-  "\022V\n\016GetQueryResult\022\036.StorageEngineInstan"
-  "ce.Request\032\".StorageEngineInstance.Query"
-  "Result\"\0002z\n\020MonitoringModule\022f\n\022GetSnipp"
-  "etMetaData\022&.StorageEngineInstance.MetaD"
-  "ataRequest\032&.StorageEngineInstance.Snipp"
-  "etMetaData\"\0002\304\001\n\020OffloadingModule\022V\n\nSch"
-  "eduling\022%.StorageEngineInstance.SnippetR"
-  "equest\032\037.StorageEngineInstance.Response\""
-  "\000\022X\n\rPushCSDMetric\022$.StorageEngineInstan"
+  "ion:\0028\001\"\351\001\n\013TmaxRequest\022\020\n\010query_id\030\001 \001("
+  "\005\022\017\n\007work_id\030\002 \001(\005\0228\n\006chunks\030\003 \003(\0132(.Sto"
+  "rageEngineInstance.TmaxRequest.Chunk\022\021\n\t"
+  "file_name\030\004 \001(\t\022\020\n\010csd_name\030\005 \001(\t\022\024\n\014tab"
+  "le_filter\030\006 \001(\t\022\031\n\021column_projection\030\007 \001"
+  "(\t\032\'\n\005Chunk\022\016\n\006offset\030\001 \001(\003\022\016\n\006length\030\002 "
+  "\001(\005\"\036\n\014TmaxResponse\022\016\n\006result\030\001 \001(\t\"\007\n\005E"
+  "mpty2\201\004\n\026StorageEngineInterface\022_\n\025Gener"
+  "icQueryInterface\022#.StorageEngineInstance"
+  ".GenericQuery\032\037.StorageEngineInstance.Re"
+  "sponse\"\000\022o\n\030OffloadingQueryInterface\022%.S"
+  "torageEngineInstance.SnippetRequest\032(.St"
+  "orageEngineInstance.QueryStringResult\"\000("
+  "\001\022X\n\rPushCSDMetric\022$.StorageEngineInstan"
   "ce.CSDMetricList\032\037.StorageEngineInstance"
-  ".Response\"\0002\326\001\n\016StorageManager\022U\n\nReques"
-  "tPBA\022!.StorageEngineInstance.LBARequest\032"
-  "\".StorageEngineInstance.PBAResponse\"\000\022m\n"
-  "\027RequestVolumeAllocation\022$.StorageEngine"
-  "Instance.VolumeRequest\032*.StorageEngineIn"
-  "stance.AllocatedVolumeInfo\"\0002c\n\nWALManag"
-  "er\022U\n\nRequestWAL\022!.StorageEngineInstance"
-  ".WALRequest\032\".StorageEngineInstance.WALR"
-  "esponse\"\000B6\n\026io.grpc.snippet_sampleB\024sni"
-  "ppet_sample_ProtoP\001\242\002\003SSPb\006proto3"
+  ".Response\"\000\022^\n\021keti_send_snippet\022\".Stora"
+  "geEngineInstance.TmaxRequest\032#.StorageEn"
+  "gineInstance.TmaxResponse\"\000\022[\n\023keti_get_"
+  "csd_status\022\034.StorageEngineInstance.Empty"
+  "\032$.StorageEngineInstance.CSDMetricList\"\000"
+  "2\217\002\n\rMergingModule\022W\n\013Aggregation\022%.Stor"
+  "ageEngineInstance.SnippetRequest\032\037.Stora"
+  "geEngineInstance.Response\"\000\022M\n\010EndQuery\022"
+  "\036.StorageEngineInstance.Request\032\037.Storag"
+  "eEngineInstance.Response\"\000\022V\n\016GetQueryRe"
+  "sult\022\036.StorageEngineInstance.Request\032\".S"
+  "torageEngineInstance.QueryResult\"\0002z\n\020Mo"
+  "nitoringModule\022f\n\022GetSnippetMetaData\022&.S"
+  "torageEngineInstance.MetaDataRequest\032&.S"
+  "torageEngineInstance.SnippetMetaData\"\0002\375"
+  "\002\n\020OffloadingModule\022V\n\nScheduling\022%.Stor"
+  "ageEngineInstance.SnippetRequest\032\037.Stora"
+  "geEngineInstance.Response\"\000\022X\n\rPushCSDMe"
+  "tric\022$.StorageEngineInstance.CSDMetricLi"
+  "st\032\037.StorageEngineInstance.Response\"\000\022]\n"
+  "\024t_snippet_scheduling\022\".StorageEngineIns"
+  "tance.TmaxRequest\032\037.StorageEngineInstanc"
+  "e.Response\"\000\022X\n\020t_get_csd_status\022\034.Stora"
+  "geEngineInstance.Empty\032$.StorageEngineIn"
+  "stance.CSDMetricList\"\0002\326\001\n\016StorageManage"
+  "r\022U\n\nRequestPBA\022!.StorageEngineInstance."
+  "LBARequest\032\".StorageEngineInstance.PBARe"
+  "sponse\"\000\022m\n\027RequestVolumeAllocation\022$.St"
+  "orageEngineInstance.VolumeRequest\032*.Stor"
+  "ageEngineInstance.AllocatedVolumeInfo\"\0002"
+  "c\n\nWALManager\022U\n\nRequestWAL\022!.StorageEng"
+  "ineInstance.WALRequest\032\".StorageEngineIn"
+  "stance.WALResponse\"\000B6\n\026io.grpc.snippet_"
+  "sampleB\024snippet_sample_ProtoP\001\242\002\003SSPb\006pr"
+  "oto3"
   ;
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_storage_5fengine_5finstance_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_storage_5fengine_5finstance_2eproto = {
-  false, false, 6873, descriptor_table_protodef_storage_5fengine_5finstance_2eproto, "storage_engine_instance.proto", 
-  &descriptor_table_storage_5fengine_5finstance_2eproto_once, nullptr, 0, 41,
+  false, false, 7524, descriptor_table_protodef_storage_5fengine_5finstance_2eproto, "storage_engine_instance.proto", 
+  &descriptor_table_storage_5fengine_5finstance_2eproto_once, nullptr, 0, 45,
   schemas, file_default_instances, TableStruct_storage_5fengine_5finstance_2eproto::offsets,
   file_level_metadata_storage_5fengine_5finstance_2eproto, file_level_enum_descriptors_storage_5fengine_5finstance_2eproto, file_level_service_descriptors_storage_5fengine_5finstance_2eproto,
 };
@@ -10696,6 +10809,903 @@ void AllocatedVolumeInfo::InternalSwap(AllocatedVolumeInfo* other) {
       file_level_metadata_storage_5fengine_5finstance_2eproto[40]);
 }
 
+// ===================================================================
+
+class TmaxRequest_Chunk::_Internal {
+ public:
+};
+
+TmaxRequest_Chunk::TmaxRequest_Chunk(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:StorageEngineInstance.TmaxRequest.Chunk)
+}
+TmaxRequest_Chunk::TmaxRequest_Chunk(const TmaxRequest_Chunk& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&offset_, &from.offset_,
+    static_cast<size_t>(reinterpret_cast<char*>(&length_) -
+    reinterpret_cast<char*>(&offset_)) + sizeof(length_));
+  // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.TmaxRequest.Chunk)
+}
+
+inline void TmaxRequest_Chunk::SharedCtor() {
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&offset_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&length_) -
+    reinterpret_cast<char*>(&offset_)) + sizeof(length_));
+}
+
+TmaxRequest_Chunk::~TmaxRequest_Chunk() {
+  // @@protoc_insertion_point(destructor:StorageEngineInstance.TmaxRequest.Chunk)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void TmaxRequest_Chunk::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+}
+
+void TmaxRequest_Chunk::ArenaDtor(void* object) {
+  TmaxRequest_Chunk* _this = reinterpret_cast< TmaxRequest_Chunk* >(object);
+  (void)_this;
+}
+void TmaxRequest_Chunk::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void TmaxRequest_Chunk::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void TmaxRequest_Chunk::Clear() {
+// @@protoc_insertion_point(message_clear_start:StorageEngineInstance.TmaxRequest.Chunk)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&offset_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&length_) -
+      reinterpret_cast<char*>(&offset_)) + sizeof(length_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* TmaxRequest_Chunk::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int64 offset = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          offset_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 length = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          length_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* TmaxRequest_Chunk::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:StorageEngineInstance.TmaxRequest.Chunk)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int64 offset = 1;
+  if (this->_internal_offset() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt64ToArray(1, this->_internal_offset(), target);
+  }
+
+  // int32 length = 2;
+  if (this->_internal_length() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_length(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:StorageEngineInstance.TmaxRequest.Chunk)
+  return target;
+}
+
+size_t TmaxRequest_Chunk::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:StorageEngineInstance.TmaxRequest.Chunk)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // int64 offset = 1;
+  if (this->_internal_offset() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int64SizePlusOne(this->_internal_offset());
+  }
+
+  // int32 length = 2;
+  if (this->_internal_length() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_length());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TmaxRequest_Chunk::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    TmaxRequest_Chunk::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TmaxRequest_Chunk::GetClassData() const { return &_class_data_; }
+
+void TmaxRequest_Chunk::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<TmaxRequest_Chunk *>(to)->MergeFrom(
+      static_cast<const TmaxRequest_Chunk &>(from));
+}
+
+
+void TmaxRequest_Chunk::MergeFrom(const TmaxRequest_Chunk& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:StorageEngineInstance.TmaxRequest.Chunk)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from._internal_offset() != 0) {
+    _internal_set_offset(from._internal_offset());
+  }
+  if (from._internal_length() != 0) {
+    _internal_set_length(from._internal_length());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void TmaxRequest_Chunk::CopyFrom(const TmaxRequest_Chunk& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:StorageEngineInstance.TmaxRequest.Chunk)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TmaxRequest_Chunk::IsInitialized() const {
+  return true;
+}
+
+void TmaxRequest_Chunk::InternalSwap(TmaxRequest_Chunk* other) {
+  using std::swap;
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(TmaxRequest_Chunk, length_)
+      + sizeof(TmaxRequest_Chunk::length_)
+      - PROTOBUF_FIELD_OFFSET(TmaxRequest_Chunk, offset_)>(
+          reinterpret_cast<char*>(&offset_),
+          reinterpret_cast<char*>(&other->offset_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata TmaxRequest_Chunk::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
+      file_level_metadata_storage_5fengine_5finstance_2eproto[41]);
+}
+
+// ===================================================================
+
+class TmaxRequest::_Internal {
+ public:
+};
+
+TmaxRequest::TmaxRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned),
+  chunks_(arena) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:StorageEngineInstance.TmaxRequest)
+}
+TmaxRequest::TmaxRequest(const TmaxRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      chunks_(from.chunks_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  file_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    file_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_file_name().empty()) {
+    file_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_file_name(), 
+      GetArenaForAllocation());
+  }
+  csd_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    csd_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_csd_name().empty()) {
+    csd_name_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_csd_name(), 
+      GetArenaForAllocation());
+  }
+  table_filter_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    table_filter_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_table_filter().empty()) {
+    table_filter_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_table_filter(), 
+      GetArenaForAllocation());
+  }
+  column_projection_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    column_projection_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_column_projection().empty()) {
+    column_projection_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_column_projection(), 
+      GetArenaForAllocation());
+  }
+  ::memcpy(&query_id_, &from.query_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&work_id_) -
+    reinterpret_cast<char*>(&query_id_)) + sizeof(work_id_));
+  // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.TmaxRequest)
+}
+
+inline void TmaxRequest::SharedCtor() {
+file_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  file_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+csd_name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  csd_name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+table_filter_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  table_filter_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+column_projection_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  column_projection_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+    reinterpret_cast<char*>(&query_id_) - reinterpret_cast<char*>(this)),
+    0, static_cast<size_t>(reinterpret_cast<char*>(&work_id_) -
+    reinterpret_cast<char*>(&query_id_)) + sizeof(work_id_));
+}
+
+TmaxRequest::~TmaxRequest() {
+  // @@protoc_insertion_point(destructor:StorageEngineInstance.TmaxRequest)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void TmaxRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  file_name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  csd_name_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  table_filter_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  column_projection_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void TmaxRequest::ArenaDtor(void* object) {
+  TmaxRequest* _this = reinterpret_cast< TmaxRequest* >(object);
+  (void)_this;
+}
+void TmaxRequest::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void TmaxRequest::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void TmaxRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:StorageEngineInstance.TmaxRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  chunks_.Clear();
+  file_name_.ClearToEmpty();
+  csd_name_.ClearToEmpty();
+  table_filter_.ClearToEmpty();
+  column_projection_.ClearToEmpty();
+  ::memset(&query_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&work_id_) -
+      reinterpret_cast<char*>(&query_id_)) + sizeof(work_id_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* TmaxRequest::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // int32 query_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          query_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 work_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          work_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .StorageEngineInstance.TmaxRequest.Chunk chunks = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_chunks(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // string file_name = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          auto str = _internal_mutable_file_name();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.TmaxRequest.file_name"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string csd_name = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          auto str = _internal_mutable_csd_name();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.TmaxRequest.csd_name"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string table_filter = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          auto str = _internal_mutable_table_filter();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.TmaxRequest.table_filter"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string column_projection = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+          auto str = _internal_mutable_column_projection();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.TmaxRequest.column_projection"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* TmaxRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:StorageEngineInstance.TmaxRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // int32 query_id = 1;
+  if (this->_internal_query_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_query_id(), target);
+  }
+
+  // int32 work_id = 2;
+  if (this->_internal_work_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(2, this->_internal_work_id(), target);
+  }
+
+  // repeated .StorageEngineInstance.TmaxRequest.Chunk chunks = 3;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_chunks_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(3, this->_internal_chunks(i), target, stream);
+  }
+
+  // string file_name = 4;
+  if (!this->_internal_file_name().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_file_name().data(), static_cast<int>(this->_internal_file_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "StorageEngineInstance.TmaxRequest.file_name");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_file_name(), target);
+  }
+
+  // string csd_name = 5;
+  if (!this->_internal_csd_name().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_csd_name().data(), static_cast<int>(this->_internal_csd_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "StorageEngineInstance.TmaxRequest.csd_name");
+    target = stream->WriteStringMaybeAliased(
+        5, this->_internal_csd_name(), target);
+  }
+
+  // string table_filter = 6;
+  if (!this->_internal_table_filter().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_table_filter().data(), static_cast<int>(this->_internal_table_filter().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "StorageEngineInstance.TmaxRequest.table_filter");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_table_filter(), target);
+  }
+
+  // string column_projection = 7;
+  if (!this->_internal_column_projection().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_column_projection().data(), static_cast<int>(this->_internal_column_projection().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "StorageEngineInstance.TmaxRequest.column_projection");
+    target = stream->WriteStringMaybeAliased(
+        7, this->_internal_column_projection(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:StorageEngineInstance.TmaxRequest)
+  return target;
+}
+
+size_t TmaxRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:StorageEngineInstance.TmaxRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .StorageEngineInstance.TmaxRequest.Chunk chunks = 3;
+  total_size += 1UL * this->_internal_chunks_size();
+  for (const auto& msg : this->chunks_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // string file_name = 4;
+  if (!this->_internal_file_name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_file_name());
+  }
+
+  // string csd_name = 5;
+  if (!this->_internal_csd_name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_csd_name());
+  }
+
+  // string table_filter = 6;
+  if (!this->_internal_table_filter().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_table_filter());
+  }
+
+  // string column_projection = 7;
+  if (!this->_internal_column_projection().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_column_projection());
+  }
+
+  // int32 query_id = 1;
+  if (this->_internal_query_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_query_id());
+  }
+
+  // int32 work_id = 2;
+  if (this->_internal_work_id() != 0) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32SizePlusOne(this->_internal_work_id());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TmaxRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    TmaxRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TmaxRequest::GetClassData() const { return &_class_data_; }
+
+void TmaxRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<TmaxRequest *>(to)->MergeFrom(
+      static_cast<const TmaxRequest &>(from));
+}
+
+
+void TmaxRequest::MergeFrom(const TmaxRequest& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:StorageEngineInstance.TmaxRequest)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  chunks_.MergeFrom(from.chunks_);
+  if (!from._internal_file_name().empty()) {
+    _internal_set_file_name(from._internal_file_name());
+  }
+  if (!from._internal_csd_name().empty()) {
+    _internal_set_csd_name(from._internal_csd_name());
+  }
+  if (!from._internal_table_filter().empty()) {
+    _internal_set_table_filter(from._internal_table_filter());
+  }
+  if (!from._internal_column_projection().empty()) {
+    _internal_set_column_projection(from._internal_column_projection());
+  }
+  if (from._internal_query_id() != 0) {
+    _internal_set_query_id(from._internal_query_id());
+  }
+  if (from._internal_work_id() != 0) {
+    _internal_set_work_id(from._internal_work_id());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void TmaxRequest::CopyFrom(const TmaxRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:StorageEngineInstance.TmaxRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TmaxRequest::IsInitialized() const {
+  return true;
+}
+
+void TmaxRequest::InternalSwap(TmaxRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  chunks_.InternalSwap(&other->chunks_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &file_name_, lhs_arena,
+      &other->file_name_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &csd_name_, lhs_arena,
+      &other->csd_name_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &table_filter_, lhs_arena,
+      &other->table_filter_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &column_projection_, lhs_arena,
+      &other->column_projection_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(TmaxRequest, work_id_)
+      + sizeof(TmaxRequest::work_id_)
+      - PROTOBUF_FIELD_OFFSET(TmaxRequest, query_id_)>(
+          reinterpret_cast<char*>(&query_id_),
+          reinterpret_cast<char*>(&other->query_id_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata TmaxRequest::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
+      file_level_metadata_storage_5fengine_5finstance_2eproto[42]);
+}
+
+// ===================================================================
+
+class TmaxResponse::_Internal {
+ public:
+};
+
+TmaxResponse::TmaxResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor();
+  if (!is_message_owned) {
+    RegisterArenaDtor(arena);
+  }
+  // @@protoc_insertion_point(arena_constructor:StorageEngineInstance.TmaxResponse)
+}
+TmaxResponse::TmaxResponse(const TmaxResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  result_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    result_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_result().empty()) {
+    result_.Set(::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::EmptyDefault{}, from._internal_result(), 
+      GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.TmaxResponse)
+}
+
+inline void TmaxResponse::SharedCtor() {
+result_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  result_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), "", GetArenaForAllocation());
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+TmaxResponse::~TmaxResponse() {
+  // @@protoc_insertion_point(destructor:StorageEngineInstance.TmaxResponse)
+  if (GetArenaForAllocation() != nullptr) return;
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+inline void TmaxResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  result_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void TmaxResponse::ArenaDtor(void* object) {
+  TmaxResponse* _this = reinterpret_cast< TmaxResponse* >(object);
+  (void)_this;
+}
+void TmaxResponse::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void TmaxResponse::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+
+void TmaxResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:StorageEngineInstance.TmaxResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  result_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* TmaxResponse::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string result = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_result();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "StorageEngineInstance.TmaxResponse.result"));
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* TmaxResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:StorageEngineInstance.TmaxResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string result = 1;
+  if (!this->_internal_result().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_result().data(), static_cast<int>(this->_internal_result().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "StorageEngineInstance.TmaxResponse.result");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_result(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:StorageEngineInstance.TmaxResponse)
+  return target;
+}
+
+size_t TmaxResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:StorageEngineInstance.TmaxResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string result = 1;
+  if (!this->_internal_result().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_result());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TmaxResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSizeCheck,
+    TmaxResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TmaxResponse::GetClassData() const { return &_class_data_; }
+
+void TmaxResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message* to,
+                      const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+  static_cast<TmaxResponse *>(to)->MergeFrom(
+      static_cast<const TmaxResponse &>(from));
+}
+
+
+void TmaxResponse::MergeFrom(const TmaxResponse& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:StorageEngineInstance.TmaxResponse)
+  GOOGLE_DCHECK_NE(&from, this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_result().empty()) {
+    _internal_set_result(from._internal_result());
+  }
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void TmaxResponse::CopyFrom(const TmaxResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:StorageEngineInstance.TmaxResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TmaxResponse::IsInitialized() const {
+  return true;
+}
+
+void TmaxResponse::InternalSwap(TmaxResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      &result_, lhs_arena,
+      &other->result_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata TmaxResponse::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
+      file_level_metadata_storage_5fengine_5finstance_2eproto[43]);
+}
+
+// ===================================================================
+
+class Empty::_Internal {
+ public:
+};
+
+Empty::Empty(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase(arena, is_message_owned) {
+  // @@protoc_insertion_point(arena_constructor:StorageEngineInstance.Empty)
+}
+Empty::Empty(const Empty& from)
+  : ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:StorageEngineInstance.Empty)
+}
+
+
+
+
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData Empty::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::CopyImpl,
+    ::PROTOBUF_NAMESPACE_ID::internal::ZeroFieldsBase::MergeImpl,
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*Empty::GetClassData() const { return &_class_data_; }
+
+
+
+
+
+
+
+::PROTOBUF_NAMESPACE_ID::Metadata Empty::GetMetadata() const {
+  return ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(
+      &descriptor_table_storage_5fengine_5finstance_2eproto_getter, &descriptor_table_storage_5fengine_5finstance_2eproto_once,
+      file_level_metadata_storage_5fengine_5finstance_2eproto[44]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace StorageEngineInstance
 PROTOBUF_NAMESPACE_OPEN
@@ -10821,6 +11831,18 @@ template<> PROTOBUF_NOINLINE ::StorageEngineInstance::AllocatedVolumeInfo_CsdAll
 }
 template<> PROTOBUF_NOINLINE ::StorageEngineInstance::AllocatedVolumeInfo* Arena::CreateMaybeMessage< ::StorageEngineInstance::AllocatedVolumeInfo >(Arena* arena) {
   return Arena::CreateMessageInternal< ::StorageEngineInstance::AllocatedVolumeInfo >(arena);
+}
+template<> PROTOBUF_NOINLINE ::StorageEngineInstance::TmaxRequest_Chunk* Arena::CreateMaybeMessage< ::StorageEngineInstance::TmaxRequest_Chunk >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::StorageEngineInstance::TmaxRequest_Chunk >(arena);
+}
+template<> PROTOBUF_NOINLINE ::StorageEngineInstance::TmaxRequest* Arena::CreateMaybeMessage< ::StorageEngineInstance::TmaxRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::StorageEngineInstance::TmaxRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::StorageEngineInstance::TmaxResponse* Arena::CreateMaybeMessage< ::StorageEngineInstance::TmaxResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::StorageEngineInstance::TmaxResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::StorageEngineInstance::Empty* Arena::CreateMaybeMessage< ::StorageEngineInstance::Empty >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::StorageEngineInstance::Empty >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

@@ -16,13 +16,15 @@ using grpc::ServerBuilder;
 using grpc::ServerContext;
 using grpc::ServerReader;
 using grpc::Status;
-
 using StorageEngineInstance::StorageEngineInterface;
 using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::QueryStringResult;
 using StorageEngineInstance::Response;
 using StorageEngineInstance::GenericQuery;
 using StorageEngineInstance::CSDMetricList;
+using StorageEngineInstance::TmaxRequest;
+using StorageEngineInstance::TmaxResponse;
+using StorageEngineInstance::Empty;
 using namespace std;
 
 void SendQueryStatus(const char* message){
@@ -113,6 +115,26 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
 
     OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
     offloadingModule.PushCSDMetric(*request);
+
+    return Status::OK;
+  }
+
+  Status keti_send_snippet(ServerContext *context, const TmaxRequest *request, TmaxResponse *response) override {
+    KETILOG::DEBUGLOG("Interface", "<T> Tmax DB Server called keti_send_snipet");
+
+    KETILOG::DEBUGLOG("Interface", "<T> parsing tmax snippet request");
+
+    OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
+    offloadingModule.t_send_snippet(*request);
+
+    return Status::OK;
+  }
+
+  Status keti_get_csd_status(ServerContext *context, const Empty* request, CSDMetricList *response) override {
+    KETILOG::DEBUGLOG("Interface", "<T> Tmax DB Server called keti_get_csd_status");
+
+    OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
+    offloadingModule.t_get_csd_status();
 
     return Status::OK;
   }

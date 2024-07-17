@@ -25,6 +25,8 @@ static const char* StorageEngineInterface_method_names[] = {
   "/StorageEngineInstance.StorageEngineInterface/GenericQueryInterface",
   "/StorageEngineInstance.StorageEngineInterface/OffloadingQueryInterface",
   "/StorageEngineInstance.StorageEngineInterface/PushCSDMetric",
+  "/StorageEngineInstance.StorageEngineInterface/keti_send_snippet",
+  "/StorageEngineInstance.StorageEngineInterface/keti_get_csd_status",
 };
 
 std::unique_ptr< StorageEngineInterface::Stub> StorageEngineInterface::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -37,6 +39,8 @@ StorageEngineInterface::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterfa
   : channel_(channel), rpcmethod_GenericQueryInterface_(StorageEngineInterface_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_OffloadingQueryInterface_(StorageEngineInterface_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::CLIENT_STREAMING, channel)
   , rpcmethod_PushCSDMetric_(StorageEngineInterface_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_keti_send_snippet_(StorageEngineInterface_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_keti_get_csd_status_(StorageEngineInterface_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status StorageEngineInterface::Stub::GenericQueryInterface(::grpc::ClientContext* context, const ::StorageEngineInstance::GenericQuery& request, ::StorageEngineInstance::Response* response) {
@@ -101,6 +105,52 @@ void StorageEngineInterface::Stub::async::PushCSDMetric(::grpc::ClientContext* c
   return result;
 }
 
+::grpc::Status StorageEngineInterface::Stub::keti_send_snippet(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::StorageEngineInstance::TmaxResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::TmaxResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_keti_send_snippet_, context, request, response);
+}
+
+void StorageEngineInterface::Stub::async::keti_send_snippet(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::TmaxResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::TmaxResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_keti_send_snippet_, context, request, response, std::move(f));
+}
+
+void StorageEngineInterface::Stub::async::keti_send_snippet(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::TmaxResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_keti_send_snippet_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::TmaxResponse>* StorageEngineInterface::Stub::PrepareAsyncketi_send_snippetRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::TmaxResponse, ::StorageEngineInstance::TmaxRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_keti_send_snippet_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::TmaxResponse>* StorageEngineInterface::Stub::Asyncketi_send_snippetRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncketi_send_snippetRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status StorageEngineInterface::Stub::keti_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::StorageEngineInstance::CSDMetricList* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_keti_get_csd_status_, context, request, response);
+}
+
+void StorageEngineInterface::Stub::async::keti_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_keti_get_csd_status_, context, request, response, std::move(f));
+}
+
+void StorageEngineInterface::Stub::async::keti_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_keti_get_csd_status_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>* StorageEngineInterface::Stub::PrepareAsyncketi_get_csd_statusRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_keti_get_csd_status_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>* StorageEngineInterface::Stub::Asyncketi_get_csd_statusRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncketi_get_csd_statusRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 StorageEngineInterface::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       StorageEngineInterface_method_names[0],
@@ -132,6 +182,26 @@ StorageEngineInterface::Service::Service() {
              ::StorageEngineInstance::Response* resp) {
                return service->PushCSDMetric(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      StorageEngineInterface_method_names[3],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< StorageEngineInterface::Service, ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::TmaxResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](StorageEngineInterface::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::StorageEngineInstance::TmaxRequest* req,
+             ::StorageEngineInstance::TmaxResponse* resp) {
+               return service->keti_send_snippet(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      StorageEngineInterface_method_names[4],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< StorageEngineInterface::Service, ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](StorageEngineInterface::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::StorageEngineInstance::Empty* req,
+             ::StorageEngineInstance::CSDMetricList* resp) {
+               return service->keti_get_csd_status(ctx, req, resp);
+             }, this)));
 }
 
 StorageEngineInterface::Service::~Service() {
@@ -152,6 +222,20 @@ StorageEngineInterface::Service::~Service() {
 }
 
 ::grpc::Status StorageEngineInterface::Service::PushCSDMetric(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status StorageEngineInterface::Service::keti_send_snippet(::grpc::ServerContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::TmaxResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status StorageEngineInterface::Service::keti_get_csd_status(::grpc::ServerContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response) {
   (void) context;
   (void) request;
   (void) response;
@@ -368,6 +452,8 @@ MonitoringModule::Service::~Service() {
 static const char* OffloadingModule_method_names[] = {
   "/StorageEngineInstance.OffloadingModule/Scheduling",
   "/StorageEngineInstance.OffloadingModule/PushCSDMetric",
+  "/StorageEngineInstance.OffloadingModule/t_snippet_scheduling",
+  "/StorageEngineInstance.OffloadingModule/t_get_csd_status",
 };
 
 std::unique_ptr< OffloadingModule::Stub> OffloadingModule::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -379,6 +465,8 @@ std::unique_ptr< OffloadingModule::Stub> OffloadingModule::NewStub(const std::sh
 OffloadingModule::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
   : channel_(channel), rpcmethod_Scheduling_(OffloadingModule_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_PushCSDMetric_(OffloadingModule_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_t_snippet_scheduling_(OffloadingModule_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_t_get_csd_status_(OffloadingModule_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status OffloadingModule::Stub::Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::StorageEngineInstance::Response* response) {
@@ -427,6 +515,52 @@ void OffloadingModule::Stub::async::PushCSDMetric(::grpc::ClientContext* context
   return result;
 }
 
+::grpc::Status OffloadingModule::Stub::t_snippet_scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::StorageEngineInstance::Response* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_t_snippet_scheduling_, context, request, response);
+}
+
+void OffloadingModule::Stub::async::t_snippet_scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_t_snippet_scheduling_, context, request, response, std::move(f));
+}
+
+void OffloadingModule::Stub::async::t_snippet_scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_t_snippet_scheduling_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* OffloadingModule::Stub::PrepareAsynct_snippet_schedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::Response, ::StorageEngineInstance::TmaxRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_t_snippet_scheduling_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* OffloadingModule::Stub::Asynct_snippet_schedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsynct_snippet_schedulingRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status OffloadingModule::Stub::t_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::StorageEngineInstance::CSDMetricList* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_t_get_csd_status_, context, request, response);
+}
+
+void OffloadingModule::Stub::async::t_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_t_get_csd_status_, context, request, response, std::move(f));
+}
+
+void OffloadingModule::Stub::async::t_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_t_get_csd_status_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>* OffloadingModule::Stub::PrepareAsynct_get_csd_statusRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::StorageEngineInstance::CSDMetricList, ::StorageEngineInstance::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_t_get_csd_status_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>* OffloadingModule::Stub::Asynct_get_csd_statusRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsynct_get_csd_statusRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 OffloadingModule::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       OffloadingModule_method_names[0],
@@ -448,6 +582,26 @@ OffloadingModule::Service::Service() {
              ::StorageEngineInstance::Response* resp) {
                return service->PushCSDMetric(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      OffloadingModule_method_names[2],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< OffloadingModule::Service, ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::Response, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](OffloadingModule::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::StorageEngineInstance::TmaxRequest* req,
+             ::StorageEngineInstance::Response* resp) {
+               return service->t_snippet_scheduling(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      OffloadingModule_method_names[3],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< OffloadingModule::Service, ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](OffloadingModule::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::StorageEngineInstance::Empty* req,
+             ::StorageEngineInstance::CSDMetricList* resp) {
+               return service->t_get_csd_status(ctx, req, resp);
+             }, this)));
 }
 
 OffloadingModule::Service::~Service() {
@@ -461,6 +615,20 @@ OffloadingModule::Service::~Service() {
 }
 
 ::grpc::Status OffloadingModule::Service::PushCSDMetric(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status OffloadingModule::Service::t_snippet_scheduling(::grpc::ServerContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::Response* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status OffloadingModule::Service::t_get_csd_status(::grpc::ServerContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response) {
   (void) context;
   (void) request;
   (void) response;
