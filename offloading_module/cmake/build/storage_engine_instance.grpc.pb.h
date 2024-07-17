@@ -58,6 +58,20 @@ class StorageEngineInterface final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncPushCSDMetricRaw(context, request, cq));
     }
+    virtual ::grpc::Status keti_send_snippet(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::StorageEngineInstance::TmaxResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::TmaxResponse>> Asyncketi_send_snippet(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::TmaxResponse>>(Asyncketi_send_snippetRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::TmaxResponse>> PrepareAsyncketi_send_snippet(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::TmaxResponse>>(PrepareAsyncketi_send_snippetRaw(context, request, cq));
+    }
+    virtual ::grpc::Status keti_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::StorageEngineInstance::CSDMetricList* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::CSDMetricList>> Asyncketi_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::CSDMetricList>>(Asyncketi_get_csd_statusRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::CSDMetricList>> PrepareAsyncketi_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::CSDMetricList>>(PrepareAsyncketi_get_csd_statusRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
@@ -66,6 +80,10 @@ class StorageEngineInterface final {
       virtual void OffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) = 0;
       virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
       virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void keti_send_snippet(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::TmaxResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void keti_send_snippet(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::TmaxResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void keti_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void keti_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -78,6 +96,10 @@ class StorageEngineInterface final {
     virtual ::grpc::ClientAsyncWriterInterface< ::StorageEngineInstance::SnippetRequest>* PrepareAsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::TmaxResponse>* Asyncketi_send_snippetRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::TmaxResponse>* PrepareAsyncketi_send_snippetRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::CSDMetricList>* Asyncketi_get_csd_statusRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::CSDMetricList>* PrepareAsyncketi_get_csd_statusRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -105,6 +127,20 @@ class StorageEngineInterface final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncPushCSDMetricRaw(context, request, cq));
     }
+    ::grpc::Status keti_send_snippet(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::StorageEngineInstance::TmaxResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::TmaxResponse>> Asyncketi_send_snippet(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::TmaxResponse>>(Asyncketi_send_snippetRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::TmaxResponse>> PrepareAsyncketi_send_snippet(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::TmaxResponse>>(PrepareAsyncketi_send_snippetRaw(context, request, cq));
+    }
+    ::grpc::Status keti_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::StorageEngineInstance::CSDMetricList* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>> Asyncketi_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>>(Asyncketi_get_csd_statusRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>> PrepareAsyncketi_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>>(PrepareAsyncketi_get_csd_statusRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
@@ -113,6 +149,10 @@ class StorageEngineInterface final {
       void OffloadingQueryInterface(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::ClientWriteReactor< ::StorageEngineInstance::SnippetRequest>* reactor) override;
       void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
       void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void keti_send_snippet(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::TmaxResponse* response, std::function<void(::grpc::Status)>) override;
+      void keti_send_snippet(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::TmaxResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void keti_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response, std::function<void(::grpc::Status)>) override;
+      void keti_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -131,9 +171,15 @@ class StorageEngineInterface final {
     ::grpc::ClientAsyncWriter< ::StorageEngineInstance::SnippetRequest>* PrepareAsyncOffloadingQueryInterfaceRaw(::grpc::ClientContext* context, ::StorageEngineInstance::QueryStringResult* response, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::TmaxResponse>* Asyncketi_send_snippetRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::TmaxResponse>* PrepareAsyncketi_send_snippetRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>* Asyncketi_get_csd_statusRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>* PrepareAsyncketi_get_csd_statusRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_GenericQueryInterface_;
     const ::grpc::internal::RpcMethod rpcmethod_OffloadingQueryInterface_;
     const ::grpc::internal::RpcMethod rpcmethod_PushCSDMetric_;
+    const ::grpc::internal::RpcMethod rpcmethod_keti_send_snippet_;
+    const ::grpc::internal::RpcMethod rpcmethod_keti_get_csd_status_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -144,6 +190,8 @@ class StorageEngineInterface final {
     virtual ::grpc::Status GenericQueryInterface(::grpc::ServerContext* context, const ::StorageEngineInstance::GenericQuery* request, ::StorageEngineInstance::Response* response);
     virtual ::grpc::Status OffloadingQueryInterface(::grpc::ServerContext* context, ::grpc::ServerReader< ::StorageEngineInstance::SnippetRequest>* reader, ::StorageEngineInstance::QueryStringResult* response);
     virtual ::grpc::Status PushCSDMetric(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response);
+    virtual ::grpc::Status keti_send_snippet(::grpc::ServerContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::TmaxResponse* response);
+    virtual ::grpc::Status keti_get_csd_status(::grpc::ServerContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_GenericQueryInterface : public BaseClass {
@@ -205,7 +253,47 @@ class StorageEngineInterface final {
       ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_GenericQueryInterface<WithAsyncMethod_OffloadingQueryInterface<WithAsyncMethod_PushCSDMetric<Service > > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_keti_send_snippet : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_keti_send_snippet() {
+      ::grpc::Service::MarkMethodAsync(3);
+    }
+    ~WithAsyncMethod_keti_send_snippet() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status keti_send_snippet(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::TmaxResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void Requestketi_send_snippet(::grpc::ServerContext* context, ::StorageEngineInstance::TmaxRequest* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::TmaxResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_keti_get_csd_status : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_keti_get_csd_status() {
+      ::grpc::Service::MarkMethodAsync(4);
+    }
+    ~WithAsyncMethod_keti_get_csd_status() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status keti_get_csd_status(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void Requestketi_get_csd_status(::grpc::ServerContext* context, ::StorageEngineInstance::Empty* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::CSDMetricList>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_GenericQueryInterface<WithAsyncMethod_OffloadingQueryInterface<WithAsyncMethod_PushCSDMetric<WithAsyncMethod_keti_send_snippet<WithAsyncMethod_keti_get_csd_status<Service > > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_GenericQueryInterface : public BaseClass {
    private:
@@ -282,7 +370,61 @@ class StorageEngineInterface final {
     virtual ::grpc::ServerUnaryReactor* PushCSDMetric(
       ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_GenericQueryInterface<WithCallbackMethod_OffloadingQueryInterface<WithCallbackMethod_PushCSDMetric<Service > > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_keti_send_snippet : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_keti_send_snippet() {
+      ::grpc::Service::MarkMethodCallback(3,
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::TmaxResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::TmaxResponse* response) { return this->keti_send_snippet(context, request, response); }));}
+    void SetMessageAllocatorFor_keti_send_snippet(
+        ::grpc::MessageAllocator< ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::TmaxResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::TmaxResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_keti_send_snippet() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status keti_send_snippet(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::TmaxResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* keti_send_snippet(
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::TmaxResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_keti_get_csd_status : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_keti_get_csd_status() {
+      ::grpc::Service::MarkMethodCallback(4,
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response) { return this->keti_get_csd_status(context, request, response); }));}
+    void SetMessageAllocatorFor_keti_get_csd_status(
+        ::grpc::MessageAllocator< ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_keti_get_csd_status() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status keti_get_csd_status(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* keti_get_csd_status(
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_GenericQueryInterface<WithCallbackMethod_OffloadingQueryInterface<WithCallbackMethod_PushCSDMetric<WithCallbackMethod_keti_send_snippet<WithCallbackMethod_keti_get_csd_status<Service > > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_GenericQueryInterface : public BaseClass {
@@ -331,6 +473,40 @@ class StorageEngineInterface final {
     }
     // disable synchronous version of this method
     ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_keti_send_snippet : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_keti_send_snippet() {
+      ::grpc::Service::MarkMethodGeneric(3);
+    }
+    ~WithGenericMethod_keti_send_snippet() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status keti_send_snippet(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::TmaxResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_keti_get_csd_status : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_keti_get_csd_status() {
+      ::grpc::Service::MarkMethodGeneric(4);
+    }
+    ~WithGenericMethod_keti_get_csd_status() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status keti_get_csd_status(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -393,6 +569,46 @@ class StorageEngineInterface final {
     }
     void RequestPushCSDMetric(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_keti_send_snippet : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_keti_send_snippet() {
+      ::grpc::Service::MarkMethodRaw(3);
+    }
+    ~WithRawMethod_keti_send_snippet() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status keti_send_snippet(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::TmaxResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void Requestketi_send_snippet(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_keti_get_csd_status : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_keti_get_csd_status() {
+      ::grpc::Service::MarkMethodRaw(4);
+    }
+    ~WithRawMethod_keti_get_csd_status() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status keti_get_csd_status(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void Requestketi_get_csd_status(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -462,6 +678,50 @@ class StorageEngineInterface final {
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
+  class WithRawCallbackMethod_keti_send_snippet : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_keti_send_snippet() {
+      ::grpc::Service::MarkMethodRawCallback(3,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->keti_send_snippet(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_keti_send_snippet() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status keti_send_snippet(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::TmaxResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* keti_send_snippet(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_keti_get_csd_status : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_keti_get_csd_status() {
+      ::grpc::Service::MarkMethodRawCallback(4,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->keti_get_csd_status(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_keti_get_csd_status() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status keti_get_csd_status(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* keti_get_csd_status(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
   class WithStreamedUnaryMethod_GenericQueryInterface : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
@@ -515,9 +775,63 @@ class StorageEngineInterface final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedPushCSDMetric(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::CSDMetricList,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_GenericQueryInterface<WithStreamedUnaryMethod_PushCSDMetric<Service > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_keti_send_snippet : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_keti_send_snippet() {
+      ::grpc::Service::MarkMethodStreamed(3,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::TmaxResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::TmaxResponse>* streamer) {
+                       return this->Streamedketi_send_snippet(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_keti_send_snippet() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status keti_send_snippet(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::TmaxResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status Streamedketi_send_snippet(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::TmaxRequest,::StorageEngineInstance::TmaxResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_keti_get_csd_status : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_keti_get_csd_status() {
+      ::grpc::Service::MarkMethodStreamed(4,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList>* streamer) {
+                       return this->Streamedketi_get_csd_status(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_keti_get_csd_status() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status keti_get_csd_status(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status Streamedketi_get_csd_status(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Empty,::StorageEngineInstance::CSDMetricList>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_GenericQueryInterface<WithStreamedUnaryMethod_PushCSDMetric<WithStreamedUnaryMethod_keti_send_snippet<WithStreamedUnaryMethod_keti_get_csd_status<Service > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_GenericQueryInterface<WithStreamedUnaryMethod_PushCSDMetric<Service > > StreamedService;
+  typedef WithStreamedUnaryMethod_GenericQueryInterface<WithStreamedUnaryMethod_PushCSDMetric<WithStreamedUnaryMethod_keti_send_snippet<WithStreamedUnaryMethod_keti_get_csd_status<Service > > > > StreamedService;
 };
 
 class MergingModule final {
@@ -1270,6 +1584,20 @@ class OffloadingModule final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsyncPushCSDMetricRaw(context, request, cq));
     }
+    virtual ::grpc::Status t_snippet_scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::StorageEngineInstance::Response* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> Asynct_snippet_scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(Asynct_snippet_schedulingRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>> PrepareAsynct_snippet_scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>>(PrepareAsynct_snippet_schedulingRaw(context, request, cq));
+    }
+    virtual ::grpc::Status t_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::StorageEngineInstance::CSDMetricList* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::CSDMetricList>> Asynct_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::CSDMetricList>>(Asynct_get_csd_statusRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::CSDMetricList>> PrepareAsynct_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::CSDMetricList>>(PrepareAsynct_get_csd_statusRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
@@ -1277,6 +1605,10 @@ class OffloadingModule final {
       virtual void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
       virtual void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void t_snippet_scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void t_snippet_scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void t_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void t_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -1286,6 +1618,10 @@ class OffloadingModule final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* Asynct_snippet_schedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::Response>* PrepareAsynct_snippet_schedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::CSDMetricList>* Asynct_get_csd_statusRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::StorageEngineInstance::CSDMetricList>* PrepareAsynct_get_csd_statusRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -1304,6 +1640,20 @@ class OffloadingModule final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsyncPushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsyncPushCSDMetricRaw(context, request, cq));
     }
+    ::grpc::Status t_snippet_scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::StorageEngineInstance::Response* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> Asynct_snippet_scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(Asynct_snippet_schedulingRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>> PrepareAsynct_snippet_scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>>(PrepareAsynct_snippet_schedulingRaw(context, request, cq));
+    }
+    ::grpc::Status t_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::StorageEngineInstance::CSDMetricList* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>> Asynct_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>>(Asynct_get_csd_statusRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>> PrepareAsynct_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>>(PrepareAsynct_get_csd_statusRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
@@ -1311,6 +1661,10 @@ class OffloadingModule final {
       void Scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
       void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
       void PushCSDMetric(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void t_snippet_scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::Response* response, std::function<void(::grpc::Status)>) override;
+      void t_snippet_scheduling(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::Response* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void t_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response, std::function<void(::grpc::Status)>) override;
+      void t_get_csd_status(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -1326,8 +1680,14 @@ class OffloadingModule final {
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncSchedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::SnippetRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* AsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsyncPushCSDMetricRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::CSDMetricList& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* Asynct_snippet_schedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::Response>* PrepareAsynct_snippet_schedulingRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::TmaxRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>* Asynct_get_csd_statusRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::StorageEngineInstance::CSDMetricList>* PrepareAsynct_get_csd_statusRaw(::grpc::ClientContext* context, const ::StorageEngineInstance::Empty& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_Scheduling_;
     const ::grpc::internal::RpcMethod rpcmethod_PushCSDMetric_;
+    const ::grpc::internal::RpcMethod rpcmethod_t_snippet_scheduling_;
+    const ::grpc::internal::RpcMethod rpcmethod_t_get_csd_status_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -1337,6 +1697,8 @@ class OffloadingModule final {
     virtual ~Service();
     virtual ::grpc::Status Scheduling(::grpc::ServerContext* context, const ::StorageEngineInstance::SnippetRequest* request, ::StorageEngineInstance::Response* response);
     virtual ::grpc::Status PushCSDMetric(::grpc::ServerContext* context, const ::StorageEngineInstance::CSDMetricList* request, ::StorageEngineInstance::Response* response);
+    virtual ::grpc::Status t_snippet_scheduling(::grpc::ServerContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::Response* response);
+    virtual ::grpc::Status t_get_csd_status(::grpc::ServerContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_Scheduling : public BaseClass {
@@ -1378,7 +1740,47 @@ class OffloadingModule final {
       ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_Scheduling<WithAsyncMethod_PushCSDMetric<Service > > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_t_snippet_scheduling : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_t_snippet_scheduling() {
+      ::grpc::Service::MarkMethodAsync(2);
+    }
+    ~WithAsyncMethod_t_snippet_scheduling() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status t_snippet_scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void Requestt_snippet_scheduling(::grpc::ServerContext* context, ::StorageEngineInstance::TmaxRequest* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::Response>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_t_get_csd_status : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_t_get_csd_status() {
+      ::grpc::Service::MarkMethodAsync(3);
+    }
+    ~WithAsyncMethod_t_get_csd_status() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status t_get_csd_status(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void Requestt_get_csd_status(::grpc::ServerContext* context, ::StorageEngineInstance::Empty* request, ::grpc::ServerAsyncResponseWriter< ::StorageEngineInstance::CSDMetricList>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_Scheduling<WithAsyncMethod_PushCSDMetric<WithAsyncMethod_t_snippet_scheduling<WithAsyncMethod_t_get_csd_status<Service > > > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_Scheduling : public BaseClass {
    private:
@@ -1433,7 +1835,61 @@ class OffloadingModule final {
     virtual ::grpc::ServerUnaryReactor* PushCSDMetric(
       ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_Scheduling<WithCallbackMethod_PushCSDMetric<Service > > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_t_snippet_scheduling : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_t_snippet_scheduling() {
+      ::grpc::Service::MarkMethodCallback(2,
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::Response>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::TmaxRequest* request, ::StorageEngineInstance::Response* response) { return this->t_snippet_scheduling(context, request, response); }));}
+    void SetMessageAllocatorFor_t_snippet_scheduling(
+        ::grpc::MessageAllocator< ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::Response>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::Response>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_t_snippet_scheduling() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status t_snippet_scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* t_snippet_scheduling(
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_t_get_csd_status : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_t_get_csd_status() {
+      ::grpc::Service::MarkMethodCallback(3,
+          new ::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::StorageEngineInstance::Empty* request, ::StorageEngineInstance::CSDMetricList* response) { return this->t_get_csd_status(context, request, response); }));}
+    void SetMessageAllocatorFor_t_get_csd_status(
+        ::grpc::MessageAllocator< ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_t_get_csd_status() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status t_get_csd_status(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* t_get_csd_status(
+      ::grpc::CallbackServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_Scheduling<WithCallbackMethod_PushCSDMetric<WithCallbackMethod_t_snippet_scheduling<WithCallbackMethod_t_get_csd_status<Service > > > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_Scheduling : public BaseClass {
@@ -1465,6 +1921,40 @@ class OffloadingModule final {
     }
     // disable synchronous version of this method
     ::grpc::Status PushCSDMetric(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::CSDMetricList* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_t_snippet_scheduling : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_t_snippet_scheduling() {
+      ::grpc::Service::MarkMethodGeneric(2);
+    }
+    ~WithGenericMethod_t_snippet_scheduling() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status t_snippet_scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_t_get_csd_status : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_t_get_csd_status() {
+      ::grpc::Service::MarkMethodGeneric(3);
+    }
+    ~WithGenericMethod_t_get_csd_status() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status t_get_csd_status(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1510,6 +2000,46 @@ class OffloadingModule final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_t_snippet_scheduling : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_t_snippet_scheduling() {
+      ::grpc::Service::MarkMethodRaw(2);
+    }
+    ~WithRawMethod_t_snippet_scheduling() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status t_snippet_scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void Requestt_snippet_scheduling(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_t_get_csd_status : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_t_get_csd_status() {
+      ::grpc::Service::MarkMethodRaw(3);
+    }
+    ~WithRawMethod_t_get_csd_status() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status t_get_csd_status(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void Requestt_get_csd_status(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawCallbackMethod_Scheduling : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
@@ -1551,6 +2081,50 @@ class OffloadingModule final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* PushCSDMetric(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_t_snippet_scheduling : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_t_snippet_scheduling() {
+      ::grpc::Service::MarkMethodRawCallback(2,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->t_snippet_scheduling(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_t_snippet_scheduling() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status t_snippet_scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* t_snippet_scheduling(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_t_get_csd_status : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_t_get_csd_status() {
+      ::grpc::Service::MarkMethodRawCallback(3,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->t_get_csd_status(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_t_get_csd_status() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status t_get_csd_status(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* t_get_csd_status(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -1607,9 +2181,63 @@ class OffloadingModule final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedPushCSDMetric(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::CSDMetricList,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_Scheduling<WithStreamedUnaryMethod_PushCSDMetric<Service > > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_t_snippet_scheduling : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_t_snippet_scheduling() {
+      ::grpc::Service::MarkMethodStreamed(2,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::Response>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::StorageEngineInstance::TmaxRequest, ::StorageEngineInstance::Response>* streamer) {
+                       return this->Streamedt_snippet_scheduling(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_t_snippet_scheduling() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status t_snippet_scheduling(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::TmaxRequest* /*request*/, ::StorageEngineInstance::Response* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status Streamedt_snippet_scheduling(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::TmaxRequest,::StorageEngineInstance::Response>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_t_get_csd_status : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_t_get_csd_status() {
+      ::grpc::Service::MarkMethodStreamed(3,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::StorageEngineInstance::Empty, ::StorageEngineInstance::CSDMetricList>* streamer) {
+                       return this->Streamedt_get_csd_status(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_t_get_csd_status() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status t_get_csd_status(::grpc::ServerContext* /*context*/, const ::StorageEngineInstance::Empty* /*request*/, ::StorageEngineInstance::CSDMetricList* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status Streamedt_get_csd_status(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::StorageEngineInstance::Empty,::StorageEngineInstance::CSDMetricList>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_Scheduling<WithStreamedUnaryMethod_PushCSDMetric<WithStreamedUnaryMethod_t_snippet_scheduling<WithStreamedUnaryMethod_t_get_csd_status<Service > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_Scheduling<WithStreamedUnaryMethod_PushCSDMetric<Service > > StreamedService;
+  typedef WithStreamedUnaryMethod_Scheduling<WithStreamedUnaryMethod_PushCSDMetric<WithStreamedUnaryMethod_t_snippet_scheduling<WithStreamedUnaryMethod_t_get_csd_status<Service > > > > StreamedService;
 };
 
 class StorageManager final {

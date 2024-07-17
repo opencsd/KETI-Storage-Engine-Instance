@@ -5,6 +5,8 @@
 #include "keti_log.h"
 #include "ip_config.h"
 
+using StorageEngineInstance::CSDMetricList;
+using StorageEngineInstance::CSDMetricList_CSDMetric;
 using namespace std;
 
 class CSDStatusManager { 
@@ -35,6 +37,10 @@ public:
     static unordered_map<string,struct CSDInfo> GetCSDInfoAll(){
 		return GetInstance().getCSDInfoAll();
 	}
+
+    static CSDMetricList T_get_csd_status(){
+        return GetInstance().t_get_csd_status();
+    }
     
 private:
 	CSDStatusManager() {};
@@ -62,6 +68,25 @@ private:
         return _instance;
     }
 
+    CSDMetricList t_get_csd_status(){
+        CSDMetricList csd_metric_list;
+
+        for(auto& status : CSDStatusManager_){
+            CSDMetricList_CSDMetric csd_metric;
+            csd_metric.set_id(status.first);
+            csd_metric.set_cpu_usage(status.second.cpu_usage);
+            csd_metric.set_memory_usage(status.second.memory_usage);
+            csd_metric.set_disk_usage(status.second.disk_usage);
+            csd_metric.set_network(status.second.network);
+            csd_metric.set_working_block_count(status.second.working_block_count);
+            csd_metric.set_score(status.second.analysis_score);
+
+            csd_metric_list.add_csd_metric_list()->CopyFrom(csd_metric);
+        }
+
+        return csd_metric_list;
+    }
+
 /* Variables */
 public:
     inline const static string LOGTAG = "Offloading::CSD Status Manager";
@@ -70,4 +95,3 @@ private:
     std::mutex mutex_;
 	unordered_map<string,struct CSDInfo> CSDStatusManager_;//key:id, value:CSDInfo
 };
-

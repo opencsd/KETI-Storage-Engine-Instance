@@ -40,6 +40,7 @@ using StorageEngineInstance::Snippet;
 using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::ScanInfo;
 using StorageEngineInstance::ScanInfo_SSTInfo;
+using StorageEngineInstance::TmaxRequest;
 
 class Scheduler{
   public: 
@@ -51,9 +52,15 @@ class Scheduler{
       SnippetRequest scheduling_target = GetInstance().SnippetQueue_.wait_and_pop();
       return scheduling_target;
     }
+
+    static void T_snippet_scheduling(TmaxRequest request){
+      GetInstance().t_snippet_scheduling(request);
+      return;
+    }
+
     static Scheduler& GetInstance(){
-        static Scheduler scheduler;
-        return scheduler;
+      static Scheduler scheduler;
+      return scheduler;
     }
   private:
     Scheduler() {
@@ -67,8 +74,6 @@ class Scheduler{
         return *this;
     }
 
-
-
     void runScheduler();
     map<string,string> getBestCSD(ScanInfo* scanInfo);
   
@@ -77,7 +82,9 @@ class Scheduler{
     map<string,string> DSI_Algorithm(ScanInfo *scanInfo); //Depends on Snippet Information 
     map<string,string> Random(ScanInfo *scanInfo);
     map<string,string> Auto_Selection(ScanInfo *scanInfo);
-
+    
+    void t_snippet_scheduling(TmaxRequest request);
+    void t_offloading_snippet(TmaxRequest request, string csd_id);
   
   public:
 

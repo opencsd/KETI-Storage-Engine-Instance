@@ -351,3 +351,85 @@ map<string,string> Scheduler::Auto_Selection(ScanInfo *scanInfo){
     return bestcsd;
 }
 //map sst가 key, 선정 csd가 value
+
+void Scheduler::t_snippet_scheduling(TmaxRequest request){
+    KETILOG::DEBUGLOG("Offloading", "<T> scheduling tmax snippet...");
+
+    t_offloading_snippet(request, "1");
+    return;
+}
+
+void Scheduler::t_offloading_snippet(TmaxRequest request, string csd_id){
+    KETILOG::DEBUGLOG("Offloading", "<T> called t_offloading_snippet");
+    KETILOG::DEBUGLOG("Offloading", "<T> parsing tmax snippet...");
+
+    StringBuffer snippetbuf;
+    Writer<StringBuffer> writer(snippetbuf);
+
+    writer.StartObject();
+
+    writer.Key("tmax");
+    string csdIP = "10.1."+csd_id+".2";
+    writer.String(csdIP.c_str());
+
+    writer.Key("query_id");
+    writer.Int(request.query_id());
+
+    writer.Key("work_id");
+    writer.Int(request.work_id());
+
+    writer.Key("file_name");
+    writer.String(request.file_name().c_str());
+
+    writer.Key("table_filter");
+    writer.String(request.table_filter().c_str());
+
+    writer.Key("column_projection");
+    writer.String(request.column_projection().c_str());
+
+    writer.Key("chunks");
+    writer.StartArray();
+    for (int i = 0; i < request.chunks_size(); i++){
+        writer.StartObject();
+        writer.Key("offset");
+        writer.Int(request.chunks(i).offset());
+        writer.Key("length");
+        writer.Int(request.chunks(i).length());
+        writer.EndObject();
+    }
+    writer.EndArray();
+
+    writer.EndObject();
+
+    string snippet_json = snippetbuf.GetString();
+
+    // Check Send Snippet
+    {
+    cout << endl << snippet_json << endl << endl; 
+    }
+
+    KETILOG::DEBUGLOG("Offloading", "<T> send tmax snippet...");
+
+    int sock = socket(PF_INET, SOCK_STREAM, 0);
+
+    struct sockaddr_in serv_addr;
+    memset(&serv_addr, 0, sizeof(serv_addr));
+
+    std::istringstream port_((string)CSD_IDENTIFIER_PORT);
+    std::uint16_t port{};
+    port_ >> port;
+
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_addr.s_addr = inet_addr(STORAGE_NODE_IP);
+    serv_addr.sin_port = htons(port);
+
+    connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
+    
+    size_t len = strlen(snippet_json.c_str());
+    send(sock, &len, sizeof(len), 0);
+    send(sock, (char *)snippet_json.c_str(), strlen(snippet_json.c_str()), 0);
+
+    close(sock);
+
+    return;
+}

@@ -2,7 +2,7 @@
 
 void SnippetManager::setupSnippet(SnippetRequest snippet, map<string,string> bestcsd){ 
     //get PBA & WAL
-    MonitoringModuleConnector mc(grpc::CreateChannel((string)LOCALHOST+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
+    MonitoringModuleConnector mc(grpc::CreateChannel((string)OPENCSD_CLUSTER_MASTER_IP+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
     SnippetMetaData snippetMetaData = mc.GetSnippetMetaData(/*snippet.snippet().db_name()*/"tpch_origin", snippet.snippet().table_name(0), snippet.scan_info(), bestcsd);
 
     map<string, int> csd_block_count_map;
@@ -244,7 +244,7 @@ void SnippetManager::sendSnippetToCSD(string snippet_json){
     port_ >> port;
 
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = inet_addr(STORAGE_CLUSTER_MASTER_IP);
+    serv_addr.sin_addr.s_addr = inet_addr(STORAGE_NODE_IP);
     serv_addr.sin_port = htons(port);
 
     {

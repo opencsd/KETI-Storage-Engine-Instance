@@ -18,7 +18,8 @@ using StorageEngineInstance::OffloadingModule;
 using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::Response;
 using StorageEngineInstance::CSDMetricList;
-
+using StorageEngineInstance::TmaxRequest;
+using StorageEngineInstance::Empty;
 using namespace std;
 
 // Logic and data behind the server's behavior.
@@ -58,6 +59,23 @@ class OffloadingModuleServiceImpl final : public OffloadingModule::Service {
     }
     
     response->set_value("Success");
+
+    return Status::OK;
+  }
+
+  Status t_snippet_scheduling(ServerContext *context, const TmaxRequest *request, Response* response) override {
+    KETILOG::DEBUGLOG("Offloading", "<T> called t_snippet_scheduling");
+
+    Scheduler::T_snippet_scheduling(*request);
+
+    return Status::OK;
+  }
+
+  Status t_get_csd_status(ServerContext *context, const Empty *request, CSDMetricList* response) override {
+    KETILOG::DEBUGLOG("Offloading", "<T> called t_get_server_metric");
+
+    CSDMetricList csd_metric_list = CSDStatusManager::T_get_csd_status();
+    response->CopyFrom(csd_metric_list);
 
     return Status::OK;
   }
