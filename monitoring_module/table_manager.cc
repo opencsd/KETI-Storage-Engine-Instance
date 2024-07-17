@@ -145,7 +145,7 @@ void TableManager::updateSSTPBA(string sst_name){
 	lba_request_sst.mutable_table_lba_block()->CopyFrom(table_lba_block);
 	lba_request.mutable_sst_list()->insert({sst_name, lba_request_sst});
 	
-    StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)LBA2PBA_MANAGER_PORT, grpc::InsecureChannelCredentials()));
+    StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_NODE_IP+":"+(string)LBA2PBA_MANAGER_PORT, grpc::InsecureChannelCredentials()));
     StorageEngineInstance::PBAResponse pbaResponse = smc.RequestPBA(lba_request);
 
 	for (const auto res_sst : pbaResponse.sst_list()) {
@@ -316,7 +316,7 @@ void TableManager::tempRequestFilteredPBA(StorageEngineInstance::MetaDataRequest
 		lba_request.mutable_sst_list()->insert({sst_name, lba_request_sst});
 	}
 	
-    StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)LBA2PBA_MANAGER_PORT, grpc::InsecureChannelCredentials()));
+    StorageManagerConnector smc(grpc::CreateChannel((string)STORAGE_NODE_IP+":"+(string)LBA2PBA_MANAGER_PORT, grpc::InsecureChannelCredentials()));
     StorageEngineInstance::PBAResponse pbaResponse = smc.RequestPBA(lba_request);
 
 	// // Check Recv Snippet

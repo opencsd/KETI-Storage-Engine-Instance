@@ -40,7 +40,7 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
     walRequest.set_db_name(request->db_name());
     walRequest.set_table_name(request->table_name());
 
-    // WALHandler wh(grpc::CreateChannel((string)STORAGE_CLUSTER_MASTER_IP+":"+(string)WAL_MANAGER_PORT, grpc::InsecureChannelCredentials()));
+    // WALHandler wh(grpc::CreateChannel((string)STORAGE_NODE_IP+":"+(string)WAL_MANAGER_PORT, grpc::InsecureChannelCredentials()));
     // wh.RequestWAL(walRequest, sst_count, wal_deleted_key_json, wal_inserted_row_json); 
 
     int index = 0;
