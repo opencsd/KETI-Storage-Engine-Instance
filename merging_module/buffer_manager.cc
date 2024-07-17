@@ -4,7 +4,9 @@ void getColOffset(const char* row_data, int* col_offset_list, vector<int> return
 
 void BufferManager::initBufferManager(){
     std::thread BufferManagerInterface(&BufferManager::bufferManagerInterface,this);
+    std::thread T_BufferManagerInterface(&BufferManager::t_buffer_manager_interface,this);
     BufferManagerInterface.detach();
+    T_BufferManagerInterface.detach();
 }
 
 void BufferManager::bufferManagerInterface(){
@@ -93,6 +95,66 @@ void BufferManager::bufferManagerInterface(){
         send(client_fd, cMsg, strlen(cMsg), 0);
 
         pushResult(BlockResult(json.c_str(), data));
+        
+        close(client_fd);		
+	}   
+	close(server_fd);
+}
+
+void BufferManager::t_buffer_manager_interface(){
+    int server_fd, client_fd;
+	int opt = 1;
+	struct sockaddr_in serv_addr, client_addr;
+	socklen_t addrlen = sizeof(client_addr);
+    static char cMsg[] = "ok";
+
+	if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0){
+        perror("socket failed");
+        exit(EXIT_FAILURE);
+    }
+
+	if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))){
+        perror("setsockopt");
+        exit(EXIT_FAILURE);
+    }
+	
+	memset(&serv_addr, 0, sizeof(serv_addr));
+	serv_addr.sin_family = AF_INET;
+	serv_addr.sin_addr.s_addr = INADDR_ANY;
+    serv_addr.sin_port = htons(T_SE_MERGING_TCP_PORT);
+ 
+	if (bind(server_fd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)) < 0){
+		perror("bind");
+		exit(EXIT_FAILURE);
+	} 
+
+	if (listen(server_fd, NCONNECTION) < 0){
+		perror("listen");
+		exit(EXIT_FAILURE);
+	}
+
+    KETILOG::WARNLOG(LOGTAG,"<T> CSD Return Server Listening on 0.0.0.0:"+to_string(T_SE_MERGING_TCP_PORT));
+
+	while(1){
+		if ((client_fd = accept(server_fd, (struct sockaddr*)&client_addr, (socklen_t*)&addrlen)) < 0){
+			perror("accept");
+        	exit(EXIT_FAILURE);
+		}
+
+        KETILOG::DEBUGLOG(LOGTAG, "<T> received csd result");
+
+        char buffer[4096];
+        memset(buffer, 0, 4096);
+
+        int bytes_received = recv(client_fd, buffer, 4096 - 1, 0);
+		if (bytes_received < 0) {
+            std::cerr << "Failed to receive data." << std::endl;
+            close(client_fd);
+        }else{
+            buffer[bytes_received] = '\0';
+            
+            t_result_merging(buffer);
+        }
         
         close(client_fd);		
 	}   
@@ -473,6 +535,30 @@ int BufferManager::saveTableData(Snippet snippet, TableData &table_data_, int of
     // }
     
     return 1;
+}
+
+void BufferManager::t_result_merging(char* t_data){
+    KETILOG::DEBUGLOG("Offloading", "<T> called t_result_merging");
+
+    rapidjson::Document document;
+    if (document.Parse(t_data).HasParseError()) {
+        std::cerr << "Failed to parse JSON." << std::endl;
+        return;
+    }
+
+    rapidjson::StringBuffer strbuf;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+    document.Accept(writer);
+
+    std::cout << strbuf.GetString() << std::endl;
+
+    KETILOG::DEBUGLOG("Offloading", "<T> csd result parsing...");
+
+    t_result_sending();
+}
+
+void BufferManager::t_result_sending(){
+    KETILOG::DEBUGLOG("Offloading", "<T> called t_result_sending");
 }
 
 void getColOffset(const char* row_data, int* col_offset_list, vector<int> return_datatype, vector<int> table_offlen){

@@ -222,6 +222,10 @@ class BufferManager{
     int saveTableData(Snippet snippet, TableData &table_data_, int offset, int length);
     int endQuery(StorageEngineInstance::Request qid);
 
+    void t_buffer_manager_interface();
+    void t_result_merging(char* t_data);
+    void t_result_sending();
+
     inline const static std::string LOGTAG = "Merging::Buffer Manager";
 
   private:
