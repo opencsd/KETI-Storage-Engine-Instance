@@ -143,18 +143,29 @@ void BufferManager::t_buffer_manager_interface(){
 
         KETILOG::DEBUGLOG(LOGTAG, "<T> received csd result");
 
-        char buffer[4096];
-        memset(buffer, 0, 4096);
+        std::string json = "";
+        int njson;
+		size_t ljson;
 
-        int bytes_received = recv(client_fd, buffer, 4096 - 1, 0);
-		if (bytes_received < 0) {
-            std::cerr << "Failed to receive data." << std::endl;
-            close(client_fd);
-        }else{
-            buffer[bytes_received] = '\0';
-            
-            t_result_merging(buffer);
-        }
+		recv(client_fd , &ljson, sizeof(ljson), 0);
+
+        char buffer[ljson];
+        memset(buffer, 0, ljson);
+		
+		while(1) {
+			if ((njson = recv(client_fd, buffer, BUFF_SIZE-1, 0)) == -1) {
+				perror("read");
+				exit(1);
+			}
+			ljson -= njson;
+		    buffer[njson] = '\0';
+			json += buffer;
+
+		    if (ljson == 0)
+				break;
+		}
+
+        t_result_merging(json.c_str());
         
         close(client_fd);		
 	}   
@@ -537,11 +548,11 @@ int BufferManager::saveTableData(Snippet snippet, TableData &table_data_, int of
     return 1;
 }
 
-void BufferManager::t_result_merging(char* t_data){
+void BufferManager::t_result_merging(const char* json){
     KETILOG::DEBUGLOG("Offloading", "<T> called t_result_merging");
 
     rapidjson::Document document;
-    if (document.Parse(t_data).HasParseError()) {
+    if (document.Parse(json).HasParseError()) {
         std::cerr << "Failed to parse JSON." << std::endl;
         return;
     }

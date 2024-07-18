@@ -223,7 +223,7 @@ class BufferManager{
     int endQuery(StorageEngineInstance::Request qid);
 
     void t_buffer_manager_interface();
-    void t_result_merging(char* t_data);
+    void t_result_merging(const char* json);
     void t_result_sending();
 
     inline const static std::string LOGTAG = "Merging::Buffer Manager";
