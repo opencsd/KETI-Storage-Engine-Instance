@@ -24,7 +24,6 @@
 #include "keti_log.h"
 #include "keti_type.h"
 #include "ip_config.h"
-#include "monitoring_module_connector.h"
 
 #define BUFF_SIZE 4096
 

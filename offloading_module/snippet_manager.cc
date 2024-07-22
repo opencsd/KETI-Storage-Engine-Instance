@@ -1,28 +1,26 @@
 #include "snippet_manager.h"
 
 void SnippetManager::setupSnippet(SnippetRequest snippet, map<string,string> bestcsd){ 
-    //get PBA & WAL
-    MonitoringModuleConnector mc(grpc::CreateChannel((string)OPENCSD_CLUSTER_MASTER_IP+":"+(string)SE_MONITORING_NODE_PORT, grpc::InsecureChannelCredentials()));
-    SnippetMetaData snippetMetaData = mc.GetSnippetMetaData(/*snippet.snippet().db_name()*/"tpch_origin", snippet.snippet().table_name(0), snippet.scan_info(), bestcsd);
-
     map<string, int> csd_block_count_map;
-    for (const auto entry : snippetMetaData.sst_pba_map()) {
+    for (const auto entry : snippet.scan_info().sst_list()) {
         string sst_name = entry.first;
         string csd_name = bestcsd[sst_name];
         if(csd_block_count_map.find(csd_name) != csd_block_count_map.end()){
-            csd_block_count_map[csd_name] += entry.second.block_count();
+            csd_block_count_map[csd_name] += entry.second.sst_block_count();
         }else{
-            csd_block_count_map[csd_name] = entry.second.block_count();
+            csd_block_count_map[csd_name] = entry.second.sst_block_count();
         }
     }
 
+    int table_total_block_count = snippet.scan_info().table_block_count();
+
     StringBuffer snippetbuf;
-    for (const auto entry : snippetMetaData.sst_pba_map()) {
+    for (const auto entry : snippet.scan_info().sst_list()) {
         snippetbuf.Clear();
         string sst_name = entry.first;
         string best_csd = bestcsd[sst_name];
         int csd_block_count = csd_block_count_map[best_csd];
-        serialize(snippetbuf, snippet.snippet(), best_csd, entry.second.pba_string(), csd_block_count, snippetMetaData.table_total_block_count());
+        serialize(snippetbuf, snippet.snippet(), best_csd, entry.second.csd_pba_map().at(best_csd), csd_block_count, table_total_block_count);
         sendSnippetToCSD(snippetbuf.GetString());
     }
 }

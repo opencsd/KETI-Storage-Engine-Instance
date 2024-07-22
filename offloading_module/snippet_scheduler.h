@@ -39,7 +39,7 @@ using namespace rapidjson;
 using StorageEngineInstance::Snippet;
 using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::ScanInfo;
-using StorageEngineInstance::ScanInfo_SSTInfo;
+using StorageEngineInstance::ScanInfo_SST;
 using StorageEngineInstance::TmaxRequest;
 
 class Scheduler{

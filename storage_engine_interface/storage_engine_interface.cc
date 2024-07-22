@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "generic_query_connector.h"
 #include "merging_module_connector.h"
 #include "offloading_module_connector.h"
 #include "ip_config.h"
