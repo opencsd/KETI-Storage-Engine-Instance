@@ -103,13 +103,6 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
     return Status::OK;
   }
 
-  Status GenericQueryInterface(ServerContext *context, const GenericQuery *request, Response *response) override {
-    //Generic Query 처리 필요 ==> send to myrocks container
-    KETILOG::INFOLOG("Interface", "# receive generic query from query engine");
-
-    return Status::OK;
-  }
-
   Status PushCSDMetric(ServerContext *context, const CSDMetricList *request, Response *response) override {
     KETILOG::DEBUGLOG("Interface", "Push CSD Metric");
 

@@ -8,7 +8,6 @@ option objc_class_prefix = "SSP";
 package StorageEngineInstance;
 
 service StorageEngineInterface {
-  rpc GenericQueryInterface(GenericQuery) returns (Response) {}
   rpc OffloadingQueryInterface (stream SnippetRequest) returns (QueryStringResult) {}
   rpc PushCSDMetric (CSDMetricList) returns (Response) {}
   rpc keti_send_snippet(TmaxRequest) returns (TmaxResponse) {}
