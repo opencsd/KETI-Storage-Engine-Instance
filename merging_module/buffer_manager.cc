@@ -549,7 +549,7 @@ int BufferManager::saveTableData(Snippet snippet, TableData &table_data_, int of
 }
 
 void BufferManager::t_result_merging(const char* json){
-    KETILOG::DEBUGLOG("Offloading", "<T> called t_result_merging");
+    KETILOG::DEBUGLOG(LOGTAG, "<T> called t_result_merging");
 
     rapidjson::Document document;
     if (document.Parse(json).HasParseError()) {
@@ -563,13 +563,13 @@ void BufferManager::t_result_merging(const char* json){
 
     std::cout << strbuf.GetString() << std::endl;
 
-    KETILOG::DEBUGLOG("Offloading", "<T> csd result parsing...");
+    KETILOG::DEBUGLOG(LOGTAG, "<T> csd result parsing...");
 
     t_result_sending();
 }
 
 void BufferManager::t_result_sending(){
-    KETILOG::DEBUGLOG("Offloading", "<T> called t_result_sending");
+    KETILOG::DEBUGLOG(LOGTAG, "<T> called t_result_sending");
 }
 
 void getColOffset(const char* row_data, int* col_offset_list, vector<int> return_datatype, vector<int> table_offlen){
