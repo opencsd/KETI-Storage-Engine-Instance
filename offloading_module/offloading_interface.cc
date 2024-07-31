@@ -28,14 +28,14 @@ class OffloadingModuleServiceImpl final : public OffloadingModule::Service {
   Status Scheduling(ServerContext *context, const SnippetRequest *snippet, Response *response) override {
     KETILOG::INFOLOG("Interface", "# receive scan snippet");
 
-    {
-      std::string test_json;
-      google::protobuf::util::JsonPrintOptions options;
-      options.always_print_primitive_fields = true;
-      options.always_print_enums_as_ints = true;
-      google::protobuf::util::MessageToJsonString(*snippet,&test_json,options);
-      std::cout << endl << test_json << std::endl << std::endl; 
-    }
+    // {
+    //   std::string test_json;
+    //   google::protobuf::util::JsonPrintOptions options;
+    //   options.always_print_primitive_fields = true;
+    //   options.always_print_enums_as_ints = true;
+    //   google::protobuf::util::MessageToJsonString(*snippet,&test_json,options);
+    //   std::cout << endl << test_json << std::endl << std::endl; 
+    // }
 
     Scheduler::PushQueue(*snippet);
 

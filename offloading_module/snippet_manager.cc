@@ -25,7 +25,10 @@ void SnippetManager::setupSnippet(SnippetRequest snippet, map<string,string> bes
     }
 }
 
-void SnippetManager::serialize(StringBuffer &snippetbuf, Snippet snippet, string csd, string pba, int csd_block_count, int table_total_block_count) {
+void SnippetManager::serialize(StringBuffer &snippetbuf, Snippet snippet, string csd, BlockList pba, int csd_block_count, int table_total_block_count) {
+    std::string jsonBlock;
+    google::protobuf::util::MessageToJsonString(pba, &jsonBlock);
+
     Writer<StringBuffer> writer(snippetbuf);
 
     writer.StartObject();
@@ -196,7 +199,7 @@ void SnippetManager::serialize(StringBuffer &snippetbuf, Snippet snippet, string
     writer.EndArray();
 
     writer.Key("pba");
-    writer.RawValue(pba.c_str(), strlen(pba.c_str()), kObjectType);
+    writer.RawValue(jsonBlock.c_str(), strlen(jsonBlock.c_str()), kObjectType);
 
     writer.Key("primaryKey");
     writer.Int(snippet.pk_num());
@@ -245,9 +248,9 @@ void SnippetManager::sendSnippetToCSD(string snippet_json){
     serv_addr.sin_addr.s_addr = inet_addr(STORAGE_NODE_IP);
     serv_addr.sin_port = htons(port);
 
-    {
-        // cout << endl << snippet_json.c_str() << endl << endl;
-    }
+    // {
+    //     cout << endl << snippet_json.c_str() << endl << endl;
+    // }
 
     connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 

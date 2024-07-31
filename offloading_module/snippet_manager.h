@@ -33,6 +33,7 @@ using namespace rapidjson;
 using StorageEngineInstance::Snippet;
 using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::ScanInfo;
+using StorageEngineInstance::BlockList;
 
 class SnippetManager{
   public: 
@@ -54,7 +55,7 @@ class SnippetManager{
     }
 
     void setupSnippet(SnippetRequest snippet, map<string,string> bestcsd);
-    void serialize(StringBuffer &snippetbuf, Snippet snippet, string csd, string pba, int csd_block_count, int table_total_block_count); // snippet -> json 구성
+    void serialize(StringBuffer &snippetbuf, Snippet snippet, string csd, BlockList pba, int csd_block_count, int table_total_block_count); // snippet -> json 구성
     void sendSnippetToCSD(string snippet_json); // CSD 전달
   
   public:
