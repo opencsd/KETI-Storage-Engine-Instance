@@ -19,7 +19,6 @@ using StorageEngineInstance::StorageEngineInterface;
 using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::QueryStringResult;
 using StorageEngineInstance::Response;
-using StorageEngineInstance::GenericQuery;
 using StorageEngineInstance::CSDMetricList;
 using StorageEngineInstance::TmaxRequest;
 using StorageEngineInstance::TmaxResponse;
