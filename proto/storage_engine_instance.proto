@@ -234,16 +234,17 @@ message CSDMetricList {
 
 message TmaxRequest {
   message Chunk {
-    int64 offset = 1;
-    int32 length = 2;
+    int32 block_dba = 1;
+    int32 block_size = 2;
   }
-  int32 query_id = 1;
-  int32 work_id = 2;
-  repeated Chunk chunks = 3;
-  string file_name = 4;
-  string csd_name = 5;
-  string table_filter = 6;
-  string column_projection = 7;
+  message TableFilter {
+    string filter = 1;
+  }
+  int32 id = 1;
+  repeated Chunk chunks = 2;
+  string block_dir = 3;
+  repeated string csd_list = 4;
+  TableFilter table_filter = 5;
 }
 
 message TmaxResponse {
