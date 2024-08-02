@@ -47,6 +47,7 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 
 # Include common include directories
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../include")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../include/tmax-lib/include")
 
 # kvs_grpc_proto
 add_library(ss_grpc_proto

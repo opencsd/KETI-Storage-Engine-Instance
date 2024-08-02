@@ -25,5 +25,5 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/offloading_module/CMakeLists.txt)
-include(${CMAKE_CURRENT_SOURCE_DIR}/monitoring_module/CMakeLists.txt)
+include(${CMAKE_CURRENT_SOURCE_DIR}/storage_engine_interface/CMakeLists.txt)
 include(${CMAKE_CURRENT_SOURCE_DIR}/merging_module/CMakeLists.txt)
