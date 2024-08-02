@@ -7,6 +7,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <stdlib.h>
 #include <queue>
 #include <tuple>
 #include <sys/socket.h>
@@ -36,6 +37,7 @@
 #include "keti_type.h"
 #include "keti_log.h"
 #include "internal_queue.h"
+#include "tb_block.h"
 
 using namespace std;
 using namespace rapidjson;
@@ -223,7 +225,7 @@ class BufferManager{
     int endQuery(StorageEngineInstance::Request qid);
 
     void t_buffer_manager_interface();
-    void t_result_merging(const char* json);
+    void t_result_merging(res_chunk_t *res_chunk_t);
     void t_result_sending();
 
     inline const static std::string LOGTAG = "Merging::Buffer Manager";

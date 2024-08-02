@@ -143,29 +143,18 @@ void BufferManager::t_buffer_manager_interface(){
 
         KETILOG::DEBUGLOG(LOGTAG, "<T> received csd result");
 
-        std::string json = "";
-        int njson;
-		size_t ljson;
+        res_chunk_t *res_chunk_t_ = (res_chunk_t*)malloc(sizeof(res_chunk_t));
 
-		recv(client_fd , &ljson, sizeof(ljson), 0);
+        recv(client_fd , &res_chunk_t_->res_len, sizeof(int),0);
 
-        char buffer[ljson];
-        memset(buffer, 0, ljson);
-		
-		while(1) {
-			if ((njson = recv(client_fd, buffer, BUFF_SIZE-1, 0)) == -1) {
-				perror("read");
-				exit(1);
-			}
-			ljson -= njson;
-		    buffer[njson] = '\0';
-			json += buffer;
+        res_chunk_t_->res_buf = (uchar*)malloc(res_chunk_t_->res_len);
+        if (!res_chunk_t_->res_buf) {
+            perror("malloc");
+            exit(EXIT_FAILURE);
+        }
+        recv(client_fd, res_chunk_t_->res_buf, res_chunk_t_->res_len, 0);
 
-		    if (ljson == 0)
-				break;
-		}
-
-        t_result_merging(json.c_str());
+        t_result_merging(res_chunk_t_);
         
         close(client_fd);		
 	}   
@@ -548,20 +537,15 @@ int BufferManager::saveTableData(Snippet snippet, TableData &table_data_, int of
     return 1;
 }
 
-void BufferManager::t_result_merging(const char* json){
+void BufferManager::t_result_merging(res_chunk_t *res_chunk_t_){
     KETILOG::DEBUGLOG(LOGTAG, "<T> called t_result_merging");
 
-    rapidjson::Document document;
-    if (document.Parse(json).HasParseError()) {
-        std::cerr << "Failed to parse JSON." << std::endl;
-        return;
+    std::cout << "res_len: " << res_chunk_t_->res_len << std::endl;
+    std::cout << "res_buf: ";
+    for (int i = 0; i < res_chunk_t_->res_len; ++i) {
+        printf("%02X ",(u_char)res_chunk_t_->res_buf[i]);
     }
-
-    rapidjson::StringBuffer strbuf;
-    rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-    document.Accept(writer);
-
-    std::cout << strbuf.GetString() << std::endl;
+    std::cout << std::endl;
 
     KETILOG::DEBUGLOG(LOGTAG, "<T> csd result parsing...");
 
