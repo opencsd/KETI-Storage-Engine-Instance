@@ -369,29 +369,23 @@ void Scheduler::t_offloading_snippet(TmaxRequest request, string csd_id){
     string csdIP = "10.1."+csd_id+".2";
     writer.String(csdIP.c_str());
 
-    writer.Key("query_id");
-    writer.Int(request.query_id());
+    writer.Key("id");
+    writer.Int(request.id());
 
-    writer.Key("work_id");
-    writer.Int(request.work_id());
-
-    writer.Key("file_name");
-    writer.String(request.file_name().c_str());
+    writer.Key("block_dir");
+    writer.String(request.block_dir().c_str());
 
     writer.Key("table_filter");
-    writer.String(request.table_filter().c_str());
-
-    writer.Key("column_projection");
-    writer.String(request.column_projection().c_str());
+    writer.String("");
 
     writer.Key("chunks");
     writer.StartArray();
     for (int i = 0; i < request.chunks_size(); i++){
         writer.StartObject();
-        writer.Key("offset");
-        writer.Int(request.chunks(i).offset());
-        writer.Key("length");
-        writer.Int(request.chunks(i).length());
+        writer.Key("block_dba");
+        writer.Int(request.chunks(i).block_dba());
+        writer.Key("block_size");
+        writer.Int(request.chunks(i).block_size());
         writer.EndObject();
     }
     writer.EndArray();
