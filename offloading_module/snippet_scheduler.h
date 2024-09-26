@@ -36,10 +36,9 @@
 using namespace std;
 using namespace rapidjson;
 
-using StorageEngineInstance::Snippet;
 using StorageEngineInstance::SnippetRequest;
-using StorageEngineInstance::ScanInfo;
-using StorageEngineInstance::ScanInfo_SST;
+using StorageEngineInstance::SnippetRequest_SstInfo;
+
 using StorageEngineInstance::TmaxRequest;
 
 class Scheduler{
@@ -75,13 +74,13 @@ class Scheduler{
     }
 
     void runScheduler();
-    map<string,string> getBestCSD(ScanInfo* scanInfo);
+    map<string,string> getBestCSD(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info);
   
     string DCS_algorithm(vector<string> dcs_candidate_csd); //DSI용
-    map<string,string> DCS_Algorithm(ScanInfo *scanInfo); //Depends on CSD Status
-    map<string,string> DSI_Algorithm(ScanInfo *scanInfo); //Depends on Snippet Information 
-    map<string,string> Random(ScanInfo *scanInfo);
-    map<string,string> Auto_Selection(ScanInfo *scanInfo);
+    map<string,string> DCS_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info); //Depends on CSD Status
+    map<string,string> DSI_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info); //Depends on Snippet Information 
+    map<string,string> Random(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info);
+    map<string,string> Auto_Selection(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info);
     
     void t_snippet_scheduling(TmaxRequest request);
     void t_offloading_snippet(TmaxRequest request, string csd_id);
