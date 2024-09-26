@@ -27,7 +27,7 @@ string SnippetManager::serialize(SnippetRequest snippet, string best_csd_id, str
     doc.Parse(snippet_string.c_str());
     if (doc.HasParseError()) {
         std::cerr << "JSON parse error!" << std::endl;
-        return;
+        return "";
     }
 
     if(doc.HasMember("workId")){
