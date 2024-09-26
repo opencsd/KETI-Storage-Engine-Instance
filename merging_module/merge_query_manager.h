@@ -3,12 +3,12 @@
 #include "buffer_manager.h"
 
 using namespace std;
-using StorageEngineInstance::Snippet;
+// using StorageEngineInstance::Snippet;
 using StorageEngineInstance::SnippetRequest;
-using StorageEngineInstance::Snippet_Projection;
-using StorageEngineInstance::Snippet_Filter;
-using StorageEngineInstance::Snippet_Order;
-using StorageEngineInstance::Snippet_Dependency;
+using StorageEngineInstance::SnippetRequest_Projection;
+using StorageEngineInstance::SnippetRequest_Filter;
+using StorageEngineInstance::SnippetRequest_Order;
+using StorageEngineInstance::SnippetRequest_Dependency;
 using google::protobuf::RepeatedPtrField;
 
 inline std::string& rtrim(std::string& s, const char* t = " \t\n\r\f\v\0"){
@@ -41,9 +41,11 @@ struct T{
 
 class MergeQueryManager{	
 public:
-    MergeQueryManager(SnippetRequest snippet_){
-        this->snippet = snippet_.snippet();
-        this->snippetType = snippet_.type();
+    MergeQueryManager(const SnippetRequest& snippet_){
+        cout << "hj :: MergeQueryManager()" << endl;
+
+        this->snippet = snippet_;
+        // this->snippetType = snippet_.type();
         this->group_by_table_.clear();
         this->group_by_key_.clear();
         this->ordered_index_.clear();
@@ -54,7 +56,7 @@ public:
     inline const static std::string LOGTAG = "Merging::Merge Query Manager";
 
 private:
-    Snippet snippet;//스니펫
+    SnippetRequest snippet;//스니펫
     int snippetType;//스니펫 작업 타입
     int tableCnt;//작업 대상 테이블 개수
     bool isGroupby;//그룹바이 여부
@@ -73,26 +75,27 @@ private:
 
 private:
     // void Aggregation();//column projection, 모든 스니펫이 기본적으로 수행
-    void Aggregation(TableData &aggregation_table, const RepeatedPtrField<Snippet_Projection>& projections, const RepeatedPtrField<string>& alias, TableData &dest);//column projection, 모든 스니펫이 기본적으로 수행
-    T Projection(TableData &aggregation_table, Snippet_Projection projection, int rowIndex);//프로젝션 수행,Aggregation 호출
-    T Postfix(TableData &aggregation_table, Snippet_Projection projection, int rowIndex, int start, int end);//실제 postfix 계산
+    
+void Aggregation(TableData &aggregation_table, const RepeatedPtrField<SnippetRequest_Projection>& projections, const RepeatedPtrField<string>& alias, TableData &dest);
+    T Projection(TableData &aggregation_table, SnippetRequest_Projection projection, int rowIndex);//프로젝션 수행,Aggregation 호출
+    T Postfix(TableData &aggregation_table, SnippetRequest_Projection projection, int rowIndex, int start, int end);//실제 postfix 계산
     void GroupBy(TableData &groupby_table, const RepeatedPtrField<string>& groups, vector<TableData> &dest);//group by, 그룹바이 절이 있으면 수행
-    void OrderBy(TableData &orderby_table, const Snippet_Order& orders, TableData &dest);//order by, 오더바이 절이 있으면 수행
-    void InnerJoin_hash(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, TableData &dest);//inner join (hash join + nested loop join)
-    void LeftOuterJoin_hash(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, TableData &dest);//left outer join (hash join)
-    void RightOuterJoin_hash(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, TableData &dest);//right outer join (hash join)
-    void CrossJoin(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, TableData &dest);//cartesian product
-    void Union(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, TableData &dest);//left and right table union
-    void In(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, TableData &dest);//non dependency in
-    void DependencyInnerJoin(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, const Snippet_Dependency &dependency, TableData &dest);//dependency join
-    void DependencyExist(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, const Snippet_Dependency &dependency, TableData &dest);//dependency exist/not exist
-    void DependencyIn(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, const Snippet_Dependency &dependency, TableData &dest);//dependency in/not in
-    void Filtering(TableData &filter_table, const RepeatedPtrField<Snippet_Filter>& filters, TableData &dest);//single table filtering
+    void OrderBy(TableData &orderby_table, const SnippetRequest_Order& orders, TableData &dest);//order by, 오더바이 절이 있으면 수행
+    void InnerJoin_hash(TableData &left_table, TableData &right_table, const RepeatedPtrField<SnippetRequest_Filter>& filters, TableData &dest);//inner join (hash join + nested loop join)
+    void LeftOuterJoin_hash(TableData &left_table, TableData &right_table, const RepeatedPtrField<SnippetRequest_Filter>& filters, TableData &dest);//left outer join (hash join)
+    void RightOuterJoin_hash(TableData &left_table, TableData &right_table, const RepeatedPtrField<SnippetRequest_Filter>& filters, TableData &dest);//right outer join (hash join)
+    void CrossJoin(TableData &left_table, TableData &right_table, const RepeatedPtrField<SnippetRequest_Filter>& filters, TableData &dest);//cartesian product
+    void Union(TableData &left_table, TableData &right_table, const RepeatedPtrField<SnippetRequest_Filter>& filters, TableData &dest);//left and right table union
+    void In(TableData &left_table, TableData &right_table, const RepeatedPtrField<SnippetRequest_Filter>& filters, TableData &dest);//non dependency in
+    void DependencyInnerJoin(TableData &left_table, TableData &right_table, const RepeatedPtrField<SnippetRequest_Filter>& filters, const SnippetRequest_Dependency &dependency, TableData &dest);//dependency join
+void DependencyExist(TableData &left_table, TableData &right_table, const RepeatedPtrField<SnippetRequest_Filter>& filters, const SnippetRequest_Dependency &dependency, TableData &dest);
+void DependencyIn(TableData &left_table, TableData &right_table, const RepeatedPtrField<SnippetRequest_Filter>& filters, const SnippetRequest_Dependency &dependency, TableData &dest);
+    void Filtering(TableData &filter_table, const RepeatedPtrField<SnippetRequest_Filter>& filters, TableData &dest);//single table filtering
     void createHashTable(TableData &table, vector<string> equal_join_column);//create hash table for hash join
     template <typename T,typename U>
     bool compareByOperator(int oper, const T& arg1, const U& arg2);
     string makeGroupbyKey(TableData &groupby_table, const RepeatedPtrField<string>& groups, int row_index);
 
-    void InnerJoin_nestedloop(TableData &left_table, TableData &right_table, const RepeatedPtrField<Snippet_Filter>& filters, TableData &dest);//inner join (nested loop join)
+    void InnerJoin_nestedloop(TableData &left_table, TableData &right_table, const RepeatedPtrField<SnippetRequest_Filter>& filters, TableData &dest);//inner join (nested loop join)
     // void LeftOuterJoin_nestedloop();//left outer join (nested loop join)
 };
