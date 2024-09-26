@@ -473,10 +473,10 @@ TableData BufferManager::getTableData(int qid, int wid, string table_name){
     return tableData;
 }
 
-int BufferManager::saveTableData(Snippet snippet, TableData &table_data_, int offset, int length){
+int BufferManager::saveTableData(SnippetRequest snippet, TableData &table_data_, int offset, int length){
     int qid = snippet.query_id();
     int wid = snippet.work_id();
-    string table_name = snippet.table_alias();
+    string table_name = snippet.result_info().table_alias();
 
     string msg = "# save table {" + to_string(qid) + "|" + table_name + "}";
     KETILOG::DEBUGLOG(LOGTAG,msg);
@@ -487,9 +487,9 @@ int BufferManager::saveTableData(Snippet snippet, TableData &table_data_, int of
     unique_lock<mutex> lock(workBuffer->mu);
 
     workBuffer->table_alias = table_name;
-    for(int i = 0; i < snippet.column_alias_size(); i++){
-        workBuffer->table_column.push_back(snippet.column_alias(i));
-        workBuffer->table_data.insert({snippet.column_alias(i),ColData{}});
+    for(int i = 0; i < snippet.result_info().column_alias_size(); i++){
+        workBuffer->table_column.push_back(snippet.result_info().column_alias(i));
+        workBuffer->table_data.insert({snippet.result_info().column_alias(i),ColData{}});
     }
 
     DataBuffer_[qid]->tablename_workid_map[table_name] = wid;
@@ -585,49 +585,56 @@ void getColOffset(const char* row_data, int* col_offset_list, vector<int> return
     }
 }
 
-void calculForReturnData(StorageEngineInstance::Snippet snippet){
-    unordered_map<string, int> col_type, col_offlen;
-    for (int i = 0; i < snippet.table_col_size(); i++){
-        col_type.insert(make_pair(snippet.table_col(i), snippet.table_datatype(i)));
-        col_offlen.insert(make_pair(snippet.table_col(i), snippet.table_offlen(i)));
-    }
-    
-    vector<int> return_datatype, return_offlen;
-    for (int i = 0; i < snippet.column_projection_size(); i++){
-        //tpc-h 쿼리 동작만 수행하도록 작성 => 수정필요
-        if(snippet.column_projection(i).value(0) == "CASE"){
-            return_datatype.push_back(2);
-            return_offlen.push_back(4);
-        }if(snippet.column_projection(i).value(0) == "EXTRACT"){
-            return_datatype.push_back(14);
-            return_offlen.push_back(3);
-        }if(snippet.column_projection(i).value(0) == "SUBSTRING"){
-            return_datatype.push_back(254);
-            return_offlen.push_back(2);
-        }else{
-            if(snippet.column_projection(i).value_size() == 1){
-                return_datatype.push_back(col_type[snippet.column_projection(i).value(0)]);
-                return_offlen.push_back(col_offlen[snippet.column_projection(i).value(0)]);
-            }else{
-                int multiple_count = 0;
-                for (int j = 0; j < snippet.column_projection(i).value_size(); j++){
-                    if(snippet.column_projection(i).value(j) == "*"){
-                        multiple_count++;
-                    }
-                }
-                if(multiple_count == 1){
-                    return_datatype.push_back(246);
-                    return_offlen.push_back(8);
-                }else if(multiple_count == 2){
-                    return_datatype.push_back(246);
-                    return_offlen.push_back(9);
-                }else{
-                    return_datatype.push_back(col_type[snippet.column_projection(i).value(0)]);
-                    return_offlen.push_back(col_offlen[snippet.column_projection(i).value(0)]);
-                }
-            }
-        }
-    }
+// void calculForReturnData(StorageEngineInstance::SnippetRequest snippet){
+//     std::string json_output;
+//     google::protobuf::util::JsonPrintOptions options;
+//     options.always_print_primitive_fields = true;  // 기본값도 모두 출력
+//     options.always_print_enums_as_ints = true;     // enum 값을 숫자로 출력
 
-    //return return_datatype, return_offlen
-}
+//     google::protobuf::util::MessageToJsonString(snippet, &json_output, options);
+//     std::cout << "Snippet in JSON format: " << std::endl << json_output << std::endl;
+//     unordered_map<string, int> col_type, col_offlen;
+//     for (int i = 0; i < snippet.schema_info().column_list_size(); i++){
+//         col_type.insert(make_pair(snippet.schema_info().column_list(i).name(), snippet.schema_info().column_list(i).type()));
+//         col_offlen.insert(make_pair(snippet.schema_info().column_list(i).name(), snippet.schema_info().column_list(i).length()));
+//     }
+    
+//     vector<int> return_datatype, return_offlen;
+//     for (int i = 0; i < snippet.query_info().projection_size(); i++){
+//         //tpc-h 쿼리 동작만 수행하도록 작성 => 수정필요
+//         if(snippet.query_info().projection(i).value(0) == "CASE"){
+//             return_datatype.push_back(2);
+//             return_offlen.push_back(4);
+//         }if(snippet.query_info().projection(i).value(0) == "EXTRACT"){
+//             return_datatype.push_back(14);
+//             return_offlen.push_back(3);
+//         }if(snippet.query_info().projection(i).value(0) == "SUBSTRING"){
+//             return_datatype.push_back(254);
+//             return_offlen.push_back(2);
+//         }else{
+//             if(snippet.query_info().projection(i).value_size() == 1){
+//                 return_datatype.push_back(col_type[snippet.query_info().projection(i).value(0)]);
+//                 return_offlen.push_back(col_offlen[snippet.query_info().projection(i).value(0)]);
+//             }else{
+//                 int multiple_count = 0;
+//                 for (int j = 0; j < snippet.query_info().projection(i).value_size(); j++){
+//                     if(snippet.query_info().projection(i).value(j) == "*"){
+//                         multiple_count++;
+//                     }
+//                 }
+//                 if(multiple_count == 1){
+//                     return_datatype.push_back(246);
+//                     return_offlen.push_back(8);
+//                 }else if(multiple_count == 2){
+//                     return_datatype.push_back(246);
+//                     return_offlen.push_back(9);
+//                 }else{
+//                     return_datatype.push_back(col_type[snippet.query_info().projection(i).value(0)]);
+//                     return_offlen.push_back(col_offlen[snippet.query_info().projection(i).value(0)]);
+//                 }
+//             }
+//         }
+//     }
+
+//     // return return_datatype, return_offlen
+// }

@@ -42,7 +42,7 @@
 using namespace std;
 using namespace rapidjson;
 
-using StorageEngineInstance::Snippet;
+using StorageEngineInstance::SnippetRequest;
 
 #define NUM_OF_BLOCKS 15
 #define BUFF_SIZE (NUM_OF_BLOCKS * 5000)
@@ -189,7 +189,7 @@ class BufferManager{
       return GetInstance().getTableData(qid, wid, tname);
     }
 
-    static int SaveTableData(Snippet snippet, TableData &table_data_, int offset, int length){
+    static int SaveTableData(SnippetRequest snippet, TableData &table_data_, int offset, int length){
       return GetInstance().saveTableData(snippet, table_data_, offset, length);
     }
 
@@ -221,7 +221,7 @@ class BufferManager{
     void mergeResult(int qid, int wid);
     void initializeBuffer(int qid, int wid, string tname);//return true only when the snippet work done
     TableData getTableData(int qid, int wid, string tname);//return table data on queryID/tableName
-    int saveTableData(Snippet snippet, TableData &table_data_, int offset, int length);
+    int saveTableData(SnippetRequest snippet, TableData &table_data_, int offset, int length);
     int endQuery(StorageEngineInstance::Request qid);
 
     void t_buffer_manager_interface();
