@@ -13,6 +13,7 @@
 #include <condition_variable>
 #include <queue>
 #include <thread>
+#include <cctype>
 
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
@@ -30,10 +31,7 @@
 using namespace std;
 using namespace rapidjson;
 
-using StorageEngineInstance::Snippet;
 using StorageEngineInstance::SnippetRequest;
-using StorageEngineInstance::ScanInfo;
-using StorageEngineInstance::BlockList;
 
 class SnippetManager{
   public: 
@@ -55,10 +53,9 @@ class SnippetManager{
     }
 
     void setupSnippet(SnippetRequest snippet, map<string,string> bestcsd);
-    void serialize(StringBuffer &snippetbuf, Snippet snippet, string csd, BlockList pba, int csd_block_count, int table_total_block_count); // snippet -> json 구성
-    void sendSnippetToCSD(string snippet_json); // CSD 전달
+    string serialize(SnippetRequest snippet, string csd, string target_sst_name);
+    void sendSnippetToCSD(string snippet_json);
   
   public:
     inline const static std::string LOGTAG = "Offloading::Snippet Scheduler";
-
 };

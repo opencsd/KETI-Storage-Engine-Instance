@@ -1,246 +1,135 @@
 #include "snippet_manager.h"
 
+//map key: sst name, value : bestcsd, ex) <1.sst,1>
 void SnippetManager::setupSnippet(SnippetRequest snippet, map<string,string> bestcsd){ 
-    map<string, int> csd_block_count_map;
-    for (const auto entry : snippet.scan_info().sst_list()) {
-        string sst_name = entry.first;
-        string csd_name = bestcsd[sst_name];
-        if(csd_block_count_map.find(csd_name) != csd_block_count_map.end()){
-            csd_block_count_map[csd_name] += entry.second.sst_block_count();
-        }else{
-            csd_block_count_map[csd_name] = entry.second.sst_block_count();
-        }
+    string target_sst_name;
+    string best_csd_id;
+
+    for (const auto& csd : bestcsd) {
+        target_sst_name = csd.first;  
+        best_csd_id = csd.second;     
     }
 
-    int table_total_block_count = snippet.scan_info().table_block_count();
+    string json_str = serialize(snippet, best_csd_id, target_sst_name);
+    sendSnippetToCSD(json_str);
 
-    StringBuffer snippetbuf;
-    for (const auto entry : snippet.scan_info().sst_list()) {
-        snippetbuf.Clear();
-        string sst_name = entry.first;
-        string best_csd = bestcsd[sst_name];
-        int csd_block_count = csd_block_count_map[best_csd];
-        serialize(snippetbuf, snippet.snippet(), best_csd, entry.second.csd_pba_map().at(best_csd), csd_block_count, table_total_block_count);
-        sendSnippetToCSD(snippetbuf.GetString());
-    }
 }
 
-void SnippetManager::serialize(StringBuffer &snippetbuf, Snippet snippet, string csd, BlockList pba, int csd_block_count, int table_total_block_count) {
-    std::string jsonBlock;
-    google::protobuf::util::MessageToJsonString(pba, &jsonBlock);
+string SnippetManager::serialize(SnippetRequest snippet, string best_csd_id, string target_sst_name) {
+    std::string snippet_string;
+    google::protobuf::util::JsonOptions options;
+    options.always_print_enums_as_ints =true;
+    options.always_print_primitive_fields = true;
+    options.preserve_proto_field_names = true;
+    google::protobuf::util::MessageToJsonString(snippet, &snippet_string,options);
 
-    Writer<StringBuffer> writer(snippetbuf);
-
-    writer.StartObject();
-    writer.Key("Snippet"); 
-
-    writer.StartObject();
-
-    writer.Key("queryID");
-    writer.Int(snippet.query_id());
-
-    writer.Key("workID");
-    writer.Int(snippet.work_id());
-
-    writer.Key("tableName");
-    writer.String(snippet.table_name(0).c_str());
-
-    writer.Key("tableCol");
-    writer.StartArray();
-    for (int i = 0; i < snippet.table_col_size(); i++){
-        writer.String(snippet.table_col(i).c_str());
+    rapidjson::Document doc;
+    doc.Parse(snippet_string.c_str());
+    if (doc.HasParseError()) {
+        std::cerr << "JSON parse error!" << std::endl;
+        return;
     }
-    writer.EndArray();
 
-    writer.Key("tableFilter");
-    writer.StartArray();
-    if(snippet.table_filter_size() > 0){
-        for (int i = 0; i < snippet.table_filter().size(); i++)
-        {
-            writer.StartObject();
-            if (snippet.table_filter(i).lv().type().size() > 0)
-            {
-                writer.Key("LV");
-                
-                if(snippet.table_filter(i).lv().type(0) == 10){
-                    writer.String(snippet.table_filter()[i].lv().value(0).c_str());
-                }
-            }
-            writer.Key("OPERATOR");
-            writer.Int(snippet.table_filter(i).operator_());
+    if(doc.HasMember("workId")){
+        rapidjson::Value& work_id = doc["workId"];
+    }
 
-            if(snippet.table_filter(i).operator_() == 8 || snippet.table_filter(i).operator_() == 9 || snippet.table_filter(i).operator_() == 16){
-                // **EXTRA가 DB Connector에서 올땐 RV로 오는데 여기서 EXTRA로 바뀌어서 CSD로 넘어감 -> 통일하는게 좋을듯
-                writer.Key("EXTRA");
-                writer.StartArray();
+    if (doc.HasMember("sstInfo") && doc["sstInfo"].IsArray()) {
+        rapidjson::Value& sst_info = doc["sstInfo"];
 
-                for(int j = 0; j < snippet.table_filter()[i].rv().type().size(); j++){
-                    if(snippet.table_filter()[i].rv().type(j) != 10){
-                        if(snippet.table_filter()[i].rv().type(j) == 7 || snippet.table_filter()[i].rv().type(j) == 3){
-                            string tmpstr = snippet.table_filter()[i].rv().value(j);
-                            int tmpint = atoi(tmpstr.c_str());
-                            writer.Int(tmpint);
-                        }else if(snippet.table_filter()[i].rv().type(j) == 9){
-                            string tmpstr = snippet.table_filter()[i].rv().value(j);
-                            tmpstr = "+" + tmpstr;
-                            writer.String(tmpstr.c_str());
-                        }else if(snippet.table_filter()[i].rv().type(j) == 4 || snippet.table_filter()[i].rv().type(j) == 5){
-                            string tmpstr = snippet.table_filter()[i].rv().value(j);
-                            double tmpfloat = stod(tmpstr);
-                            writer.Double(tmpfloat);
-                        }else{
-                            string tmpstr = snippet.table_filter()[i].rv().value(j);
-                            tmpstr = "+" + tmpstr;
-                            writer.String(tmpstr.c_str());
+        // sst_info 배열에서 해당 sst_name만 남기기
+        for (rapidjson::SizeType i = 0; i < sst_info.Size(); ) { 
+            if (sst_info[i].HasMember("sstName") && sst_info[i]["sstName"].IsString()) {
+
+                std::string sst_name = sst_info[i]["sstName"].GetString();
+                // sst_name이 target_sst_name과 일치하지 않으면 삭제
+                if (sst_name != target_sst_name) {
+                    sst_info.Erase(sst_info.Begin() + i);
+                    continue; 
+                } else {
+                    // 일치하는 sst_name의 csd를 필터링
+                    if (sst_info[i].HasMember("csd") && sst_info[i]["csd"].IsArray()) {
+
+                        rapidjson::Value& csd_array = sst_info[i]["csd"];
+
+                        for (rapidjson::SizeType j = 0; j < csd_array.Size(); ) {
+                            if (csd_array[j].HasMember("csdId") && csd_array[j]["csdId"].IsString()) {
+
+                                if (std::string(csd_array[j]["csdId"].GetString()) != best_csd_id) {
+                                    csd_array.Erase(csd_array.Begin() + j);
+                                    continue; 
+                                }
+                                
+                            }
+                            ++j;
                         }
-                    }else{
-                        writer.String(snippet.table_filter()[i].rv().value(j).c_str());
                     }
-                }
-                writer.EndArray();
-            } else if (snippet.table_filter(i).rv().type().size() > 0){
-                writer.Key("RV");
 
-                if(snippet.table_filter(i).rv().type(0) != 10){
-                    if(snippet.table_filter(i).rv().type(0) == 7 || snippet.table_filter(i).rv().type(0) == 3){
-                        string tmpstr = snippet.table_filter(i).rv().value(0);
-                        int tmpint = atoi(tmpstr.c_str());
-                        writer.Int(tmpint);
-                    }else if(snippet.table_filter(i).rv().type(0) == 9){
-                        string tmpstr = snippet.table_filter(i).rv().value(0);
-                        tmpstr = "+" + tmpstr;
-                        writer.String(tmpstr.c_str());
-                    }else if(snippet.table_filter(i).rv().type(0) == 4 || snippet.table_filter(i).rv().type(0) == 5){
-                        string tmpstr = snippet.table_filter(i).rv().value(0);
-                        double tmpfloat = stod(tmpstr);
-                        writer.Double(tmpfloat);
-                    }else{
-                        string tmpstr = snippet.table_filter(i).rv().value(0);
-                        tmpstr = "+" + tmpstr;
-                        writer.String(tmpstr.c_str());
-                    }
-                }else{
-                    writer.String(snippet.table_filter(i).rv().value(0).c_str());
                 }
             }
-
-            writer.EndObject();
+            ++i; // 다음 sst_info 항목으로 이동
         }
     }
-    writer.EndArray();
 
-    writer.Key("columnProjection");
-    writer.StartArray();
-    for (int i = 0; i < snippet.column_projection().size(); i++){
-        writer.StartObject();
-        writer.Key("selectType");
-        writer.Int(snippet.column_projection(i).select_type()); 
+    if (doc.HasMember("sstInfo") && doc["sstInfo"].IsArray()) {
+        rapidjson::Value& sst_info = doc["sstInfo"];
 
-        for(int j = 0; j < snippet.column_projection(i).value_size(); j++){
-            if(j==0){
-                writer.Key("value");
-                writer.StartArray();
-                writer.String(snippet.column_projection(i).value(j).c_str());
+        // 새로운 blockInfo 객체를 만들기 위해 JsonAllocator를 사용
+        rapidjson::Value block_info(rapidjson::kObjectType);
+
+        // 첫 번째 sst_info의 partition 및 block 정보를 가져오기
+        if (sst_info.Size() > 0 && sst_info[0].HasMember("csd") && sst_info[0]["csd"].IsArray()) {
+            rapidjson::Value& csd_array = sst_info[0]["csd"];
+
+            if (csd_array.Size() > 0 && csd_array[0].HasMember("partition") && csd_array[0].HasMember("block") && csd_array[0]["block"].IsArray()) {
+                // partition 정보 추가
+                block_info.AddMember("partition", csd_array[0]["partition"], doc.GetAllocator());
+
+                // block 배열 추가
+                rapidjson::Value block_array(rapidjson::kArrayType);
+                rapidjson::Value& original_block_array = csd_array[0]["block"];
+                
+                for (rapidjson::SizeType i = 0; i < original_block_array.Size(); ++i) {
+                    if (original_block_array[i].HasMember("offset") && original_block_array[i].HasMember("length")) {
+                        rapidjson::Value block_obj(rapidjson::kObjectType);
+                        block_obj.AddMember("offset", original_block_array[i]["offset"], doc.GetAllocator());
+                        block_obj.AddMember("length", original_block_array[i]["length"], doc.GetAllocator());
+
+                        block_array.PushBack(block_obj, doc.GetAllocator());
+                    }
+                }
+                
+                block_info.AddMember("block", block_array, doc.GetAllocator());
             }
-            else{
-                writer.String(snippet.column_projection(i).value(j).c_str());
-            }
         }
-        writer.EndArray();
-        for(int j = 0; j < snippet.column_projection(i).value_type_size(); j++){
-            if(j == 0){
-                writer.Key("valueType");
-                writer.StartArray();
-                writer.Int(snippet.column_projection(i).value_type(j));
-            }else{
-                writer.Int(snippet.column_projection(i).value_type(j));
-            }
-        }
-        writer.EndArray();
 
-        if(snippet.column_projection(i).value_size() == 0){
-            writer.Key("value");
-            writer.StartArray();
-            writer.EndArray();
-            writer.Key("valueType");
-            writer.StartArray();
-            writer.EndArray();
-        }
-        writer.EndObject();
+        // "sstInfo" 제거하고 "blockInfo"로 대체
+        doc.RemoveMember("sstInfo");
+        doc.AddMember("blockInfo", block_info, doc.GetAllocator());
     }
-    writer.EndArray();
-
-    writer.Key("tableOffset");
-    writer.StartArray();
-    for (int i = 0; i < snippet.table_offset_size(); i++){
-        writer.Int(snippet.table_offset()[i]);
-    }
-    writer.EndArray();
-
-    writer.Key("tableOfflen");
-    writer.StartArray();
-    for (int i = 0; i < snippet.table_offlen_size(); i++){
-        writer.Int(snippet.table_offlen()[i]);
-    }
-    writer.EndArray();
-
-    writer.Key("tableDatatype");
-    writer.StartArray();
-    for (int i = 0; i < snippet.table_datatype_size(); i++){
-        writer.Int(snippet.table_datatype()[i]);
-    }
-    writer.EndArray();    
-
-    writer.Key("columnAlias");
-    writer.StartArray();
-    for (int i = 0; i < snippet.column_alias_size(); i++){
-        writer.String(snippet.column_alias(i).c_str());
-    }
-    writer.EndArray();
-
-    writer.Key("pba");
-    writer.RawValue(jsonBlock.c_str(), strlen(jsonBlock.c_str()), kObjectType);
-
-    writer.Key("primaryKey");
-    writer.Int(snippet.pk_num());
-
-    writer.Key("csdName");
-    writer.String(csd.c_str());
-
-    writer.Key("tableTotalBlockCount");
-    writer.Int(table_total_block_count);
-
-    writer.Key("csdTotalBlockCount");
-    writer.Int(csd_block_count);
     
-    writer.Key("tableAlias");
-    writer.String(snippet.table_alias().c_str());
-
-    string port = "";
-
-    port = (string)SE_MERGING_TCP_NODE_PORT;
+    std::string csd_ip_string = "10.1." + best_csd_id + ".2";
+    rapidjson::Value csd_ip(csd_ip_string.c_str(), doc.GetAllocator());
+    doc.AddMember("csd_ip", csd_ip ,doc.GetAllocator());
     
-    writer.Key("storageEnginePort");
-    writer.String(port.c_str());
+    rapidjson::StringBuffer buffer;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+    doc.Accept(writer);
 
-    writer.EndObject();
-    
-    string csdIP = "10.1."+csd+".2";
-    writer.Key("csdIP");
-    writer.String(csdIP.c_str());
+    string json_str = buffer.GetString();
 
-    writer.EndObject();
+    return json_str;
 }
 
 void SnippetManager::sendSnippetToCSD(string snippet_json){
     KETILOG::DEBUGLOG(LOGTAG, "# send snippet to csd ");
 
     int sock = socket(PF_INET, SOCK_STREAM, 0);
-
     struct sockaddr_in serv_addr;
     memset(&serv_addr, 0, sizeof(serv_addr));
 
-    std::istringstream port_((string)CSD_IDENTIFIER_PORT);
+    std::string port_str = std::to_string(CSD_IDENTIFIER_PORT1);
+    std::istringstream port_(port_str);
     std::uint16_t port{};
     port_ >> port;
 
@@ -260,3 +149,6 @@ void SnippetManager::sendSnippetToCSD(string snippet_json){
 
     close(sock);
 }
+
+
+
