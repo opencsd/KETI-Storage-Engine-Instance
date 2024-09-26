@@ -81,8 +81,9 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
       //   google::protobuf::util::MessageToJsonString(snippet_request,&test_json,options);
       //   std::cout << endl << test_json << std::endl << std::endl; 
       // }
-
-      if(snippet_request.type() == StorageEngineInstance::SnippetRequest::CSD_SCAN_SNIPPET){
+      if((snippet_request.type() == StorageEngineInstance::SnippetRequest::FULL_SCAN) \
+          ||(snippet_request.type() == StorageEngineInstance::SnippetRequest::INDEX_SCAN) \
+          || (snippet_request.type() == StorageEngineInstance::SnippetRequest::INDEX_TABLE_SCAN)){
         KETILOG::DEBUGLOG("Interface","# send snippet to offloading module");
         OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
         offloadingModule.Scheduling(snippet_request);
@@ -92,13 +93,13 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
         mergingModule.Aggregation(snippet_request);
       }
     }
-
     MergingModuleConnector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_MERGING_NODE_PORT, grpc::InsecureChannelCredentials()));
-    QueryStringResult result_ = mergingModule.GetQueryResult(snippet_request.snippet().query_id(), snippet_request.snippet().work_id(), snippet_request.snippet().table_alias());
+    QueryStringResult result_ = mergingModule.GetQueryResult(snippet_request.query_id(), snippet_request.work_id(), snippet_request.result_info().table_alias());
 
-    result->CopyFrom(result_);
-
+    result->CopyFrom(result_);   
+      
     return Status::OK;
+    
   }
 
   Status PushCSDMetric(ServerContext *context, const CSDMetricList *request, Response *response) override {

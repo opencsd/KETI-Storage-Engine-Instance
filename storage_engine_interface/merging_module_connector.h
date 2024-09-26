@@ -13,7 +13,6 @@ using grpc::ClientContext;
 using grpc::Status;
 using StorageEngineInstance::MergingModule;
 using StorageEngineInstance::SnippetRequest;
-using StorageEngineInstance::Snippet;
 using StorageEngineInstance::Request;
 using StorageEngineInstance::QueryStringResult;
 using StorageEngineInstance::Response;
