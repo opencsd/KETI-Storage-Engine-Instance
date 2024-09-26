@@ -10,7 +10,6 @@ using grpc::ServerReaderWriter;
 using grpc::Status;
 
 using StorageEngineInstance::MergingModule;
-using StorageEngineInstance::Snippet;
 using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::Request;
 using StorageEngineInstance::Response;
@@ -30,7 +29,8 @@ class MergingModuleServiceImpl final : public MergingModule::Service {
     // std::cout << endl << test_json << std::endl << std::endl; 
     // }
 
-    string msg = "# aggregation {" + to_string(request->snippet().query_id()) + "|" + to_string(request->snippet().work_id()) + "}";
+
+    string msg = "# aggregation {" + to_string(request->query_id()) + "|" + to_string(request->work_id()) + "}";
     KETILOG::INFOLOG("Merging",msg);
 
     // merge query manager instance & run snippet work
