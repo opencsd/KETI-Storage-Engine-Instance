@@ -4,18 +4,18 @@ void Scheduler::runScheduler(){
     while (1){
         SnippetRequest snippet = Scheduler::PopQueue();
         
-        //map sst가 key, 선정 csd가 value
-        map<string,string> bestcsd;
+        //map sst가 key, 선정 csd가 value 
+        map<string,string> bestcsd; 
         for ( int i=0;i<snippet.sst_info_size();i++){
             bestcsd = Scheduler::getBestCSD(&snippet.sst_info(i));
 
-            SnippetManager::SetupSnippet(snippet, bestcsd);
         }
+        SnippetManager::SetupSnippet(snippet, bestcsd);
 
     }
 }
 
-map<string,string> Scheduler::getBestCSD(const StorageEngineInstance::SnippetRequest_SstInfo*sst_info){
+map<string,string> Scheduler::getBestCSD(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info){
     map<string,string> bestCSDList; 
     switch(SCHEDULING_ALGORITHM){
         case(DCS):{
@@ -401,10 +401,10 @@ void Scheduler::t_offloading_snippet(TmaxRequest request, string csd_id){
     struct sockaddr_in serv_addr;
     memset(&serv_addr, 0, sizeof(serv_addr));
 
-std::string port_str = std::to_string(CSD_IDENTIFIER_PORT1);
-std::istringstream port_(port_str);
-std::uint16_t port{};
-port_ >> port;
+    std::string port_str = std::to_string(CSD_IDENTIFIER_PORT1);
+    std::istringstream port_(port_str);
+    std::uint16_t port{};
+    port_ >> port;
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = inet_addr(STORAGE_NODE_IP);

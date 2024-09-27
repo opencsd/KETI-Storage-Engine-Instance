@@ -53,7 +53,7 @@ class SnippetManager{
     }
 
     void setupSnippet(SnippetRequest snippet, map<string,string> bestcsd);
-    string serialize(SnippetRequest snippet, string csd, string target_sst_name);
+    string serialize(SnippetRequest snippet, string csd, vector<string> target_sst_list);
     void sendSnippetToCSD(string snippet_json);
   
   public:
