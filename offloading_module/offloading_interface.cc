@@ -89,6 +89,8 @@ void RunGRPCServer() {
   ServerBuilder builder;
   builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
   builder.RegisterService(&service);
+  builder.SetMaxSendMessageSize(-1);
+  builder.SetMaxReceiveMessageSize(-1);
   std::unique_ptr<Server> server(builder.BuildAndStart());
 
   sleep(1);
