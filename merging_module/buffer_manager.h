@@ -92,24 +92,24 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
       Document document;
       document.Parse(json_); 
 
-      query_id = document["queryID"].GetInt();
-      work_id = document["workID"].GetInt();
-      table_alias = document["tableAlias"].GetString();
+      query_id = document["query_id"].GetInt();
+      work_id = document["work_id"].GetInt();
+      table_alias = document["table_alias"].GetString();
 
-      row_count = document["rowCount"].GetInt();
+      row_count = document["row_count"].GetInt();
 
-      Value &row_offset_ = document["rowOffset"];
+      Value &row_offset_ = document["row_offset"];
       for(int i = 0; i<row_offset_.Size(); i++){
           row_offset.push_back(row_offset_[i].GetInt());
       }
 
-      Value &column_alias_ = document["columnAlias"];
+      Value &column_alias_ = document["column_alias"];
       for(int i = 0; i<column_alias_.Size(); i++){
           column_alias.push_back(column_alias_[i].GetString());
       }
 
-      Value &return_datatype_ = document["returnDatatype"];
-      Value &return_offlen_ = document["returnOfflen"];
+      Value &return_datatype_ = document["return_column_type"];
+      Value &return_offlen_ = document["return_column_length"];
       for(int i = 0; i<return_datatype_.Size(); i++){
           return_datatype.push_back(return_datatype_[i].GetInt());
           return_offlen.push_back(return_offlen_[i].GetInt());
@@ -119,12 +119,12 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
 
       memcpy(data, data_, length);
 
-      csd_name = document["csdName"].GetString();
-      result_block_count = document["resultBlockCount"].GetInt();
-      table_total_block_count = document["tableTotalBlockCount"].GetInt();
+      // csd_name = document["csdName"].GetString();
+      result_block_count = document["current_block_count"].GetInt();
+      table_total_block_count = document["total_block_count"].GetInt();
 
-      scanned_row_count = document["scannedRowCount"].GetInt();
-      filtered_row_count = document["filteredRowCount"].GetInt();
+      scanned_row_count = document["scanned_row_count"].GetInt();
+      filtered_row_count = document["filtered_row_count"].GetInt();
     }
 };
 
