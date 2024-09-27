@@ -233,45 +233,45 @@ void BufferManager::mergeResult(int qid, int wid){
                     col_type = result.return_datatype[j];
 
                     switch (col_type){
-                        case MySQL_BYTE:{
+                        case MySQL_DataType::MySQL_BYTE:{
                             char tempbuf[col_len];
                             memcpy(tempbuf,row_data+col_offset,col_len);
                             int64_t my_value = *((int8_t *)tempbuf);
                             workBuffer->table_data[col_name].intvec.push_back(my_value);
                             break;
-                        }case MySQL_INT16:{
+                        }case MySQL_DataType::MySQL_INT16:{
                             char tempbuf[col_len];
                             memcpy(tempbuf,row_data+col_offset,col_len);
                             int64_t my_value = *((int16_t *)tempbuf);
                             workBuffer->table_data[col_name].intvec.push_back(my_value);     
                             break;
-                        }case MySQL_INT32:{
+                        }case MySQL_DataType::MySQL_INT32:{
                             char tempbuf[col_len];
                             memcpy(tempbuf,row_data+col_offset,col_len);
                             int64_t my_value = *((int32_t *)tempbuf);
                             workBuffer->table_data[col_name].intvec.push_back(my_value);
                             break;
-                        }case MySQL_INT64:{
+                        }case MySQL_DataType::MySQL_INT64:{
                             char tempbuf[col_len];
                             memcpy(tempbuf,row_data+col_offset,col_len);
                             int64_t my_value = *((int64_t *)tempbuf);
                             workBuffer->table_data[col_name].intvec.push_back(my_value);
                             break;
-                        }case MySQL_FLOAT32:{
+                        }case MySQL_DataType::MySQL_FLOAT32:{
                             //아직 처리X
                             char tempbuf[col_len];//col_len = 4
                             memcpy(tempbuf,row_data+col_offset,col_len);
                             double my_value = *((float *)tempbuf);
                             workBuffer->table_data[col_name].floatvec.push_back(my_value);
                             break;
-                        }case MySQL_DOUBLE:{
+                        }case MySQL_DataType::MySQL_DOUBLE:{
                             //아직 처리X
                             char tempbuf[col_len];//col_len = 8
                             memcpy(tempbuf,row_data+col_offset,col_len);
                             double my_value = *((double *)tempbuf);
                             workBuffer->table_data[col_name].floatvec.push_back(my_value);
                             break;
-                        }case MySQL_NEWDECIMAL:{
+                        }case MySQL_DataType::MySQL_NEWDECIMAL:{
                             //decimal(15,2)만 고려한 상황 -> col_len = 7 or 8 (integer:6/real:1 or 2 or 3)
                             char tempbuf[col_len];//col_len = 7 or 8 or 9
                             memcpy(tempbuf,row_data+col_offset,col_len);
@@ -319,28 +319,28 @@ void BufferManager::mergeResult(int qid, int wid){
                             }
                             workBuffer->table_data[col_name].floatvec.push_back(my_value);
                             break;
-                        }case MySQL_DATE:{
+                        }case MySQL_DataType::MySQL_DATE:{
                             char tempbuf[col_len+1];
                             memcpy(tempbuf,row_data+col_offset,col_len);
                             tempbuf[3] = 0x00;
                             int64_t my_value = *((int *)tempbuf);
                             workBuffer->table_data[col_name].intvec.push_back(my_value);
                             break;
-                        }case MySQL_TIMESTAMP:{
+                        }case MySQL_DataType::MySQL_TIMESTAMP:{
                             //아직 처리X
                             char tempbuf[col_len];
                             memcpy(tempbuf,row_data+col_offset,col_len);
                             int my_value = *((int *)tempbuf);
                             workBuffer->table_data[col_name].intvec.push_back(my_value);
                             break;
-                        }case MySQL_STRING:{
+                        }case MySQL_DataType::MySQL_STRING:{
                             char tempbuf[col_len+1];
                             memcpy(tempbuf,row_data+col_offset,col_len);
                             tempbuf[col_len] = '\0';
                             string my_value(tempbuf);
                             workBuffer->table_data[col_name].strvec.push_back(my_value);
                             break;
-                        }case MySQL_VARSTRING:{
+                        }case MySQL_DataType::MySQL_VARSTRING:{
                             char tempbuf[col_len];
                             if(col_len < 258){//0~257 (_1_,___256____)
                                 memcpy(tempbuf,row_data+col_offset+1,col_len-1);
