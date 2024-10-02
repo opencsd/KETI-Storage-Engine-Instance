@@ -74,13 +74,13 @@ class Scheduler{
     }
 
     void runScheduler();
-    map<string,string> getBestCSD(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info);
+    void getBestCSD(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd);
   
     string DCS_algorithm(vector<string> dcs_candidate_csd); //DSI용
-    map<string,string> DCS_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info); //Depends on CSD Status
-    map<string,string> DSI_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info); //Depends on Snippet Information 
-    map<string,string> Random(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info);
-    map<string,string> Auto_Selection(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info);
+    void DCS_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd); //Depends on CSD Status
+    void DSI_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd); //Depends on Snippet Information 
+    void Random(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd);
+    void Auto_Selection(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd);
     
     void t_snippet_scheduling(TmaxRequest request);
     void t_offloading_snippet(TmaxRequest request, string csd_id);

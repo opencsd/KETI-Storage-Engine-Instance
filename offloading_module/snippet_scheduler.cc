@@ -7,37 +7,36 @@ void Scheduler::runScheduler(){
         //map sst가 key, 선정 csd가 value 
         map<string,string> bestcsd; 
         for ( int i=0;i<snippet.sst_info_size();i++){
-            bestcsd = Scheduler::getBestCSD(&snippet.sst_info(i));
-
+            Scheduler::getBestCSD(&snippet.sst_info(i), bestcsd);
         }
-        SnippetManager::SetupSnippet(snippet, bestcsd);
 
+        SnippetManager::SetupSnippet(snippet, bestcsd);
     }
 }
 
-map<string,string> Scheduler::getBestCSD(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info){
+void Scheduler::getBestCSD(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd){
     map<string,string> bestCSDList; 
+
     switch(SCHEDULING_ALGORITHM){
         case(DCS):{
-            bestCSDList = DCS_Algorithm(sst_info);
+            DCS_Algorithm(sst_info, bestcsd);
             break;
         }case(DSI):{
-            bestCSDList = DSI_Algorithm(sst_info);
+            DSI_Algorithm(sst_info, bestcsd);
             break;
         }case(RANDOM):{
-            bestCSDList = Random(sst_info);
+            Random(sst_info, bestcsd);
             break;
         }case(AUTO_SELECTION):{
-            bestCSDList = Auto_Selection(sst_info);
+            Auto_Selection(sst_info, bestcsd);
             break;
         }
     }
     
-    return bestCSDList;
+    return;
 }
 
-map<string,string> Scheduler::DCS_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info){
-    map<string,string> bestcsd;
+void Scheduler::DCS_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd){
     string csd_id;
     string sst_name;
     //csd 전체 info, key : csd id, value: csd 정보
@@ -63,7 +62,7 @@ map<string,string> Scheduler::DCS_Algorithm(const StorageEngineInstance::Snippet
             csd_id = sst_info->csd(i).csd_id();
             KETILOG::DEBUGLOG("Offloading", "sst name " + sst_name + ", id : " + csd_id);
             bestcsd[sst_name] = csd_id;
-            return bestcsd;
+            return;
         }
     
 
@@ -95,7 +94,7 @@ map<string,string> Scheduler::DCS_Algorithm(const StorageEngineInstance::Snippet
         KETILOG::DEBUGLOG("Offloading", itr-> first + " : " + itr->second);
     }
 
-    return bestcsd;
+    return;
 }
 string Scheduler::DCS_algorithm(vector<string> dcs_candidate_csd){//DSI용
     CSDStatusManager::CSDInfo csd1 = {"ip1",0,0,0,0,15,50};
@@ -136,8 +135,7 @@ string Scheduler::DCS_algorithm(vector<string> dcs_candidate_csd){//DSI용
     return bestcsd;
 } 
 
-map<string,string> Scheduler::DSI_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info){
-    map<string,string> bestcsd;
+void Scheduler::DSI_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd){
     map<string, vector<int>> csd_sst_count; // csd가 가지고 있는 sst 전체 파일 수, 0번째는 sst수, 1번째는 스케줄링 횟수  
     
     int csd_list_size ;
@@ -186,7 +184,7 @@ map<string,string> Scheduler::DSI_Algorithm(const StorageEngineInstance::Snippet
             csd_id = sst_info->csd(i).csd_id();
             KETILOG::DEBUGLOG("Offloading", "sst name " + sst_name + ", id : " + csd_id);
             bestcsd[sst_name] = csd_id;
-            return bestcsd;
+            return;
         }
         //1. 최소 스케줄링 수 찾기
         best_scheduling_count = INT_MAX;
@@ -263,10 +261,9 @@ map<string,string> Scheduler::DSI_Algorithm(const StorageEngineInstance::Snippet
         KETILOG::DEBUGLOG("Offloading", itr->first + " : " + itr->second);
     }
     
-    return bestcsd;
+    return;
 }
-map<string,string> Scheduler::Random(const StorageEngineInstance::SnippetRequest_SstInfo*sst_info){
-    map<string,string> bestcsd;
+void Scheduler::Random(const StorageEngineInstance::SnippetRequest_SstInfo*sst_info, map<string,string>& bestcsd){
     string csd_id;
     string sst_name;
     // srand(time(NULL));
@@ -284,7 +281,7 @@ map<string,string> Scheduler::Random(const StorageEngineInstance::SnippetRequest
             csd_id = sst_info->csd(i).csd_id();
             KETILOG::DEBUGLOG("Offloading", "sst name : " + sst_name + ", id : " + csd_id);
             bestcsd[sst_name] = csd_id;
-            return bestcsd;
+            return;
         }
     }
     for (int i=0;i<csd_count;i++) {
@@ -299,12 +296,11 @@ map<string,string> Scheduler::Random(const StorageEngineInstance::SnippetRequest
     for(map<string,string>::iterator itr=bestcsd.begin(); itr !=bestcsd.end(); ++itr){
         KETILOG::DEBUGLOG("Offloading", itr-> first + " : " + itr->second);
     }
-    return bestcsd;
+    return;
 }
 
-map<string,string> Scheduler::Auto_Selection(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info){
+void Scheduler::Auto_Selection(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd){
     map<string, vector<int>> csd_sst_count;
-    map<string,string> bestcsd;
     float total_csd_num;
     float total_sst_num = 0;
     int csd_list_size;
@@ -336,13 +332,13 @@ map<string,string> Scheduler::Auto_Selection(const StorageEngineInstance::Snippe
 
     if(total_sst_num/total_csd_num < 4){
         KETILOG::DEBUGLOG("Offloading", "DCS Algorithm");
-        bestcsd = DCS_Algorithm(sst_info);
+        // bestcsd = DCS_Algorithm(sst_info);
     }
     else {
         KETILOG::DEBUGLOG("Offloading", "DSI Algorithm");
-        bestcsd = DSI_Algorithm(sst_info);
+        // bestcsd = DSI_Algorithm(sst_info);
     }
-    return bestcsd;
+    return;
 }
 //map sst가 key, 선정 csd가 value
 
