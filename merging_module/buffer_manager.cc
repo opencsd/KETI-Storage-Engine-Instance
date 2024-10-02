@@ -203,17 +203,17 @@ void BufferManager::mergeResult(int qid, int wid){
             new_row_offset.assign(result.row_offset.begin(), result.row_offset.end());
             new_row_offset.push_back(result.length);
 
-            if(KETILOG::IsLogLevelUnder(TRACE)){
-                // 리턴 데이터 형식 확인 - Debug Code   
-                for(int i = 0; i<result.return_datatype.size(); i++){
-                    cout << result.return_datatype[i] << " ";
-                }
-                cout << endl;
-                for(int i = 0; i<result.return_datatype.size(); i++){
-                    cout << result.return_offlen[i] << " ";
-                }
-                cout << endl;  
-            }
+            // if(KETILOG::IsLogLevelUnder(TRACE)){
+            //     // 리턴 데이터 형식 확인 - Debug Code   
+            //     for(int i = 0; i<result.return_datatype.size(); i++){
+            //         cout << result.return_datatype[i] << " ";
+            //     }
+            //     cout << endl;
+            //     for(int i = 0; i<result.return_datatype.size(); i++){
+            //         cout << result.return_offlen[i] << " ";
+            //     }
+            //     cout << endl;  
+            // }
 
             for(int i=0; i<result.row_count; i++){
                 origin_row_len = new_row_offset[i+1] - new_row_offset[i];

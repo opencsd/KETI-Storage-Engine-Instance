@@ -8,14 +8,6 @@ void SnippetManager::setupSnippet(SnippetRequest snippet, map<string,string> bes
         sst_group[csd.second].push_back(csd.first);
     }
 
-    for (const auto& it : sst_group) {
-        cout << "CSD ID: " << it.first << endl;
-        for (const auto& it2 : it.second) {
-            cout << "  SST Name: " << it2 << endl;
-        }
-    }
-
-    //<1, [1.sst,2.sst]>, <2, [3.sst]>
     for(const auto& it : sst_group){
         string json_str = serialize(snippet, it.first, it.second);
         sendSnippetToCSD(json_str);
@@ -29,7 +21,7 @@ string SnippetManager::serialize(SnippetRequest snippet, string best_csd_id, vec
     options.always_print_primitive_fields = true;
     options.preserve_proto_field_names = true;
     google::protobuf::util::MessageToJsonString(snippet, &snippet_string,options);
-    
+
     int csd_block_count = 0;
     
     rapidjson::Document doc;
@@ -47,6 +39,7 @@ string SnippetManager::serialize(SnippetRequest snippet, string best_csd_id, vec
 
         for(string target_sst : target_sst_list){
 
+
             for (rapidjson::SizeType i = 0; i < sst_info.Size(); i++) { 
                 std::string sst_name = sst_info[i]["sst_name"].GetString();
 
@@ -57,13 +50,14 @@ string SnippetManager::serialize(SnippetRequest snippet, string best_csd_id, vec
                         std::string csd_id = csd_array[j]["csd_id"].GetString();
 
                         if (csd_id == best_csd_id) {
+
                             block_info.AddMember("partition", csd_array[j]["partition"], doc.GetAllocator());
                         
                             rapidjson::Value& block_array = csd_array[j]["block"];
                             for (rapidjson::SizeType k = 0; k < block_array.Size(); k++) { 
                                 rapidjson::Value& block_obj = block_array[k];
-                                block.PushBack(block_obj, doc.GetAllocator());
                                 csd_block_count += block_obj["length"].Size();
+                                block.PushBack(block_obj, doc.GetAllocator());
                             }
                         }
                     }
@@ -73,10 +67,12 @@ string SnippetManager::serialize(SnippetRequest snippet, string best_csd_id, vec
     }
 
     block_info.AddMember("block", block, doc.GetAllocator());
+    doc.AddMember("block_info",block_info,doc.GetAllocator());
+
+    doc.RemoveMember("sst_info");
 
     rapidjson::Value& result_info = doc["result_info"];
 
-    rapidjson::Value csd_block_count("csd_block_count", doc.GetAllocator());
     result_info.AddMember("csd_block_count", csd_block_count, doc.GetAllocator());
 
     std::string csd_ip_string = "10.1." + best_csd_id + ".2";
@@ -99,7 +95,7 @@ void SnippetManager::sendSnippetToCSD(string snippet_json){
     struct sockaddr_in serv_addr;
     memset(&serv_addr, 0, sizeof(serv_addr));
 
-    std::string port_str = std::to_string(CSD_IDENTIFIER_PORT1);
+    std::string port_str = CSD_IDENTIFIER_PORT;
     std::istringstream port_(port_str);
     std::uint16_t port{};
     port_ >> port;
@@ -108,9 +104,9 @@ void SnippetManager::sendSnippetToCSD(string snippet_json){
     serv_addr.sin_addr.s_addr = inet_addr(STORAGE_NODE_IP);
     serv_addr.sin_port = htons(port);
 
-    {
-        cout << endl << snippet_json.c_str() << endl << endl;
-    }
+    // {
+    //     cout << endl << snippet_json.c_str() << endl << endl;
+    // }
 
     connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 

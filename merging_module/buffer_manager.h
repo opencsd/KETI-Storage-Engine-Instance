@@ -119,7 +119,6 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
 
       memcpy(data, data_, length);
 
-      // csd_name = document["csdName"].GetString();
       result_block_count = document["current_block_count"].GetInt();
       table_total_block_count = document["total_block_count"].GetInt();
 

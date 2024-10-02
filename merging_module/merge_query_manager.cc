@@ -7,19 +7,12 @@ using StorageEngineInstance::SnippetRequest_ValueType_STRING;
 using StorageEngineInstance::SnippetRequest_Filter_OperType;
 
 void MergeQueryManager::RunSnippetWork(){
-    {
-    std::string test_json;
-    google::protobuf::util::JsonPrintOptions options;
-    options.always_print_primitive_fields = true;
-    options.always_print_enums_as_ints = true;
-    google::protobuf::util::MessageToJsonString(snippet,&test_json,options);
-    std::cout << endl << test_json << std::endl << std::endl; 
-    }
     tableCnt = snippet.query_info().table_name_size();
     isGroupby = (snippet.query_info().group_by_size() == 0) ? false : true;
     isOrderby = (snippet.query_info().order_by().column_name_size() == 0) ? false : true;
     isHaving = (snippet.query_info().having_size() == 0) ? false : true;
     isLimit = (snippet.query_info().limit().length() != 0) ? true : false;
+    
     //Save "base_table"
     for(int i=0; i<tableCnt; i++){
         if(i==0){
@@ -80,9 +73,7 @@ void MergeQueryManager::RunSnippetWork(){
             break;
         }case StorageEngineInstance::SnippetRequest_SnippetType_FILTER:{
             //Filtering(left_table_, snippet.table_filter(), target_table);
-
             Filtering(left_table_, snippet.query_info().filtering(), target_table);
-
             break;
         }case StorageEngineInstance::SnippetRequest_SnippetType_INNER_JOIN:{
             InnerJoin_hash(left_table_, right_table_, snippet.query_info().filtering(), target_table);

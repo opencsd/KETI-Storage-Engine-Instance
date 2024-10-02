@@ -42,10 +42,8 @@ struct T{
 class MergeQueryManager{	
 public:
     MergeQueryManager(const SnippetRequest& snippet_){
-        cout << "hj :: MergeQueryManager()" << endl;
-
         this->snippet = snippet_;
-        // this->snippetType = snippet_.type();
+        this->snippetType = snippet_.type();
         this->group_by_table_.clear();
         this->group_by_key_.clear();
         this->ordered_index_.clear();
