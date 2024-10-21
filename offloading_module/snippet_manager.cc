@@ -56,7 +56,11 @@ string SnippetManager::serialize(SnippetRequest snippet, string best_csd_id, vec
                             rapidjson::Value& block_array = csd_array[j]["block"];
                             for (rapidjson::SizeType k = 0; k < block_array.Size(); k++) { 
                                 rapidjson::Value& block_obj = block_array[k];
-                                csd_block_count += block_obj["length"].Size();
+                                if(block_obj["offset"].Size() == 1){
+                                    csd_block_count += block_obj["length"].Size();
+                                }else{
+                                    csd_block_count += 1;
+                                }
                                 block.PushBack(block_obj, doc.GetAllocator());
                             }
                         }
@@ -73,7 +77,23 @@ string SnippetManager::serialize(SnippetRequest snippet, string best_csd_id, vec
 
     rapidjson::Value& result_info = doc["result_info"];
 
+    vector<int> return_column_length_;
+    vector<int> return_column_type_;
+
+    calcul_return_column_type(snippet, return_column_length_, return_column_type_);
+
+    rapidjson::Value return_column_length(rapidjson::kArrayType);
+    for (int length : return_column_length_) {
+        return_column_length.PushBack(length, doc.GetAllocator());
+    }
+    rapidjson::Value return_column_type(rapidjson::kArrayType);
+    for (int type : return_column_type_) {
+        return_column_type.PushBack(type, doc.GetAllocator()); 
+    }
+
     result_info.AddMember("csd_block_count", csd_block_count, doc.GetAllocator());
+    result_info.AddMember("return_column_length", return_column_length, doc.GetAllocator());
+    result_info.AddMember("return_column_type", return_column_type, doc.GetAllocator());
 
     std::string csd_ip_string = "10.1." + best_csd_id + ".2";
     rapidjson::Value csd_ip(csd_ip_string.c_str(), doc.GetAllocator());
@@ -115,6 +135,53 @@ void SnippetManager::sendSnippetToCSD(string snippet_json){
     send(sock, (char *)snippet_json.c_str(), strlen(snippet_json.c_str()), 0);
 
     close(sock);
+}
+
+void SnippetManager::calcul_return_column_type(SnippetRequest& snippet, vector<int>& return_column_length, vector<int>& return_column_type){// *임시tpc-h 쿼리 동작만 수행하도록 작성 => 수정필요
+    unordered_map<string, int> column_type, column_length;
+    for (int i = 0; i < snippet.schema_info().column_list_size(); i++){
+        column_type.insert(make_pair(snippet.schema_info().column_list(i).name(), snippet.schema_info().column_list(i).type()));
+        column_length.insert(make_pair(snippet.schema_info().column_list(i).name(), snippet.schema_info().column_list(i).length()));
+    }
+    
+    for (int i = 0; i < snippet.query_info().projection_size(); i++){
+        if(snippet.query_info().projection(i).value(0) == "CASE"){
+            return_column_type.push_back(2);
+            return_column_length.push_back(4);
+        }else if(snippet.query_info().projection(i).value(0) == "EXTRACT"){
+            return_column_type.push_back(2);
+            return_column_length.push_back(4);
+        }else if(snippet.query_info().projection(i).value(0) == "SUBSTRING"){
+            return_column_type.push_back(254);
+            return_column_length.push_back(2);
+        }else{
+            if(snippet.query_info().projection(i).value_size() == 1){
+                return_column_type.push_back(column_type[snippet.query_info().projection(i).value(0)]);
+                return_column_length.push_back(column_length[snippet.query_info().projection(i).value(0)]);
+            }else{
+                int multiple_count = 0;
+                for (int j = 0; j < snippet.query_info().projection(i).value_size(); j++){
+                    if(snippet.query_info().projection(i).value(j) == "*"){
+                      if(snippet.query_info().projection(i).value(j-1) == "ps_availqty"){//임시로 작성!!!!
+                        multiple_count--;
+                      }else{
+                        multiple_count++;
+                      }
+                    }
+                }
+                if(multiple_count == 1){
+                    return_column_type.push_back(246);
+                    return_column_length.push_back(8);
+                }else if(multiple_count == 2){
+                    return_column_type.push_back(246);
+                    return_column_length.push_back(9);
+                }else{
+                    return_column_type.push_back(column_type[snippet.query_info().projection(i).value(0)]);
+                    return_column_length.push_back(column_length[snippet.query_info().projection(i).value(0)]);
+                }
+            }
+        }
+    }
 }
 
 

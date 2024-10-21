@@ -176,6 +176,7 @@ void BufferManager::pushResult(BlockResult blockResult){
         for(int i = 0; i < blockResult.column_alias.size(); i++){
             workBuffer->table_column.push_back(blockResult.column_alias[i]);
             workBuffer->table_data.insert({blockResult.column_alias[i],ColData{}});
+            workBuffer->save_table_column_type(blockResult.return_datatype);
         }
 
         workBuffer->left_block_count = blockResult.table_total_block_count;
@@ -194,11 +195,10 @@ void BufferManager::mergeResult(int qid, int wid){
     while (1){
         BlockResult result = workBuffer->work_buffer_queue.wait_and_pop();
         unique_lock<mutex> lock(workBuffer->mu);
-
-        string col_name;
         
         if(result.length != 0){
-            int col_type, col_offset, col_len, origin_row_len, col_count = 0;
+            int col_type, col_offset, col_len, origin_row_len, col_count = 0;  
+            string col_name;
             vector<int> new_row_offset;
             new_row_offset.assign(result.row_offset.begin(), result.row_offset.end());
             new_row_offset.push_back(result.length);
@@ -209,7 +209,7 @@ void BufferManager::mergeResult(int qid, int wid){
             //         cout << result.return_datatype[i] << " ";
             //     }
             //     cout << endl;
-            //     for(int i = 0; i<result.return_datatype.size(); i++){
+            //     for(int i = 0; i<result.return_offlen.size(); i++){
             //         cout << result.return_offlen[i] << " ";
             //     }
             //     cout << endl;  
@@ -222,7 +222,6 @@ void BufferManager::mergeResult(int qid, int wid){
 
                 col_count = workBuffer->table_column.size();
                 int col_offset_list[col_count + 1];
-                
                 getColOffset(row_data, col_offset_list, result.return_datatype, result.return_offlen);
                 col_offset_list[col_count] = origin_row_len;
 
@@ -230,7 +229,7 @@ void BufferManager::mergeResult(int qid, int wid){
                     col_name = workBuffer->table_column[j];
                     col_offset = col_offset_list[j];
                     col_len = col_offset_list[j+1] - col_offset_list[j];
-                    col_type = result.return_datatype[j];
+                    col_type = result.return_datatype[j];                    
 
                     switch (col_type){
                         case MySQL_DataType::MySQL_BYTE:{
@@ -353,8 +352,8 @@ void BufferManager::mergeResult(int qid, int wid){
                             workBuffer->table_data[col_name].strvec.push_back(my_value);
                             break;
                         }default:{
-                            string msg = " error>> Type: " + to_string(col_type) + " is not defined!";
-                            KETILOG::FATALLOG(LOGTAG, msg);
+                            // string msg = " error>> Type: " + to_string(col_type) + " is not defined!";
+                            // KETILOG::FATALLOG(LOGTAG, msg);
                         }
                     }
                     workBuffer->table_data[col_name].isnull.push_back(false);
@@ -367,25 +366,16 @@ void BufferManager::mergeResult(int qid, int wid){
         workBuffer->row_count += result.row_count;
         DataBuffer_[qid]->scanned_row_count += result.scanned_row_count;
         DataBuffer_[qid]->filtered_row_count += result.filtered_row_count;
+        workBuffer->work_in_progress_condition.notify_all();
         
-        KETILOG::DEBUGLOG(LOGTAG,"# save data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} ... (left " + std::to_string(workBuffer->left_block_count) + " blocks)");
+        // KETILOG::DEBUGLOG(LOGTAG,"# save data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} ... (left " + std::to_string(workBuffer->left_block_count) + " blocks)");
 
         if(workBuffer->left_block_count == 0){ //Work Done
             string msg = "# merging data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} done";
             KETILOG::INFOLOG(LOGTAG,msg);
 
-            for(auto it = workBuffer->table_data.begin(); it != workBuffer->table_data.end(); it++){
-                if((*it).second.floatvec.size() != 0){
-                    (*it).second.type = TYPE_FLOAT;
-                }else if((*it).second.intvec.size() != 0){
-                    (*it).second.type = TYPE_INT;
-                }else if((*it).second.strvec.size() != 0){
-                    (*it).second.type = TYPE_STRING;
-                }
-            }
-
             workBuffer->status = WorkDone;
-            workBuffer->cond.notify_all();
+            workBuffer->work_done_condition.notify_all();
 
             break;
         }
@@ -402,7 +392,9 @@ void BufferManager::initializeBuffer(int qid, int wid, string table_name){
 
     if(wid == -1){
         return;
-    }else if(DataBuffer_[qid]->work_buffer_list.find(wid) == DataBuffer_[qid]->work_buffer_list.end()){
+    }
+    
+    if(DataBuffer_[qid]->work_buffer_list.find(wid) == DataBuffer_[qid]->work_buffer_list.end()){
         WorkBuffer* workBuffer = new WorkBuffer();
         DataBuffer_[qid]->tablename_workid_map[table_name] = wid;
         DataBuffer_[qid]->work_buffer_list[wid] = workBuffer;
@@ -410,11 +402,21 @@ void BufferManager::initializeBuffer(int qid, int wid, string table_name){
 }
 
 int BufferManager::endQuery(StorageEngineInstance::Request qid){
-    DataBuffer_.erase(qid.query_id());
+    auto it = DataBuffer_.find(qid.query_id());
+    if (it != DataBuffer_.end()) {
+        delete it->second;     
+        DataBuffer_.erase(it);
+    }
     return 1;
 }
 
-TableData BufferManager::getTableData(int qid, int wid, string table_name){ 
+int BufferManager::checkTableStatus(int qid, int wid, string table_name){
+    WorkBuffer* workBuffer = DataBuffer_[qid]->work_buffer_list[wid];
+    unique_lock<mutex> lock(workBuffer->mu);
+    return workBuffer->status;
+}
+
+TableData BufferManager::getTableData(int qid, int wid, string table_name, int row_index){
     initializeBuffer(qid, wid, table_name);
 
     if(wid == -1){
@@ -431,45 +433,71 @@ TableData BufferManager::getTableData(int qid, int wid, string table_name){
     TableData tableData;
 
     WorkBuffer* workBuffer = DataBuffer_[qid]->work_buffer_list[wid];
-    unique_lock<mutex> lock2(workBuffer->mu);
+    unique_lock<mutex> lock(workBuffer->mu);
+
+    while(workBuffer->row_count - row_index < 1000000 && workBuffer->status != WorkDone){
+        workBuffer->work_in_progress_condition.wait(lock);
+    }
+
+    tableData.table_data = workBuffer->table_data;
+    tableData.row_count = workBuffer->row_count;
+    tableData.status = workBuffer->status;
+
+    if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
+        cout << "<get table data>" << endl;
+        for(auto i : workBuffer->table_data){
+            cout << i.first << "|" << i.second.row_count << "|" << i.second.type << endl;
+        }
+    }
+    if(workBuffer->table_data.size() == 0){
+        cout << "what ???" << endl;
+    }
+    
+    return tableData;
+}
+
+TableData BufferManager::getFinishedTableData(int qid, int wid, string table_name){ 
+    initializeBuffer(qid, wid, table_name);
+
+    if(wid == -1){
+        while(true){
+            if(DataBuffer_[qid]->tablename_workid_map.find(table_name) == DataBuffer_[qid]->tablename_workid_map.end()){
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            }else{
+                wid = DataBuffer_[qid]->tablename_workid_map[table_name];
+                break;
+            }
+        }
+    }
+
+    TableData tableData;
+
+    WorkBuffer* workBuffer = DataBuffer_[qid]->work_buffer_list[wid];
+    unique_lock<mutex> lock(workBuffer->mu);
 
     if(workBuffer->status == NotFinished || workBuffer->status == Initialized){
         KETILOG::DEBUGLOG(LOGTAG,"# not finished " + to_string(qid) + ":" + table_name);
-
-        workBuffer->cond.wait(lock2);
-        tableData.table_data = workBuffer->table_data;
-        tableData.valid = true;
-        tableData.row_count = workBuffer->row_count;
-        tableData.scanned_row_count = DataBuffer_[qid]->scanned_row_count;
-        tableData.filtered_row_count = DataBuffer_[qid]->filtered_row_count;
-
-        KETILOG::DEBUGLOG(LOGTAG,"# finished " + to_string(qid) + ":" + table_name);
-        if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
-            cout << "<get table data>" << endl;
-            for(auto i : workBuffer->table_data){
-                cout << i.first << "|" << i.second.row_count << "|" << i.second.type << endl;
-            }
-        }
+        workBuffer->work_done_condition.wait(lock);
     }else if(workBuffer->status == WorkDone){
         KETILOG::DEBUGLOG(LOGTAG,"# done " + to_string(qid) + ":" + table_name);
+    }
 
-        tableData.table_data = workBuffer->table_data;
-        tableData.valid = true;
-        tableData.row_count = workBuffer->row_count;
-        tableData.scanned_row_count = DataBuffer_[qid]->scanned_row_count;
-        tableData.filtered_row_count = DataBuffer_[qid]->scanned_row_count;
+    tableData.table_data = workBuffer->table_data;
+    tableData.row_count = workBuffer->row_count;
+    tableData.status = workBuffer->status;
+    tableData.scanned_row_count = DataBuffer_[qid]->scanned_row_count;
+    tableData.filtered_row_count = DataBuffer_[qid]->scanned_row_count;
 
-        if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
-            cout << "<get table data>" << endl;
-            for(auto i : workBuffer->table_data){
-                cout << i.first << "|" << i.second.row_count << "|" << i.second.type << endl;
-            }
-        }
-        if(workBuffer->table_data.size() == 0){
-            cout << "what ???" << endl;
+    if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
+        cout << "<get finished table data>" << endl;
+        for(auto i : workBuffer->table_data){
+            cout << i.first << "|" << i.second.row_count << "|" << i.second.type << endl;
         }
     }
-    
+    if(workBuffer->table_data.size() == 0){
+        cout << "what ???" << endl;
+    }
+
     return tableData;
 }
 
@@ -481,7 +509,25 @@ int BufferManager::saveTableData(SnippetRequest snippet, TableData &table_data_,
     string msg = "# save table {" + to_string(qid) + "|" + table_name + "}";
     KETILOG::DEBUGLOG(LOGTAG,msg);
 
-    initializeBuffer(qid, wid, table_name);
+    if(KETILOG::IsLogLevelUnder(TRACE)){
+        cout << "<save table>" << endl;
+        for(auto i : table_data_.table_data){
+            if(i.second.type == TYPE_STRING){
+                cout << i.first << "|" << i.second.strvec.size() << "|" << i.second.type << endl;
+                // cout << i.first << "|" << i.second.strvec[0] << endl;
+            }else if(i.second.type == TYPE_INT){
+                cout << i.first << "|" << i.second.intvec.size() << "|" << i.second.type << endl;
+                // cout << i.first << "|" << i.second.intvec[0] << endl;
+            }else if(i.second.type == TYPE_FLOAT){
+                cout << i.first << "|" << i.second.floatvec.size() << "|" << i.second.type << endl;
+                // cout << i.first << "|" << i.second.floatvec[0] << endl;
+            }else if(i.second.type == TYPE_EMPTY){
+                cout << i.first << "|" << "empty row" << "|" << i.second.type << endl;
+            }else{
+                cout << "save table row else ?" << endl;
+            }
+        }
+    }
 
     WorkBuffer* workBuffer = DataBuffer_[qid]->work_buffer_list[wid];
     unique_lock<mutex> lock(workBuffer->mu);
@@ -524,7 +570,8 @@ int BufferManager::saveTableData(SnippetRequest snippet, TableData &table_data_,
     }
 
     DataBuffer_[qid]->work_buffer_list[wid]->status = WorkDone;
-    DataBuffer_[qid]->work_buffer_list[wid]->cond.notify_all();
+    DataBuffer_[qid]->work_buffer_list[wid]->work_done_condition.notify_all();
+    DataBuffer_[qid]->work_buffer_list[wid]->work_in_progress_condition.notify_all();
     
     // Debug Code   
     // for(auto it = DataBuffer_[qid]->work_buffer_list.begin(); it != DataBuffer_[qid]->work_buffer_list.end(); it++){
@@ -584,57 +631,3 @@ void getColOffset(const char* row_data, int* col_offset_list, vector<int> return
         col_offset_list[i] = new_col_offset;
     }
 }
-
-// void calculForReturnData(StorageEngineInstance::SnippetRequest snippet){
-//     std::string json_output;
-//     google::protobuf::util::JsonPrintOptions options;
-//     options.always_print_primitive_fields = true;  // 기본값도 모두 출력
-//     options.always_print_enums_as_ints = true;     // enum 값을 숫자로 출력
-
-//     google::protobuf::util::MessageToJsonString(snippet, &json_output, options);
-//     std::cout << "Snippet in JSON format: " << std::endl << json_output << std::endl;
-//     unordered_map<string, int> col_type, col_offlen;
-//     for (int i = 0; i < snippet.schema_info().column_list_size(); i++){
-//         col_type.insert(make_pair(snippet.schema_info().column_list(i).name(), snippet.schema_info().column_list(i).type()));
-//         col_offlen.insert(make_pair(snippet.schema_info().column_list(i).name(), snippet.schema_info().column_list(i).length()));
-//     }
-    
-//     vector<int> return_datatype, return_offlen;
-//     for (int i = 0; i < snippet.query_info().projection_size(); i++){
-//         //tpc-h 쿼리 동작만 수행하도록 작성 => 수정필요
-//         if(snippet.query_info().projection(i).value(0) == "CASE"){
-//             return_datatype.push_back(2);
-//             return_offlen.push_back(4);
-//         }if(snippet.query_info().projection(i).value(0) == "EXTRACT"){
-//             return_datatype.push_back(14);
-//             return_offlen.push_back(3);
-//         }if(snippet.query_info().projection(i).value(0) == "SUBSTRING"){
-//             return_datatype.push_back(254);
-//             return_offlen.push_back(2);
-//         }else{
-//             if(snippet.query_info().projection(i).value_size() == 1){
-//                 return_datatype.push_back(col_type[snippet.query_info().projection(i).value(0)]);
-//                 return_offlen.push_back(col_offlen[snippet.query_info().projection(i).value(0)]);
-//             }else{
-//                 int multiple_count = 0;
-//                 for (int j = 0; j < snippet.query_info().projection(i).value_size(); j++){
-//                     if(snippet.query_info().projection(i).value(j) == "*"){
-//                         multiple_count++;
-//                     }
-//                 }
-//                 if(multiple_count == 1){
-//                     return_datatype.push_back(246);
-//                     return_offlen.push_back(8);
-//                 }else if(multiple_count == 2){
-//                     return_datatype.push_back(246);
-//                     return_offlen.push_back(9);
-//                 }else{
-//                     return_datatype.push_back(col_type[snippet.query_info().projection(i).value(0)]);
-//                     return_offlen.push_back(col_offlen[snippet.query_info().projection(i).value(0)]);
-//                 }
-//             }
-//         }
-//     }
-
-//     // return return_datatype, return_offlen
-// }

@@ -113,6 +113,9 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
       for(int i = 0; i<return_datatype_.Size(); i++){
           return_datatype.push_back(return_datatype_[i].GetInt());
           return_offlen.push_back(return_offlen_[i].GetInt());
+          if(return_datatype_[i].GetInt() > 3000 || return_offlen_[i].GetInt() > 3000){
+            cout << "weird data~!" << endl;
+          }
       }        
 
       length = document["length"].GetInt();
@@ -135,7 +138,8 @@ struct WorkBuffer {
   int left_block_count;//*남은 블록 수(csd 결과 병합 체크용) -> Monitoring Container 통신
   int status;//작업 상태
   int row_count;//행 개수
-  condition_variable cond;
+  condition_variable work_done_condition;
+  condition_variable work_in_progress_condition;
   mutex mu;
 
   WorkBuffer(){
@@ -145,6 +149,49 @@ struct WorkBuffer {
     table_data.clear();
     left_block_count = 0;
     row_count = 0;
+  }
+
+  void save_table_column_type(vector<int> return_datatype){
+    for(size_t i=0; i<table_column.size(); i++){
+        string col_name = table_column[i];
+        int col_type = return_datatype[i];
+        switch (col_type){
+            case MySQL_DataType::MySQL_BYTE:{
+                table_data[col_name].type = TYPE_INT;
+                break;
+            }case MySQL_DataType::MySQL_INT16:{
+                table_data[col_name].type = TYPE_INT;     
+                break;
+            }case MySQL_DataType::MySQL_INT32:{
+                table_data[col_name].type = TYPE_INT;
+                break;
+            }case MySQL_DataType::MySQL_INT64:{
+                table_data[col_name].type = TYPE_INT;
+                break;
+            }case MySQL_DataType::MySQL_FLOAT32:{
+                table_data[col_name].type = TYPE_FLOAT;
+                break;
+            }case MySQL_DataType::MySQL_DOUBLE:{
+                table_data[col_name].type = TYPE_FLOAT;
+                break;
+            }case MySQL_DataType::MySQL_NEWDECIMAL:{
+                table_data[col_name].type = TYPE_FLOAT;
+                break;
+            }case MySQL_DataType::MySQL_DATE:{
+                table_data[col_name].type = TYPE_INT;
+                break;
+            }case MySQL_DataType::MySQL_TIMESTAMP:{
+                table_data[col_name].type = TYPE_INT;
+                break;
+            }case MySQL_DataType::MySQL_STRING:{
+                table_data[col_name].type = TYPE_STRING;
+                break;
+            }case MySQL_DataType::MySQL_VARSTRING:{
+                table_data[col_name].type = TYPE_STRING;
+                break;
+            }
+        }
+    }
   }
 };
 
@@ -162,17 +209,22 @@ struct QueryBuffer{
     scanned_row_count = 0;
     filtered_row_count = 0;
   }
+
+  ~QueryBuffer(){
+    for (auto& pair : work_buffer_list) {
+        delete pair.second;
+    }
+  }
 };
 
 struct TableData{//결과 리턴용
-  bool valid;//결과의 유효성
   int scanned_row_count;
   int filtered_row_count;
   unordered_map<string,ColData> table_data;//결과 데이터
   int row_count;
+  int status;
 
   TableData(){
-    valid = false;
     table_data.clear();
     row_count = 0;
   }
@@ -184,12 +236,20 @@ class BufferManager{
       return GetInstance().initializeBuffer(qid, wid, tname);
     }
 
-    static TableData GetTableData(int qid, int wid, string tname){
-      return GetInstance().getTableData(qid, wid, tname);
+    static TableData GetFinishedTableData(int qid, int wid, string tname){
+      return GetInstance().getFinishedTableData(qid, wid, tname);
+    }
+
+    static TableData GetTableData(int qid, int wid, string tname, int row_index){
+      return GetInstance().getTableData(qid, wid, tname, row_index);
     }
 
     static int SaveTableData(SnippetRequest snippet, TableData &table_data_, int offset, int length){
       return GetInstance().saveTableData(snippet, table_data_, offset, length);
+    }
+
+    static int CheckTableStatus(int qid, int wid, string tname){
+      return GetInstance().checkTableStatus(qid, wid, tname);
     }
 
     static int EndQuery(StorageEngineInstance::Request qid){
@@ -219,8 +279,10 @@ class BufferManager{
     void pushResult(BlockResult blockResult);
     void mergeResult(int qid, int wid);
     void initializeBuffer(int qid, int wid, string tname);//return true only when the snippet work done
-    TableData getTableData(int qid, int wid, string tname);//return table data on queryID/tableName
+    TableData getFinishedTableData(int qid, int wid, string tname);//return table data on queryID/tableName
+    TableData getTableData(int qid, int wid, string tname, int row_index);//return table data on queryID/tableName
     int saveTableData(SnippetRequest snippet, TableData &table_data_, int offset, int length);
+    int checkTableStatus(int qid, int wid, string tname);
     int endQuery(StorageEngineInstance::Request qid);
 
     void t_buffer_manager_interface();

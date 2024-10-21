@@ -29,7 +29,6 @@ class MergingModuleServiceImpl final : public MergingModule::Service {
     // std::cout << endl << test_json << std::endl << std::endl; 
     // }
 
-
     string msg = "# aggregation {" + to_string(request->query_id()) + "|" + to_string(request->work_id()) + "}";
     KETILOG::INFOLOG("Merging",msg);
 
@@ -45,7 +44,7 @@ class MergingModuleServiceImpl final : public MergingModule::Service {
     string msg = "# get query result {" + to_string(request->query_id()) + "|" + to_string(request->work_id()) + "|" + request->table_name() + "}";
     KETILOG::INFOLOG("Merging", msg);
      
-    TableData queryResult = BufferManager::GetTableData(request->query_id(),request->work_id(),request->table_name());
+    TableData queryResult = BufferManager::GetFinishedTableData(request->query_id(),request->work_id(),request->table_name());
 
     if(KETILOG::IsLogLevelUnder(TRACE)){
       // // 테이블 데이터 로우 수 확인 - Debug Code   
@@ -68,43 +67,41 @@ class MergingModuleServiceImpl final : public MergingModule::Service {
       }
     }
 
-    if(queryResult.valid){
-      for (auto td : queryResult.table_data){
-        string col_name = td.first;
-        QueryResult_Column col;
+    for (auto td : queryResult.table_data){
+      string col_name = td.first;
+      QueryResult_Column col;
 
-        switch (td.second.type){
-          case TYPE_STRING:{
-            col.set_col_type(QueryResult_Column_ColType::QueryResult_Column_ColType_TYPE_STRING);  
-            for(size_t i=0; i<td.second.strvec.size(); i++){
-              col.add_string_col(td.second.strvec[i]);
-            }
-            break;
-          }case TYPE_INT:{
-            col.set_col_type(QueryResult_Column_ColType::QueryResult_Column_ColType_TYPE_INT);    
-            for(size_t i=0; i<td.second.intvec.size(); i++){
-              col.add_int_col(td.second.intvec[i]);
-            }
-            break;
-          }case TYPE_FLOAT:{
-            col.set_col_type(QueryResult_Column_ColType::QueryResult_Column_ColType_TYPE_FLOAT);  
-            for(size_t i=0; i<td.second.floatvec.size(); i++){
-              col.add_double_col(td.second.floatvec[i]);
-            }
-            break;
-          }case TYPE_EMPTY:{
-            col.set_col_type(QueryResult_Column_ColType::QueryResult_Column_ColType_TYPE_EMPTY);
-            break;
-          }default:{
-            KETILOG::FATALLOG("Merging","GetQueryResult Type Error");
+      switch (td.second.type){
+        case TYPE_STRING:{
+          col.set_col_type(QueryResult_Column_ColType::QueryResult_Column_ColType_TYPE_STRING);  
+          for(size_t i=0; i<td.second.strvec.size(); i++){
+            col.add_string_col(td.second.strvec[i]);
           }
+          break;
+        }case TYPE_INT:{
+          col.set_col_type(QueryResult_Column_ColType::QueryResult_Column_ColType_TYPE_INT);    
+          for(size_t i=0; i<td.second.intvec.size(); i++){
+            col.add_int_col(td.second.intvec[i]);
+          }
+          break;
+        }case TYPE_FLOAT:{
+          col.set_col_type(QueryResult_Column_ColType::QueryResult_Column_ColType_TYPE_FLOAT);  
+          for(size_t i=0; i<td.second.floatvec.size(); i++){
+            col.add_double_col(td.second.floatvec[i]);
+          }
+          break;
+        }case TYPE_EMPTY:{
+          col.set_col_type(QueryResult_Column_ColType::QueryResult_Column_ColType_TYPE_EMPTY);
+          break;
+        }default:{
+          KETILOG::FATALLOG("Merging","GetQueryResult Type Error");
         }
-        result->mutable_query_result()->insert({col_name, col});
       }
-      result->set_row_count(queryResult.row_count);
-      result->set_scanned_row_count(queryResult.scanned_row_count);
-      result->set_filtered_row_count(queryResult.filtered_row_count);
+      result->mutable_query_result()->insert({col_name, col});
     }
+    result->set_row_count(queryResult.row_count);
+    result->set_scanned_row_count(queryResult.scanned_row_count);
+    result->set_filtered_row_count(queryResult.filtered_row_count);
 
     BufferManager::EndQuery(*request);
 

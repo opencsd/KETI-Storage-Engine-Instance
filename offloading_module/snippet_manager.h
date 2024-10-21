@@ -55,6 +55,7 @@ class SnippetManager{
     void setupSnippet(SnippetRequest snippet, map<string,string> bestcsd);
     string serialize(SnippetRequest snippet, string csd, vector<string> target_sst_list);
     void sendSnippetToCSD(string snippet_json);
+    void calcul_return_column_type(SnippetRequest& snippet, vector<int>& return_column_length, vector<int>& return_column_type);
   
   public:
     inline const static std::string LOGTAG = "Offloading::Snippet Scheduler";

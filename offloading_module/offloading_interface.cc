@@ -93,8 +93,6 @@ void RunGRPCServer() {
   builder.SetMaxReceiveMessageSize(-1);
   std::unique_ptr<Server> server(builder.BuildAndStart());
 
-  sleep(1);
-
   KETILOG::FATALLOG("Offloading", "Offloading Server listening on "+server_address);
   
   server->Wait();
