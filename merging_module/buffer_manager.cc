@@ -509,26 +509,6 @@ int BufferManager::saveTableData(SnippetRequest snippet, TableData &table_data_,
     string msg = "# save table {" + to_string(qid) + "|" + table_name + "}";
     KETILOG::DEBUGLOG(LOGTAG,msg);
 
-    if(KETILOG::IsLogLevelUnder(TRACE)){
-        cout << "<save table>" << endl;
-        for(auto i : table_data_.table_data){
-            if(i.second.type == TYPE_STRING){
-                cout << i.first << "|" << i.second.strvec.size() << "|" << i.second.type << endl;
-                // cout << i.first << "|" << i.second.strvec[0] << endl;
-            }else if(i.second.type == TYPE_INT){
-                cout << i.first << "|" << i.second.intvec.size() << "|" << i.second.type << endl;
-                // cout << i.first << "|" << i.second.intvec[0] << endl;
-            }else if(i.second.type == TYPE_FLOAT){
-                cout << i.first << "|" << i.second.floatvec.size() << "|" << i.second.type << endl;
-                // cout << i.first << "|" << i.second.floatvec[0] << endl;
-            }else if(i.second.type == TYPE_EMPTY){
-                cout << i.first << "|" << "empty row" << "|" << i.second.type << endl;
-            }else{
-                cout << "save table row else ?" << endl;
-            }
-        }
-    }
-
     WorkBuffer* workBuffer = DataBuffer_[qid]->work_buffer_list[wid];
     unique_lock<mutex> lock(workBuffer->mu);
 
@@ -572,14 +552,6 @@ int BufferManager::saveTableData(SnippetRequest snippet, TableData &table_data_,
     DataBuffer_[qid]->work_buffer_list[wid]->status = WorkDone;
     DataBuffer_[qid]->work_buffer_list[wid]->work_done_condition.notify_all();
     DataBuffer_[qid]->work_buffer_list[wid]->work_in_progress_condition.notify_all();
-    
-    // Debug Code   
-    // for(auto it = DataBuffer_[qid]->work_buffer_list.begin(); it != DataBuffer_[qid]->work_buffer_list.end(); it++){
-    //     cout << "workID: " << (*it).first << " tableName: " << (*it).second->table_alias << endl;
-    // }
-    // for(auto it = DataBuffer_[qid]->table_status.begin(); it != DataBuffer_[qid]->table_status.end(); it++){
-    //     cout << "tableName: " << (*it).first << " workID: " << (*it).second.first << "status: " << (*it).second.second << endl;
-    // }
     
     return 1;
 }
