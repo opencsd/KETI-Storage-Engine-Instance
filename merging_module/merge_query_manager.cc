@@ -170,30 +170,35 @@ void MergeQueryManager::Aggregation(TableData &aggregation_table, const Repeated
                     }
                     colData.type = t.type;
                 }else{//로우 개수만큼
-                    for (int r = 0; r < target_row_count; r++){
-                        t = Projection(aggregation_table,projections[p],r);//p번째 프로젝션을 r번째 로우에 적용
-                        switch(t.type){
-                            case TYPE_STRING:{
-                                colData.strvec.push_back(t.varString);
-                                colData.isnull.push_back(false);
-                                colData.row_count++;
-                                break;
-                            }case TYPE_INT:{    
-                                colData.intvec.push_back(t.varInt);
-                                colData.isnull.push_back(false);
-                                colData.row_count++;
-                                break;
-                            }case TYPE_FLOAT:{
-                                colData.floatvec.push_back(t.varFloat);
-                                colData.isnull.push_back(false);
-                                colData.row_count++;
-                                break;
-                            }default:{
-                                KETILOG::ERRORLOG(LOGTAG,"SnippetRequest_Projection_SelectType_COLUMNNAME2 => check plz..");
+                    if(projections[p].value_size() == 1 && projections[p].value_type(0) == StorageEngineInstance::SnippetRequest_ValueType_COLUMN){
+                        colData = aggregation_table.table_data[projections[p].value(0)];
+                    }else{
+                        for (int r = 0; r < target_row_count; r++){
+                            t = Projection(aggregation_table,projections[p],r);//p번째 프로젝션을 r번째 로우에 적용
+                            switch(t.type){
+                                case TYPE_STRING:{
+                                    colData.strvec.push_back(t.varString);
+                                    colData.isnull.push_back(false);
+                                    colData.row_count++;
+                                    break;
+                                }case TYPE_INT:{    
+                                    colData.intvec.push_back(t.varInt);
+                                    colData.isnull.push_back(false);
+                                    colData.row_count++;
+                                    break;
+                                }case TYPE_FLOAT:{
+                                    colData.floatvec.push_back(t.varFloat);
+                                    colData.isnull.push_back(false);
+                                    colData.row_count++;
+                                    break;
+                                }default:{
+                                    KETILOG::ERRORLOG(LOGTAG,"SnippetRequest_Projection_SelectType_COLUMNNAME2 => check plz..");
+                                }
                             }
+                            colData.type = t.type;
                         }
-                        colData.type = t.type;
                     }
+                    
                 }
                 break;
             }case StorageEngineInstance::SnippetRequest_Projection_SelectType_SUM:{
@@ -994,38 +999,39 @@ void MergeQueryManager::Filtering(TableData &filter_table, const RepeatedPtrFiel
 
     for(int r=0; r<filter_table.row_count; r++){
         bool passed = true;
+        int index = 0;
 
-        for(int f=0; f<snippet_.query_info().filtering_size(); f++){
-            if(f%2 == 1){
-                if(snippet_.query_info().filtering(f).operator_() == SnippetRequest_Filter_OperType::SnippetRequest_Filter_OperType_AND){
+        for(const auto& filter : filters){
+            if(index%2 == 1){
+                if(filter.operator_() == SnippetRequest_Filter_OperType::SnippetRequest_Filter_OperType_AND){
                     if(passed == false) break;
                 }else{
-                    KETILOG::ERRORLOG(LOGTAG,"Filtering: " + snippet_.query_info().filtering(f).operator_());
+                    KETILOG::ERRORLOG(LOGTAG,"Filtering: " + filter.operator_());
                 }
             }else{
-                string left_col = snippet_.query_info().filtering(f).lv().value(0);
+                string left_col = filter.lv().value(0);
 
                 switch(filter_table.table_data[left_col].type){
                 case TYPE_STRING:{
                     string lv = trim(filter_table.table_data[left_col].strvec[r]);
-                    string rv = snippet_.query_info().filtering(f).rv().value(0);
-                    passed = compareByOperator(snippet_.query_info().filtering(f).operator_(), lv, rv);
+                    string rv = filter.rv().value(0);
+                    passed = compareByOperator(filter.operator_(), lv, rv);
                     break;
                 }case TYPE_FLOAT:{
                     float lv = filter_table.table_data[left_col].floatvec[r];
-                    float rv = stof(snippet_.query_info().filtering(f).rv().value(0));
-                    cout << lv << " > " << rv << "=" << (lv > rv) << endl;
-                    passed = compareByOperator(snippet_.query_info().filtering(f).operator_(), lv, rv);
+                    float rv = stof(filter.rv().value(0));
+                    passed = compareByOperator(filter.operator_(), lv, rv);
                     break;
                 }case TYPE_INT:{
                     int lv = filter_table.table_data[left_col].intvec[r];
-                    int rv = stoi(snippet_.query_info().filtering(f).rv().value(0));
-                    passed = compareByOperator(snippet_.query_info().filtering(f).operator_(), lv, rv);
+                    int rv = stoi(filter.rv().value(0));
+                    passed = compareByOperator(filter.operator_(), lv, rv);
                     break;
                 }default:
                     KETILOG::ERRORLOG(LOGTAG,"Filtering (d)");
                 }
             }
+            index++;
         }
 
         if(passed){ 
@@ -1074,8 +1080,6 @@ void MergeQueryManager::InnerJoin_hash(){
     while(true){
         right_table_ = BufferManager::GetTableData(snippet_.query_id(),-1,snippet_.query_info().table_name(1), row_index);
         debug_table(2);
-
-        cout << "## " << right_table_.status << endl;
 
         if(row_index == right_table_.row_count && right_table_.status == WorkDone){
             break;
@@ -1892,8 +1896,6 @@ void MergeQueryManager::In(){
         }
         row_index = left_table_.row_count;
 
-
-
         if(row_index == left_table_.row_count && left_table_.status == WorkDone){
             break;
         }
@@ -2072,7 +2074,7 @@ void MergeQueryManager::DependencyExist(){
             first = false;
         }
 
-        for(int r1=0; r1<left_table_.row_count; r1++){
+        for(int r1=row_index; r1<left_table_.row_count; r1++){
             bool passed = false;
             bool exist;
 
@@ -2180,7 +2182,7 @@ void MergeQueryManager::DependencyIn(){
             first = false;
         }
 
-        for(int r1=0; r1<left_table_.row_count; r1++){
+        for(int r1=row_index; r1<left_table_.row_count; r1++){
             T lv;
             lv.type = lv_type;
             if(lv_type == TYPE_STRING){
