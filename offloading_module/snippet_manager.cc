@@ -33,46 +33,63 @@ string SnippetManager::serialize(SnippetRequest snippet, string best_csd_id, vec
 
     rapidjson::Value block_info(rapidjson::kObjectType);
     rapidjson::Value block(rapidjson::kArrayType);
+    rapidjson::Value sst_list(rapidjson::kArrayType);
 
     if (doc.HasMember("sst_info") && doc["sst_info"].IsArray()) {
         rapidjson::Value& sst_info = doc["sst_info"];
 
         for(string target_sst : target_sst_list){
 
-
             for (rapidjson::SizeType i = 0; i < sst_info.Size(); i++) { 
                 std::string sst_name = sst_info[i]["sst_name"].GetString();
 
                 if (sst_name == target_sst) {
+                    
                     rapidjson::Value& csd_array = sst_info[i]["csd"];
 
                     for (rapidjson::SizeType j = 0; j < csd_array.Size(); j++) { 
                         std::string csd_id = csd_array[j]["csd_id"].GetString();
 
                         if (csd_id == best_csd_id) {
-
-                            block_info.AddMember("partition", csd_array[j]["partition"], doc.GetAllocator());
-                        
-                            rapidjson::Value& block_array = csd_array[j]["block"];
-                            for (rapidjson::SizeType k = 0; k < block_array.Size(); k++) { 
-                                rapidjson::Value& block_obj = block_array[k];
-                                if(block_obj["offset"].Size() == 1){
-                                    csd_block_count += block_obj["length"].Size();
-                                }else{
-                                    csd_block_count += 1;
-                                }
-                                block.PushBack(block_obj, doc.GetAllocator());
+                            
+                            if(!block_info.HasMember("partition")){
+                                block_info.AddMember("partition", csd_array[j]["partition"], doc.GetAllocator());
                             }
+
+                            if(csd_array[j]["block"].Size() > 0){
+                                rapidjson::Value& block_array = csd_array[j]["block"];
+                                for (rapidjson::SizeType k = 0; k < block_array.Size(); k++) { 
+                                    rapidjson::Value& block_obj = block_array[k];
+                                    if(block_obj["offset"].Size() == 1){
+                                        csd_block_count += block_obj["length"].Size();
+                                    }else{
+                                        csd_block_count += 1;
+                                    }
+                                    block.PushBack(block_obj, doc.GetAllocator());
+                                }
+                            }else{
+                                rapidjson::Value sst_name_;
+                                sst_name_.SetString(sst_name.c_str(), doc.GetAllocator());
+                                sst_list.PushBack(sst_name_, doc.GetAllocator());
+                            }
+
+                            break;
                         }
                     }
+
+                    break;
                 }
             }
         }
     }
 
-    block_info.AddMember("block", block, doc.GetAllocator());
-    doc.AddMember("block_info",block_info,doc.GetAllocator());
+    if (block.Size() > 0){
+        block_info.AddMember("block", block, doc.GetAllocator());
+    }else{
+        block_info.AddMember("sst_list", sst_list, doc.GetAllocator());
+    }
 
+    doc.AddMember("block_info",block_info,doc.GetAllocator());
     doc.RemoveMember("sst_info");
 
     rapidjson::Value& result_info = doc["result_info"];
