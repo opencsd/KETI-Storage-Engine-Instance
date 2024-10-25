@@ -163,6 +163,7 @@ message SnippetRequest {
     } 
     string sst_name = 1;
     repeated CSD csd = 2;
+    int32 sst_block_count = 3;
   }
   message WalInfo {
     repeated string deleted_key = 1;

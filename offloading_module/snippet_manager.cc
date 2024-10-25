@@ -71,6 +71,7 @@ string SnippetManager::serialize(SnippetRequest snippet, string best_csd_id, vec
                                 rapidjson::Value sst_name_;
                                 sst_name_.SetString(sst_name.c_str(), doc.GetAllocator());
                                 sst_list.PushBack(sst_name_, doc.GetAllocator());
+                                csd_block_count += sst_info[i]["sst_block_count"].GetInt();
                             }
 
                             break;
