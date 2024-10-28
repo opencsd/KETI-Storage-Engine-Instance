@@ -44,7 +44,7 @@ using namespace rapidjson;
 
 using StorageEngineInstance::SnippetRequest;
 
-#define NUM_OF_BLOCKS 15
+#define NUM_OF_BLOCKS 100
 #define BUFF_SIZE (NUM_OF_BLOCKS * 5000)
 #define NCONNECTION 8
 #define ID_INIT_WAIT_MAX_TIME 1000
