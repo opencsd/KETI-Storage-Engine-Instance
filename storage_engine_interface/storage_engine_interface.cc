@@ -85,15 +85,15 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
           ||(snippet_request.type() == StorageEngineInstance::SnippetRequest::INDEX_SCAN) \
           || (snippet_request.type() == StorageEngineInstance::SnippetRequest::INDEX_TABLE_SCAN)){
         KETILOG::DEBUGLOG("Interface","# send snippet to offloading module");
-        OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
+        OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+to_string(SE_OFFLOADING_PORT), grpc::InsecureChannelCredentials()));
         offloadingModule.Scheduling(snippet_request);
       }else{
         KETILOG::DEBUGLOG("Interface","# send snippet to merging module");
-        MergingModuleConnector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_MERGING_NODE_PORT, grpc::InsecureChannelCredentials()));
+        MergingModuleConnector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+to_string(SE_MERGING_PORT), grpc::InsecureChannelCredentials()));
         mergingModule.Aggregation(snippet_request);
       }
     }
-    MergingModuleConnector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_MERGING_NODE_PORT, grpc::InsecureChannelCredentials()));
+    MergingModuleConnector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+to_string(SE_MERGING_PORT), grpc::InsecureChannelCredentials()));
     QueryStringResult result_ = mergingModule.GetQueryResult(snippet_request.query_id(), snippet_request.work_id(), snippet_request.result_info().table_alias());
 
     result->CopyFrom(result_);   
@@ -105,7 +105,7 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
   Status PushCSDMetric(ServerContext *context, const CSDMetricList *request, Response *response) override {
     KETILOG::DEBUGLOG("Interface", "Push CSD Metric");
 
-    OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
+    OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+to_string(SE_OFFLOADING_PORT), grpc::InsecureChannelCredentials()));
     offloadingModule.PushCSDMetric(*request);
 
     return Status::OK;
@@ -116,7 +116,7 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
 
     KETILOG::DEBUGLOG("Interface", "<T> parsing tmax snippet request");
 
-    OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
+    OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+to_string(SE_OFFLOADING_PORT), grpc::InsecureChannelCredentials()));
     offloadingModule.t_send_snippet(*request);
 
     return Status::OK;
@@ -125,7 +125,7 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
   Status keti_get_csd_status(ServerContext *context, const Empty* request, CSDMetricList *response) override {
     KETILOG::DEBUGLOG("Interface", "<T> Tmax DB Server called keti_get_csd_status");
 
-    OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+(string)SE_OFFLOADING_NODE_PORT, grpc::InsecureChannelCredentials()));
+    OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+to_string(SE_OFFLOADING_PORT), grpc::InsecureChannelCredentials()));
     offloadingModule.t_get_csd_status();
 
     return Status::OK;
@@ -178,7 +178,7 @@ int main(int argc, char** argv) {
 
   httplib::Server server;
   server.Get("/log-level", KETILOG::HandleSetLogLevel);
-  server.listen("0.0.0.0", 40206);
+  server.listen("0.0.0.0", 40205);
   
   grpc_thread.join();
 

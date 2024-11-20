@@ -397,8 +397,7 @@ void Scheduler::t_offloading_snippet(TmaxRequest request, string csd_id){
     struct sockaddr_in serv_addr;
     memset(&serv_addr, 0, sizeof(serv_addr));
 
-    std::string port_str = std::to_string(CSD_IDENTIFIER_PORT1);
-    std::istringstream port_(port_str);
+    std::istringstream port_(CSD_IDENTIFIER_PORT);
     std::uint16_t port{};
     port_ >> port;
 

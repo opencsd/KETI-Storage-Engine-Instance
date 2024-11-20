@@ -112,7 +112,7 @@ class MergingModuleServiceImpl final : public MergingModule::Service {
 };
 
 void RunGRPCServer() {
-  std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_MERGING_PORT));
+  std::string server_address((std::string)LOCALHOST+":"+to_string(SE_MERGING_PORT));
   MergingModuleServiceImpl service;
 
   ServerBuilder builder;
