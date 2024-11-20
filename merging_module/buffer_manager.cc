@@ -374,6 +374,9 @@ void BufferManager::mergeResult(int qid, int wid){
             string msg = "# merging data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} done";
             KETILOG::INFOLOG(LOGTAG,msg);
 
+            // string message = ">Save Result in Buffer ID:" + to_string(qid) + "-" + to_string(wid) + " Complete (lines:" + to_string(workBuffer->row_count) + ")";
+            // logToFile(message);
+
             workBuffer->status = WorkDone;
             workBuffer->work_done_condition.notify_all();
 

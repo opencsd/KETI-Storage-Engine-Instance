@@ -38,6 +38,7 @@
 #include "keti_log.h"
 #include "internal_queue.h"
 #include "tb_block.h"
+#include "log_to_file.h"
 
 using namespace std;
 using namespace rapidjson;

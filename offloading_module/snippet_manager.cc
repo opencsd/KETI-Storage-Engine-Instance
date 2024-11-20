@@ -12,6 +12,9 @@ void SnippetManager::setupSnippet(SnippetRequest snippet, map<string,string> bes
         string json_str = serialize(snippet, it.first, it.second);
         sendSnippetToCSD(json_str);
     }
+
+    // string message = ">Scheduling and Send Snippet ID:" + to_string(snippet.query_id()) + "-" + to_string(snippet.work_id()) + " Complete";
+    // logToFile(message);
 }
 
 string SnippetManager::serialize(SnippetRequest snippet, string best_csd_id, vector<string> target_sst_list) {
@@ -155,6 +158,7 @@ void SnippetManager::sendSnippetToCSD(string snippet_json){
     close(sock);
 }
 
+
 void SnippetManager::calcul_return_column_type(SnippetRequest& snippet, vector<int>& return_column_length, vector<int>& return_column_type){// *임시tpc-h 쿼리 동작만 수행하도록 작성 => 수정필요
     unordered_map<string, int> column_type, column_length;
     for (int i = 0; i < snippet.schema_info().column_list_size(); i++){
@@ -163,44 +167,181 @@ void SnippetManager::calcul_return_column_type(SnippetRequest& snippet, vector<i
     }
     
     for (int i = 0; i < snippet.query_info().projection_size(); i++){
-        if(snippet.query_info().projection(i).value(0) == "CASE"){
-            return_column_type.push_back(2);
+        // THEN 다음에 있는 결과값의 type과 length로 결정 
+        if(snippet.query_info().projection(i).value(0) == "CASE"){  // OK
+            for(int j=0;j < snippet.query_info().projection(i).value_size();j++){
+                if(snippet.query_info().projection(i).value(j) == "THEN"){
+                    
+                    int tempReturnType = snippet.query_info().projection(i).value_type(j+1);
+                    int tempReturnLength = getLengthByType(tempReturnType); //그냥 숫자 인경우 length 계산
+                    if(tempReturnLength == 0){ // string이나 varchar인 경우 그냥 그거 길이 만큼
+                        tempReturnLength = snippet.query_info().projection(i).value(j+1).length();
+                    }
+                    
+                    return_column_type.push_back(getValueTypeToMysqlType(tempReturnType));
+                    return_column_length.push_back(tempReturnLength);
+                    break;
+                }
+            }
+
+        // EXTRACT의 경우 연월일시간을 추출할때 사용하므로 value와 length 변경할 필요 음슴
+        }else if(snippet.query_info().projection(i).value(0) == "EXTRACT"){ // 보니까 연,월,일을 뽑아서 INT16 length 2 
+            return_column_type.push_back(3); // INT32
             return_column_length.push_back(4);
-        }else if(snippet.query_info().projection(i).value(0) == "EXTRACT"){
-            return_column_type.push_back(2);
-            return_column_length.push_back(4);
-        }else if(snippet.query_info().projection(i).value(0) == "SUBSTRING"){
-            return_column_type.push_back(254);
-            return_column_length.push_back(2);
+
+        }else if(snippet.query_info().projection(i).value(0) == "SUBSTRING"){ // 뒤에 나오는 int의 a, b b-a+1로 length 설정
+            int substringLength = stoi(snippet.query_info().projection(i).value(3)) - stoi(snippet.query_info().projection(i).value(2)) + 1;
+            int substringType = column_type.find(snippet.query_info().projection(i).value(1)) -> second; // type은 타겟이 되는 컬럼 그대로
+            return_column_type.push_back(substringType);
+            return_column_length.push_back(substringLength);
+
         }else{
-            if(snippet.query_info().projection(i).value_size() == 1){
+            if(snippet.query_info().projection(i).value_size() == 1){ // 그냥 하나인 경우 그대로 간다
                 return_column_type.push_back(column_type[snippet.query_info().projection(i).value(0)]);
                 return_column_length.push_back(column_length[snippet.query_info().projection(i).value(0)]);
             }else{
+                int resultType = 0;
+                int resultLength = 0;
                 int multiple_count = 0;
+                std::stack<int> postfixStack; // 곱하기는 int 80, 더하기는 int 120 빼기는 int 110 나누기는 int 50 아니다 필요없네
+                int decimalCount = 0, intCount = 0;
                 for (int j = 0; j < snippet.query_info().projection(i).value_size(); j++){
-                    if(snippet.query_info().projection(i).value(j) == "*"){
-                      if(snippet.query_info().projection(i).value(j-1) == "ps_availqty"){//임시로 작성!!!!
-                        multiple_count--;
-                      }else{
-                        multiple_count++;
-                      }
+                    string token = snippet.query_info().projection(i).value(j);
+                    int tokenType = 0;
+                    if (token == "+" || token == "-" || token == "*" || token == "/"){
+                        int op2 = postfixStack.top(); postfixStack.pop();
+                        int op1 = postfixStack.top(); postfixStack.pop();
+                        if(op1 == 246 || op2 == 246){
+                            tokenType = 246;
+                        }
+                        else{
+                            tokenType = 3;
+                        }
+                        if(token == "*" || token == "/"){
+                            if(decimalCount == 0){
+                                if(op1 == 246) decimalCount++;
+                                if(op2 == 246) decimalCount++;
+                            }
+                            else{
+                                if(op1 == 246) decimalCount++;
+                            }
+                        }
+                        postfixStack.push(tokenType);
+                    }
+                    else{
+                        if(snippet.query_info().projection(i).value_type(j) == 10){
+                            tokenType = column_type.find(snippet.query_info().projection(i).value(j)) -> second;
+                        }
+                        else{
+                            tokenType = snippet.query_info().projection(i).value_type(j);
+                        }
+                        postfixStack.push(tokenType);
                     }
                 }
-                if(multiple_count == 1){
+                if(decimalCount == 0){ // 오직 int 연산인 경우 
+                    return_column_type.push_back(3);
+                    return_column_length.push_back(4);
+                }
+                else{
                     return_column_type.push_back(246);
-                    return_column_length.push_back(8);
-                }else if(multiple_count == 2){
-                    return_column_type.push_back(246);
-                    return_column_length.push_back(9);
-                }else{
-                    return_column_type.push_back(column_type[snippet.query_info().projection(i).value(0)]);
-                    return_column_length.push_back(column_length[snippet.query_info().projection(i).value(0)]);
+                    return_column_length.push_back(6+decimalCount);
                 }
             }
         }
     }
+
+    // cout << " ---- " << endl;
+    // cout << " return_column_length ";
+    // for(int i=0; i<return_column_length.size(); i++){
+    //     cout << return_column_length[i] << " " ;
+    // }
+    // cout<<endl;
+    // cout << " return_column_type ";
+    // for(int i=0; i<return_column_type.size(); i++){
+    //     cout << return_column_type[i] << " " ;
+    // }
+    // cout<<endl;
+    // cout << " ---- " << endl;
 }
 
 
+int SnippetManager::getLengthByType(int valueType){
+    int returnVal = 0;
+    switch (valueType){
+        case 0:
+            returnVal = 1;
+            break;
+        case 1:
+            returnVal = 2;
+            break;
+        case 2:
+            returnVal = 4;
+            break;
+        case 3:
+            returnVal = 8;
+            break;
+        case 4:
+            returnVal = 4;
+            break;
+        case 5:
+            returnVal = 8;
+            break;
+        case 7:
+            returnVal = 4;
+            break;
+        case 8:
+            returnVal = 8;
+            break;
+        case 14:
+            returnVal = 3;
+            break;
+        case 246:
+            returnVal = 7;
+            break;
+        default:
+            returnVal = 0;
+            break;
+    }
+    return returnVal;
+}
 
+int SnippetManager::getValueTypeToMysqlType(int valueType){
+    int returnVal = 0;
+    switch (valueType){
+        case 0:
+            returnVal = 2;
+            break;
+        case 1:
+            returnVal = 2;
+            break;
+        case 2:
+            returnVal = 3;
+            break;
+        case 3:
+            returnVal = 8;
+            break;
+        case 4:
+            returnVal = 4;
+            break;
+        case 5:
+            returnVal = 5;
+            break;
+        case 6:
+            returnVal = 246;
+            break;
+        case 7:
+            returnVal = 14;
+            break;
+        case 8:
+            returnVal = 7;
+            break;
+        case 9:
+            returnVal = 254;
+            break;
+
+        default:
+            returnVal = 0;
+            break;
+    }
+    return returnVal;
+}

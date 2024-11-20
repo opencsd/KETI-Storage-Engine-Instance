@@ -85,6 +85,7 @@ class MergingModuleConnector {
 							result_string << setw(length) << left << to_string(entry.second.int_col(i)) << "|";
 							break;
 						case QueryResult_Column::TYPE_FLOAT:
+							// result_string <<  std::fixed << std::setprecision(2) << setw(length) << left << entry.second.double_col(i) << "|";
 							result_string << setw(length) << left << to_string(entry.second.double_col(i)) << "|";
 							break;
 						case QueryResult_Column::TYPE_EMPTY:

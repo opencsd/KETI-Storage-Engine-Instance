@@ -110,6 +110,8 @@ void MergeQueryManager::RunSnippetWork(){
             }else{
                 BufferManager::SaveTableData(snippet_,order_by_table_,0,order_by_table_.row_count);
             }
+            // string message = ">Merge Snippet ID:" + to_string(snippet_.query_id()) + "-" + to_string(snippet_.work_id()) + " Complete (line:" + to_string(order_by_table_.row_count) + ")";
+            // logToFile(message);
         }else{
             //Save "result_table"
             if(is_limit_){
@@ -117,6 +119,8 @@ void MergeQueryManager::RunSnippetWork(){
             }else{
                 BufferManager::SaveTableData(snippet_,result_table_,0,result_table_.row_count);
             } 
+            // string message = ">Merge Snippet ID:" + to_string(snippet_.query_id()) + "-" + to_string(snippet_.work_id()) + " Complete (line:" + to_string(result_table_.row_count) + ")";
+            // logToFile(message);
         }
     }
 

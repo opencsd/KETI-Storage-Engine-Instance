@@ -25,6 +25,7 @@
 #include "keti_log.h"
 #include "keti_type.h"
 #include "ip_config.h"
+#include "log_to_file.h"
 
 #define BUFF_SIZE 4096
 
@@ -56,6 +57,10 @@ class SnippetManager{
     string serialize(SnippetRequest snippet, string csd, vector<string> target_sst_list);
     void sendSnippetToCSD(string snippet_json);
     void calcul_return_column_type(SnippetRequest& snippet, vector<int>& return_column_length, vector<int>& return_column_type);
+
+    int getLengthByType(int valueType);
+    
+    int getValueTypeToMysqlType(int valueType);
   
   public:
     inline const static std::string LOGTAG = "Offloading::Snippet Scheduler";

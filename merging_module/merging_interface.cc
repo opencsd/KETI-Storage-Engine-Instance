@@ -87,6 +87,8 @@ class MergingModuleServiceImpl final : public MergingModule::Service {
         }case TYPE_FLOAT:{
           col.set_col_type(QueryResult_Column_ColType::QueryResult_Column_ColType_TYPE_FLOAT);  
           for(size_t i=0; i<td.second.floatvec.size(); i++){
+            // double value = std::round(td.second.floatvec[i] * 100) / 100;
+            // col.add_double_col(value);
             col.add_double_col(td.second.floatvec[i]);
           }
           break;
