@@ -18,6 +18,8 @@ using StorageEngineInstance::QueryStringResult;
 using StorageEngineInstance::Response;
 using StorageEngineInstance::QueryResult;
 using StorageEngineInstance::QueryResult_Column;
+using StorageEngineInstance::TmaxRequest;
+using StorageEngineInstance::TmaxResponse;
 
 using namespace std;
 
@@ -42,6 +44,8 @@ class MergingModuleConnector {
 		}
 
 		QueryStringResult GetQueryResult(int qid, int wid, string tname) {
+			cout << "check@@ " << endl;
+
 			KETILOG::DEBUGLOG(LOGTAG, "# get query result");
 
 			Request request;
@@ -104,6 +108,22 @@ class MergingModuleConnector {
 			result.set_filtered_row_count(query_result.filtered_row_count());
 
 			return result;
+		}
+
+		TmaxResponse GetTmaxQueryResult(TmaxRequest tRequest) {
+			KETILOG::DEBUGLOG("Interface::Merging Connector", "<T> GetTmaxQueryResult");
+
+			ClientContext context;
+			TmaxResponse tResponse;
+			
+			Status status = stub_->GetTmaxQueryResult(&context, tRequest, &tResponse);
+
+			if (!status.ok()) {
+				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
+				KETILOG::FATALLOG(LOGTAG,"RPC failed");
+			}
+
+			return tResponse;
 		}
 
 		string EndQuery(int qid) {

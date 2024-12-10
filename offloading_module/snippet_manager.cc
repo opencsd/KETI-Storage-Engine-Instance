@@ -250,18 +250,18 @@ void SnippetManager::calcul_return_column_type(SnippetRequest& snippet, vector<i
         }
     }
 
-    // cout << " ---- " << endl;
-    // cout << " return_column_length ";
-    // for(int i=0; i<return_column_length.size(); i++){
-    //     cout << return_column_length[i] << " " ;
-    // }
-    // cout<<endl;
-    // cout << " return_column_type ";
-    // for(int i=0; i<return_column_type.size(); i++){
-    //     cout << return_column_type[i] << " " ;
-    // }
-    // cout<<endl;
-    // cout << " ---- " << endl;
+    cout << " ---- " << endl;
+    cout << " return_column_length ";
+    for(int i=0; i<return_column_length.size(); i++){
+        cout << return_column_length[i] << " " ;
+    }
+    cout<<endl;
+    cout << " return_column_type ";
+    for(int i=0; i<return_column_type.size(); i++){
+        cout << return_column_type[i] << " " ;
+    }
+    cout<<endl;
+    cout << " ---- " << endl;
 }
 
 

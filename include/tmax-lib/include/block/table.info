@@ -1,0 +1,12 @@
+SQL> desc test;
+
+COLUMN_NAME                              TYPE               CONSTRAINT          
+---------------------------------------- ------------------ --------------------
+C0                                       NUMBER(20)                             
+C1                                       CHAR(20)                               
+C2                                       CHAR(20)                               
+C3                                       CHAR(20)                               
+C4                                       CHAR(20)                               
+C5                                       CHAR(20)                               
+
+SQL> spool off

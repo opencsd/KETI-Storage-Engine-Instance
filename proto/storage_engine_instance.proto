@@ -18,6 +18,8 @@ service MergingModule {
   rpc Aggregation (SnippetRequest) returns (Response) {}
   rpc EndQuery (Request) returns (Response) {}
   rpc GetQueryResult (Request) returns (QueryResult) {}
+  rpc GetTmaxQueryResult (TmaxRequest) returns (TmaxResponse) {}
+
 }
 
 service MonitoringModule {
@@ -27,7 +29,7 @@ service MonitoringModule {
 service OffloadingModule {
   rpc Scheduling (SnippetRequest) returns (Response) {}
   rpc PushCSDMetric (CSDMetricList) returns (Response) {}
-  rpc t_snippet_scheduling (TmaxRequest) returns (Response) {}
+  rpc t_snippet_scheduling (TmaxRequest) returns (TmaxResponse) {}
   rpc t_get_csd_status(Empty) returns (CSDMetricList) {}
 }
 
@@ -252,42 +254,40 @@ message CSDMetricList {
   repeated CSDMetric csd_metric_list = 1;
 }
 
-message TmaxRequest {
-  enum SnippetType {
-    FULL_SCAN = 0;
-    INDEX_SCAN = 1;
-    INDEX_TABLE_SCAN = 2;
-    AGGREGATION = 3;
-    FILTER = 4;
-    INNER_JOIN = 5;
-    LEFT_OUTER_JOIN = 6;
-    RIGHT_OUTER_JOIN = 7;
-    CROSS_JOIN = 8;
-    UNION = 9;
-    IN = 10;
-    EXIST = 11;
-    DEPENDENCY_INNER_JOIN = 12;
-    DEPENDENCY_EXIST = 13;
-    DEPENDENCY_IN = 14;
-    TMAX_SNIPPET = 15;
-  }  
-  message Chunk {
-    int32 block_dba = 1;
-    int32 block_size = 2;
-  }
-  message TableFilter {
-    string filter = 1;
-  }
-  SnippetType type = 1;
-  int32 id = 2;
-  repeated Chunk chunks = 3;
-  bytes block_dir = 4;
-  repeated string csd_list = 5;
-  TableFilter table_filter = 6;
-}
 
+message TmaxRequest { 
+  enum RequestType { 
+    FO_REQUEST = 0; 
+    FETCH_REQUEST = 1; 
+  } 
+  message File {
+    message Chunk { 
+      int64 offset = 1; 
+      int32 length = 2; 
+    }
+    string filename = 1; 
+    repeated Chunk chunk_list = 2; 
+  }
+  RequestType type = 1; 
+  int32 id = 2; 
+  int32 block_size = 3;
+  int32 buffer_size = 4; 
+  bytes filter = 5; 
+  repeated File file_list = 6;
+}
 message TmaxResponse {
-  string result = 1;
+  enum ResponseType {  
+    FO_RESPONSE = 0;  
+    FETCH_RESPONSE = 1;  
+  }
+  enum TmaxErrorCode { 
+    TMAX_ERROR_NONE = 0; 
+    TMAX_ERROR_INVALID_REQTYPE=1; 
+  }  
+  ResponseType type = 1;  
+  bytes result = 2; 
+  int32 chunk_count = 3; 
+  TmaxErrorCode  errorcode = 4; 
 }
 
 message Empty {}

@@ -8,6 +8,10 @@
 #include "offloading_module_connector.h"
 #include "ip_config.h"
 
+//Tmax Lib
+#include "tb_block.h"
+#include "ex.h"
+
 #include <grpcpp/grpcpp.h>
 
 using grpc::Server;
@@ -73,14 +77,14 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
     }
 
     while (stream->Read(&snippet_request)) {      
-      // {
-      //   std::string test_json;
-      //   google::protobuf::util::JsonPrintOptions options;
-      //   options.always_print_primitive_fields = true;
-      //   options.always_print_enums_as_ints = true;
-      //   google::protobuf::util::MessageToJsonString(snippet_request,&test_json,options);
-      //   std::cout << endl << test_json << std::endl << std::endl; 
-      // }
+      {
+        std::string test_json;
+        google::protobuf::util::JsonPrintOptions options;
+        options.always_print_primitive_fields = true;
+        options.always_print_enums_as_ints = true;
+        google::protobuf::util::MessageToJsonString(snippet_request,&test_json,options);
+        std::cout << endl << test_json << std::endl << std::endl; 
+      }
       if((snippet_request.type() == StorageEngineInstance::SnippetRequest::FULL_SCAN) \
           ||(snippet_request.type() == StorageEngineInstance::SnippetRequest::INDEX_SCAN) \
           || (snippet_request.type() == StorageEngineInstance::SnippetRequest::INDEX_TABLE_SCAN)){
@@ -113,11 +117,19 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
 
   Status keti_send_snippet(ServerContext *context, const TmaxRequest *request, TmaxResponse *response) override {
     KETILOG::DEBUGLOG("Interface", "<T> Tmax DB Server called keti_send_snipet");
-
     KETILOG::DEBUGLOG("Interface", "<T> parsing tmax snippet request");
 
-    OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+to_string(SE_OFFLOADING_PORT), grpc::InsecureChannelCredentials()));
-    offloadingModule.t_send_snippet(*request);
+    TmaxResponse tResponse;
+    
+    if(request->type()==TmaxRequest::FO_REQUEST){
+      OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+to_string(SE_OFFLOADING_PORT), grpc::InsecureChannelCredentials()));
+      tResponse = offloadingModule.t_send_snippet(*request);
+    }else if(request->type()==TmaxRequest::FETCH_REQUEST){
+      MergingModuleConnector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+to_string(SE_MERGING_PORT), grpc::InsecureChannelCredentials()));
+      tResponse = mergingModule.GetTmaxQueryResult(*request);
+    }
+
+    response->CopyFrom(tResponse);  
 
     return Status::OK;
   }
@@ -133,7 +145,7 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
 };
 
 void RunGRPCServer() {
-  std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_INTERFACE_PORT));
+  std::string server_address("0.0.0.0:"+std::to_string(SE_INTERFACE_PORT));
   StorageEngineInterfaceServiceImpl service;
 
   ServerBuilder builder;
@@ -175,7 +187,6 @@ int main(int argc, char** argv) {
   }
 
   std::thread grpc_thread(RunGRPCServer);
-
   httplib::Server server;
   server.Get("/log-level", KETILOG::HandleSetLogLevel);
   server.listen("0.0.0.0", 40205);

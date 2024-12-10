@@ -49,6 +49,12 @@ include_directories("${CMAKE_CURRENT_BINARY_DIR}")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../include")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../include/tmax-lib/include")
 
+set(TMAX_LIB_SOURCES
+  "${CMAKE_CURRENT_SOURCE_DIR}/../include/tmax-lib/data_blk.cc"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../include/tmax-lib/ex.cc"
+)
+add_library(tmax_lib STATIC ${TMAX_LIB_SOURCES})
+
 # kvs_grpc_proto
 add_library(ss_grpc_proto
   ${ss_grpc_srcs}
@@ -69,6 +75,7 @@ endif (UNIX)
 # offloading module
 add_executable(offloading-module "offloading_interface.cc" "snippet_scheduler.cc" "snippet_manager.cc")
 target_link_libraries(offloading-module
+  tmax_lib
   ss_grpc_proto
   ${LINKING_LIBRARIES}
   ${_REFLECTION}

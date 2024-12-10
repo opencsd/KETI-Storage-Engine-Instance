@@ -16,7 +16,8 @@ using StorageEngineInstance::Response;
 using StorageEngineInstance::QueryResult;
 using StorageEngineInstance::QueryResult_Column;
 using StorageEngineInstance::QueryResult_Column_ColType;
-
+using StorageEngineInstance::TmaxRequest;
+using StorageEngineInstance::TmaxResponse;
 class MergingModuleServiceImpl final : public MergingModule::Service {
   Status Aggregation(ServerContext* context, const SnippetRequest* request, Response* response) override {  
     // // Check Recv Snippet
@@ -109,10 +110,31 @@ class MergingModuleServiceImpl final : public MergingModule::Service {
 
     return Status::OK;
   }
+
+Status GetTmaxQueryResult(ServerContext* context, const TmaxRequest* tRequest, TmaxResponse* tResponse) override {
+    KETILOG::DEBUGLOG("Merging", "<T> GetTmaxQueryResult");
+
+    tResponse->set_type(StorageEngineInstance::TmaxResponse::FETCH_RESPONSE);
+    int id = tRequest->id();
+    ChunkBuffer chunk_buffer = BufferManager::GetTmaxQueryResult(id);
+  
+    if (tRequest->type() == StorageEngineInstance::TmaxRequest::FETCH_REQUEST) {
+        tResponse->set_chunk_count(chunk_buffer.chunk_count);
+        tResponse->set_result(chunk_buffer.result);  // 문자열 처리 필요 시 추가 변환
+        tResponse->set_errorcode(StorageEngineInstance::TmaxResponse::TMAX_ERROR_NONE);
+    } else {
+        tResponse->set_errorcode(StorageEngineInstance::TmaxResponse::TMAX_ERROR_INVALID_REQTYPE);
+        return grpc::Status(grpc::StatusCode::INVALID_ARGUMENT, "Invalid request type");
+    }
+
+    return Status::OK;
+}
+
 };
 
 void RunGRPCServer() {
-  std::string server_address((std::string)LOCALHOST+":"+to_string(SE_MERGING_PORT));
+  std::string server_address("0.0.0.0:"+to_string(SE_MERGING_PORT));
+
   MergingModuleServiceImpl service;
 
   ServerBuilder builder;

@@ -79,7 +79,6 @@ void BufferManager::bufferManagerInterface(){
         int ndata = 0;
         size_t ldata = 0;
         recv(client_fd , &ldata, sizeof(ldata),0);
-
 		while(1) {
 			if ((ndata = recv( client_fd , dataiter, ldata,0)) == -1) {
 				perror("read");
@@ -93,7 +92,7 @@ void BufferManager::bufferManagerInterface(){
 		}
 
         send(client_fd, cMsg, strlen(cMsg), 0);
-
+        
         pushResult(BlockResult(json.c_str(), data));
         
         close(client_fd);		
@@ -142,19 +141,55 @@ void BufferManager::t_buffer_manager_interface(){
 		}
 
         KETILOG::DEBUGLOG(LOGTAG, "<T> received csd result");
+        std::string json = "";
+        int njson; //처리결과 상태 저장
+		size_t ljson; //문자열 길이 저장
 
-        res_chunk_t *res_chunk_t_ = (res_chunk_t*)malloc(sizeof(res_chunk_t));
+        recv(client_fd , &ljson, sizeof(ljson), 0);
 
-        recv(client_fd , &res_chunk_t_->res_len, sizeof(int),0);
+        char buffer[ljson];
+        memset(buffer, 0, ljson);
 
-        res_chunk_t_->res_buf = (uchar*)malloc(res_chunk_t_->res_len);
-        if (!res_chunk_t_->res_buf) {
-            perror("malloc");
-            exit(EXIT_FAILURE);
-        }
-        recv(client_fd, res_chunk_t_->res_buf, res_chunk_t_->res_len, 0);
+        while(1) {
+			if ((njson = recv(client_fd, buffer, BUFF_SIZE-1, 0)) == -1) {
+				perror("read");
+				exit(1);
+			}
+			ljson -= njson;
+		    buffer[njson] = '\0';
+			json += buffer;
 
-        t_result_merging(res_chunk_t_);
+		    if (ljson == 0)
+				break;
+		}
+
+		KETILOG::DEBUGLOG(LOGTAG, json);
+        send(client_fd, cMsg, strlen(cMsg), 0);
+
+        u_char data[BUFF_SIZE];
+        u_char* dataiter = data;
+		memset(data, 0, BUFF_SIZE);
+        int ndata = 0;
+        size_t ldata = 0;
+        recv(client_fd , &ldata, sizeof(ldata),0);
+        size_t data_size = ldata;
+
+		while(1) {
+			if ((ndata = recv( client_fd , dataiter, ldata,0)) == -1) {
+				perror("read");
+				exit(1);
+			}
+            dataiter += ndata;
+			ldata -= ndata;
+            
+
+		    if (ldata == 0)
+				break;
+		}
+        
+        send(client_fd, cMsg, strlen(cMsg), 0);
+        
+        t_result_merging(json, data, data_size);
         
         close(client_fd);		
 	}   
@@ -165,7 +200,7 @@ void BufferManager::pushResult(BlockResult blockResult){
     int qid = blockResult.query_id;
     int wid = blockResult.work_id;
     string table_name = blockResult.table_alias;
-
+    
     initializeBuffer(qid, wid, table_name);
 
     WorkBuffer* workBuffer = DataBuffer_[qid]->work_buffer_list[wid];
@@ -559,23 +594,57 @@ int BufferManager::saveTableData(SnippetRequest snippet, TableData &table_data_,
     return 1;
 }
 
-void BufferManager::t_result_merging(res_chunk_t *res_chunk_t_){
-    KETILOG::DEBUGLOG(LOGTAG, "<T> called t_result_merging");
+void BufferManager::t_initialize_buffer(int id){
+    unique_lock<mutex> lock(t_buffer_mutex_);
 
-    std::cout << "res_len: " << res_chunk_t_->res_len << std::endl;
-    std::cout << "res_buf: ";
-    for (int i = 0; i < res_chunk_t_->res_len; ++i) {
-        printf("%02X ",(u_char)res_chunk_t_->res_buf[i]);
+    if(TmaxDataBuffer_.find(id) == TmaxDataBuffer_.end()){
+        TmaxQueryBuffer tmax_query_buffer;
+        TmaxDataBuffer_[id];
     }
-    std::cout << std::endl;
-
-    KETILOG::DEBUGLOG(LOGTAG, "<T> csd result parsing...");
-
-    t_result_sending();
 }
 
-void BufferManager::t_result_sending(){
-    KETILOG::DEBUGLOG(LOGTAG, "<T> called t_result_sending");
+void BufferManager::t_result_merging(std::string json, u_char* data, size_t data_size) {
+    KETILOG::DEBUGLOG(LOGTAG, "<T> called t_result_merging, data_size : " + to_string(data_size));
+    KETILOG::DEBUGLOG(LOGTAG, "json: " + json);
+
+    int id, chunk_count;
+    t_initialize_buffer(id);
+
+    rapidjson::Document document;
+    if (document.Parse(json.c_str()).HasParseError()) {
+        KETILOG::ERRORLOG(LOGTAG, "Error: Failed to parse JSON.");
+        return;
+    }
+
+    id = document["id"].GetInt();
+    chunk_count = document["chunk_count"].GetInt();
+
+    unique_lock<mutex> lock(TmaxDataBuffer_[id].mu);
+
+    ChunkBuffer chunk_buffer;
+    chunk_buffer.chunk_count = chunk_count;
+    std::string data_str(reinterpret_cast<char*>(data), data_size);
+    chunk_buffer.result = data_str;
+
+    TmaxDataBuffer_[id].chunk_buffer.push_back(chunk_buffer);
+    TmaxDataBuffer_[id].available.notify_all();
+}
+
+ChunkBuffer BufferManager::t_get_result(int id){
+    KETILOG::DEBUGLOG(LOGTAG, "<T> called t_get_result");
+
+    t_initialize_buffer(id);
+
+    unique_lock<mutex> lock(TmaxDataBuffer_[id].mu);
+
+    if(TmaxDataBuffer_[id].chunk_buffer.size() == 0){
+        TmaxDataBuffer_[id].available.wait(lock);
+    }
+
+    ChunkBuffer last_chunk = TmaxDataBuffer_[id].chunk_buffer.back();
+    TmaxDataBuffer_[id].chunk_buffer.pop_back();
+    
+    return last_chunk;
 }
 
 void getColOffset(const char* row_data, int* col_offset_list, vector<int> return_datatype, vector<int> table_offlen){

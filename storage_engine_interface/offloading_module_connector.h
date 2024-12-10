@@ -53,20 +53,20 @@ class OffloadingModuleConnector {
 			return;
 		}
 
-		void t_send_snippet(TmaxRequest tRequest){
-			Response response;
+		TmaxResponse t_send_snippet(TmaxRequest tRequest){
+			TmaxResponse tResponse;
     		ClientContext context;
 
 			KETILOG::DEBUGLOG(LOGTAG, "<T> send parsed snippet to scheduling");
 			
-			Status status = stub_->t_snippet_scheduling(&context, tRequest, &response);
+			Status status = stub_->t_snippet_scheduling(&context, tRequest, &tResponse);
 
 	  		if (!status.ok()) {
 				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
 				KETILOG::FATALLOG(LOGTAG,"RPC failed");
 			}
 
-			return;
+			return tResponse;
 		}
 
 		CSDMetricList t_get_csd_status(){

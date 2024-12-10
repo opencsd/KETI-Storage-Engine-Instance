@@ -342,14 +342,47 @@ void Scheduler::Auto_Selection(const StorageEngineInstance::SnippetRequest_SstIn
 }
 //map sst가 key, 선정 csd가 value
 
-void Scheduler::t_snippet_scheduling(TmaxRequest request){
+void Scheduler::t_snippet_scheduling(TmaxRequest request, TmaxResponse tResponse){
     KETILOG::DEBUGLOG("Offloading", "<T> scheduling tmax snippet...");
 
-    t_offloading_snippet(request, "1");
+    map<string, vector<string>> file_csd_map; //key - file name, value - csd id
+    file_csd_map["block.dump"] = {"1"}; //하드코딩 해결 필요
+    file_csd_map["block1.dump"] = {"1"};
+    file_csd_map["block2.dump"] = {"2"};
+    file_csd_map["block3.dump"] = {"3"};
+    file_csd_map["block4.dump"] = {"4"};
+    file_csd_map["block5.dump"] = {"5"};
+    file_csd_map["block6.dump"] = {"6"};
+    file_csd_map["block7.dump"] = {"7"};
+    file_csd_map["block8.dump"] = {"8"};
+
+    string target_csd_id;
+   
+    for (const auto& file : request.file_list()) {
+        string file_name = file.filename(); 
+        if(file_csd_map.find(file_name) != file_csd_map.end()){
+            if(file_csd_map[file_name].size() == 1){
+                string target_csd_id = file_csd_map[file_name].at(0);
+                t_offloading_snippet(request, tResponse,target_csd_id, file_name);
+            }else{//스케줄링 필요
+                string target_csd_id = file_csd_map[file_name].at(0);
+                t_offloading_snippet(request, tResponse, target_csd_id, file_name);
+            }
+        }else{
+            tResponse.set_type(TmaxResponse::FO_RESPONSE);
+            tResponse.set_errorcode(TmaxResponse::TMAX_ERROR_INVALID_REQTYPE);
+            KETILOG::DEBUGLOG("Offloading", "<T> File does not exist");
+            return;
+        }
+    }
+    
+    tResponse.set_type(TmaxResponse::FO_RESPONSE);
+    tResponse.set_errorcode(TmaxResponse::TMAX_ERROR_NONE);
+        
     return;
 }
 
-void Scheduler::t_offloading_snippet(TmaxRequest request, string csd_id){
+void Scheduler::t_offloading_snippet(TmaxRequest request, TmaxResponse tResponse, string csd_id, string file_name) {
     KETILOG::DEBUGLOG("Offloading", "<T> called t_offloading_snippet");
     KETILOG::DEBUGLOG("Offloading", "<T> parsing tmax snippet...");
 
@@ -357,43 +390,53 @@ void Scheduler::t_offloading_snippet(TmaxRequest request, string csd_id){
     Writer<StringBuffer> writer(snippetbuf);
 
     writer.StartObject();
+
     writer.Key("type");
-    writer.Int(request.type());
-    
-    writer.Key("csdIP");
-    string csdIP = "10.1."+csd_id+".2";
+    writer.Int(StorageEngineInstance::SnippetRequest::TMAX_SNIPPET);
+
+    writer.Key("csd_ip");
+    string csdIP = "10.1." + csd_id + ".2";
     writer.String(csdIP.c_str());
 
     writer.Key("id");
     writer.Int(request.id());
 
-    writer.Key("block_dir");
-    writer.String(request.block_dir().c_str());
+    writer.Key("block_size");
+    writer.Int(request.block_size());
 
-    writer.Key("table_filter");
-    writer.String("");
+    writer.Key("buffer_size");
+    writer.Int(request.buffer_size());
 
-    writer.Key("chunks");
+    std::string base64_encoded = Base64Encode(request.filter());
+    writer.Key("filter_info");
+    writer.String(base64_encoded.c_str());
+
+    writer.Key("file_name");
+    writer.String(file_name.c_str());
+
+    writer.Key("chunk_list");
     writer.StartArray();
-    for (int i = 0; i < request.chunks_size(); i++){
-        writer.StartObject();
-        writer.Key("block_dba");
-        writer.Int(request.chunks(i).block_dba());
-        writer.Key("block_size");
-        writer.Int(request.chunks(i).block_size());
-        writer.EndObject();
+    for (int i = 0; i < request.file_list_size(); i++) {
+        if (file_name == request.file_list(i).filename()) {
+            for (int j = 0; j < request.file_list(i).chunk_list_size(); j++) {
+                writer.StartObject();
+                writer.Key("offset");
+                writer.Int64(request.file_list(i).chunk_list(j).offset());
+                writer.Key("length");
+                writer.Int64(request.file_list(i).chunk_list(j).length());
+                writer.EndObject();
+            }
+        }
     }
-    writer.EndArray();
+    writer.EndArray(); 
 
     writer.EndObject();
 
     string snippet_json = snippetbuf.GetString();
-
-
     KETILOG::DEBUGLOG("Offloading", "<T> send tmax snippet...");
+    KETILOG::DEBUGLOG("Offloading", snippet_json);
 
     int sock = socket(PF_INET, SOCK_STREAM, 0);
-
     struct sockaddr_in serv_addr;
     memset(&serv_addr, 0, sizeof(serv_addr));
 

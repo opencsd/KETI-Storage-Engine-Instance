@@ -19,6 +19,8 @@ using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::Response;
 using StorageEngineInstance::CSDMetricList;
 using StorageEngineInstance::TmaxRequest;
+using StorageEngineInstance::TmaxResponse;
+
 using StorageEngineInstance::Empty;
 using namespace std;
 
@@ -27,15 +29,6 @@ class OffloadingModuleServiceImpl final : public OffloadingModule::Service {
   public:
   Status Scheduling(ServerContext *context, const SnippetRequest *snippet, Response *response) override {
     KETILOG::INFOLOG("Interface", "# receive scan snippet");
-
-    // {
-    //   std::string test_json;
-    //   google::protobuf::util::JsonPrintOptions options;
-    //   options.always_print_primitive_fields = true;
-    //   options.always_print_enums_as_ints = true;
-    //   google::protobuf::util::MessageToJsonString(*snippet,&test_json,options);
-    //   std::cout << endl << test_json << std::endl << std::endl; 
-    // }
 
     Scheduler::PushQueue(*snippet);
 
@@ -63,10 +56,10 @@ class OffloadingModuleServiceImpl final : public OffloadingModule::Service {
     return Status::OK;
   }
 
-  Status t_snippet_scheduling(ServerContext *context, const TmaxRequest *request, Response* response) override {
+  Status t_snippet_scheduling(ServerContext *context, const TmaxRequest *request, TmaxResponse *response) override {
     KETILOG::DEBUGLOG("Offloading", "<T> called t_snippet_scheduling");
 
-    Scheduler::T_snippet_scheduling(*request);
+    Scheduler::T_snippet_scheduling(*request, *response);
 
     return Status::OK;
   }
@@ -83,7 +76,7 @@ class OffloadingModuleServiceImpl final : public OffloadingModule::Service {
 };
 
 void RunGRPCServer() {
-  std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_OFFLOADING_PORT));
+  std::string server_address("0.0.0.0:"+std::to_string(SE_OFFLOADING_PORT));
   OffloadingModuleServiceImpl service;
 
   ServerBuilder builder;

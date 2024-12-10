@@ -50,11 +50,18 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../include")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/../include/tmax-lib/include")
 
 # kvs_grpc_proto
+set(TMAX_LIB_SOURCES
+  "${CMAKE_CURRENT_SOURCE_DIR}/../include/tmax-lib/data_blk.cc"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../include/tmax-lib/ex.cc"
+)
+add_library(tmax_lib STATIC ${TMAX_LIB_SOURCES})
+
 add_library(ss_grpc_proto
   ${ss_grpc_srcs}
   ${ss_grpc_hdrs}
   ${ss_proto_srcs}
-  ${ss_proto_hdrs})
+  ${ss_proto_hdrs}
+)
 target_link_libraries(ss_grpc_proto
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
@@ -67,8 +74,9 @@ if (UNIX)
 endif (UNIX)
 
 # interface module
-add_executable(storage-engine-interface "storage_engine_interface.cc")
+add_executable(storage-engine-interface "storage_engine_interface.cc" )
 target_link_libraries(storage-engine-interface
+  tmax_lib
   ss_grpc_proto
   ${LINKING_LIBRARIES}
   ${_REFLECTION}

@@ -1,4 +1,4 @@
-#define LOCALHOST "0.0.0.0"
+#define LOCALHOST (getenv("LOCALHOST") ? getenv("LOCALHOST") : "0.0.0.0")
 
 // Storage Engine Node
 #define SE_INTERFACE_PORT 40200
@@ -9,4 +9,4 @@
 
 // Storage Node 
 #define STORAGE_NODE_IP getenv("STORAGE_NODE_IP")
-#define CSD_IDENTIFIER_PORT 40300
+#define CSD_IDENTIFIER_PORT "40300"

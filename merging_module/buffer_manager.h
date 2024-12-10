@@ -108,14 +108,28 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
       for(int i = 0; i<column_alias_.Size(); i++){
           column_alias.push_back(column_alias_[i].GetString());
       }
+      
+      Value return_datatype_ = Value(rapidjson::kArrayType);;
+      if (document.HasMember("return_column_type") && document["return_column_type"].IsArray()) {
+        return_datatype_ = document["return_column_type"];
+      }
 
-      Value &return_datatype_ = document["return_column_type"];
-      Value &return_offlen_ = document["return_column_length"];
+      Value return_offlen_= Value(rapidjson::kArrayType);;
+      if (document.HasMember("return_column_length") && document["return_column_length"].IsArray()) {
+        return_offlen_ = document["return_column_length"];
+      }
+     
       for(int i = 0; i<return_datatype_.Size(); i++){
-          return_datatype.push_back(return_datatype_[i].GetInt());
-          return_offlen.push_back(return_offlen_[i].GetInt());
+        if (!return_datatype_[i].IsInt() || !return_offlen_[i].IsInt()) {
+            cout << "Error: Invalid data type in return_column_type or return_column_length." << endl;
+            continue;
+        }
+          int datatype_value = return_datatype_[i].GetInt();
+          int offlen_value = return_offlen_[i].GetInt();
+          return_datatype.push_back(datatype_value);
+          return_offlen.push_back(offlen_value);
           if(return_datatype_[i].GetInt() > 3000 || return_offlen_[i].GetInt() > 3000){
-            cout << "weird data~!" << endl;
+            cout <<"weird data~!" << endl;
           }
       }        
 
@@ -218,6 +232,21 @@ struct QueryBuffer{
   }
 };
 
+struct ChunkBuffer {
+  int chunk_count;
+  string result;
+};
+
+struct TmaxQueryBuffer{
+  mutex mu;
+  condition_variable available;
+  vector<ChunkBuffer> chunk_buffer;
+
+  TmaxQueryBuffer(){
+    chunk_buffer.clear();
+  };
+};
+
 struct TableData{//결과 리턴용
   int scanned_row_count;
   int filtered_row_count;
@@ -260,6 +289,9 @@ class BufferManager{
     static void InitBufferManager(){
       GetInstance().initBufferManager();
     }
+    static ChunkBuffer GetTmaxQueryResult(int id){
+      return GetInstance().t_get_result(id);
+    }
 
   private:
     BufferManager(){};
@@ -287,13 +319,15 @@ class BufferManager{
     int endQuery(StorageEngineInstance::Request qid);
 
     void t_buffer_manager_interface();
-    void t_result_merging(res_chunk_t *res_chunk_t);
-    void t_result_sending();
+    void t_result_merging(string json, u_char *data,  size_t data_size);
+    ChunkBuffer t_get_result(int id);
+    void t_initialize_buffer(int id);
 
     inline const static std::string LOGTAG = "Merging::Buffer Manager";
-
   private:
     unordered_map<int, struct QueryBuffer*> DataBuffer_;//buffer manager data buffer
+    unordered_map<int, TmaxQueryBuffer> TmaxDataBuffer_; //key : id, value : TmaxQueryBuffer
     thread BufferManagerInterface;//get csd result thread
     mutex buffer_mutex_;
+    mutex t_buffer_mutex_;
 };

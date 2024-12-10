@@ -31,6 +31,9 @@
 #include "csd_status_manager.h"
 #include "snippet_manager.h"
 
+//Tmax Lib
+#include "tb_block.h"
+#include "ex.h"
 #define BUFF_SIZE 4096
 
 using namespace std;
@@ -40,6 +43,7 @@ using StorageEngineInstance::SnippetRequest;
 using StorageEngineInstance::SnippetRequest_SstInfo;
 
 using StorageEngineInstance::TmaxRequest;
+using StorageEngineInstance::TmaxResponse;
 
 class Scheduler{
   public: 
@@ -52,8 +56,8 @@ class Scheduler{
       return scheduling_target;
     }
 
-    static void T_snippet_scheduling(TmaxRequest request){
-      GetInstance().t_snippet_scheduling(request);
+    static void T_snippet_scheduling(TmaxRequest request, TmaxResponse tResponse){
+      GetInstance().t_snippet_scheduling(request, tResponse);
       return;
     }
 
@@ -82,8 +86,8 @@ class Scheduler{
     void Random(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd);
     void Auto_Selection(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd);
     
-    void t_snippet_scheduling(TmaxRequest request);
-    void t_offloading_snippet(TmaxRequest request, string csd_id);
+    void t_snippet_scheduling(TmaxRequest request, TmaxResponse tResponse);
+    void t_offloading_snippet(TmaxRequest request, TmaxResponse tResponse, string csd_id, string file_name);
   
   public:
 
@@ -94,3 +98,22 @@ class Scheduler{
     kQueue<SnippetRequest> SnippetQueue_;
     int SCHEDULING_ALGORITHM;
 };
+
+inline std::string Base64Encode(const std::string& input) {
+    static const char encode_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    std::string output;
+    size_t padding = (3 - input.size() % 3) % 3;
+
+    for (size_t i = 0; i < input.size(); i += 3) {
+        uint32_t block = (static_cast<uint8_t>(input[i]) << 16);
+        if (i + 1 < input.size()) block |= (static_cast<uint8_t>(input[i + 1]) << 8);
+        if (i + 2 < input.size()) block |= static_cast<uint8_t>(input[i + 2]);
+
+        output += encode_table[(block >> 18) & 0x3F];
+        output += encode_table[(block >> 12) & 0x3F];
+        output += (i + 1 < input.size() ? encode_table[(block >> 6) & 0x3F] : '=');
+        output += (i + 2 < input.size() ? encode_table[block & 0x3F] : '=');
+    }
+
+    return output;
+}

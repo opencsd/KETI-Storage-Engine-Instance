@@ -57,7 +57,7 @@ class MonitoringModuleServiceImpl final : public MonitoringModule::Service {
 };
 
 void RunGRPCServer() {
-  std::string server_address((std::string)LOCALHOST+":"+std::to_string(SE_MONITORING_PORT));
+  std::string server_address((std::string)LOCAL_HOST+":"+std::to_string(SE_MONITORING_PORT));
   MonitoringModuleServiceImpl service;
 
   ServerBuilder builder;
