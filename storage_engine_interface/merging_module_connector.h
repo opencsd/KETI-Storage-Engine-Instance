@@ -44,8 +44,6 @@ class MergingModuleConnector {
 		}
 
 		QueryStringResult GetQueryResult(int qid, int wid, string tname) {
-			cout << "check@@ " << endl;
-
 			KETILOG::DEBUGLOG(LOGTAG, "# get query result");
 
 			Request request;

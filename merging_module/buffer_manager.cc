@@ -214,7 +214,7 @@ void BufferManager::pushResult(BlockResult blockResult){
             workBuffer->save_table_column_type(blockResult.return_datatype);
         }
 
-        workBuffer->left_block_count = blockResult.table_total_block_count;
+        workBuffer->table_total_block_count = blockResult.table_total_block_count;
         workBuffer->status = NotFinished;
 
         std::thread mergeResultThread(&BufferManager::mergeResult,this, qid, wid);
@@ -397,15 +397,15 @@ void BufferManager::mergeResult(int qid, int wid){
             }
         }
 
-        workBuffer->left_block_count -= result.result_block_count;
+        workBuffer->merged_block_count += result.result_block_count;
         workBuffer->row_count += result.row_count;
         DataBuffer_[qid]->scanned_row_count += result.scanned_row_count;
         DataBuffer_[qid]->filtered_row_count += result.filtered_row_count;
         workBuffer->work_in_progress_condition.notify_all();
         
-        // KETILOG::DEBUGLOG(LOGTAG,"# save data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} ... (left " + std::to_string(workBuffer->left_block_count) + " blocks)");
+        KETILOG::DEBUGLOG(LOGTAG,"# save data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} ... ( " + std::to_string(workBuffer->merged_block_count) + " / " + std::to_string(workBuffer->table_total_block_count) + ")");
 
-        if(workBuffer->left_block_count == 0){ //Work Done
+        if(workBuffer->merged_block_count == workBuffer->table_total_block_count){ //Work Done
             string msg = "# merging data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} done";
             KETILOG::INFOLOG(LOGTAG,msg);
 
@@ -413,6 +413,7 @@ void BufferManager::mergeResult(int qid, int wid){
             // logToFile(message);
 
             workBuffer->status = WorkDone;
+            workBuffer->work_in_progress_condition.notify_all();
             workBuffer->work_done_condition.notify_all();
 
             break;
@@ -524,7 +525,7 @@ TableData BufferManager::getFinishedTableData(int qid, int wid, string table_nam
     tableData.row_count = workBuffer->row_count;
     tableData.status = workBuffer->status;
     tableData.scanned_row_count = DataBuffer_[qid]->scanned_row_count;
-    tableData.filtered_row_count = DataBuffer_[qid]->scanned_row_count;
+    tableData.filtered_row_count = DataBuffer_[qid]->filtered_row_count;
 
     if(KETILOG::IsLogLevelUnder(TRACE)){// Debug Code 
         cout << "<get finished table data>" << endl;

@@ -142,6 +142,8 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
 
       scanned_row_count = document["scanned_row_count"].GetInt();
       filtered_row_count = document["filtered_row_count"].GetInt();
+
+      cout << work_id << ": " << result_block_count << "/" << table_total_block_count << endl;
     }
 };
 
@@ -150,7 +152,8 @@ struct WorkBuffer {
   string table_alias;//*결과 테이블의 별칭
   vector<string> table_column;//*결과 컬럼명
   unordered_map<string,ColData> table_data;//결과의 컬럼 별 데이터(컬럼명,타입,데이터)
-  int left_block_count;//*남은 블록 수(csd 결과 병합 체크용) -> Monitoring Container 통신
+  int table_total_block_count;
+  int merged_block_count;//*처리 블록 수(csd 결과 병합 체크용) -> Monitoring Container 통신
   int status;//작업 상태
   int row_count;//행 개수
   condition_variable work_done_condition;
@@ -162,7 +165,8 @@ struct WorkBuffer {
     table_column.clear();
     status = Initialized;
     table_data.clear();
-    left_block_count = 0;
+    table_total_block_count = 0;
+    merged_block_count = 0;
     row_count = 0;
   }
 
