@@ -15,4 +15,5 @@ docker run -d -it --privileged \
  -e STORAGE_NODE_IP="10.0.4.83" -e LOG_LEVEL="TRACE" \
  -p 40201:40201 \
  --network host \
+ -v /mnt/gluster:/mnt/gluster \
  --name $image_name $registry/$image_name:$version 

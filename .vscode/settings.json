@@ -83,6 +83,7 @@
         "any": "cpp",
         "slist": "cpp",
         "coroutine": "cpp",
-        "*.inc": "cpp"
+        "*.inc": "cpp",
+        "filesystem": "cpp"
     }
 }

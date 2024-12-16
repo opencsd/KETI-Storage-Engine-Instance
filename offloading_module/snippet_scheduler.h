@@ -16,6 +16,7 @@
 #include <climits>
 #include <stdlib.h>
 #include <time.h>
+#include <filesystem>
 
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
@@ -30,6 +31,8 @@
 #include "ip_config.h"
 #include "csd_status_manager.h"
 #include "snippet_manager.h"
+
+namespace fs = std::filesystem;
 
 //Tmax Lib
 #include "tb_block.h"

@@ -345,37 +345,43 @@ void Scheduler::Auto_Selection(const StorageEngineInstance::SnippetRequest_SstIn
 void Scheduler::t_snippet_scheduling(TmaxRequest request, TmaxResponse tResponse){
     KETILOG::DEBUGLOG("Offloading", "<T> scheduling tmax snippet...");
 
-    map<string, vector<string>> file_csd_map; //key - file name, value - csd id
-    file_csd_map["block.dump"] = {"1"}; //하드코딩 해결 필요
-    file_csd_map["block1.dump"] = {"1"};
-    file_csd_map["block2.dump"] = {"2"};
-    file_csd_map["block3.dump"] = {"3"};
-    file_csd_map["block4.dump"] = {"4"};
-    file_csd_map["block5.dump"] = {"5"};
-    file_csd_map["block6.dump"] = {"6"};
-    file_csd_map["block7.dump"] = {"7"};
-    file_csd_map["block8.dump"] = {"8"};
-
-    string target_csd_id;
-   
     for (const auto& file : request.file_list()) {
-        string file_name = file.filename(); 
-        if(file_csd_map.find(file_name) != file_csd_map.end()){
-            if(file_csd_map[file_name].size() == 1){
-                string target_csd_id = file_csd_map[file_name].at(0);
-                t_offloading_snippet(request, tResponse,target_csd_id, file_name);
-            }else{//스케줄링 필요
-                string target_csd_id = file_csd_map[file_name].at(0);
-                t_offloading_snippet(request, tResponse, target_csd_id, file_name);
+        std::string target_file = file.filename();
+        string target_csd_id;
+        bool file_found = false;
+
+        for (int i = 1; i <= 8; ++i) {
+            std::string nvmeDir = "/mnt/gluster/nvme" + std::to_string(i) + "/tmax";
+
+            try {
+                if (fs::exists(nvmeDir) && fs::is_directory(nvmeDir)) {
+                    for (const auto& entry : fs::directory_iterator(nvmeDir)) {
+                        if (entry.is_regular_file() && entry.path().filename() == target_file) {
+                            file_found = true;
+                            target_csd_id = to_string(i);
+                            break;
+                        }
+                    }
+                }
+            } catch (const fs::filesystem_error& e) {
+                std::cerr << "Error accessing " << nvmeDir << ": " << e.what() << std::endl;
             }
-        }else{
+
+            if (file_found){
+                cout << "<T> Schuedling : file " << target_file << " = " << target_csd_id << endl;
+                t_offloading_snippet(request, tResponse,target_csd_id, target_file); 
+                break;
+            }
+        }
+
+        if (!file_found) {
             tResponse.set_type(TmaxResponse::FO_RESPONSE);
             tResponse.set_errorcode(TmaxResponse::TMAX_ERROR_INVALID_REQTYPE);
-            KETILOG::DEBUGLOG("Offloading", "<T> File does not exist");
-            return;
+            KETILOG::DEBUGLOG("Offloading", "<T> File not found in any nvme directories");
         }
+
     }
-    
+
     tResponse.set_type(TmaxResponse::FO_RESPONSE);
     tResponse.set_errorcode(TmaxResponse::TMAX_ERROR_NONE);
         
