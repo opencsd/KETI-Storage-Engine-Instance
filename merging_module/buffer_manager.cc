@@ -151,7 +151,7 @@ void BufferManager::t_buffer_manager_interface(){
         memset(buffer, 0, ljson);
 
         while(1) {
-			if ((njson = recv(client_fd, buffer, BUFF_SIZE-1, 0)) == -1) {
+			if ((njson = recv(client_fd, buffer, T_BUFFER_SIZE-1, 0)) == -1) {
 				perror("read");
 				exit(1);
 			}
@@ -166,9 +166,9 @@ void BufferManager::t_buffer_manager_interface(){
 		KETILOG::DEBUGLOG(LOGTAG, json);
         send(client_fd, cMsg, strlen(cMsg), 0);
 
-        u_char data[BUFF_SIZE];
+        u_char data[T_BUFFER_SIZE];
         u_char* dataiter = data;
-		memset(data, 0, BUFF_SIZE);
+		memset(data, 0, T_BUFFER_SIZE);
         int ndata = 0;
         size_t ldata = 0;
         recv(client_fd , &ldata, sizeof(ldata),0);
@@ -182,12 +182,13 @@ void BufferManager::t_buffer_manager_interface(){
             dataiter += ndata;
 			ldata -= ndata;
             
-
 		    if (ldata == 0)
 				break;
 		}
         
         send(client_fd, cMsg, strlen(cMsg), 0);
+
+        /*debugg*/cout<<"buffer ";for(int t=0; t<data_size; t++){printf("%02X ",(u_char)data[t]);}cout << endl;
         
         t_result_merging(json, data, data_size);
         
@@ -606,7 +607,6 @@ void BufferManager::t_initialize_buffer(int id){
 
 void BufferManager::t_result_merging(std::string json, u_char* data, size_t data_size) {
     KETILOG::DEBUGLOG(LOGTAG, "<T> called t_result_merging, data_size : " + to_string(data_size));
-    KETILOG::DEBUGLOG(LOGTAG, "json: " + json);
 
     int id, chunk_count;
     t_initialize_buffer(id);
