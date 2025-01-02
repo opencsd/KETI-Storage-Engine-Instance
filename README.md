@@ -29,6 +29,8 @@ Developed by KETI
 
 >   Cmake >= 3.24
 
+>   libprotoc >= 3.19
+
 >   gcc >= 11.04
 
 ## Required Module
