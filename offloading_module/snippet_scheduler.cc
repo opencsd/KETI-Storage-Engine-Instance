@@ -345,10 +345,47 @@ void Scheduler::Auto_Selection(const StorageEngineInstance::SnippetRequest_SstIn
 void Scheduler::t_snippet_scheduling(TmaxRequest request, TmaxResponse tResponse){
     KETILOG::DEBUGLOG("Offloading", "<T> scheduling tmax snippet...");
 
+    map<string, vector<string>> file_csd_map; //key - file name, value - csd id
+    file_csd_map["tdisk0"] = {"1"}; //하드코딩 해결 필요
+    file_csd_map["tdisk1"] = {"8"};
+    file_csd_map["tdisk2"] = {"3"};
+    file_csd_map["tdisk3"] = {"4"};
+    file_csd_map["tdisk4"] = {"5"};
+    file_csd_map["tdisk5"] = {"6"};
+    file_csd_map["tdisk6"] = {"7"};
+    file_csd_map["csd_disk0"] = {"1"}; //하드코딩 해결 필요
+    file_csd_map["csd_disk1"] = {"8"};
+    file_csd_map["csd_disk2"] = {"3"};
+    file_csd_map["csd_disk3"] = {"4"};
+    file_csd_map["csd_disk4"] = {"5"};
+    file_csd_map["csd_disk5"] = {"6"};
+    file_csd_map["csd_disk6"] = {"7"};
+    file_csd_map["tas_csd_disk1"] = {"1"};
+    
+    string target_csd_id;
+   
     for (const auto& file : request.file_list()) {
-        std::string target_file = file.filename();
-        string target_csd_id;
-        bool file_found = false;
+        string file_name = file.filename(); 
+        if(file_csd_map.find(file_name) != file_csd_map.end()){
+            if(file_csd_map[file_name].size() == 1){
+                target_csd_id = file_csd_map[file_name].at(0);
+                t_offloading_snippet(request, tResponse, target_csd_id, file_name);
+            }else{//스케줄링 필요
+                target_csd_id = file_csd_map[file_name].at(0);
+                t_offloading_snippet(request, tResponse, target_csd_id, file_name);
+            }
+        }else{
+            tResponse.set_type(TmaxResponse::FO_RESPONSE);
+            tResponse.set_errorcode(TmaxResponse::TMAX_ERROR_INVALID_REQTYPE);
+            KETILOG::DEBUGLOG("Offloading", "<T> File does not exist");
+            return;
+        }
+    }
+
+    // for (const auto& file : request.file_list()) {
+    //     std::string target_file = file.filename();
+    //     string target_csd_id;
+    //     bool file_found = false;
 
         // for (int i = 2; i <= 8; ++i) {
         //     std::string nvmeDir = "/mnt/gluster/nvme" + std::to_string(i) + "/tmax_test";
@@ -380,9 +417,9 @@ void Scheduler::t_snippet_scheduling(TmaxRequest request, TmaxResponse tResponse
         //     KETILOG::DEBUGLOG("Offloading", "<T> File not found in any nvme directories");
         // }
 
-        t_offloading_snippet(request, tResponse, "2", target_file); 
+    //     t_offloading_snippet(request, tResponse, "1", target_file); 
 
-    }
+    // }
 
     tResponse.set_type(TmaxResponse::FO_RESPONSE);
     tResponse.set_errorcode(TmaxResponse::TMAX_ERROR_NONE);
