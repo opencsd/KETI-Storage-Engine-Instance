@@ -1,9 +1,11 @@
 ## Introduction of OpenCSD KETI-Storage-Engine-Instance
 -------------
 
-KEIT-Storage-Engine-Instance for KETI-OpenCSD Platform
+KEIT-Storage-Engine-Instance for OpenCSD Offloading Instance 
 
 Developed by KETI
+
+![Project Logo](image.png)
 
 ## Contents
 -------------
@@ -19,7 +21,7 @@ Developed by KETI
 
 ## Requirement
 -------------
->   Ubuntu 20.04.2 LTS
+>   Ubuntu 18.04.2 LTS
 
 >   MySQL 5.6(Storage Engine : MyROCKS by KETI-Version)
 
@@ -27,13 +29,14 @@ Developed by KETI
 
 >   Cmake >= 3.24
 
->   libprotoc >= 3.19
+>   gcc >= 11.04
 
 ## Required Module
-- *[KETI-DB-Connector-Instance](https://github.com/opencsd/KETI-DB-Connector-Instance)*
+- *[KETI-Query-Engine-Instance](https://github.com/opencsd/KETI-Query-Engine-Instance)*
 - *[KETI-Storage-Engine-Instance](https://github.com/opencsd/KETI-Storage-Engine-Instance)*
-- *[KETI-CSD-Proxy](https://github.com/opencsd/KETI-CSD-Proxy)*
-- *[KETI-LBA2PBA-Manager](https://github.com/opencsd/KETI-LBA2PBA-Manager)*
+- *[CSD-Identifier](https://github.com/opencsd/KETI-Storage-Controller-Module)*
+- *[KETI-LBA2PBA-Manager](https://github.com/opencsd/KETI-Storage-Controller-Module)*
+- *[CSD-Worker-Module](https://github.com/opencsd/KETI-Block-Storage-Module)*
 
 ## How To Install
 -------------
@@ -46,33 +49,14 @@ make -j8
 
 ## Modules
 -------------
-### Interface Container
+### Storage Engine Interface
 -------------
 Be the first to receive and manage snippets to perform queries
-#### Storage Engine Input Interface
+#### Storage Engine Interface
 -------------
-Receive snippets for query execution from DB Connector Instance
-#### Snippet Manager
--------------
-Manage snippet task status by query and deliver snippets to appropriate container
+Receive snippets for query execution from Query Engine Instance
 
-### Monitoring Container
--------------
-Manages data related to database schema information required to perform queries
-#### LBA2PBA Query Agent
--------------
-Communicates with LBA2PBA Manager to convert logical block address to physical block address
-#### WAL Query Agent
--------------
-Communicates with WAL Manager, which manages unflushed data
-#### Table Manager
--------------
-Manage database table schema information, etc.
-#### Index Manager
--------------
-Perform tasks required for index scans, such as index table management and data exploration
-
-### Offloading Container
+### Offloading Module
 -------------
 Passing snippets to computational storage
 #### Snippet Scheduler
@@ -81,8 +65,11 @@ Appropriate compute storage to perform query scan/filter operations is selected 
 #### CSD Status Manager
 -------------
 State management of computational storage for scheduling
+#### Snippet Manager
+-------------
+Managing snippet for offloading
 
-### Merging Container
+### Merging Module
 -------------
 Merge and store work results received from computational storage
 #### Merge Query Manager
