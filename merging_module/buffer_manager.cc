@@ -188,7 +188,7 @@ void BufferManager::t_buffer_manager_interface(){
         
         send(client_fd, cMsg, strlen(cMsg), 0);
 
-        /*debugg*/cout<<"buffer ";for(int t=0; t<data_size; t++){printf("%02X ",(u_char)data[t]);}cout << endl;
+        // /*debugg*/cout<<"buffer ";for(int t=0; t<data_size; t++){printf("%02X ",(u_char)data[t]);}cout << endl;
         
         t_result_merging(json, data, data_size);
         
