@@ -36,9 +36,8 @@ Developed by KETI
 ## Required Module
 - *[KETI-Query-Engine-Instance](https://github.com/opencsd/KETI-Query-Engine-Instance)*
 - *[KETI-Storage-Engine-Instance](https://github.com/opencsd/KETI-Storage-Engine-Instance)*
-- *[CSD-Identifier](https://github.com/opencsd/KETI-Storage-Controller-Module)*
-- *[KETI-LBA2PBA-Manager](https://github.com/opencsd/KETI-Storage-Controller-Module)*
-- *[CSD-Worker-Module](https://github.com/opencsd/KETI-Block-Storage-Module)*
+- *[KETI-Storage-Controller-Module](https://github.com/opencsd/KETI-Storage-Controller-Module)*
+- *[KETI-Block-Storage-Module](https://github.com/opencsd/KETI-Block-Storage-Module)*
 
 ## How To Install
 -------------
