@@ -224,22 +224,7 @@ void SnippetManager::calcul_return_column_type(SnippetRequest& snippet, vector<i
                                 decimalCount = 1;
                             }
                         }
-
-                        // if(op1 == 246 || op2 == 246){
-                        //     tokenType = 246;
-                        // }
-                        // else{
-                        //     tokenType = 3;
-                        // }
-                        // if(token == "*" || token == "/"){
-                        //     if(decimalCount == 0){
-                        //         if(op1 == 246) decimalCount++;
-                        //         if(op2 == 246) decimalCount++;
-                        //     }
-                        //     else{
-                        //         if(op1 == 246) decimalCount++;
-                        //     }
-                        // }
+                        
                         postfixStack.push(tokenType);
                     }
                     else{
