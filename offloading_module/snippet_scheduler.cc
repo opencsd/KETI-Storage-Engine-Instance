@@ -346,14 +346,14 @@ void Scheduler::t_snippet_scheduling(TmaxRequest request, TmaxResponse tResponse
     KETILOG::DEBUGLOG("Offloading", "<T> scheduling tmax snippet...");
 
     map<string, vector<string>> file_csd_map; //key - file name, value - csd id
-    file_csd_map["tdisk0"] = {"1"}; //하드코딩 해결 필요
+    file_csd_map["tdisk0"] = {"1"}; //temp
     file_csd_map["tdisk1"] = {"8"};
     file_csd_map["tdisk2"] = {"3"};
     file_csd_map["tdisk3"] = {"4"};
     file_csd_map["tdisk4"] = {"5"};
     file_csd_map["tdisk5"] = {"6"};
     file_csd_map["tdisk6"] = {"7"};
-    file_csd_map["csd_disk0"] = {"1"}; //하드코딩 해결 필요
+    file_csd_map["csd_disk0"] = {"1"}; //temp
     file_csd_map["csd_disk1"] = {"8"};
     file_csd_map["csd_disk2"] = {"3"};
     file_csd_map["csd_disk3"] = {"4"};
@@ -370,7 +370,7 @@ void Scheduler::t_snippet_scheduling(TmaxRequest request, TmaxResponse tResponse
             if(file_csd_map[file_name].size() == 1){
                 target_csd_id = file_csd_map[file_name].at(0);
                 t_offloading_snippet(request, tResponse, target_csd_id, file_name);
-            }else{//스케줄링 필요
+            }else{//scheduling
                 target_csd_id = file_csd_map[file_name].at(0);
                 t_offloading_snippet(request, tResponse, target_csd_id, file_name);
             }
