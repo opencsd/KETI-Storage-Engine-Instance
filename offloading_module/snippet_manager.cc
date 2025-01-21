@@ -200,32 +200,46 @@ void SnippetManager::calcul_return_column_type(SnippetRequest& snippet, vector<i
                 return_column_type.push_back(column_type[snippet.query_info().projection(i).value(0)]);
                 return_column_length.push_back(column_length[snippet.query_info().projection(i).value(0)]);
             }else{
-                int resultType = 0;
-                int resultLength = 0;
-                int multiple_count = 0;
-                std::stack<int> postfixStack; // 곱하기는 int 80, 더하기는 int 120 빼기는 int 110 나누기는 int 50 아니다 필요없네
-                int decimalCount = 0, intCount = 0;
+                std::stack<int> postfixStack; 
+                int decimalCount = 0;
+
                 for (int j = 0; j < snippet.query_info().projection(i).value_size(); j++){
                     string token = snippet.query_info().projection(i).value(j);
                     int tokenType = 0;
                     if (token == "+" || token == "-" || token == "*" || token == "/"){
+                        int tempDecimalCount = 0;
                         int op2 = postfixStack.top(); postfixStack.pop();
                         int op1 = postfixStack.top(); postfixStack.pop();
-                        if(op1 == 246 || op2 == 246){
-                            tokenType = 246;
-                        }
-                        else{
-                            tokenType = 3;
-                        }
+
+                        if(op1 == 246) tempDecimalCount++;
+                        else if(op2 == 246) tempDecimalCount++;
+
+                        if(tempDecimalCount == 0) tokenType = 3;
+                        else tokenType = 246;
+
                         if(token == "*" || token == "/"){
-                            if(decimalCount == 0){
-                                if(op1 == 246) decimalCount++;
-                                if(op2 == 246) decimalCount++;
-                            }
-                            else{
-                                if(op1 == 246) decimalCount++;
+                            decimalCount = tempDecimalCount;
+                        }else{
+                            if(tempDecimalCount != 0){
+                                decimalCount = 1;
                             }
                         }
+
+                        // if(op1 == 246 || op2 == 246){
+                        //     tokenType = 246;
+                        // }
+                        // else{
+                        //     tokenType = 3;
+                        // }
+                        // if(token == "*" || token == "/"){
+                        //     if(decimalCount == 0){
+                        //         if(op1 == 246) decimalCount++;
+                        //         if(op2 == 246) decimalCount++;
+                        //     }
+                        //     else{
+                        //         if(op1 == 246) decimalCount++;
+                        //     }
+                        // }
                         postfixStack.push(tokenType);
                     }
                     else{
