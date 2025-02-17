@@ -31,7 +31,6 @@ class MergingModuleServiceImpl final : public MergingModule::Service {
     // }
 
     string msg = "# aggregation {" + to_string(request->query_id()) + "|" + to_string(request->work_id()) + "}";
-    KETILOG::INFOLOG("Merging",msg);
 
     // merge query manager instance & run snippet work
     thread MergeQueryInstance = thread(&MergeQueryManager::RunSnippetWork,MergeQueryManager(*request));
@@ -54,7 +53,7 @@ class MergingModuleServiceImpl final : public MergingModule::Service {
           if(i.second.type == TYPE_STRING){
             cout << i.first << "|" << i.second.strvec.size() << endl;
             // cout << i.first << "|" << i.second.strvec[0] << endl;
-          }else if(i.second.type == TYPE_INT){
+          }else if(i.second.type == TYPE_INT || i.second.type == TYPE_DATE){
             cout << i.first << "|" << i.second.intvec.size() << endl;
             // cout << i.first << "|" << i.second.intvec[0] << endl;
           }else if(i.second.type == TYPE_FLOAT){
@@ -88,13 +87,18 @@ class MergingModuleServiceImpl final : public MergingModule::Service {
         }case TYPE_FLOAT:{
           col.set_col_type(QueryResult_Column_ColType::QueryResult_Column_ColType_TYPE_FLOAT);  
           for(size_t i=0; i<td.second.floatvec.size(); i++){
-            // double value = std::round(td.second.floatvec[i] * 100) / 100;
-            // col.add_double_col(value);
             col.add_double_col(td.second.floatvec[i]);
           }
+          col.set_real_size(td.second.real_size);
           break;
         }case TYPE_EMPTY:{
           col.set_col_type(QueryResult_Column_ColType::QueryResult_Column_ColType_TYPE_EMPTY);
+          break;
+        }case TYPE_DATE:{
+          col.set_col_type(QueryResult_Column_ColType::QueryResult_Column_ColType_TYPE_DATE);
+          for(size_t i=0; i<td.second.intvec.size(); i++){
+            col.add_int_col(td.second.intvec[i]);
+          }
           break;
         }default:{
           KETILOG::FATALLOG("Merging","GetQueryResult Type Error");
