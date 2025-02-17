@@ -20,21 +20,31 @@ inline std::string& rtrim(std::string& s, const char* t = " \t\n\r\f\v\0"){
 	return ltrim(rtrim(s, t), t);
 }
 
+inline int countDecimalPlaces(const std::string& number) {
+    size_t pos = number.find('.');
+    if (pos == std::string::npos) {
+        return 0;
+    }
+    return number.length() - pos - 1;
+}
+
 struct T{
     string varString;
     int64_t varInt;
     double varFloat;
     bool isnull;
     bool boolean;
-    int type;//0 empty, 1 string, 2 int, 3 float, 4 boolean (KETI_VECTOR_TYPE)
-    
+    int type;//0 empty, 1 string, 2 int, 3 float, 4 boolean, 5 date (KETI_VECTOR_TYPE)
+    int real_size; 
+
     T(){
         varString = "";
         varInt = 0;
         varFloat = 0;
         isnull = false;
         boolean = false;
-        type = -1;
+        type = TYPE_EMPTY;
+        real_size = 0;
     }
 };
 
@@ -96,13 +106,13 @@ private:
     // void LeftOuterJoin_nestedloop();//left outer join (nested loop join)
 
     inline void debug_table(int flag){
-        if(KETILOG::IsLogLevelUnder(TRACE)){
+        if(KETILOG::IsLogLevelUnder(DEBUG)){
             if(flag == 1){
                 cout << "<left table>" << endl;
                 for(auto i : left_table_.table_data){
                     if(i.second.type == TYPE_STRING){
                         cout << i.first << "|" << i.second.strvec.size() << "|" << i.second.type << endl;
-                    }else if(i.second.type == TYPE_INT){
+                    }else if(i.second.type == TYPE_INT || i.second.type == TYPE_DATE){
                         cout << i.first << "|" << i.second.intvec.size() << "|" << i.second.type << endl;
                     }else if(i.second.type == TYPE_FLOAT){
                         cout << i.first << "|" << i.second.floatvec.size() << "|" << i.second.type << endl;
@@ -117,7 +127,7 @@ private:
                 for(auto i : right_table_.table_data){
                     if(i.second.type == TYPE_STRING){
                         cout << i.first << "|" << i.second.strvec.size() << "|" << i.second.type << endl;
-                    }else if(i.second.type == TYPE_INT){
+                    }else if(i.second.type == TYPE_INT || i.second.type == TYPE_DATE){
                         cout << i.first << "|" << i.second.intvec.size() << "|" << i.second.type << endl;
                     }else if(i.second.type == TYPE_FLOAT){
                         cout << i.first << "|" << i.second.floatvec.size() << "|" << i.second.type << endl;
@@ -133,7 +143,7 @@ private:
                     if(i.second.type == TYPE_STRING){
                         cout << i.first << "|" << i.second.strvec.size() << "|" << i.second.type << endl;
                         // cout << i.first << "|" << i.second.strvec[0] << endl;
-                    }else if(i.second.type == TYPE_INT){
+                    }else if(i.second.type == TYPE_INT || i.second.type == TYPE_DATE){
                         cout << i.first << "|" << i.second.intvec.size() << "|" << i.second.type << endl;
                         // cout << i.first << "|" << i.second.intvec[0] << endl;
                     }else if(i.second.type == TYPE_FLOAT){
@@ -152,12 +162,12 @@ private:
                         if(i.second.type == TYPE_STRING){
                             cout << i.first << "|" << i.second.strvec.size() << "|" << i.second.type << endl;
                             // cout << i.first << "|" << i.second.strvec[0] << endl;
-                        }else if(i.second.type == TYPE_INT){
+                        }else if(i.second.type == TYPE_INT || i.second.type == TYPE_DATE){
                             cout << i.first << "|" << i.second.intvec.size() << "|" << i.second.type << endl;
                             // cout << i.first << "|" << i.second.intvec[0] << endl;
                         }else if(i.second.type == TYPE_FLOAT){
                             cout << i.first << "|" << i.second.floatvec.size() << "|" << i.second.type << endl;
-                            // cout << i.first << "|" << i.second.floatvec[0] << endl;
+                            cout << i.first << "|" << i.second.floatvec[0] << endl;
                         }else if(i.second.type == TYPE_EMPTY){
                             cout << i.first << "|" << "empty row" << "|" << i.second.type << endl;
                         }else{
@@ -172,7 +182,7 @@ private:
                     if(i.second.type == TYPE_STRING){
                         cout << i.first << "|" << i.second.strvec.size() << "|" << i.second.type << endl;
                         // cout << i.first << "|" << i.second.strvec[0] << endl;
-                    }else if(i.second.type == TYPE_INT){
+                    }else if(i.second.type == TYPE_INT || i.second.type == TYPE_DATE){
                         cout << i.first << "|" << i.second.intvec.size() << "|" << i.second.type << endl;
                         // cout << i.first << "|" << i.second.intvec[0] << endl;
                     }else if(i.second.type == TYPE_FLOAT){
@@ -190,7 +200,7 @@ private:
                     if(i.second.type == TYPE_STRING){
                         cout << i.first << "|" << i.second.strvec.size() << "|" << i.second.type << endl;
                         // cout << i.first << "|" << i.second.strvec[0] << endl;
-                    }else if(i.second.type == TYPE_INT){
+                    }else if(i.second.type == TYPE_INT || i.second.type == TYPE_DATE){
                         cout << i.first << "|" << i.second.intvec.size() << "|" << i.second.type << endl;
                         // cout << i.first << "|" << i.second.intvec[0] << endl;
                     }else if(i.second.type == TYPE_FLOAT){

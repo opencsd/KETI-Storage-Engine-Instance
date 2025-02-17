@@ -15,21 +15,23 @@ void MergeQueryManager::RunSnippetWork(){
     is_having_ = (snippet_.query_info().having_size() == 0) ? false : true;
     is_limit_ = (snippet_.query_info().limit().length() != 0) ? true : false;
     
-    cout << "start merging " << snippet_.query_id() << " " << snippet_.work_id() << endl;
-    
     //Do snippet work -> (Make "hash_table") -> Make "target_table"
     switch(snippet_type_){
         case StorageEngineInstance::SnippetRequest_SnippetType_AGGREGATION:{
+            cout << "[Merging] start snippet work : AGGREGATION {ID:" << snippet_.query_id() << "|" << snippet_.work_id() << "}" << endl;
             target_table_ = BufferManager::GetFinishedTableData(snippet_.query_id(),-1,snippet_.query_info().table_name(0));
             break;
         }case StorageEngineInstance::SnippetRequest_SnippetType_FILTER:{
+            cout << "[Merging] start snippet work : FILTER {ID:" << snippet_.query_id() << "|" << snippet_.work_id() << "}" << endl;
             Filtering(left_table_, snippet_.query_info().filtering(), target_table_);
             break;
         }case StorageEngineInstance::SnippetRequest_SnippetType_INNER_JOIN:{
+            cout << "[Merging] start snippet work : INNER_JOIN {ID:" << snippet_.query_id() << "|" << snippet_.work_id() << "}" << endl;
             InnerJoin_hash();
             break;
         }case StorageEngineInstance::SnippetRequest_SnippetType_LEFT_OUTER_JOIN:{
             // LeftOuterJoin_nestedloop();
+            cout << "[Merging] start snippet work : LEFT_OUTER_JOIN {ID:" << snippet_.query_id() << "|" << snippet_.work_id() << "}" << endl;
             LeftOuterJoin_hash();
             break;
         }case StorageEngineInstance::SnippetRequest_SnippetType_RIGHT_OUTER_JOIN:{
@@ -42,6 +44,7 @@ void MergeQueryManager::RunSnippetWork(){
             Union();       
             break;
         }case StorageEngineInstance::SnippetRequest_SnippetType_IN:{
+            cout << "[Merging] start snippet work : IN {ID:" << snippet_.query_id() << "|" << snippet_.work_id() << "}" << endl;
             In();
             break;
         }case StorageEngineInstance::SnippetRequest_SnippetType_DEPENDENCY_INNER_JOIN:{
@@ -63,16 +66,19 @@ void MergeQueryManager::RunSnippetWork(){
     debug_table(3);
 
     if(is_groupby_){
+        cout << "[Merging] start groupby operation {ID:" << snippet_.query_id() << "|" << snippet_.work_id() << "}" << endl;
         GroupBy(target_table_, snippet_.query_info().group_by(), group_by_table_);//GroupBy -> Make "group_by_key" & "group_by_table"
         // debug_table(4);
         
         //Column Projection -> Make "result_table"
         for(int i=0; i<group_by_table_.size(); i++){
+            cout << "[Merging] start column projection {ID:" << snippet_.query_id() << "|" << snippet_.work_id() << "}" << endl;
             Aggregation(group_by_table_[i], snippet_.query_info().projection(), snippet_.result_info().column_alias(), result_table_);
         }
         group_by_table_.clear();
     }else{
         //Column Projection -> Make "result_table"
+        cout << "[Merging] start column projection {ID:" << snippet_.query_id() << "|" << snippet_.work_id() << "}" << endl;
         Aggregation(target_table_, snippet_.query_info().projection(), snippet_.result_info().column_alias(), result_table_);
     } 
 
@@ -85,6 +91,7 @@ void MergeQueryManager::RunSnippetWork(){
 
         if(is_orderby_){
             //Order By -> Make "ordered_index" & "order_by_table"
+            cout << "[Merging] start orderby operation {ID:" << snippet_.query_id() << "|" << snippet_.work_id() << "}" << endl;
             OrderBy(having_table_, snippet_.query_info().order_by(), order_by_table_);
             //Save "order_by_table"
             if(is_limit_){
@@ -103,6 +110,7 @@ void MergeQueryManager::RunSnippetWork(){
     }else{
         if(is_orderby_){
             //Order By -> Make "ordered_index" & "order_by_table"
+            cout << "[Merging] start orderby operation {ID:" << snippet_.query_id() << "|" << snippet_.work_id() << "}" << endl;
             OrderBy(result_table_, snippet_.query_info().order_by(), order_by_table_);
             //Save "order_by_table"
             if(is_limit_){
@@ -124,9 +132,9 @@ void MergeQueryManager::RunSnippetWork(){
         }
     }
 
-    debug_table(6);
+    cout << "[Merging] finished snippet work {ID:" << snippet_.query_id() << "|" << snippet_.work_id() << "}" << endl;
 
-    cout << "merging done " << snippet_.query_id() << " " << snippet_.work_id() << endl;
+    debug_table(6);
 }
 
 void MergeQueryManager::Aggregation(TableData &aggregation_table, const RepeatedPtrField<SnippetRequest_Projection>& projections, const RepeatedPtrField<string>& alias, TableData &dest){
@@ -158,7 +166,8 @@ void MergeQueryManager::Aggregation(TableData &aggregation_table, const Repeated
                             colData.isnull.push_back(false);
                             colData.row_count++;
                             break;
-                        }case TYPE_INT:{    
+                        }case TYPE_INT:    
+                         case TYPE_DATE:{ 
                             colData.intvec.push_back(t.varInt);
                             colData.isnull.push_back(false);
                             colData.row_count++;
@@ -173,6 +182,7 @@ void MergeQueryManager::Aggregation(TableData &aggregation_table, const Repeated
                         }
                     }
                     colData.type = t.type;
+                    colData.real_size = max(colData.real_size, t.real_size);
                 }else{//로우 개수만큼
                     if(projections[p].value_size() == 1 && projections[p].value_type(0) == StorageEngineInstance::SnippetRequest_ValueType_COLUMN){
                         colData = aggregation_table.table_data[projections[p].value(0)];
@@ -185,7 +195,8 @@ void MergeQueryManager::Aggregation(TableData &aggregation_table, const Repeated
                                     colData.isnull.push_back(false);
                                     colData.row_count++;
                                     break;
-                                }case TYPE_INT:{    
+                                }case TYPE_INT:
+                                 case TYPE_DATE:{ 
                                     colData.intvec.push_back(t.varInt);
                                     colData.isnull.push_back(false);
                                     colData.row_count++;
@@ -199,10 +210,10 @@ void MergeQueryManager::Aggregation(TableData &aggregation_table, const Repeated
                                     KETILOG::ERRORLOG(LOGTAG,"SnippetRequest_Projection_SelectType_COLUMNNAME2 => check plz..");
                                 }
                             }
-                            colData.type = t.type;
                         }
+                        colData.type = t.type;
+                        colData.real_size = max(colData.real_size, t.real_size);
                     }
-                    
                 }
                 break;
             }case StorageEngineInstance::SnippetRequest_Projection_SelectType_SUM:{
@@ -215,6 +226,7 @@ void MergeQueryManager::Aggregation(TableData &aggregation_table, const Repeated
                             break;
                         }case TYPE_FLOAT:{
                             t.varFloat += t_.varFloat;
+                            t.real_size = max(t.real_size, t_.real_size);
                             break;
                         }default:{
                             KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::SnippetRequest_Projection_SelectType_SUM1 => check plz..");
@@ -234,6 +246,7 @@ void MergeQueryManager::Aggregation(TableData &aggregation_table, const Repeated
                         colData.isnull.push_back(false);
                         colData.row_count++;
                         colData.type = t.type;
+                        colData.real_size = max(colData.real_size, t.real_size);
                         break;
                     }default:{
                         KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::SnippetRequest_Projection_SelectType_SUM2 => check plz..");
@@ -273,6 +286,7 @@ void MergeQueryManager::Aggregation(TableData &aggregation_table, const Repeated
                 colData.isnull.push_back(false);
                 colData.row_count++;
                 colData.type = TYPE_FLOAT;
+                colData.real_size = 6; // 고정
                 break;
             }case StorageEngineInstance::SnippetRequest_Projection_SelectType_COUNT:{//해당 컬럼의 null 데이터 제외 로우 개수 카운트
                 vector<bool> is_column_null = aggregation_table.table_data[projections[p].value(0)].isnull;
@@ -347,6 +361,7 @@ void MergeQueryManager::Aggregation(TableData &aggregation_table, const Repeated
                         colData.floatvec.push_back(t.varFloat);
                         colData.isnull.push_back(false);
                         colData.row_count++;
+                        colData.real_size = max(colData.real_size, t.real_size);
                         break;
                     }case TYPE_STRING:{
                         colData.strvec.push_back(t.varString);
@@ -398,6 +413,7 @@ void MergeQueryManager::Aggregation(TableData &aggregation_table, const Repeated
                         colData.floatvec.push_back(t.varFloat);
                         colData.isnull.push_back(false);
                         colData.row_count++;
+                        colData.real_size = max(colData.real_size, t.real_size);
                         break;
                     }case TYPE_STRING:{
                         colData.strvec.push_back(t.varString);
@@ -414,18 +430,20 @@ void MergeQueryManager::Aggregation(TableData &aggregation_table, const Repeated
         }
 
         switch(colData.type){
-        case TYPE_INT:{    
-            dest.table_data[alias[p]].intvec.insert(dest.table_data[alias[p]].intvec.end(), colData.intvec.begin(), colData.intvec.end());
-            break;
-        }case TYPE_FLOAT:{
-            dest.table_data[alias[p]].floatvec.insert(dest.table_data[alias[p]].floatvec.end(), colData.floatvec.begin(), colData.floatvec.end());
-            break;
-        }case TYPE_STRING:{
-            dest.table_data[alias[p]].strvec.insert(dest.table_data[alias[p]].strvec.end(), colData.strvec.begin(), colData.strvec.end());
-            break;
-        }default:{
-            KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::Aggregation => check plz..");
-        }
+            case TYPE_INT:
+            case TYPE_DATE:{    
+                dest.table_data[alias[p]].intvec.insert(dest.table_data[alias[p]].intvec.end(), colData.intvec.begin(), colData.intvec.end());
+                break;
+            }case TYPE_FLOAT:{
+                dest.table_data[alias[p]].floatvec.insert(dest.table_data[alias[p]].floatvec.end(), colData.floatvec.begin(), colData.floatvec.end());
+                dest.table_data[alias[p]].real_size = colData.real_size;
+                break;
+            }case TYPE_STRING:{
+                dest.table_data[alias[p]].strvec.insert(dest.table_data[alias[p]].strvec.end(), colData.strvec.begin(), colData.strvec.end());
+                break;
+            }default:{
+                KETILOG::ERRORLOG(LOGTAG,"MergeQueryManager::Aggregation => check plz..");
+            }
         }
 
         dest.table_data[alias[p]].isnull.insert(dest.table_data[alias[p]].isnull.end(), colData.isnull.begin(), colData.isnull.end());
@@ -520,10 +538,11 @@ T MergeQueryManager::Projection(TableData &aggregation_table, SnippetRequest_Pro
                     postfixResult.varInt = t.varInt;
                     break;
                 case TYPE_STRING:
-                    postfixResult.varString =t.varString;
+                    postfixResult.varString = t.varString;
                     break;
                 case TYPE_FLOAT:
                     postfixResult.varFloat = t.varFloat;
+                    postfixResult.real_size = t.real_size;
                     break;
                 default:
                     KETILOG::ERRORLOG(LOGTAG,"else type check plz.. "+to_string(t.type));
@@ -544,10 +563,11 @@ T MergeQueryManager::Projection(TableData &aggregation_table, SnippetRequest_Pro
                 postfixResult.varInt = t.varInt;
                 break;
             case TYPE_STRING:
-                postfixResult.varString =t.varString;
+                postfixResult.varString = t.varString;
                 break;
             case TYPE_FLOAT:
                 postfixResult.varFloat = t.varFloat;
+                postfixResult.real_size = t.real_size;
                 break;
             default:
                 KETILOG::ERRORLOG(LOGTAG,"else type check plz.. "+to_string(t.type));
@@ -601,7 +621,7 @@ T MergeQueryManager::Projection(TableData &aggregation_table, SnippetRequest_Pro
 
         postfixResult.varInt = result;
         postfixResult.isnull = false;
-        postfixResult.type = TYPE_INT;
+        postfixResult.type = TYPE_DATE;
     }else{ //POSTFIX
         postfixResult = Postfix(aggregation_table, projection, rowIndex, 0, projection.value_size());
     }
@@ -619,19 +639,17 @@ T MergeQueryManager::Postfix(TableData &aggregation_table, SnippetRequest_Projec
             case StorageEngineInstance::SnippetRequest_ValueType_COLUMN:{
                 if(aggregation_table.table_data[projection.value(i)].type == TYPE_STRING){
                     t.varString = aggregation_table.table_data[projection.value(i)].strvec[rowIndex];
-                    t.type = TYPE_STRING;
-                    oper_stack.push(t);
-                }else if(aggregation_table.table_data[projection.value(i)].type == TYPE_INT){
+                }else if(aggregation_table.table_data[projection.value(i)].type == TYPE_INT || aggregation_table.table_data[projection.value(i)].type == TYPE_DATE){
                     t.varInt = aggregation_table.table_data[projection.value(i)].intvec[rowIndex];
-                    t.type = TYPE_INT;
-                    oper_stack.push(t);
                 }else if(aggregation_table.table_data[projection.value(i)].type == TYPE_FLOAT){
                     t.varFloat = aggregation_table.table_data[projection.value(i)].floatvec[rowIndex];
-                    t.type = TYPE_FLOAT;
-                    oper_stack.push(t);
+                    t.real_size = aggregation_table.table_data[projection.value(i)].real_size;
                 }else{
                     KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (a) " + to_string(aggregation_table.table_data[projection.value(i)].type));
                 }
+                
+                t.type = aggregation_table.table_data[projection.value(i)].type;
+                oper_stack.push(t);
                 break;
             }case StorageEngineInstance::SnippetRequest_ValueType_OPERATOR:{
                 if(projection.value(i) == "+"){
@@ -646,6 +664,7 @@ T MergeQueryManager::Postfix(TableData &aggregation_table, SnippetRequest_Projec
                     }else if(oper1.type == TYPE_FLOAT){
                         t.varFloat = oper1.varFloat + oper2.varFloat;
                         t.type = TYPE_FLOAT;
+                        t.real_size = oper1.real_size;
                         oper_stack.push(t);
                     }else{
                         KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (b)");
@@ -663,11 +682,13 @@ T MergeQueryManager::Postfix(TableData &aggregation_table, SnippetRequest_Projec
                         }else if(oper2.type == TYPE_FLOAT){
                             t.varFloat = oper1.varInt - oper2.varFloat;
                             t.type = TYPE_FLOAT;
+                            t.real_size = oper2.real_size;
                             oper_stack.push(t);
                         }else{
                             KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (c)");
                         }
                     }else if(oper1.type == TYPE_FLOAT){
+                        t.real_size = oper1.real_size;
                         if (oper2.type == TYPE_INT){
                             t.varInt = oper1.varFloat - oper2.varInt;
                             t.type = TYPE_FLOAT;
@@ -693,6 +714,7 @@ T MergeQueryManager::Postfix(TableData &aggregation_table, SnippetRequest_Projec
                         }else if(oper2.type == TYPE_FLOAT){
                             t.varFloat = oper1.varInt * oper2.varFloat;
                             t.type = TYPE_FLOAT;
+                            t.real_size = oper2.real_size;
                             oper_stack.push(t);
                         }else{
                             KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (e)");
@@ -701,10 +723,12 @@ T MergeQueryManager::Postfix(TableData &aggregation_table, SnippetRequest_Projec
                         if (oper2.type == TYPE_INT){
                             t.varInt = oper1.varFloat * oper2.varInt;
                             t.type = TYPE_FLOAT;
+                            t.real_size = oper1.real_size;
                             oper_stack.push(t);
                         }else if(oper2.type == TYPE_FLOAT){
                             t.varFloat = oper1.varFloat * oper2.varFloat;
                             t.type = TYPE_FLOAT;
+                            t.real_size = oper1.real_size + oper2.real_size;
                             oper_stack.push(t);
                         }else{
                             KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (f)");
@@ -723,6 +747,7 @@ T MergeQueryManager::Postfix(TableData &aggregation_table, SnippetRequest_Projec
                         }else if(oper2.type == TYPE_FLOAT){
                             t.varFloat = oper1.varInt / oper2.varFloat;
                             t.type = TYPE_FLOAT;
+                            t.real_size = oper2.real_size;
                             oper_stack.push(t);
                         }else{
                             KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (g)");
@@ -731,10 +756,12 @@ T MergeQueryManager::Postfix(TableData &aggregation_table, SnippetRequest_Projec
                         if (oper2.type == TYPE_INT){
                             t.varInt = oper1.varFloat / oper2.varInt;
                             t.type = TYPE_FLOAT;
+                            t.real_size = oper1.real_size;
                             oper_stack.push(t);
                         }else if(oper2.type == TYPE_FLOAT){
                             t.varFloat = oper1.varFloat / oper2.varFloat;
                             t.type = TYPE_FLOAT;
+                            t.real_size = oper1.real_size + oper2.real_size;
                             oper_stack.push(t);
                         }else{
                             KETILOG::ERRORLOG(LOGTAG,"Postfix type check plz... (h)");
@@ -770,8 +797,8 @@ T MergeQueryManager::Postfix(TableData &aggregation_table, SnippetRequest_Projec
                     T oper1 = oper_stack.top();
                     oper_stack.pop();
                     if(oper1.type == TYPE_STRING && oper2.type == TYPE_STRING){
-                        string col = oper1.varString;
-                        string str = oper2.varString;
+                        string col = trim(oper1.varString);
+                        string str = trim(oper2.varString);
                         if(str.substr(0,1) == "%" && str.substr(str.length()-1) == "%"){//'%str%'
                             string find_str = str.substr(1,str.length()-2);
                             t.boolean = (col.find(find_str) != string::npos) ? true : false;
@@ -795,10 +822,16 @@ T MergeQueryManager::Postfix(TableData &aggregation_table, SnippetRequest_Projec
                 }
                 break;
             }case StorageEngineInstance::SnippetRequest_ValueType_FLOAT32:
-             case StorageEngineInstance::SnippetRequest_ValueType_DOUBLE:
-             case StorageEngineInstance::SnippetRequest_ValueType_DECIMAL:{
+             case StorageEngineInstance::SnippetRequest_ValueType_DOUBLE:{
                 t.varFloat = stod(projection.value(i));
                 t.type = TYPE_FLOAT;
+                t.real_size = countDecimalPlaces(projection.value(i)); //"0.0001000000" Q11 "100.00" Q14  
+                oper_stack.push(t);
+                break;
+            }case StorageEngineInstance::SnippetRequest_ValueType_DECIMAL:{
+                t.varFloat = stod(projection.value(i));
+                t.type = TYPE_FLOAT;
+                t.real_size = 2;
                 oper_stack.push(t);
                 break;
             }case StorageEngineInstance::SnippetRequest::INT16:
@@ -836,6 +869,7 @@ string MergeQueryManager::makeGroupbyKey(TableData &groupby_table, const Repeate
                 key += "|" + trim_str;
                 break;
             case TYPE_INT:
+            case TYPE_DATE:
                 key += "|" + to_string(groupby_table.table_data[groupby_col_name].intvec[row_index]);
                 break;
             case TYPE_FLOAT:
@@ -871,6 +905,7 @@ void MergeQueryManager::GroupBy(TableData &groupby_table, const RepeatedPtrField
                 string col_name = col.first;
                 switch(col.second.type){
                     case TYPE_INT:
+                    case TYPE_DATE:
                         dest[group_by_index].table_data[col_name].intvec.push_back(groupby_table.table_data[col_name].intvec[r]);
                         break;
                     case TYPE_STRING:
@@ -878,6 +913,7 @@ void MergeQueryManager::GroupBy(TableData &groupby_table, const RepeatedPtrField
                         break;
                     case TYPE_FLOAT:
                         dest[group_by_index].table_data[col_name].floatvec.push_back(groupby_table.table_data[col_name].floatvec[r]);
+                        dest[group_by_index].table_data[col_name].real_size = groupby_table.table_data[col_name].real_size;
                         break;
                     default:
                     KETILOG::ERRORLOG(LOGTAG,"group by type check plz.. "+col_name);
@@ -913,6 +949,7 @@ void MergeQueryManager::OrderBy(TableData &orderby_table, const SnippetRequest_O
             if(orders.ascending(c) == SnippetRequest_Order_OrderDirection_ASC){
                 switch(orderby_table.table_data[orders.column_name(c)].type){
                     case TYPE_INT:
+                    case TYPE_DATE:
                         if(orderby_table.table_data[orders.column_name(c)].intvec[i] != orderby_table.table_data[orders.column_name(c)].intvec[j]){
                             return orderby_table.table_data[orders.column_name(c)].intvec[i] < orderby_table.table_data[orders.column_name(c)].intvec[j];
                         }
@@ -934,6 +971,7 @@ void MergeQueryManager::OrderBy(TableData &orderby_table, const SnippetRequest_O
             }else{//SnippetRequest_Order_OrderDirection_DESC
                 switch(orderby_table.table_data[orders.column_name(c)].type){
                     case TYPE_INT:
+                    case TYPE_DATE:
                         if(orderby_table.table_data[orders.column_name(c)].intvec[i] != orderby_table.table_data[orders.column_name(c)].intvec[j]){
                             return orderby_table.table_data[orders.column_name(c)].intvec[i] > orderby_table.table_data[orders.column_name(c)].intvec[j];
                         }
@@ -968,29 +1006,29 @@ void MergeQueryManager::OrderBy(TableData &orderby_table, const SnippetRequest_O
     for(auto table: orderby_table.table_data){
         switch(table.second.type){
             case TYPE_INT:
+            case TYPE_DATE:
                 for(int i=0; i<ordered_index_.size(); i++){
                     dest.table_data[table.first].intvec.push_back(table.second.intvec[ordered_index_[i]]);
                     dest.table_data[table.first].isnull.push_back(table.second.isnull[ordered_index_[i]]);
                 }
-                dest.table_data[table.first].type = TYPE_INT;
                 break;
             case TYPE_FLOAT:
                 for(int i=0; i<ordered_index_.size(); i++){
                     dest.table_data[table.first].floatvec.push_back(table.second.floatvec[ordered_index_[i]]);
                     dest.table_data[table.first].isnull.push_back(table.second.isnull[ordered_index_[i]]);
                 }
-                dest.table_data[table.first].type = TYPE_FLOAT;
+                dest.table_data[table.first].real_size = table.second.real_size;
                 break;
             case TYPE_STRING:
                 for(int i=0; i<ordered_index_.size(); i++){
                     dest.table_data[table.first].strvec.push_back(table.second.strvec[ordered_index_[i]]);
                     dest.table_data[table.first].isnull.push_back(table.second.isnull[ordered_index_[i]]);
                 }
-                dest.table_data[table.first].type = TYPE_STRING;
                 break;
             default:
                 KETILOG::ERRORLOG(LOGTAG,"order by type error check plz..");
         }
+        dest.table_data[table.first].type = table.second.type;
         dest.table_data[table.first].row_count = table.second.row_count;
     }
     dest.row_count = orderby_table.row_count;
@@ -1042,6 +1080,7 @@ void MergeQueryManager::Filtering(TableData &filter_table, const RepeatedPtrFiel
             for (auto it = filter_table.table_data.begin(); it != filter_table.table_data.end(); it++){
                 switch((*it).second.type){
                 case TYPE_INT:
+                case TYPE_DATE:
                     dest_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[r]);
                     break;
                 case TYPE_STRING:
@@ -1049,6 +1088,7 @@ void MergeQueryManager::Filtering(TableData &filter_table, const RepeatedPtrFiel
                     break;
                 case TYPE_FLOAT:
                     dest_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r]);
+                    dest_table.table_data[(*it).first].real_size = (*it).second.real_size;
                     break;
                 }
                 dest_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[r]);
@@ -1101,6 +1141,7 @@ void MergeQueryManager::InnerJoin_hash(){
         bool equal_join_exist = (equal_join_column.size() != 0)? true : false;
 
         if(equal_join_exist){ //hash join::equal filter + (nested loop join::non equal filter)
+            cout << "[Merging] start join operation for right table rows from index " << row_index << " to " << right_table_.row_count << endl;
             for(int r = row_index; r < right_table_.row_count; r++){
                 string hash_key = "";
 
@@ -1159,6 +1200,7 @@ void MergeQueryManager::InnerJoin_hash(){
                         for (auto it = right_table_.table_data.begin(); it != right_table_.table_data.end(); it++){
                             switch((*it).second.type){
                             case TYPE_INT:
+                            case TYPE_DATE:
                                 target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[r]);
                                 break;
                             case TYPE_STRING:
@@ -1166,6 +1208,7 @@ void MergeQueryManager::InnerJoin_hash(){
                                 break;
                             case TYPE_FLOAT:
                                 target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r]);
+                                target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                                 break;
                             }
                             target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[r]);
@@ -1174,6 +1217,7 @@ void MergeQueryManager::InnerJoin_hash(){
                         for (auto it = left_table_.table_data.begin(); it != left_table_.table_data.end(); it++){
                             switch((*it).second.type){
                             case TYPE_INT:
+                            case TYPE_DATE:
                                 target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[hash_table_[hash_key][i]]);
                                 break;
                             case TYPE_STRING:
@@ -1181,6 +1225,7 @@ void MergeQueryManager::InnerJoin_hash(){
                                 break;
                             case TYPE_FLOAT:
                                 target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[hash_table_[hash_key][i]]);
+                                target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                                 break;
                             }
                             target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[hash_table_[hash_key][i]]);
@@ -1207,7 +1252,6 @@ void MergeQueryManager::InnerJoin_hash(){
                             string right_column = snippet_.query_info().filtering(f).rv().value(0);
                             int oper = snippet_.query_info().filtering(f).operator_();
 
-                            // passed = compareByOperator(snippet.query_info().filtering(f).operator_(), left_column, right_column, r1,r2);
                             switch(left_table_.table_data[left_column].type){
                             case TYPE_STRING:
                                 passed = compareByOperator(oper, left_table_.table_data[left_column].strvec[r1],
@@ -1233,6 +1277,7 @@ void MergeQueryManager::InnerJoin_hash(){
                         for (auto it = left_table_.table_data.begin(); it != left_table_.table_data.end(); it++){
                             switch((*it).second.type){
                             case TYPE_INT:
+                            case TYPE_DATE:
                                 target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[r1]);
                                 break;
                             case TYPE_STRING:
@@ -1240,6 +1285,7 @@ void MergeQueryManager::InnerJoin_hash(){
                                 break;
                             case TYPE_FLOAT:
                                 target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r1]);
+                                target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                                 break;
                             }
                             target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[r1]);
@@ -1248,6 +1294,7 @@ void MergeQueryManager::InnerJoin_hash(){
                         for (auto it = right_table_.table_data.begin(); it != right_table_.table_data.end(); it++){
                             switch((*it).second.type){
                             case TYPE_INT:
+                            case TYPE_DATE:
                                 target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[r2]);
                                 break;
                             case TYPE_STRING:
@@ -1255,6 +1302,7 @@ void MergeQueryManager::InnerJoin_hash(){
                                 break;
                             case TYPE_FLOAT:
                                 target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r2]);
+                                target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                                 break;
                             }
                             target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[r2]);
@@ -1317,6 +1365,7 @@ void MergeQueryManager::InnerJoin_nestedloop(){
                 for (auto it = left_table_.table_data.begin(); it != left_table_.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
+                    case TYPE_DATE:
                         target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[r1]);
                         break;
                     case TYPE_STRING:
@@ -1324,6 +1373,7 @@ void MergeQueryManager::InnerJoin_nestedloop(){
                         break;
                     case TYPE_FLOAT:
                         target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r1]);
+                        target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                         break;
                     }
                     target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[r1]);
@@ -1332,6 +1382,7 @@ void MergeQueryManager::InnerJoin_nestedloop(){
                 for (auto it = right_table_.table_data.begin(); it != right_table_.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
+                    case TYPE_DATE:
                         target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[r2]);
                         break;
                     case TYPE_STRING:
@@ -1339,6 +1390,7 @@ void MergeQueryManager::InnerJoin_nestedloop(){
                         break;
                     case TYPE_FLOAT:
                         target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r2]);
+                        target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                         break;
                     }
                     target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[r2]);
@@ -1390,6 +1442,7 @@ void MergeQueryManager::LeftOuterJoin_hash(){
         }
         
         for(int r=row_index; r<left_table_.row_count; r++){
+            cout << "[Merging] start join operation for left table rows from index " << row_index << " to " << right_table_.row_count << endl;
             string hash_key = "";
             bool passed = false;
 
@@ -1416,6 +1469,7 @@ void MergeQueryManager::LeftOuterJoin_hash(){
                     for (auto it = left_table_.table_data.begin(); it != left_table_.table_data.end(); it++){
                         switch((*it).second.type){
                         case TYPE_INT:
+                        case TYPE_DATE:
                             target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[r]);
                             break;
                         case TYPE_STRING:
@@ -1423,6 +1477,7 @@ void MergeQueryManager::LeftOuterJoin_hash(){
                             break;
                         case TYPE_FLOAT:
                             target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r]);
+                            target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                             break;
                         }
                         target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[r]);
@@ -1431,6 +1486,7 @@ void MergeQueryManager::LeftOuterJoin_hash(){
                     for (auto it = right_table_.table_data.begin(); it != right_table_.table_data.end(); it++){
                         switch((*it).second.type){
                         case TYPE_INT:
+                        case TYPE_DATE:
                             target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[hash_table_[hash_key][i]]);
                             break;
                         case TYPE_STRING:
@@ -1438,6 +1494,7 @@ void MergeQueryManager::LeftOuterJoin_hash(){
                             break;
                         case TYPE_FLOAT:
                             target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[hash_table_[hash_key][i]]);
+                            target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                             break;
                         }
                         target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[i]);
@@ -1449,6 +1506,7 @@ void MergeQueryManager::LeftOuterJoin_hash(){
                 for (auto it = left_table_.table_data.begin(); it != left_table_.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
+                    case TYPE_DATE:
                         target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[r]);
                         break;
                     case TYPE_STRING:
@@ -1456,6 +1514,7 @@ void MergeQueryManager::LeftOuterJoin_hash(){
                         break;
                     case TYPE_FLOAT:
                         target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r]);
+                        target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                         break;
                     }
                     target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[r]);
@@ -1464,6 +1523,7 @@ void MergeQueryManager::LeftOuterJoin_hash(){
                 for (auto it = right_table_.table_data.begin(); it != right_table_.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
+                    case TYPE_DATE:
                         target_table_.table_data[(*it).first].intvec.push_back(0);
                         break;
                     case TYPE_STRING:
@@ -1471,6 +1531,7 @@ void MergeQueryManager::LeftOuterJoin_hash(){
                         break;
                     case TYPE_FLOAT:
                         target_table_.table_data[(*it).first].floatvec.push_back(0);
+                        target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                         break;
                     }
                     target_table_.table_data[(*it).first].isnull.push_back(true);//null check
@@ -1489,136 +1550,6 @@ void MergeQueryManager::LeftOuterJoin_hash(){
 
     hash_table_.clear();
 }
-
-// void MergeQueryManager::LeftOuterJoin_nestedloop(){
-//     for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
-//         target_table.table_data[(*it).first].type = (*it).second.type;
-//     }
-//     for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
-//         target_table.table_data[(*it).first].type = (*it).second.type;
-//     }
-
-//     for(int r1=0; r1<left_table.row_count; r1++){
-//         bool exist = false;
-
-//         for(int r2=0; r2<right_table.row_count; r2++){
-//             bool passed = false;
-
-//             for(int f=0; f<snippet.table_filter_size(); f++){//동등조인,비동등조인 여부 판단 필요
-//                 if(f%2 == 1){
-//                     switch(snippet.table_filter(f).operator_())
-//                     case KETI_AND:{//and가 아닌경우??
-//                         continue;
-//                     }
-//                 }else{
-//                     bool filter_passed = false;
-//                     string driving_c1 = snippet.table_filter(f).lv().value(0);
-//                     string driven_c2 = snippet.table_filter(f).rv().value(0);
-
-//                     switch(left_table.table_data[driving_c1].type){
-//                     case TYPE_INT:
-//                         if(left_table.table_data[driving_c1].intvec[r1] == right_table.table_data[driven_c2].intvec[r2]){
-//                             filter_passed = true;
-//                             break;
-//                         }
-//                         break;
-//                     case TYPE_FLOAT:
-//                         if(left_table.table_data[driving_c1].floatvec[r1] == right_table.table_data[driven_c2].floatvec[r2]){
-//                             filter_passed = true;
-//                             break;
-//                         }
-//                         break;
-//                     case TYPE_STRING:
-//                         if(left_table.table_data[driving_c1].strvec[r1] == right_table.table_data[driven_c2].strvec[r2]){
-//                             filter_passed = true;
-//                             break;
-//                         }
-//                         break;
-//                     default:
-//                         KETILOG::ERRORLOG(LOGTAG,"inner join type check plz... " + to_string(left_table.table_data[driving_c1].type));
-//                     }
-
-//                     if(filter_passed){
-//                         passed = true;
-//                         filter_passed = false;
-//                     }else{
-//                         passed = false;
-//                         break;
-//                     }
-//                 }
-//             }
-
-//             if(passed){ 
-//                 exist = true;
-//                 for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
-//                     switch((*it).second.type){
-//                     case TYPE_INT:
-//                         target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[r1]);
-//                         break;
-//                     case TYPE_STRING:
-//                         target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[r1]);
-//                         break;
-//                     case TYPE_FLOAT:
-//                         target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r1]);
-//                         break;
-//                     }
-//                     target_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[r1]);
-//                     target_table.table_data[(*it).first].row_count++;
-//                 }
-//                 for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
-//                     switch((*it).second.type){
-//                     case TYPE_INT:
-//                         target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[r2]);
-//                         break;
-//                     case TYPE_STRING:
-//                         target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[r2]);
-//                         break;
-//                     case TYPE_FLOAT:
-//                         target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r2]);
-//                         break;
-//                     }
-//                     target_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[r2]);
-//                     target_table.table_data[(*it).first].row_count++;
-//                 }
-//                 target_table.row_count++;
-//             }
-//         }
-
-//         if(!exist){
-//             for (auto it = left_table.table_data.begin(); it != left_table.table_data.end(); it++){
-//                 switch((*it).second.type){
-//                 case TYPE_INT:
-//                     target_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[r1]);
-//                     break;
-//                 case TYPE_STRING:
-//                     target_table.table_data[(*it).first].strvec.push_back((*it).second.strvec[r1]);
-//                     break;
-//                 case TYPE_FLOAT:
-//                     target_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r1]);
-//                     break;
-//                 }
-//                 target_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[r1]);
-//                 target_table.table_data[(*it).first].row_count++;
-//             }
-//             for (auto it = right_table.table_data.begin(); it != right_table.table_data.end(); it++){
-//                 switch((*it).second.type){
-//                 case TYPE_INT:
-//                     target_table.table_data[(*it).first].intvec.push_back(0);
-//                     break;
-//                 case TYPE_STRING:
-//                     target_table.table_data[(*it).first].strvec.push_back("");
-//                     break;
-//                 case TYPE_FLOAT:
-//                     target_table.table_data[(*it).first].floatvec.push_back(0);
-//                     break;
-//                 }
-//                 target_table.table_data[(*it).first].isnull.push_back(true);//null check
-//                 target_table.table_data[(*it).first].row_count++;
-//             }
-//             target_table.row_count++;
-//         }
-//     }
-// }
 
 void MergeQueryManager::RightOuterJoin_hash(){
     int row_index = 0;
@@ -1661,6 +1592,7 @@ void MergeQueryManager::RightOuterJoin_hash(){
         }
 
         for(int r=row_index; r<right_table_.row_count; r++){
+            cout << "[Merging] start join operation for right table rows from index " << row_index << " to " << right_table_.row_count << endl;
             string hash_key = "";
             bool passed = false;
 
@@ -1687,6 +1619,7 @@ void MergeQueryManager::RightOuterJoin_hash(){
                     for (auto it = right_table_.table_data.begin(); it != right_table_.table_data.end(); it++){
                         switch((*it).second.type){
                         case TYPE_INT:
+                        case TYPE_DATE:
                             target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[r]);
                             break;
                         case TYPE_STRING:
@@ -1694,6 +1627,7 @@ void MergeQueryManager::RightOuterJoin_hash(){
                             break;
                         case TYPE_FLOAT:
                             target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r]);
+                            target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                             break;
                         }
                         target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[r]);
@@ -1702,6 +1636,7 @@ void MergeQueryManager::RightOuterJoin_hash(){
                     for (auto it = left_table_.table_data.begin(); it != left_table_.table_data.end(); it++){
                         switch((*it).second.type){
                         case TYPE_INT:
+                        case TYPE_DATE:
                             target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[hash_table_[hash_key][i]]);
                             break;
                         case TYPE_STRING:
@@ -1709,6 +1644,7 @@ void MergeQueryManager::RightOuterJoin_hash(){
                             break;
                         case TYPE_FLOAT:
                             target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[hash_table_[hash_key][i]]);
+                            target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                             break;
                         }
                         target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[i]);
@@ -1720,6 +1656,7 @@ void MergeQueryManager::RightOuterJoin_hash(){
                 for (auto it = right_table_.table_data.begin(); it != right_table_.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
+                    case TYPE_DATE:
                         target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[r]);
                         break;
                     case TYPE_STRING:
@@ -1727,6 +1664,7 @@ void MergeQueryManager::RightOuterJoin_hash(){
                         break;
                     case TYPE_FLOAT:
                         target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r]);
+                        target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                         break;
                     }
                     target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[r]);
@@ -1735,6 +1673,7 @@ void MergeQueryManager::RightOuterJoin_hash(){
                 for (auto it = left_table_.table_data.begin(); it != left_table_.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
+                    case TYPE_DATE:
                         target_table_.table_data[(*it).first].intvec.push_back(0);
                         break;
                     case TYPE_STRING:
@@ -1742,6 +1681,7 @@ void MergeQueryManager::RightOuterJoin_hash(){
                         break;
                     case TYPE_FLOAT:
                         target_table_.table_data[(*it).first].floatvec.push_back(0);
+                        target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                         break;
                     }
                     target_table_.table_data[(*it).first].isnull.push_back(true);//null check
@@ -1788,6 +1728,7 @@ void MergeQueryManager::Union(){
             for (auto it = right_table_.table_data.begin(); it != right_table_.table_data.end(); it++){
                 switch((*it).second.type){
                 case TYPE_INT:
+                case TYPE_DATE:
                     target_table_.table_data[(*it).first].intvec.insert(target_table_.table_data[(*it).first].intvec.end(),right_table_.table_data[(*it).first].intvec.begin()+row_index,right_table_.table_data[(*it).first].intvec.begin()+end);
                     break;
                 case TYPE_STRING:
@@ -1795,10 +1736,12 @@ void MergeQueryManager::Union(){
                     break;
                 case TYPE_FLOAT:
                     target_table_.table_data[(*it).first].floatvec.insert(target_table_.table_data[(*it).first].floatvec.end(),right_table_.table_data[(*it).first].floatvec.begin()+row_index,right_table_.table_data[(*it).first].floatvec.begin()+end);
+                    target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                     break;
                 }
                 target_table_.table_data[(*it).first].row_count += right_table_.table_data[(*it).first].row_count;
                 target_table_.table_data[(*it).first].isnull.insert(target_table_.table_data[(*it).first].isnull.end(),right_table_.table_data[(*it).first].isnull.begin()+row_index,right_table_.table_data[(*it).first].isnull.begin()+end);
+                target_table_.table_data[(*it).first].type = (*it).second.type;
             }
 
             row_index = right_table_.row_count;
@@ -1808,17 +1751,17 @@ void MergeQueryManager::Union(){
             }
         }
 
-        for(auto it =target_table_.table_data.begin(); it != target_table_.table_data.end(); it++){
-            if((*it).second.floatvec.size() != 0){
-                (*it).second.type = TYPE_FLOAT;
-            }else if((*it).second.intvec.size() != 0){
-                (*it).second.type = TYPE_INT;
-            }else if((*it).second.strvec.size() != 0){
-                (*it).second.type = TYPE_STRING;
-            }else{
-                (*it).second.type = TYPE_EMPTY;
-            }
-        }
+        // for(auto it =target_table_.table_data.begin(); it != target_table_.table_data.end(); it++){
+        //     if((*it).second.floatvec.size() != 0){
+        //         (*it).second.type = TYPE_FLOAT;
+        //     }else if((*it).second.intvec.size() != 0){
+        //         (*it).second.type = TYPE_INT;
+        //     }else if((*it).second.strvec.size() != 0){
+        //         (*it).second.type = TYPE_STRING;
+        //     }else{
+        //         (*it).second.type = TYPE_EMPTY;
+        //     }
+        // }
 
         target_table_.row_count = left_table_.row_count + right_table_.row_count;
     }
@@ -1857,6 +1800,7 @@ void MergeQueryManager::In(){
         }
 
         for(int r=row_index; r<left_table_.row_count; r++){
+            cout << "[Merging] start in operation for right table rows from index " << row_index << " to " << right_table_.row_count << endl;
             string hash_key = "";
             bool passed = true;
             string hash_key_column = snippet_.query_info().filtering(0).lv().value(0);
@@ -1883,6 +1827,7 @@ void MergeQueryManager::In(){
                 for (auto it = left_table_.table_data.begin(); it != left_table_.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
+                    case TYPE_DATE:
                         target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[r]);
                         break;
                     case TYPE_STRING:
@@ -1890,6 +1835,7 @@ void MergeQueryManager::In(){
                         break;
                     case TYPE_FLOAT:
                         target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r]);
+                        target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                         break;
                     }
                     target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[r]);
@@ -1980,6 +1926,7 @@ void MergeQueryManager::DependencyInnerJoin(){
                     for (auto it = right_table_.table_data.begin(); it != right_table_.table_data.end(); it++){
                         switch((*it).second.type){
                         case TYPE_INT:
+                        case TYPE_DATE:
                             dependency_subquery_filtered_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[r2]);
                             break;
                         case TYPE_STRING:
@@ -1987,6 +1934,7 @@ void MergeQueryManager::DependencyInnerJoin(){
                             break;
                         case TYPE_FLOAT:
                             dependency_subquery_filtered_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r2]);
+                            dependency_subquery_filtered_table.table_data[(*it).first].real_size = (*it).second.real_size;
                             break;
                         }
                         dependency_subquery_filtered_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[r2]);
@@ -2028,6 +1976,7 @@ void MergeQueryManager::DependencyInnerJoin(){
                 for (auto it = left_table_.table_data.begin(); it != left_table_.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
+                    case TYPE_DATE:
                         target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[r1]);
                         break;
                     case TYPE_STRING:
@@ -2035,6 +1984,7 @@ void MergeQueryManager::DependencyInnerJoin(){
                         break;
                     case TYPE_FLOAT:
                         target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r1]);
+                        target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                         break;
                     }
                     target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[r1]);
@@ -2132,6 +2082,7 @@ void MergeQueryManager::DependencyExist(){
                 for (auto it = left_table_.table_data.begin(); it != left_table_.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
+                    case TYPE_DATE:
                         target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[r1]);
                         break;
                     case TYPE_STRING:
@@ -2139,6 +2090,7 @@ void MergeQueryManager::DependencyExist(){
                         break;
                     case TYPE_FLOAT:
                         target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r1]);
+                        target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                         break;
                     }
                     target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[r1]);
@@ -2242,6 +2194,7 @@ void MergeQueryManager::DependencyIn(){
                     for (auto it = right_table_.table_data.begin(); it != right_table_.table_data.end(); it++){
                         switch((*it).second.type){
                         case TYPE_INT:
+                        case TYPE_DATE:
                             dependency_subquery_filtered_table.table_data[(*it).first].intvec.push_back((*it).second.intvec[r2]);
                             break;
                         case TYPE_STRING:
@@ -2249,6 +2202,7 @@ void MergeQueryManager::DependencyIn(){
                             break;
                         case TYPE_FLOAT:
                             dependency_subquery_filtered_table.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r2]);
+                            dependency_subquery_filtered_table.table_data[(*it).first].real_size = (*it).second.real_size;
                             break;
                         }
                         dependency_subquery_filtered_table.table_data[(*it).first].isnull.push_back((*it).second.isnull[r2]);
@@ -2289,6 +2243,7 @@ void MergeQueryManager::DependencyIn(){
                 for (auto it = left_table_.table_data.begin(); it != left_table_.table_data.end(); it++){
                     switch((*it).second.type){
                     case TYPE_INT:
+                    case TYPE_DATE:
                         target_table_.table_data[(*it).first].intvec.push_back((*it).second.intvec[r1]);
                         break;
                     case TYPE_STRING:
@@ -2296,6 +2251,7 @@ void MergeQueryManager::DependencyIn(){
                         break;
                     case TYPE_FLOAT:
                         target_table_.table_data[(*it).first].floatvec.push_back((*it).second.floatvec[r1]);
+                        target_table_.table_data[(*it).first].real_size = (*it).second.real_size;
                         break;
                     }
                     target_table_.table_data[(*it).first].isnull.push_back((*it).second.isnull[r1]);
@@ -2326,6 +2282,7 @@ void MergeQueryManager::createHashTable(TableData &hash_table, vector<string> eq
                 hash_key += "|" + hash_table.table_data[hash_key_column].strvec[i];
                 break;
             case TYPE_INT:
+            case TYPE_DATE:
                 hash_key += "|" + to_string(hash_table.table_data[hash_key_column].intvec[i]);
                 break;
             case TYPE_FLOAT:
