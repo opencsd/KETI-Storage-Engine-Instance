@@ -3,6 +3,7 @@
 void Scheduler::runScheduler(){ 
     while (1){
         SnippetRequest snippet = Scheduler::PopQueue();
+        cout << "[Scheduler] start snippet scheduling {ID:" << snippet.query_id() << "|" << snippet.work_id() << "}" << endl;;
         
         //map sst가 key, 선정 csd가 value 
         map<string,string> bestcsd; 
@@ -15,17 +16,21 @@ void Scheduler::runScheduler(){
 }
 
 void Scheduler::getBestCSD(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd){
-    map<string,string> bestCSDList; 
-
     switch(SCHEDULING_ALGORITHM){
         case(DCS):{
+            cout << "[Scheduler] scheduling algorithm : DCS(Depend on CSD Status)" << endl;
             DCS_Algorithm(sst_info, bestcsd);
+            cout << "[Scheduler] result> " << sst_info->sst_name() << " -> csd#" << bestcsd[sst_info->sst_name()] << endl;
             break;
         }case(DSI):{
+            cout << "[Scheduler] scheduling algorithm : DSI(Depend on SST Info)" << endl;
             DSI_Algorithm(sst_info, bestcsd);
+            cout << "[Scheduler] result> " << sst_info->sst_name() << " -> csd#" << bestcsd[sst_info->sst_name()] << endl;
             break;
-        }case(RANDOM):{
-            Random(sst_info, bestcsd);
+        }case(DFA):{
+            cout << "[Scheduler] scheduling algorithm : DFA(Drop First Available)" << endl;
+            DFA_Algorithm(sst_info, bestcsd);
+            cout << "[Scheduler] result> " << sst_info->sst_name() << " -> csd#" << bestcsd[sst_info->sst_name()] << endl;
             break;
         }case(AUTO_SELECTION):{
             Auto_Selection(sst_info, bestcsd);
@@ -64,7 +69,6 @@ void Scheduler::DCS_Algorithm(const StorageEngineInstance::SnippetRequest_SstInf
             bestcsd[sst_name] = csd_id;
             return;
         }
-    
 
         //DCS스케줄링
         KETILOG::DEBUGLOG("Offloading", "sst-csd count : n");
@@ -263,7 +267,7 @@ void Scheduler::DSI_Algorithm(const StorageEngineInstance::SnippetRequest_SstInf
     
     return;
 }
-void Scheduler::Random(const StorageEngineInstance::SnippetRequest_SstInfo*sst_info, map<string,string>& bestcsd){
+void Scheduler::DFA_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo*sst_info, map<string,string>& bestcsd){
     string csd_id;
     string sst_name;
     // srand(time(NULL));
