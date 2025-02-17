@@ -60,8 +60,9 @@ struct ColData{
   vector<int64_t> intvec;
   vector<double> floatvec;
   vector<bool> isnull;//해당 인덱스 null 여부 (조인시)
-  int type;//0 empty, 1 string, 2 int, 3 float, 4 boolean (KETI_VECTOR_TYPE)
+  int type;//0 empty, 1 string, 2 int, 3 float, 4 boolean, 5 date (KETI_VECTOR_TYPE)
   int row_count;
+  int real_size;
   ColData(){
     strvec.clear();
     intvec.clear();
@@ -69,6 +70,7 @@ struct ColData{
     isnull.clear();
     type = TYPE_EMPTY; 
     row_count = 0;
+    real_size = 0;
   }
 };
 
@@ -143,8 +145,6 @@ struct BlockResult{//csd 결과 데이터 파싱 구조체
 
       scanned_row_count = document["scanned_row_count"].GetInt();
       filtered_row_count = document["filtered_row_count"].GetInt();
-
-      cout << work_id << ": " << result_block_count << "/" << table_total_block_count << endl;
     }
 };
 
@@ -171,7 +171,7 @@ struct WorkBuffer {
     row_count = 0;
   }
 
-  void save_table_column_type(vector<int> return_datatype){
+  void save_table_column_type(vector<int> return_datatype, vector<int> return_column_length){
     for(size_t i=0; i<table_column.size(); i++){
         string col_name = table_column[i];
         int col_type = return_datatype[i];
@@ -196,9 +196,10 @@ struct WorkBuffer {
                 break;
             }case MySQL_DataType::MySQL_NEWDECIMAL:{
                 table_data[col_name].type = TYPE_FLOAT;
+                table_data[col_name].real_size = (return_column_length[i] - 6) * 2;
                 break;
             }case MySQL_DataType::MySQL_DATE:{
-                table_data[col_name].type = TYPE_INT;
+                table_data[col_name].type = TYPE_DATE;
                 break;
             }case MySQL_DataType::MySQL_TIMESTAMP:{
                 table_data[col_name].type = TYPE_INT;

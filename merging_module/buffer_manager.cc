@@ -212,9 +212,8 @@ void BufferManager::pushResult(BlockResult blockResult){
         for(int i = 0; i < blockResult.column_alias.size(); i++){
             workBuffer->table_column.push_back(blockResult.column_alias[i]);
             workBuffer->table_data.insert({blockResult.column_alias[i],ColData{}});
-            workBuffer->save_table_column_type(blockResult.return_datatype);
         }
-
+        workBuffer->save_table_column_type(blockResult.return_datatype, blockResult.return_offlen);
         workBuffer->table_total_block_count = blockResult.table_total_block_count;
         workBuffer->status = NotFinished;
 
@@ -238,18 +237,6 @@ void BufferManager::mergeResult(int qid, int wid){
             vector<int> new_row_offset;
             new_row_offset.assign(result.row_offset.begin(), result.row_offset.end());
             new_row_offset.push_back(result.length);
-
-            // if(KETILOG::IsLogLevelUnder(TRACE)){
-            //     // 리턴 데이터 형식 확인 - Debug Code   
-            //     for(int i = 0; i<result.return_datatype.size(); i++){
-            //         cout << result.return_datatype[i] << " ";
-            //     }
-            //     cout << endl;
-            //     for(int i = 0; i<result.return_offlen.size(); i++){
-            //         cout << result.return_offlen[i] << " ";
-            //     }
-            //     cout << endl;  
-            // }
 
             for(int i=0; i<result.row_count; i++){
                 origin_row_len = new_row_offset[i+1] - new_row_offset[i];
@@ -310,20 +297,20 @@ void BufferManager::mergeResult(int qid, int wid){
                             //decimal(15,2)만 고려한 상황 -> col_len = 7 or 8 (integer:6/real:1 or 2 or 3)
                             char tempbuf[col_len];//col_len = 7 or 8 or 9
                             memcpy(tempbuf,row_data+col_offset,col_len);
+
                             bool is_negative = false;
                             if(std::bitset<8>(tempbuf[0])[7] == 0){//음수일때 not +1
                                 is_negative = true;
                                 for(int i = 0; i<7; i++){
-                                    tempbuf[i] = ~tempbuf[i];//not연산
+                                    tempbuf[i] = ~tempbuf[i];//bitwise
                                 }
-                                // tempbuf[6] = tempbuf[6] +1;//+1
                             }   
+                            tempbuf[0] ^= 0x80;
                             char integer[8];
                             memset(&integer, 0, 8);
-                            for(int k=0; k<5; k++){
+                            for(int k=0; k<6; k++){
                                 integer[k] = tempbuf[5-k];
                             }
-
                             int64_t ivalue = *((int64_t *)integer); 
                             double rvalue;
                             if(col_len == 7){
@@ -333,15 +320,15 @@ void BufferManager::mergeResult(int qid, int wid){
                                 rvalue *= 0.01;
                             }else if(col_len == 8){
                                 char real[2];
-                                real[0] = tempbuf[7];
-                                real[1] = tempbuf[6];
+                                real[0] = tempbuf[6];
+                                real[1] = tempbuf[7];
                                 rvalue = *((int16_t *)real); 
                                 rvalue *= 0.0001;
                             }else if(col_len == 9){
                                 char real[4];
-                                real[0] = tempbuf[8];
+                                real[0] = tempbuf[6];
                                 real[1] = tempbuf[7];
-                                real[2] = tempbuf[6];
+                                real[2] = tempbuf[8];
                                 real[3] = 0x00;
                                 rvalue = *((int32_t *)real); 
                                 rvalue *= 0.000001;
@@ -388,8 +375,8 @@ void BufferManager::mergeResult(int qid, int wid){
                             workBuffer->table_data[col_name].strvec.push_back(my_value);
                             break;
                         }default:{
-                            // string msg = " error>> Type: " + to_string(col_type) + " is not defined!";
-                            // KETILOG::FATALLOG(LOGTAG, msg);
+                            string msg = " error>> Type: " + to_string(col_type) + " is not defined!";
+                            KETILOG::FATALLOG(LOGTAG, msg);
                         }
                     }
                     workBuffer->table_data[col_name].isnull.push_back(false);
@@ -404,10 +391,12 @@ void BufferManager::mergeResult(int qid, int wid){
         DataBuffer_[qid]->filtered_row_count += result.filtered_row_count;
         workBuffer->work_in_progress_condition.notify_all();
         
-        KETILOG::DEBUGLOG(LOGTAG,"# save data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} ... ( " + std::to_string(workBuffer->merged_block_count) + " / " + std::to_string(workBuffer->table_total_block_count) + ")");
+        KETILOG::TRACELOG(LOGTAG,"# save data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} ... (" + std::to_string(workBuffer->merged_block_count) + "/" + std::to_string(workBuffer->table_total_block_count) + ")");
+        cout << "[BufferManager] save csd result in buffer {ID:" + to_string(qid) + "|" + to_string(wid) + "}... (" + std::to_string(workBuffer->merged_block_count) + "/" + std::to_string(workBuffer->table_total_block_count) + ")" << endl;
 
         if(workBuffer->merged_block_count == workBuffer->table_total_block_count){ //Work Done
             string msg = "# merging data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} done";
+            cout << "[BufferManager] finished saving csd result in buffer {ID:" + to_string(qid) + "|" + to_string(wid) + "}" << endl;
             KETILOG::INFOLOG(LOGTAG,msg);
 
             // string message = ">Save Result in Buffer ID:" + to_string(qid) + "-" + to_string(wid) + " Complete (lines:" + to_string(workBuffer->row_count) + ")";
@@ -457,6 +446,8 @@ int BufferManager::checkTableStatus(int qid, int wid, string table_name){
 }
 
 TableData BufferManager::getTableData(int qid, int wid, string table_name, int row_index){
+    cout << "[BufferManager] get table data from buffer {ID:" << to_string(qid) << "|" << to_string(wid) << "}" << endl;
+
     initializeBuffer(qid, wid, table_name);
 
     if(wid == -1){
@@ -517,9 +508,11 @@ TableData BufferManager::getFinishedTableData(int qid, int wid, string table_nam
 
     if(workBuffer->status == NotFinished || workBuffer->status == Initialized){
         KETILOG::DEBUGLOG(LOGTAG,"# not finished " + to_string(qid) + ":" + table_name);
+        cout << "[BufferManager] wait until work {ID:" << qid << "|" << wid << "} is done" << endl;
         workBuffer->work_done_condition.wait(lock);
     }else if(workBuffer->status == WorkDone){
         KETILOG::DEBUGLOG(LOGTAG,"# done " + to_string(qid) + ":" + table_name);
+        cout << "[BufferManager] get table data from buffer {ID:" << qid << "|" << wid << "}" << endl;
     }
 
     tableData.table_data = workBuffer->table_data;
@@ -545,6 +538,8 @@ int BufferManager::saveTableData(SnippetRequest snippet, TableData &table_data_,
     int qid = snippet.query_id();
     int wid = snippet.work_id();
     string table_name = snippet.result_info().table_alias();
+    
+    cout << "[BufferManager] save table data in buffer {ID:" << qid << "|" << wid << "}" << endl;
 
     string msg = "# save table {" + to_string(qid) + "|" + table_name + "}";
     KETILOG::DEBUGLOG(LOGTAG,msg);
@@ -568,7 +563,7 @@ int BufferManager::saveTableData(SnippetRequest snippet, TableData &table_data_,
                 column.strvec.assign(coldata.second.strvec.begin()+offset, coldata.second.strvec.begin()+length); 
                 column.isnull.assign(coldata.second.isnull.begin()+offset, coldata.second.isnull.begin()+length);
                 column.row_count = length - offset;
-            }else if(coldata.second.type == TYPE_INT){
+            }else if(coldata.second.type == TYPE_INT || coldata.second.type == TYPE_DATE){
                 column.intvec.assign(coldata.second.intvec.begin()+offset, coldata.second.intvec.begin()+length); 
                 column.isnull.assign(coldata.second.isnull.begin()+offset, coldata.second.isnull.begin()+length);
                 column.row_count = length - offset;
@@ -576,6 +571,7 @@ int BufferManager::saveTableData(SnippetRequest snippet, TableData &table_data_,
                 column.floatvec.assign(coldata.second.floatvec.begin()+offset, coldata.second.floatvec.begin()+length); 
                 column.isnull.assign(coldata.second.isnull.begin()+offset, coldata.second.isnull.begin()+length);
                 column.row_count = length - offset;
+                column.real_size = coldata.second.real_size;
             }else if(coldata.second.type == TYPE_EMPTY){
             }else{
                 KETILOG::FATALLOG(LOGTAG,"save table row type check plz... ");
