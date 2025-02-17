@@ -11,6 +11,7 @@ void SnippetManager::setupSnippet(SnippetRequest snippet, map<string,string> bes
     for(const auto& it : sst_group){
         string json_str = serialize(snippet, it.first, it.second);
         sendSnippetToCSD(json_str);
+        cout << "[SnippetManager] send snippet to csd #" << it.first << endl;
     }
 
     // string message = ">Scheduling and Send Snippet ID:" + to_string(snippet.query_id()) + "-" + to_string(snippet.work_id()) + " Complete";
@@ -196,54 +197,62 @@ void SnippetManager::calcul_return_column_type(SnippetRequest& snippet, vector<i
             return_column_length.push_back(substringLength);
 
         }else{
-            if(snippet.query_info().projection(i).value_size() == 1){ // 그냥 하나인 경우 그대로 간다
+            if(snippet.query_info().projection(i).value_size() == 1){
                 return_column_type.push_back(column_type[snippet.query_info().projection(i).value(0)]);
                 return_column_length.push_back(column_length[snippet.query_info().projection(i).value(0)]);
             }else{
                 std::stack<int> postfixStack; 
-                int decimalCount = 0;
+                std::stack<int> decimalSizeStack;
 
                 for (int j = 0; j < snippet.query_info().projection(i).value_size(); j++){
                     string token = snippet.query_info().projection(i).value(j);
                     int tokenType = 0;
+
                     if (token == "+" || token == "-" || token == "*" || token == "/"){
-                        int tempDecimalCount = 0;
                         int op2 = postfixStack.top(); postfixStack.pop();
                         int op1 = postfixStack.top(); postfixStack.pop();
 
-                        if(op1 == 246) tempDecimalCount++;
-                        else if(op2 == 246) tempDecimalCount++;
-
-                        if(tempDecimalCount == 0) tokenType = 3;
-                        else tokenType = 246;
-
-                        if(token == "*" || token == "/"){
-                            decimalCount = tempDecimalCount;
-                        }else{
-                            if(tempDecimalCount != 0){
-                                decimalCount = 1;
+                        if(op2 == 246 && op1 == 246){
+                            tokenType = 246;
+                            int op2Size = decimalSizeStack.top(); decimalSizeStack.pop();
+                            int op1Size = decimalSizeStack.top(); decimalSizeStack.pop();
+                            if (token == "*" || token == "/"){
+                                decimalSizeStack.push(op1Size + op2Size);
+                            }else{
+                                int decimalSize = std::max(op1Size, op2Size);
+                                decimalSizeStack.push(op1Size + op2Size);
                             }
+                        }else if(op2 == 246 && op1 != 246){
+                            tokenType = 246;
+                            int op2Size = decimalSizeStack.top(); decimalSizeStack.pop();
+                            decimalSizeStack.push(op2Size);
+                        }else if(op2 != 246 && op1 == 246){
+                            tokenType = 246;
+                            int op1Size = decimalSizeStack.top(); decimalSizeStack.pop();
+                            decimalSizeStack.push(op1Size);
+                        }else{
+                            tokenType = 3;
                         }
-                        
-                        postfixStack.push(tokenType);
                     }
                     else{
                         if(snippet.query_info().projection(i).value_type(j) == 10){
                             tokenType = column_type.find(snippet.query_info().projection(i).value(j)) -> second;
-                        }
-                        else{
+                            if(tokenType == 246){
+                                decimalSizeStack.push(1);
+                            }
+                        }else{
                             tokenType = snippet.query_info().projection(i).value_type(j);
                         }
-                        postfixStack.push(tokenType);
                     }
+                    postfixStack.push(tokenType);
                 }
-                if(decimalCount == 0){ // 오직 int 연산인 경우 
+
+                if(postfixStack.top() == 3){ // there is no decimal
                     return_column_type.push_back(3);
                     return_column_length.push_back(4);
-                }
-                else{
+                }else{
                     return_column_type.push_back(246);
-                    return_column_length.push_back(6+decimalCount);
+                    return_column_length.push_back(6+decimalSizeStack.top());
                 }
             }
         }
