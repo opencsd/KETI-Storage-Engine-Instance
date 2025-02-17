@@ -205,7 +205,9 @@ message QueryResult {
       TYPE_STRING = 1;
       TYPE_INT = 2;
       TYPE_FLOAT = 3;
+      TYPE_DATE = 4;
     }
+    int32 real_size = 1;
     ColType col_type = 2;
     repeated string string_col = 3;
     repeated int32 int_col = 4;

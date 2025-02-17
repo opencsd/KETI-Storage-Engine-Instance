@@ -76,23 +76,30 @@ class StorageEngineInterfaceServiceImpl final : public StorageEngineInterface::S
       SendQueryStatus(Qstart);
     }
 
+    bool flag = true;
     while (stream->Read(&snippet_request)) {      
-      {
-        std::string test_json;
-        google::protobuf::util::JsonPrintOptions options;
-        options.always_print_primitive_fields = true;
-        options.always_print_enums_as_ints = true;
-        google::protobuf::util::MessageToJsonString(snippet_request,&test_json,options);
-        std::cout << endl << test_json << std::endl << std::endl; 
+      if(flag){
+        cout << "[Interface] received offloading snippet {ID:" << snippet_request.query_id() << "}" << endl;
+        flag = false;
       }
+      // {
+      //   std::string test_json;
+      //   google::protobuf::util::JsonPrintOptions options;
+      //   options.always_print_primitive_fields = true;
+      //   options.always_print_enums_as_ints = true;
+      //   google::protobuf::util::MessageToJsonString(snippet_request,&test_json,options);
+      //   std::cout << endl << test_json << std::endl << std::endl; 
+      // }
       if((snippet_request.type() == StorageEngineInstance::SnippetRequest::FULL_SCAN) \
           ||(snippet_request.type() == StorageEngineInstance::SnippetRequest::INDEX_SCAN) \
           || (snippet_request.type() == StorageEngineInstance::SnippetRequest::INDEX_TABLE_SCAN)){
         KETILOG::DEBUGLOG("Interface","# send snippet to offloading module");
+        cout << "[Interface] Type:" << snippet_request.type() <<  " > send snippet to offloading module {ID:" << snippet_request.query_id() << "|" << snippet_request.work_id() << "}" << endl;
         OffloadingModuleConnector offloadingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+to_string(SE_OFFLOADING_PORT), grpc::InsecureChannelCredentials()));
         offloadingModule.Scheduling(snippet_request);
       }else{
         KETILOG::DEBUGLOG("Interface","# send snippet to merging module");
+        cout << "[Interface] Type:" << snippet_request.type() <<  " > send snippet to merging module {ID:" << snippet_request.query_id() << "|" << snippet_request.work_id() << "}" << endl;
         MergingModuleConnector mergingModule(grpc::CreateChannel((std::string)LOCALHOST+":"+to_string(SE_MERGING_PORT), grpc::InsecureChannelCredentials()));
         mergingModule.Aggregation(snippet_request);
       }
