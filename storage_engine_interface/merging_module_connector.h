@@ -23,6 +23,91 @@ using StorageEngineInstance::TmaxResponse;
 
 using namespace std;
 
+inline string formatTable(const QueryResult& result){
+	map<string, size_t> max_col_width;
+	vector<string> column_names;
+
+	for (const auto& [col_name, col] : result.query_result()) {
+        column_names.push_back(col_name);
+        max_col_width[col_name] = col_name.length(); 
+    }
+
+	for (const auto& [col_name, col] : result.query_result()) {
+        if (col.col_type() == QueryResult_Column::TYPE_STRING) {
+            for (const auto& val : col.string_col()) {
+                max_col_width[col_name] = std::max(max_col_width[col_name], val.length());
+            }
+        } else if (col.col_type() == QueryResult_Column::TYPE_INT) {
+            for (const auto& val : col.int_col()) {
+                max_col_width[col_name] = std::max(max_col_width[col_name], std::to_string(val).length());
+            }
+        } else if (col.col_type() == QueryResult_Column::TYPE_FLOAT) {
+            for (const auto& val : col.double_col()) {
+                std::ostringstream oss;
+                oss << std::fixed << std::setprecision(col.real_size()) << val;
+                max_col_width[col_name] = std::max(max_col_width[col_name], oss.str().length());
+            }
+        } else if (col.col_type() == QueryResult_Column::TYPE_DATE) {
+            max_col_width[col_name] = std::max(max_col_width[col_name], size_t(12));
+        }
+    }
+
+	std::ostringstream table;
+
+	table << "+";
+    for (const auto& col_name : column_names) {
+        table << std::string(max_col_width[col_name] + 2, '-') << "+";
+    }
+    table << "\n|";
+    for (const auto& col_name : column_names) {
+        table << " " << std::setw(max_col_width[col_name]) << std::left << col_name << " |";
+    }
+    table << "\n+";
+    for (const auto& col_name : column_names) {
+        table << std::string(max_col_width[col_name] + 2, '-') << "+";
+    }
+    table << "\n";
+
+	for (int i = 0; i < result.row_count(); ++i) {
+        table << "|";
+        for (const auto& col_name : column_names) {
+            const auto& col = result.query_result().at(col_name);
+            std::ostringstream cell;
+            if (col.col_type() == QueryResult_Column::TYPE_STRING) {
+                cell << (i < col.string_col_size() ? col.string_col(i) : "");
+            } else if (col.col_type() == QueryResult_Column::TYPE_INT) {
+                cell << (i < col.int_col_size() ? std::to_string(col.int_col(i)) : "");
+            } else if (col.col_type() == QueryResult_Column::TYPE_FLOAT) {
+                if (i < col.double_col_size()) {
+                    cell << std::fixed << std::setprecision(col.real_size()) << col.double_col(i);
+                }
+            } else if (col.col_type() == QueryResult_Column::TYPE_DATE) {
+				if(i < col.int_col_size()){
+					int year = col.int_col(i) / (32 * 16);
+					int month = (col.int_col(i) % (32 * 16)) / 32;
+					std::string formattedMonth = (month < 10 ? "0" : "") + std::to_string(month);
+					int day = (col.int_col(i) % (32 * 16)) % 32;
+					std::string formattedDay = (day < 10 ? "0" : "") + std::to_string(day);
+					string date = to_string(year) + "-" + formattedMonth + "-" + formattedDay;
+					cell << date ;
+				}else{
+					cell << "" ;
+				}
+            }
+            table << " " << std::setw(max_col_width[col_name]) << std::left << cell.str() << " |";
+        }
+        table << "\n";
+    }
+
+	table << "+";
+    for (const auto& col_name : column_names) {
+        table << std::string(max_col_width[col_name] + 2, '-') << "+";
+    }
+    table << "\n";
+
+    return table.str();
+}
+
 class MergingModuleConnector {
 	public:
 		MergingModuleConnector(std::shared_ptr<Channel> channel) : stub_(MergingModule::NewStub(channel)) {}
@@ -34,7 +119,6 @@ class MergingModuleConnector {
     		ClientContext context;
 			
 			Status status = stub_->Aggregation(&context, snippet_request, &response);
-			// cout << "result : " << result.value() << endl;
 
 	  		if (!status.ok()) {
 				KETILOG::FATALLOG(LOGTAG,status.error_code() + ": " + status.error_message());
@@ -61,47 +145,10 @@ class MergingModuleConnector {
 				KETILOG::FATALLOG(LOGTAG,"RPC failed");
 			}
 
-			stringstream result_string;
-			int length = 18;
-			std::string line((length+1) * query_result.query_result_size() - 1, '-');
-			//Proto Buffer 형식 결과를 임시로 string으로 저장 -> 나중엔 DB Connector Instance 에서 출력		
-			result_string << "+"+line+"+\n";
-			const auto& my_map = query_result.query_result();
-			
-			result_string << "|";
-			for (const auto& entry : my_map) {
-				result_string << setw(length) << left << entry.first << "|";
-			}
-			result_string << "\n";
-
-			result_string <<  "+"+line+"+\n";
-
-			for(int i=0; i<query_result.row_count(); i++){
-				result_string << "|";
-				for (const auto& entry : my_map) {
-					switch(entry.second.col_type()){
-						case QueryResult_Column::TYPE_STRING:
-							result_string << setw(length) << left << entry.second.string_col(i) << "|";
-							break;
-						case QueryResult_Column::TYPE_INT:
-							result_string << setw(length) << left << to_string(entry.second.int_col(i)) << "|";
-							break;
-						case QueryResult_Column::TYPE_FLOAT:
-							// result_string <<  std::fixed << std::setprecision(2) << setw(length) << left << entry.second.double_col(i) << "|";
-							result_string << setw(length) << left << to_string(entry.second.double_col(i)) << "|";
-							break;
-						case QueryResult_Column::TYPE_EMPTY:
-							result_string << setw(length) << left << " " << "|";
-							break;
-					}
-				}
-				result_string << "\n";
-			}
-
-			result_string <<  "+"+line+"+\n";
+			string result_string = formatTable(query_result);
 
 			QueryStringResult result;
-			result.set_query_result(result_string.str());
+			result.set_query_result(result_string);
 			result.set_scanned_row_count(query_result.scanned_row_count());
 			result.set_filtered_row_count(query_result.filtered_row_count());
 
