@@ -78,13 +78,14 @@ typedef enum vector_type{ //저장된 컬럼의 타입을 나타냄(BM,MQM에서
     TYPE_STRING,
     TYPE_INT,
     TYPE_FLOAT,
-    TYPE_BOOLEAN
+    TYPE_BOOLEAN,
+    TYPE_DATE
 }KETI_VECTOR_TYPE;
 
 typedef enum scheduling_type{ //스케줄링을 수행하는 알고리즘 선택
     DCS = 0,
     DSI = 1,
-    RANDOM = 2,
+    DFA = 2,
     AUTO_SELECTION = 3
 }KETI_SCHEDULING_TYPE;
 
