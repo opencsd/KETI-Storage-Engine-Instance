@@ -94,6 +94,8 @@ void RunGRPCServer() {
 
 int main(int argc, char** argv) {
   Scheduler& scheduler = Scheduler::GetInstance();
+  CSDStatusManager& csdStatusManager = CSDStatusManager::GetInstance();
+
   if (argc >= 2) {
       KETILOG::SetLogLevel(stoi(argv[1]));
   }else if (getenv("LOG_LEVEL") != NULL){
@@ -123,6 +125,7 @@ int main(int argc, char** argv) {
 
   httplib::Server server;
   server.Get("/log-level", KETILOG::HandleSetLogLevel);
+  server.Get("/scheuling-algorithm", Scheduler::HandleSetAlgorithm);
   server.listen("0.0.0.0", 40206);
   
   grpc_thread.join();

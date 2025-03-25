@@ -9,7 +9,6 @@
 #include <netinet/in.h> 
 #include <arpa/inet.h>
 #include <unistd.h>
-#include <vector>
 #include <condition_variable>
 #include <queue>
 #include <thread>
@@ -32,12 +31,14 @@
 #include "csd_status_manager.h"
 #include "snippet_manager.h"
 
-namespace fs = std::filesystem;
+// namespace fs = std::filesystem;
 
 //Tmax Lib
 #include "tb_block.h"
 #include "ex.h"
 #define BUFF_SIZE 4096
+#define BLOCK_UPPER_BOUND 10000
+#define SST_UPPER_BOUND 16
 
 using namespace std;
 using namespace rapidjson;
@@ -64,6 +65,18 @@ class Scheduler{
       return;
     }
 
+    static void HandleSetAlgorithm(const httplib::Request& request, httplib::Response& response) {
+        try {
+            std::string algorithm = request.get_param_value("algorithm");
+            GetInstance().setAlgorithm(algorithm);
+            KETILOG::INFOLOG("Handle Set Algorithm", "snippet scheduling algorithm changed to "+algorithm);
+            response.status = 200;
+        }catch (std::exception &e) {
+            KETILOG::INFOLOG("Handle Set Algorithm", e.what());
+            response.status = 501;
+        }
+    }
+
     static Scheduler& GetInstance(){
       static Scheduler scheduler;
       return scheduler;
@@ -80,14 +93,30 @@ class Scheduler{
         return *this;
     }
 
+    void setAlgorithm(string algorithm){
+      std::transform(algorithm.begin(), algorithm.end(), algorithm.begin(),[](unsigned char algorithm) { return std::tolower(algorithm); });
+
+      if(algorithm == "dcs"){
+        SCHEDULING_ALGORITHM = DCS;
+      }else if(algorithm == "dsi"){
+        SCHEDULING_ALGORITHM = DSI;
+      }else if(algorithm == "dfa"){
+        SCHEDULING_ALGORITHM = DFA;
+      }else if(algorithm == "auto"){
+        SCHEDULING_ALGORITHM = AUTO_SELECTION;
+      }else{
+        KETILOG::INFOLOG(LOGTAG, "set algorithm not available");
+      }
+    }
+
     void runScheduler();
-    void getBestCSD(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd);
+    float dfs_for_dsi_algorithm(const google::protobuf::RepeatedPtrField<StorageEngineInstance::SnippetRequest_SstInfo>* sst_info, stack<string>& global_csd, stack<string>& selected_csd, int si);
+    void getBestCSD(const google::protobuf::RepeatedPtrField<StorageEngineInstance::SnippetRequest_SstInfo>* sst_info, map<string,string>& bestcsd);
   
-    string DCS_algorithm(vector<string> dcs_candidate_csd); //DSI용
-    void DCS_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd); //Depends on CSD Status
-    void DSI_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd); //Depends on Snippet Information 
-    void DFA_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd);
-    void Auto_Selection(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd);
+    void DCS_Algorithm(const google::protobuf::RepeatedPtrField<StorageEngineInstance::SnippetRequest_SstInfo>* sst_info, map<string,string>& bestcsd); //Depends on CSD Status
+    void DSI_Algorithm(const google::protobuf::RepeatedPtrField<StorageEngineInstance::SnippetRequest_SstInfo>* sst_info, map<string,string>& bestcsd); //Depends on Snippet Information 
+    void DFA_Algorithm(const google::protobuf::RepeatedPtrField<StorageEngineInstance::SnippetRequest_SstInfo>* sst_info, map<string,string>& bestcsd);
+    void Auto_Selection(const google::protobuf::RepeatedPtrField<StorageEngineInstance::SnippetRequest_SstInfo>* sst_info, map<string,string>& bestcsd);
     
     void t_snippet_scheduling(TmaxRequest request, TmaxResponse tResponse);
     void t_offloading_snippet(TmaxRequest request, TmaxResponse tResponse, string csd_id, string file_name);

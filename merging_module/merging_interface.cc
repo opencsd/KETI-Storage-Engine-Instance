@@ -21,14 +21,14 @@ using StorageEngineInstance::TmaxResponse;
 class MergingModuleServiceImpl final : public MergingModule::Service {
   Status Aggregation(ServerContext* context, const SnippetRequest* request, Response* response) override {  
     // // Check Recv Snippet
-    // {
-    // std::string test_json;
-    // google::protobuf::util::JsonPrintOptions options;
-    // options.always_print_primitive_fields = true;
-    // options.always_print_enums_as_ints = true;
-    // google::protobuf::util::MessageToJsonString(*request,&test_json,options);
-    // std::cout << endl << test_json << std::endl << std::endl; 
-    // }
+    {
+    std::string test_json;
+    google::protobuf::util::JsonPrintOptions options;
+    options.always_print_primitive_fields = true;
+    options.always_print_enums_as_ints = true;
+    google::protobuf::util::MessageToJsonString(*request,&test_json,options);
+    std::cout << endl << test_json << std::endl << std::endl; 
+    }
 
     string msg = "# aggregation {" + to_string(request->query_id()) + "|" + to_string(request->work_id()) + "}";
 

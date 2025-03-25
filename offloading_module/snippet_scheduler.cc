@@ -7,344 +7,281 @@ void Scheduler::runScheduler(){
         
         //map sst가 key, 선정 csd가 value 
         map<string,string> bestcsd; 
-        for ( int i=0;i<snippet.sst_info_size();i++){
-            Scheduler::getBestCSD(&snippet.sst_info(i), bestcsd);
-        }
-
+        Scheduler::getBestCSD(&snippet.sst_info(), bestcsd);
+        
         SnippetManager::SetupSnippet(snippet, bestcsd);
     }
 }
 
-void Scheduler::getBestCSD(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd){
+void Scheduler::getBestCSD(const google::protobuf::RepeatedPtrField<StorageEngineInstance::SnippetRequest_SstInfo>* sst_info, map<string,string>& bestcsd){
     switch(SCHEDULING_ALGORITHM){
         case(DCS):{
             cout << "[Scheduler] scheduling algorithm : DCS(Depend on CSD Status)" << endl;
             DCS_Algorithm(sst_info, bestcsd);
-            cout << "[Scheduler] result> " << sst_info->sst_name() << " -> csd#" << bestcsd[sst_info->sst_name()] << endl;
             break;
         }case(DSI):{
             cout << "[Scheduler] scheduling algorithm : DSI(Depend on SST Info)" << endl;
             DSI_Algorithm(sst_info, bestcsd);
-            cout << "[Scheduler] result> " << sst_info->sst_name() << " -> csd#" << bestcsd[sst_info->sst_name()] << endl;
             break;
         }case(DFA):{
             cout << "[Scheduler] scheduling algorithm : DFA(Drop First Available)" << endl;
             DFA_Algorithm(sst_info, bestcsd);
-            cout << "[Scheduler] result> " << sst_info->sst_name() << " -> csd#" << bestcsd[sst_info->sst_name()] << endl;
             break;
         }case(AUTO_SELECTION):{
             Auto_Selection(sst_info, bestcsd);
             break;
         }
     }
+
+    cout << "[Scheduler] scheduling result: " << endl;
+    for(const auto sst_name : bestcsd){   
+        cout << "            L " << sst_name.first << " -> csd#" << sst_name.second << endl;
+    }
     
     return;
 }
 
-void Scheduler::DCS_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd){
-    string csd_id;
-    string sst_name;
-    //csd 전체 info, key : csd id, value: csd 정보
-    unordered_map<string,struct CSDStatusManager::CSDInfo> csd_info = CSDStatusManager::GetCSDInfoAll();
-    //sst 파일을 가지고 있는 csd info, key : csd id, value: csd 정보
-    unordered_map<string,struct CSDStatusManager::CSDInfo> having_sst_csd_info;
-    //1. Table하나에 존재하는 SST 파일 횟수만큼 
-    int csd_list_size;
-    float bestScore;
-    float score;
-    string bestCSD;
-    KETILOG::DEBUGLOG("Offloading", "Depends on CSD Status");
-    int csd_count = sst_info->csd_size();
-    for(int i = 0; i< csd_count; i++){
-        //2. sst 파일을 가지고 있는 csd만 저장
-        bestScore = INT_MAX;
-        having_sst_csd_info.clear();
-        //csd가 1개면 스케줄링 할 필요 없으니까 pass
-        if(csd_count == 1){
-            KETILOG::DEBUGLOG("Offloading", "sst-csd count : 1");
+void Scheduler::DCS_Algorithm(const google::protobuf::RepeatedPtrField<StorageEngineInstance::SnippetRequest_SstInfo>* sst_info, map<string,string>& bestcsd){
+    // csd analysis score를 보고 선택 + 선택된 csd에 대해 점수 패널티 적용
+    KETILOG::DEBUGLOG(LOGTAG, "# DCS(Depend on CSD Status) Algorithm");
 
-            sst_name = sst_info->sst_name();
-            csd_id = sst_info->csd(i).csd_id();
-            KETILOG::DEBUGLOG("Offloading", "sst name " + sst_name + ", id : " + csd_id);
+    unordered_map<string,int> csd_penalty_map;
+
+    for (int i = 0; i < sst_info->size(); ++i) {
+        string sst_name = sst_info->Get(i).sst_name();
+        string selected_csd = "";
+        float csd_max_score = -1;
+
+        if(sst_info->Get(i).csd_size() == 1){
+            string csd_id = sst_info->Get(i).csd().Get(0).csd_id();
             bestcsd[sst_name] = csd_id;
-            return;
+
+            if(csd_penalty_map.find(csd_id) == csd_penalty_map.end()){
+                csd_penalty_map[csd_id] = 2;
+            }else{
+                csd_penalty_map[csd_id] += 1;
+            }
+
+        }else{
+            for(int j=0; j<sst_info->Get(i).csd_size(); ++j){
+                string csd_id = sst_info->Get(i).csd().Get(j).csd_id();
+                string csd_key = "csd" + csd_id;
+                float csd_score = CSDStatusManager::GetCSDInfo(csd_key).analysis_score;
+
+                if(csd_penalty_map.find(csd_id) != csd_penalty_map.end()){
+                    csd_score = csd_score / csd_penalty_map[csd_id];
+                }
+                
+                selected_csd = (csd_score > csd_max_score) ? csd_id : selected_csd;
+            }
+            bestcsd[sst_name] = selected_csd;
         }
-
-        //DCS스케줄링
-        KETILOG::DEBUGLOG("Offloading", "sst-csd count : n");
-
-        //sst파일을 가지고 있는 csd 메트릭 정보 저장
-        sst_name = sst_info->sst_name();
-        csd_id = sst_info->csd(i).csd_id();
-        having_sst_csd_info[csd_id] = csd_info[csd_id];
-        KETILOG::DEBUGLOG("Offloading", "Metric Information for " + csd_id + " with " + sst_name);
-    }
-        
-
-    for(unordered_map<string,struct CSDStatusManager::CSDInfo>::iterator itr=having_sst_csd_info.begin(); itr !=having_sst_csd_info.end(); ++itr){
-        score = itr->second.analysis_score / itr->second.working_block_count;
-        KETILOG::DEBUGLOG("Offloading", itr->first + "'s score : " + std::to_string(score));
-        if(score < bestScore){
-            bestCSD = itr->first;
-            bestScore = score;
-        }
-    }
-    bestcsd[sst_name] = bestCSD; 
-    csd_info[bestCSD].analysis_score += 10; // 가중치를 준다
-    
-    
-    
-    for(map<string,string>::iterator itr=bestcsd.begin(); itr !=bestcsd.end(); ++itr){
-        KETILOG::DEBUGLOG("Offloading", itr-> first + " : " + itr->second);
     }
 
     return;
 }
-string Scheduler::DCS_algorithm(vector<string> dcs_candidate_csd){//DSI용
-    CSDStatusManager::CSDInfo csd1 = {"ip1",0,0,0,0,15,50};
-    CSDStatusManager::CSDInfo csd2 = {"ip2",0,0,0,0,30,60};
-    CSDStatusManager::CSDInfo csd3 = {"ip3",0,0,0,0,45,80};
-    CSDStatusManager::CSDInfo csd4 = {"ip4",0,0,0,0,60,20};
 
-    CSDStatusManager::SetCSDInfo("1",csd1);
-    CSDStatusManager::SetCSDInfo("2",csd2);
-    CSDStatusManager::SetCSDInfo("3",csd3);
-    CSDStatusManager::SetCSDInfo("4",csd4);
-    
-    string bestcsd = "";
-    string csd_id;
-    
-    float bestScore = INT_MAX;
-    float score;
-    
-    unordered_map<string,struct CSDStatusManager::CSDInfo> csd_info = CSDStatusManager::GetCSDInfoAll();
-    unordered_map<string,struct CSDStatusManager::CSDInfo> having_sst_csd_info;
-    KETILOG::DEBUGLOG("Offloading", "DCS Algorithm");
-    
-    for(int i=0;i<dcs_candidate_csd.size();i++){
-        csd_id = dcs_candidate_csd.at(i);
-        having_sst_csd_info[csd_id] = csd_info[csd_id];
-        KETILOG::DEBUGLOG("Offloading", "csd id : " + csd_id);
+void Scheduler::DSI_Algorithm(const google::protobuf::RepeatedPtrField<StorageEngineInstance::SnippetRequest_SstInfo>* sst_info, map<string,string>& bestcsd){
+    // 선택되는 CSD가 최소 중복되도록 선택
+    KETILOG::DEBUGLOG(LOGTAG, "# DSI(Depend on SST Info) Algorithm");
+
+    // unordered_map<string,int> csd_index_map;
+    // unordered_map<string,int> sst_index_map;
+    // int si, ci = 0;
+
+    // // allocation_map에서의 sst와 csd의 인덱스 설정
+    // for(int i=0; i < sst_info->size(); ++i){
+    //     string sst_name = sst_info->Get(i).sst_name();
+    //     if(sst_index_map.find(sst_name) == sst_index_map.end()){
+    //         sst_index_map.insert({sst_name, si});
+    //         si++;
+    //     }
+
+    //     for(int j=0; j < sst_info->Get(i).csd_size(); ++j){
+    //         string csd_id = sst_info->Get(i).csd().Get(j).csd_id();
+    //         if(csd_index_map.find(csd_id) == csd_index_map.end()){
+    //             csd_index_map.insert({csd_id, ci});
+    //             ci++;
+    //         }
+    //     }
+    // }
+
+    // // sst x '할당 가능한 csd' 를 0과1로 표시한 allocation_map 생성
+    // int allocation_map[sst_index_map.size()][csd_index_map.size()];
+    // std::memset(allocation_map, 0, sizeof(allocation_map));
+
+    // for(int i=0; i < sst_info->size(); ++i){
+    //     string sst_name = sst_info->Get(i).sst_name();
+    //     int sst_index = sst_index_map[sst_name];
+
+    //     for(int j=0; j < sst_info->Get(i).csd_size(); ++j){
+    //         string csd_id = sst_info->Get(i).csd().Get(j).csd_id();
+    //         int csd_index = csd_index_map[csd_id];
+
+    //         allocation_map[sst_index][csd_index] = 1;
+    //     }
+    // }
+
+    // // allocation_map을 기반으로 최소 중복을 갖는 경우 탐색
+    // // 점수 산정 식 = 사용CSD수 / SST최대중복도
+    // // 최고 점수 계산 = 전체CSD수 / Ceil(전체SST수/전체CSD수)
+    // stack<int> selected_csd_index;
+    // for(int i=0; i < sst_index_map.size(); ++i){
+    //     for(int j=0; j < csd_index_map.size(); ++j){
+    //         if(allocation_map[i][j] == 1){
+    //             selected_csd_index.push(j);
+    //             break;
+    //         }
+    //     }
+    // }
+
+    stack<string> selected_csd;
+    stack<string> global_csd;
+    float variance_score = dfs_for_dsi_algorithm(sst_info, global_csd, selected_csd, 0);
+
+    for(int i=sst_info->size()-1; i > -1; --i){
+        string csd = global_csd.top();
+        global_csd.pop();
+        bestcsd.insert({sst_info->Get(i).sst_name(), csd});
     }
 
-    for(unordered_map<string, struct CSDStatusManager::CSDInfo>::iterator itr=having_sst_csd_info.begin(); itr != having_sst_csd_info.end();++itr){
-        score = itr->second.analysis_score / itr->second.working_block_count;
-        KETILOG::DEBUGLOG("Offloading", itr->first + "'s score" + std::to_string(score));
-        if(score < bestScore){
-            bestcsd = itr->first;
-            bestScore = score;
-        }
-    }
-    
-    return bestcsd;
-} 
+    return;
+}
 
-void Scheduler::DSI_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd){
-    map<string, vector<int>> csd_sst_count; // csd가 가지고 있는 sst 전체 파일 수, 0번째는 sst수, 1번째는 스케줄링 횟수  
-    
-    int csd_list_size ;
-    string sst_name;
-    string csd_id;
-    string bestCSD="";
-    int bestscore = INT_MAX;
-    int score ;
-    int scheduling_count;
-    int best_scheduling_count = INT_MAX;
-    vector<string> candidate_csd;
-    vector<string> dcs_candidate_csd;
-    //1. csd가 가지고 있는 파일 수 저장
+float Scheduler::dfs_for_dsi_algorithm(const google::protobuf::RepeatedPtrField<StorageEngineInstance::SnippetRequest_SstInfo>* sst_info, stack<string>& global_csd, stack<string>& selected_csd, int si){
+    if(selected_csd.size() == sst_info->size()){
+        unordered_map<string,int> csd_count_map;
+        stack<string> temp_selected_csd = selected_csd;
 
-    KETILOG::DEBUGLOG("Offloading", "Depends on SST Information");
-    sst_name = sst_info->sst_name();
-    
-    for (int i=0; sst_info->csd_size();i++) {
-        
-        csd_id = sst_info->csd(i).csd_id();
-
-        for(int k=0; k < 2; k++){
-            csd_sst_count[csd_id].push_back(0);
-        }
-
-        csd_sst_count[csd_id].at(0)++;
-        KETILOG::DEBUGLOG("Offloading", "csd id : " + csd_sst_count[csd_id].at(0));
-    }
-    
-
-    for(map<string,vector<int>>::iterator itr = csd_sst_count.begin(); itr!= csd_sst_count.end(); ++itr){
-        KETILOG::DEBUGLOG("Offloading", itr->first + " - sst file count : " + std::to_string(itr->second.at(0)));
-    }
-    
-    //2. DSI 스케줄링
-    csd_list_size = sst_info->csd_size();
-
-    for (int i=0; i<csd_list_size;i++) {
-
-        sst_name = sst_info->sst_name();
-        candidate_csd.clear();
-
-        if(csd_list_size == 1){
-            KETILOG::DEBUGLOG("Offloading", "sst-csd count : 1 ");
-
-            csd_id = sst_info->csd(i).csd_id();
-            KETILOG::DEBUGLOG("Offloading", "sst name " + sst_name + ", id : " + csd_id);
-            bestcsd[sst_name] = csd_id;
-            return;
-        }
-        //1. 최소 스케줄링 수 찾기
-        best_scheduling_count = INT_MAX;
-        for (int j =0; j < csd_list_size;j++) {
-            csd_id = sst_info->sst_name();
-            scheduling_count = csd_sst_count[csd_id].at(1);
-            sst_name = sst_info->sst_name();
-            KETILOG::DEBUGLOG("Offloading", csd_id + "'s scheduling count : " + std::to_string(scheduling_count));
-            if(scheduling_count < best_scheduling_count){
-                best_scheduling_count = scheduling_count;
+        while (!temp_selected_csd.empty()) {
+            string top = temp_selected_csd.top();
+            if(csd_count_map.find(top) == csd_count_map.end()){
+                csd_count_map[top] = 1;
+            }else{
+                csd_count_map[top]++;
             }
+            temp_selected_csd.pop();
         }
-        KETILOG::DEBUGLOG("Offloading", "best schduling count : " + best_scheduling_count);
 
-        // 2. 최소 스케줄링 수를 가지고 있는 candidate_csd vector 생성
-       for (int j =0; j < csd_list_size;j++) {
-            csd_id = sst_info->sst_name();
-            scheduling_count = csd_sst_count[csd_id].at(1);
-            if(best_scheduling_count == scheduling_count){
-                candidate_csd.push_back(csd_id);
-            }
+        int max_duplication = 0;
+        for(const auto& csd_count : csd_count_map){
+            max_duplication = max(csd_count.second, max_duplication);
         }
-        if(candidate_csd.size() == 1){
-            KETILOG::DEBUGLOG("Offloading", "candidate's count is 1");
-            bestCSD = candidate_csd.at(0);
-            bestcsd[sst_name] = bestCSD;
-            csd_sst_count[bestCSD].at(1)++;
-            KETILOG::DEBUGLOG("Offloading", "bsetCSD is" + bestCSD);
+        float variance_score = (float)csd_count_map.size() / (float)max_duplication;
+
+        return variance_score;
+    }
+
+    float global_variance_score = -1;
+    
+    for(int ci=0; ci<sst_info->Get(si).csd_size(); ++ci){
+        selected_csd.push(sst_info->Get(si).csd().Get(ci).csd_id());
+
+        float variance_score = dfs_for_dsi_algorithm(sst_info, global_csd, selected_csd, si+1);
+        if(variance_score > global_variance_score){
+            global_variance_score = variance_score;
+            global_csd = selected_csd;
         }
-        //3. 스케줄링 수가 같으면 중복도 수 비교
-        else{
-            KETILOG::DEBUGLOG("Offloading", "candidates are many, sst file count compare");
-            bestscore = INT_MAX;
-            KETILOG::DEBUGLOG("Offloading", "sst file candidates");
-            dcs_candidate_csd.clear();
-            for(int j = 0; j < candidate_csd.size(); j++){
-                KETILOG::DEBUGLOG("Offloading", candidate_csd.at(j) + ", ");
-            }
-            //최소 파일 수 찾기
-            for(int j = 0; j < candidate_csd.size(); j++){
-                csd_id = candidate_csd.at(j);
-                score = csd_sst_count[csd_id].at(0);
-                 
-                if(score < bestscore){
-                    bestscore = score;
-                    bestCSD = csd_id;
+
+        selected_csd.pop();
+    }
+
+    return global_variance_score;
+}
+
+void Scheduler::DFA_Algorithm(const google::protobuf::RepeatedPtrField<StorageEngineInstance::SnippetRequest_SstInfo>*sst_info, map<string,string>& bestcsd){
+    // 할당 가능한 csd중 앞에 있는것 선택 + 선택된 csd에 대해 점수 패널티 적용
+    KETILOG::DEBUGLOG(LOGTAG, "# DFA(Drop First Available) Algorithm");
+
+    unordered_map<string,int> csd_penalty_map;
+
+    for (int i = 0; i < sst_info->size(); ++i) {
+        string sst_name = sst_info->Get(i).sst_name();
+        int min_allocated = 1;
+        string selected_csd;
+        bool flag = true;
+
+        while(flag){
+            for(int j=0; i < sst_info->Get(i).csd().size(); ++j){
+                string csd_id = sst_info->Get(i).csd().Get(j).csd_id();
+
+                if(csd_penalty_map.find(csd_id) == csd_penalty_map.end()){
+                    csd_penalty_map[csd_id] = 1;
+                    selected_csd = csd_id;
+                    flag = false;
+                    break;
+                }else if(csd_penalty_map[csd_id] < min_allocated){
+                    csd_penalty_map[csd_id] += 1;
+                    selected_csd = csd_id;
+                    flag = false;
+                    break;
+                }else{
+                    continue;
                 }
             }
-            //최소 파일 수 를 가지고 있는 csd 후보자들 찾기
-            for(int j = 0; j < candidate_csd.size(); j++){
-                csd_id = candidate_csd.at(j);
-                score = csd_sst_count[csd_id].at(0);
-                if(bestscore == score){
-                    dcs_candidate_csd.push_back(csd_id);
-                }
-            }
-            KETILOG::DEBUGLOG("Offloading", "DCS candidates : ");
-            for(int j=0; j < dcs_candidate_csd.size(); j++){
-                KETILOG::DEBUGLOG("Offloading", dcs_candidate_csd.at(j) + ", ");
-            }
-            if(dcs_candidate_csd.size() == 1){
-                KETILOG::DEBUGLOG("Offloading", "DCS candidates count is 1 ");
-                bestCSD = dcs_candidate_csd.at(0);
-            }
-            else{
-                bestCSD = DCS_algorithm(dcs_candidate_csd);
-            }
-            KETILOG::DEBUGLOG("Offloading", "bsetCSD is " + bestCSD);
-            bestcsd[sst_name] = bestCSD;
-            csd_sst_count[bestCSD].at(1)++;
+            min_allocated++;
         }
-    }
-    for(map<string,string>::iterator itr=bestcsd.begin(); itr !=bestcsd.end(); ++itr){
-        KETILOG::DEBUGLOG("Offloading", itr->first + " : " + itr->second);
-    }
-    
-    return;
-}
-void Scheduler::DFA_Algorithm(const StorageEngineInstance::SnippetRequest_SstInfo*sst_info, map<string,string>& bestcsd){
-    string csd_id;
-    string sst_name;
-    // srand(time(NULL));
-    int random_num ;
-    vector<string> csd_list;
 
-    KETILOG::DEBUGLOG("Offloading", " Random " );
-    int csd_count = sst_info->csd_size();
+        bestcsd[sst_name] = selected_csd;
+    }
 
-    for (int i=0;i<csd_count;i++) {
-        string sst_name = sst_info->sst_name();
-        csd_list.clear();
-        if(csd_count == 1){
-            KETILOG::DEBUGLOG("Offloading", "sst-csd count : 1 ");
-            csd_id = sst_info->csd(i).csd_id();
-            KETILOG::DEBUGLOG("Offloading", "sst name : " + sst_name + ", id : " + csd_id);
-            bestcsd[sst_name] = csd_id;
-            return;
-        }
-    }
-    for (int i=0;i<csd_count;i++) {
-        csd_list.push_back(sst_info->sst_name());
-        KETILOG::DEBUGLOG("Offloading", "csd_list(" + sst_info->sst_name() + ") is " + sst_info->sst_name());
-    }
-    random_num = rand() % csd_count ;
-    KETILOG::DEBUGLOG("Offloading", "random number is " + random_num);
-    csd_id = csd_list.at(random_num);
-    bestcsd[sst_name] = csd_id;
-    
-    for(map<string,string>::iterator itr=bestcsd.begin(); itr !=bestcsd.end(); ++itr){
-        KETILOG::DEBUGLOG("Offloading", itr-> first + " : " + itr->second);
-    }
     return;
 }
 
-void Scheduler::Auto_Selection(const StorageEngineInstance::SnippetRequest_SstInfo* sst_info, map<string,string>& bestcsd){
-    map<string, vector<int>> csd_sst_count;
-    float total_csd_num;
-    float total_sst_num = 0;
-    int csd_list_size;
-    string sst_name;
-    string csd_id;
+void Scheduler::Auto_Selection(const google::protobuf::RepeatedPtrField<StorageEngineInstance::SnippetRequest_SstInfo>* sst_info, map<string,string>& bestcsd){
+    // DSI, DCS, DFA 중 상황에 따라 알고리즘 선택
+    KETILOG::DEBUGLOG(LOGTAG, "# Auto Selection");
 
-    KETILOG::DEBUGLOG("Offloading", "Auto" );
-
-    //1. csd가 가지고 있는 파일 수 저장
-    for (int i=0;i<sst_info->csd_size();i++) {
-        sst_name = sst_info->sst_name();
-                    
-        csd_id = sst_info->csd(i).csd_id();
-
-        for(int k=0; k < 2; k++){
-            csd_sst_count[csd_id].push_back(0);
-        }
-
-        csd_sst_count[csd_id].at(0)++;
-        KETILOG::DEBUGLOG("Offloading", csd_id + " : " + std::to_string(csd_sst_count[csd_id].at(0)));
-        
+    int max_csd_count = 0;
+    int total_block_count = 0;
+    for(int i=0; i<sst_info->size(); ++i){
+        max_csd_count = max(max_csd_count, sst_info->Get(i).csd_size());
+        total_block_count += max_csd_count, sst_info->Get(i).sst_block_count();
     }
-    total_csd_num = csd_sst_count.size();
-    for(map<string,vector<int>>::iterator itr = csd_sst_count.begin(); itr!= csd_sst_count.end(); ++itr){
-        total_sst_num = total_sst_num + itr->second.at(0);
-    }
-    KETILOG::DEBUGLOG("Offloading", "total csd count : " + std::to_string(total_csd_num));
-    KETILOG::DEBUGLOG("Offloading", ", total sst count : " + std::to_string(total_sst_num));
 
-    if(total_sst_num/total_csd_num < 4){
-        KETILOG::DEBUGLOG("Offloading", "DCS Algorithm");
-        // bestcsd = DCS_Algorithm(sst_info);
+    if(max_csd_count == 1){
+        KETILOG::DEBUGLOG(LOGTAG, "# max csd count = 1");
+        KETILOG::DEBUGLOG(LOGTAG, "# scheduling by DFA(Drop First Available) Algorithm");
+        cout << "[Scheduler] max csd count = 1" << endl;
+        cout << "[Scheduler] scheduling by DFA(Drop First Available) Algorithm" << endl;
+        DFA_Algorithm(sst_info, bestcsd);
+        return;
     }
-    else {
-        KETILOG::DEBUGLOG("Offloading", "DSI Algorithm");
-        // bestcsd = DSI_Algorithm(sst_info);
+
+    int sst_count = sst_info->size();
+    int avg_block_count = total_block_count / sst_count;
+
+    if(sst_count > SST_UPPER_BOUND && avg_block_count > BLOCK_UPPER_BOUND){
+        KETILOG::DEBUGLOG(LOGTAG, "# sst_count > SST_UPPER_BOUND && avg_block_count > BLOCK_UPPER_BOUND");
+        KETILOG::DEBUGLOG(LOGTAG, "# scheduling by DSI(Depend on SST Info) Algorithm");
+        cout << "[Scheduler] sst_count(" << sst_count << ") > SST_UPPER_BOUND && avg_block_count(" << avg_block_count << ") > BLOCK_UPPER_BOUND" << endl;
+        cout << "[Scheduler] scheduling by DSI(Depend on SST Info) Algorithm" << endl;
+        DSI_Algorithm(sst_info, bestcsd);
+        return;
+    }else if(sst_count > SST_UPPER_BOUND && avg_block_count < BLOCK_UPPER_BOUND){
+        KETILOG::DEBUGLOG(LOGTAG, "# sst_count > SST_UPPER_BOUND && avg_block_count < BLOCK_UPPER_BOUND");
+        KETILOG::DEBUGLOG(LOGTAG, "# scheduling by DCS(Depend on CSD Status) Algorithm");
+        cout << "[Scheduler] sst_count(" << sst_count << ") > SST_UPPER_BOUND && avg_block_count(" << avg_block_count << ") < BLOCK_UPPER_BOUND" << endl;
+        cout << "[Scheduler] scheduling by DCS(Depend on CSD Status) Algorithm" << endl;
+        DCS_Algorithm(sst_info, bestcsd);
+        return;
+    }else if(sst_count < SST_UPPER_BOUND && avg_block_count > BLOCK_UPPER_BOUND){
+        KETILOG::DEBUGLOG(LOGTAG, "# sst_count < SST_UPPER_BOUND && avg_block_count > BLOCK_UPPER_BOUND");
+        KETILOG::DEBUGLOG(LOGTAG, "# scheduling by DSI(Depend on SST Info) Algorithm");
+        cout << "[Scheduler] sst_count(" << sst_count << ") < SST_UPPER_BOUND && avg_block_count(" << avg_block_count << ") > BLOCK_UPPER_BOUND" << endl;
+        cout << "[Scheduler] scheduling by DSI(Depend on SST Info) Algorithm" << endl;
+        DSI_Algorithm(sst_info, bestcsd);
+        return;
+    }else{
+        KETILOG::DEBUGLOG(LOGTAG, "# sst_count < SST_UPPER_BOUND && avg_block_count < BLOCK_UPPER_BOUND");
+        KETILOG::DEBUGLOG(LOGTAG, "# scheduling by DCS(Depend on CSD Status) Algorithm");
+        cout << "[Scheduler] sst_count(" << sst_count << ") < SST_UPPER_BOUND && avg_block_count(" << avg_block_count << ") < BLOCK_UPPER_BOUND" << endl;
+        cout << "[Scheduler] scheduling by DCS(Depend on CSD Status) Algorithm" << endl;
+        DCS_Algorithm(sst_info, bestcsd);
+        return;
     }
-    return;
+
 }
-//map sst가 key, 선정 csd가 value
 
 void Scheduler::t_snippet_scheduling(TmaxRequest request, TmaxResponse tResponse){
     KETILOG::DEBUGLOG("Offloading", "<T> scheduling tmax snippet...");

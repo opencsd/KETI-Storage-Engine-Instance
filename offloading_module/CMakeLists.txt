@@ -72,11 +72,16 @@ if (UNIX)
 	set(LINKING_LIBRARIES ${LINKING_LIBRARIES} Threads::Threads)
 endif (UNIX)
 
+find_package(CURL REQUIRED)
+include_directories(${CURL_INCLUDE_DIRS})
+
 # offloading module
 add_executable(offloading-module "offloading_interface.cc" "snippet_scheduler.cc" "snippet_manager.cc")
 target_link_libraries(offloading-module
   tmax_lib
   ss_grpc_proto
+  stdc++fs
+  ${CURL_LIBRARIES}
   ${LINKING_LIBRARIES}
   ${_REFLECTION}
   ${_GRPC_GRPCPP}

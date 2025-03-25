@@ -71,8 +71,8 @@ void MergeQueryManager::RunSnippetWork(){
         // debug_table(4);
         
         //Column Projection -> Make "result_table"
+        cout << "[Merging] start column projection {ID:" << snippet_.query_id() << "|" << snippet_.work_id() << "}" << endl;
         for(int i=0; i<group_by_table_.size(); i++){
-            cout << "[Merging] start column projection {ID:" << snippet_.query_id() << "|" << snippet_.work_id() << "}" << endl;
             Aggregation(group_by_table_[i], snippet_.query_info().projection(), snippet_.result_info().column_alias(), result_table_);
         }
         group_by_table_.clear();
@@ -1141,7 +1141,7 @@ void MergeQueryManager::InnerJoin_hash(){
         bool equal_join_exist = (equal_join_column.size() != 0)? true : false;
 
         if(equal_join_exist){ //hash join::equal filter + (nested loop join::non equal filter)
-            cout << "[Merging] start join operation for right table rows from index " << row_index << " to " << right_table_.row_count << endl;
+            cout << "[Merging] start 'join' operation for right table rows from index " << row_index << " to " << right_table_.row_count << endl;
             for(int r = row_index; r < right_table_.row_count; r++){
                 string hash_key = "";
 
@@ -1441,8 +1441,9 @@ void MergeQueryManager::LeftOuterJoin_hash(){
             first = false;
         }
         
+        cout << "[Merging] start 'left outer join' operation for left table rows from index " << row_index << " to " << right_table_.row_count << endl;
+
         for(int r=row_index; r<left_table_.row_count; r++){
-            cout << "[Merging] start join operation for left table rows from index " << row_index << " to " << right_table_.row_count << endl;
             string hash_key = "";
             bool passed = false;
 
@@ -1591,8 +1592,9 @@ void MergeQueryManager::RightOuterJoin_hash(){
             first = false;
         }
 
+        cout << "[Merging] start 'join' operation for right table rows from index " << row_index << " to " << right_table_.row_count << endl;
+        
         for(int r=row_index; r<right_table_.row_count; r++){
-            cout << "[Merging] start join operation for right table rows from index " << row_index << " to " << right_table_.row_count << endl;
             string hash_key = "";
             bool passed = false;
 
@@ -1799,8 +1801,9 @@ void MergeQueryManager::In(){
             first = false;
         }
 
+        cout << "[Merging] start 'in' operation for left table rows from index " << row_index << " to " << left_table_.row_count << endl;
+
         for(int r=row_index; r<left_table_.row_count; r++){
-            cout << "[Merging] start in operation for right table rows from index " << row_index << " to " << right_table_.row_count << endl;
             string hash_key = "";
             bool passed = true;
             string hash_key_column = snippet_.query_info().filtering(0).lv().value(0);
