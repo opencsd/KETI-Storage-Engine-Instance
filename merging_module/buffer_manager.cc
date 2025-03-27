@@ -392,7 +392,7 @@ void BufferManager::mergeResult(int qid, int wid){
         workBuffer->work_in_progress_condition.notify_all();
         
         KETILOG::TRACELOG(LOGTAG,"# save data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} ... (" + std::to_string(workBuffer->merged_block_count) + "/" + std::to_string(workBuffer->table_total_block_count) + ")");
-        cout << "[BufferManager] save csd result in buffer {ID:" + to_string(qid) + "|" + to_string(wid) + "}... (" + std::to_string(workBuffer->merged_block_count) + "/" + std::to_string(workBuffer->table_total_block_count) + ")" << endl;
+        // cout << "[BufferManager] save csd result in buffer {ID:" + to_string(qid) + "|" + to_string(wid) + "}... (" + std::to_string(workBuffer->merged_block_count) + "/" + std::to_string(workBuffer->table_total_block_count) + ")" << endl;
 
         if(workBuffer->merged_block_count == workBuffer->table_total_block_count){ //Work Done
             string msg = "# merging data {" + to_string(qid) + "|" + to_string(wid) + "|" + workBuffer->table_alias + "} done";
